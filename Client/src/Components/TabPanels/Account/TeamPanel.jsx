@@ -30,6 +30,8 @@ const TeamPanel = () => {
 
 	const theme = useTheme();
 
+	const SPACING_GAP = theme.spacing(12);
+
 	const { authToken, user } = useSelector((state) => state.auth);
 	//TODO
 	// const [orgStates, setOrgStates] = useState({
@@ -228,7 +230,7 @@ const TeamPanel = () => {
 			{/* <Stack component="form">
         <Box sx={{ alignSelf: "flex-start" }}>
           <Typography component="h1">Organization name</Typography>
-        </Box>
+        </Box>	
         <Stack
           direction="row"
           justifyContent="flex-end"
@@ -275,7 +277,7 @@ const TeamPanel = () => {
 				component="form"
 				noValidate
 				spellCheck="false"
-				gap={theme.spacing(12)}
+				gap={SPACING_GAP} 
 			>
 				<Typography component="h1">Team members</Typography>
 				<Stack
@@ -339,7 +341,7 @@ const TeamPanel = () => {
 				theme={theme}
 			>
 				<TextInput
-					marginBottom={theme.spacing(12)}
+					marginBottom={SPACING_GAP} 
 					type="email"
 					id="input-team-member"
 					placeholder="Email"
