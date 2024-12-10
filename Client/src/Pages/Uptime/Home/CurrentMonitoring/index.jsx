@@ -1,7 +1,7 @@
 import { useTheme } from "@emotion/react";
 import { Box, Stack } from "@mui/material";
 import Search from "../../../../Components/Inputs/Search";
-import MemoizedMonitorTable from "../MonitorTable";
+import MemoizedMonitorTable from "../UptimeTable";
 import { useState } from "react";
 import useDebounce from "../../../../Utils/debounce";
 import PropTypes from "prop-types";
@@ -26,7 +26,7 @@ const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin }) => {
 				alignItems="center"
 				mb={theme.spacing(8)}
 			>
-				<Heading component="h2">Actively monitoring</Heading>
+				<Heading component="h2">Uptime monitors</Heading>
 
 				<Box
 					className="current-monitors-counter"

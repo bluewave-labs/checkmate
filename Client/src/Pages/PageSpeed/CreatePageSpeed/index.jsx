@@ -11,7 +11,7 @@ import {
 } from "../../../Features/PageSpeedMonitor/pageSpeedMonitorSlice";
 import { createToast } from "../../../Utils/toastUtils";
 import { logger } from "../../../Utils/Logger";
-import { ConfigBox } from "../../Monitors/styled";
+import { ConfigBox } from "../../Uptime/styled";
 import Radio from "../../../Components/Inputs/Radio";
 import TextInput from "../../../Components/Inputs/TextInput";
 import { HttpAdornment } from "../../../Components/Inputs/TextInput/Adornments";

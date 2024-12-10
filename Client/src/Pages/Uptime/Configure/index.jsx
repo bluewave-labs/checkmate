@@ -166,7 +166,7 @@ const Configure = () => {
 		event.preventDefault();
 		const action = await dispatch(deleteUptimeMonitor({ authToken, monitor }));
 		if (action.meta.requestStatus === "fulfilled") {
-			navigate("/monitors");
+			navigate("/uptime");
 		} else {
 			createToast({ body: "Failed to delete monitor." });
 		}
@@ -207,9 +207,9 @@ const Configure = () => {
 				<>
 					<Breadcrumbs
 						list={[
-							{ name: "monitors", path: "/monitors" },
-							{ name: "details", path: `/monitors/${monitorId}` },
-							{ name: "configure", path: `/monitors/configure/${monitorId}` },
+							{ name: "uptime", path: "/uptime" },
+							{ name: "details", path: `/uptime/${monitorId}` },
+							{ name: "configure", path: `/uptime/configure/${monitorId}` },
 						]}
 					/>
 					<Stack

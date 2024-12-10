@@ -13,7 +13,7 @@ import {
 import { monitorValidation } from "../../../Validation/validation";
 import { createToast } from "../../../Utils/toastUtils";
 import { logger } from "../../../Utils/Logger";
-import { ConfigBox } from "../../Monitors/styled";
+import { ConfigBox } from "../../Uptime/styled";
 import TextInput from "../../../Components/Inputs/TextInput";
 import Select from "../../../Components/Inputs/Select";
 import Checkbox from "../../../Components/Inputs/Checkbox";
@@ -23,7 +23,7 @@ import PulseDot from "../../../Components/Animated/PulseDot";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
 import SkeletonLayout from "./skeleton";
-import useUtils from "../../Monitors/utils";
+import useUtils from "../../Uptime/utils";
 import "./index.css";
 import Dialog from "../../../Components/Dialog";
 

@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import { createToast } from "../../../Utils/toastUtils";
 import Link from "../../../Components/Link";
-import { ConfigBox } from "../../Monitors/styled";
+import { ConfigBox } from "../../Uptime/styled";
 import TextInput from "../../../Components/Inputs/TextInput";
 import Select from "../../../Components/Inputs/Select";
 import Checkbox from "../../../Components/Inputs/Checkbox";

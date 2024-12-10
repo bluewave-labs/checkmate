@@ -268,7 +268,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching }) => {
 											},
 										}}
 										onClick={() => {
-											navigate(`/monitors/${monitor._id}`);
+											navigate(`/uptime/${monitor._id}`);
 										}}
 									>
 										<TableCell>

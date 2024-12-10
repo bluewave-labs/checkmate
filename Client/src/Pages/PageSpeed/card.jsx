@@ -8,7 +8,7 @@ import { IconBox } from "./Details/styled";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip } from "recharts";
 import { useSelector } from "react-redux";
 import { formatDateWithTz, formatDurationSplit } from "../../Utils/timeUtils";
-import useUtils from "../Monitors/utils";
+import useUtils from "../Uptime/utils";
 import { useState } from "react";
 
 /**

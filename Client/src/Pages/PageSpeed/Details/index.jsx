@@ -19,7 +19,7 @@ import PulseDot from "../../../Components/Animated/PulseDot";
 import PagespeedDetailsAreaChart from "./Charts/AreaChart";
 import Checkbox from "../../../Components/Inputs/Checkbox";
 import PieChart from "./Charts/PieChart";
-import useUtils from "../../Monitors/utils";
+import useUtils from "../../Uptime/utils";
 import "./index.css";
 
 const PageSpeedDetails = ({ isAdmin }) => {

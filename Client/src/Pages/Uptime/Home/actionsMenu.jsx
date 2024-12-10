@@ -131,7 +131,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
 				<MenuItem
 					onClick={(e) => {
 						e.stopPropagation();
-						navigate(`/monitors/${actions.id}`);
+						navigate(`/uptime/${actions.id}`);
 					}}
 				>
 					Details
@@ -150,7 +150,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
 						onClick={(e) => {
 							e.stopPropagation();
 
-							navigate(`/monitors/configure/${actions.id}`);
+							navigate(`/uptime/configure/${actions.id}`);
 						}}
 					>
 						Configure
@@ -160,7 +160,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
 					<MenuItem
 						onClick={(e) => {
 							e.stopPropagation();
-							navigate(`/monitors/create/${actions.id}`);
+							navigate(`/uptime/create/${actions.id}`);
 						}}
 					>
 						Clone

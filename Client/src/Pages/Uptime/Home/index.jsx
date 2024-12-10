@@ -13,10 +13,12 @@ import Breadcrumbs from "../../../Components/Breadcrumbs";
 import Greeting from "../../../Utils/greeting";
 import { CurrentMonitoring } from "./CurrentMonitoring";
 
-const Monitors = ({ isAdmin }) => {
+const BREADCRUMBS = [{ name: `Uptime`, path: "/uptime" }];
+
+const UptimeMonitors = ({ isAdmin }) => {
 	const theme = useTheme();
 	const navigate = useNavigate();
-	const monitorState = useSelector((state) => state.uptimeMonitors);
+	const uptimeMonitorsState = useSelector((state) => state.uptimeMonitors);
 	const authState = useSelector((state) => state.auth);
 	const dispatch = useDispatch({});
 
@@ -26,9 +28,9 @@ const Monitors = ({ isAdmin }) => {
 
 	//TODO bring fetching to this component, like on pageSpeed
 
-	const loading = monitorState?.isLoading;
+	const loading = uptimeMonitorsState?.isLoading;
 
-	const totalMonitors = monitorState?.monitorsSummary?.monitorCounts?.total;
+	const totalMonitors = uptimeMonitorsState?.monitorsSummary?.monitorCounts?.total;
 
 	const hasMonitors = totalMonitors > 0;
 	const noMonitors = !hasMonitors;
@@ -40,28 +42,28 @@ const Monitors = ({ isAdmin }) => {
 			gap={theme.spacing(8)}
 		>
 			<Box>
-				<Breadcrumbs list={[{ name: `monitors`, path: "/monitors" }]} />
+				<Breadcrumbs list={BREADCRUMBS} />
 				<Stack
 					direction="row"
-					justifyContent="space-between"
+					justifyContent="end"
 					alignItems="center"
 					mt={theme.spacing(5)}
 					gap={theme.spacing(6)}
 				>
-					<Greeting type="uptime" />
 					{canAddMonitor && (
 						<Button
 							variant="contained"
 							color="primary"
 							onClick={() => {
-								navigate("/monitors/create");
+								navigate("/uptime/create");
 							}}
 							sx={{ fontWeight: 500 }}
 						>
-							Create monitor
+							Create new
 						</Button>
 					)}
 				</Stack>
+				<Greeting type="uptime" />
 			</Box>
 			{noMonitors && <Fallback isAdmin={isAdmin} />}
 			{loading ? (
@@ -77,20 +79,20 @@ const Monitors = ({ isAdmin }) => {
 							>
 								<StatusBox
 									title="up"
-									value={monitorState?.monitorsSummary?.monitorCounts?.up ?? 0}
+									value={uptimeMonitorsState?.monitorsSummary?.monitorCounts?.up ?? 0}
 								/>
 								<StatusBox
 									title="down"
-									value={monitorState?.monitorsSummary?.monitorCounts?.down ?? 0}
+									value={uptimeMonitorsState?.monitorsSummary?.monitorCounts?.down ?? 0}
 								/>
 								<StatusBox
 									title="paused"
-									value={monitorState?.monitorsSummary?.monitorCounts?.paused ?? 0}
+									value={uptimeMonitorsState?.monitorsSummary?.monitorCounts?.paused ?? 0}
 								/>
 							</Stack>
 							<CurrentMonitoring
 								isAdmin={isAdmin}
-								monitors={monitorState.monitorsSummary.monitors}
+								monitors={uptimeMonitorsState.monitorsSummary.monitors}
 								totalMonitors={totalMonitors}
 							/>
 						</>
@@ -101,7 +103,7 @@ const Monitors = ({ isAdmin }) => {
 	);
 };
 
-Monitors.propTypes = {
+UptimeMonitors.propTypes = {
 	isAdmin: PropTypes.bool,
 };
-export default Monitors;
+export default UptimeMonitors;
