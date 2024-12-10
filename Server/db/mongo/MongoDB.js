@@ -124,7 +124,10 @@ import {
 //****************************************
 // Hardware Checks
 //****************************************
-import { createHardwareCheck } from "./modules/hardwareCheckModule.js";
+import {
+	createHardwareCheck,
+	deleteHardwareChecksByMonitorId,
+} from "./modules/hardwareCheckModule.js";
 
 //****************************************
 // Checks
@@ -213,6 +216,7 @@ export default {
 	createPageSpeedCheck,
 	deletePageSpeedChecksByMonitorId,
 	createHardwareCheck,
+	deleteHardwareChecksByMonitorId,
 	createMaintenanceWindow,
 	getMaintenanceWindowsByTeamId,
 	getMaintenanceWindowById,
