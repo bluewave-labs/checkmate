@@ -5,32 +5,58 @@ import { useTheme } from "@emotion/react";
 import PropTypes from "prop-types";
 
 /**
- * `CustomThreshold` is a functional React component that displays a
- * group of CheckBox with a label and its correspondant threshold input field.
+ * CustomThreshold Component
  *
- * @param {{ checkboxId: any; checkboxLabel: any; onCheckboxChange: any; fieldId: any; onFieldChange: any; onFieldBlur: any; alertUnit: any; infrastructureMonitor: any; errors: any; }} param0
- * @param {string} param0.checkboxId  - The text is the id of the checkbox.
- * @param {string} param0.checkboxLabel - The text to be displayed as the label next to the check icon.
- * @param {func} param0.onCheckboxChange - The function to invoke when checkbox is checked or unchecked.
- * @param {string} param0.fieldId - The text is the id of the input field.
- * @param {func} param0.onFieldChange - The function to invoke when input field is changed.
- * @param {func} param0.onFieldBlur - The function to invoke when input field is losing focus.
- * @param {string} param0.alertUnit the threshold unit such as usage percentage '%' etc
- * @param {object} param0.infrastructureMonitor the form object of the create infrastrcuture monitor page
- * @param {object} param0.errors the object that holds all the errors of the form page
- * @returns A compound React component that renders the custom threshold alert section
+ * A reusable component that renders a checkbox with an associated numeric input field
+ * and an optional unit label. The input field can be enabled/disabled based on checkbox state.
  *
+ * @component
+ * @param {Object} props - Component properties
+ * @param {string} [props.checkboxId] - Optional unique identifier for the checkbox
+ * @param {string} [props.checkboxName] - Optional name attribute for the checkbox
+ * @param {string} props.checkboxLabel - Label text for the checkbox
+ * @param {boolean} props.isChecked - Current checked state of the checkbox
+ * @param {Function} props.onCheckboxChange - Callback function when checkbox is toggled
+ * @param {string} props.fieldId - Unique identifier for the input field
+ * @param {string} [props.fieldName] - Optional name attribute for the input field
+ * @param {string} props.fieldValue - Current value of the input field
+ * @param {Function} props.onFieldChange - Callback function when input field value changes
+ * @param {Function} props.onFieldBlur - Callback function when input field loses focus
+ * @param {string} props.alertUnit - Unit label displayed next to the input field
+ * @param {Object} props.errors - Object containing validation errors for the field
+ * @param {Object} props.infrastructureMonitor - Infrastructure monitor configuration object
+ *
+ * @returns {React.ReactElement} Rendered CustomThreshold component
+ *
+ * @example
+ * <CustomThreshold
+ *   checkboxId="cpu-threshold"
+ *   checkboxName="cpu_threshold"
+ *   checkboxLabel="Enable CPU Threshold"
+ *   isChecked={true}
+ *   onCheckboxChange={handleCheckboxToggle}
+ *   fieldId="cpu-threshold-value"
+ *   fieldName="cpu_threshold_value"
+ *   fieldValue="80"
+ *   onFieldChange={handleFieldChange}
+ *   onFieldBlur={handleFieldBlur}
+ *   alertUnit="%"
+ *   errors={{}}
+ *   infrastructureMonitor={monitorConfig}
+ * />
  */
-
 export const CustomThreshold = ({
 	checkboxId,
+	checkboxName,
 	checkboxLabel,
 	onCheckboxChange,
+	isChecked,
 	fieldId,
+	fieldName,
+	fieldValue,
 	onFieldChange,
 	onFieldBlur,
 	alertUnit,
-	infrastructureMonitor,
 	errors,
 }) => {
 	const theme = useTheme();
@@ -46,8 +72,9 @@ export const CustomThreshold = ({
 			<Box>
 				<Checkbox
 					id={checkboxId}
+					name={checkboxName}
 					label={checkboxLabel}
-					isChecked={infrastructureMonitor[checkboxId]}
+					isChecked={isChecked}
 					onChange={onCheckboxChange}
 				/>
 			</Box>
@@ -61,11 +88,12 @@ export const CustomThreshold = ({
 					maxWidth="var(--env-var-width-4)"
 					type="number"
 					id={fieldId}
-					value={infrastructureMonitor[fieldId]}
+					name={fieldName}
+					value={fieldValue}
 					onBlur={onFieldBlur}
 					onChange={onFieldChange}
 					error={errors[fieldId] ? true : false}
-					disabled={!infrastructureMonitor[checkboxId]}
+					disabled={!isChecked}
 				/>
 
 				<Typography
@@ -80,10 +108,14 @@ export const CustomThreshold = ({
 };
 
 CustomThreshold.propTypes = {
-	checkboxId: PropTypes.string.isRequired,
+	checkboxId: PropTypes.string,
+	checkboxName: PropTypes.string,
 	checkboxLabel: PropTypes.string.isRequired,
+	isChecked: PropTypes.bool.isRequired,
 	onCheckboxChange: PropTypes.func.isRequired,
 	fieldId: PropTypes.string.isRequired,
+	fieldName: PropTypes.string,
+	fieldValue: PropTypes.string.isRequired,
 	onFieldChange: PropTypes.func.isRequired,
 	onFieldBlur: PropTypes.func.isRequired,
 	alertUnit: PropTypes.string.isRequired,

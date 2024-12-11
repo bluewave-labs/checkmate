@@ -3,33 +3,50 @@ import { FormControlLabel, Checkbox as MuiCheckbox } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import CheckboxOutline from "../../../assets/icons/checkbox-outline.svg?react";
 import CheckboxFilled from "../../../assets/icons/checkbox-filled.svg?react";
-
 import "./index.css";
 
 /**
- * @param {Object} props
- * @param {string} props.id - The id attribute for the checkbox input.
- * @param {string} props.label - The label to display next to the checkbox.
- * @param {('small' | 'medium' | 'large')} - The size of the checkbox.
- * @param {boolean} props.isChecked - Whether the checkbox is checked or not.
- * @param {string} [props.value] - The value of the checkbox input.
- * @param {function} [props.onChange] - The function to call when the checkbox value changes.
- * @param {boolean} [props.isDisabled] - Whether the checkbox is disabled or not.
+ * Checkbox Component
  *
- * @returns {JSX.Element}
+ * A customized checkbox component using Material-UI that supports custom sizing,
+ * disabled states, and custom icons.
+ *
+ * @component
+ * @param {Object} props - Component properties
+ * @param {string} props.id - Unique identifier for the checkbox input
+ * @param {string} [props.name] - Optional name attribute for the checkbox
+ * @param {(string|React.ReactNode)} props.label - Label text or node for the checkbox
+ * @param {('small'|'medium'|'large')} [props.size='medium'] - Size of the checkbox icon
+ * @param {boolean} props.isChecked - Current checked state of the checkbox
+ * @param {string} [props.value] - Optional value associated with the checkbox
+ * @param {Function} [props.onChange] - Callback function triggered when checkbox state changes
+ * @param {boolean} [props.isDisabled] - Determines if the checkbox is disabled
+ *
+ * @returns {React.ReactElement} Rendered Checkbox component
  *
  * @example
+ * // Basic usage
  * <Checkbox
- *  id="checkbox-id"
- *  label="Ping monitoring"
- *  isChecked={checks.type === "ping"}
- *  value="ping"
- *  onChange={handleChange}
+ *   id="terms-checkbox"
+ *   label="I agree to terms"
+ *   isChecked={agreed}
+ *   onChange={handleAgree}
+ * />
+ *
+ * @example
+ * // With custom size and disabled state
+ * <Checkbox
+ *   id="advanced-checkbox"
+ *   label="Advanced Option"
+ *   size="large"
+ *   isChecked={isAdvanced}
+ *   isDisabled={!canModify}
+ *   onChange={handleAdvancedToggle}
  * />
  */
-
 const Checkbox = ({
 	id,
+	name,
 	label,
 	size = "medium",
 	isChecked,
@@ -46,6 +63,7 @@ const Checkbox = ({
 			control={
 				<MuiCheckbox
 					checked={isDisabled ? false : isChecked}
+					name={name}
 					value={value}
 					onChange={onChange}
 					icon={<CheckboxOutline />}
@@ -54,7 +72,7 @@ const Checkbox = ({
 						"aria-label": "controlled checkbox",
 						id: id,
 					}}
-					sx={{						
+					sx={{
 						"&:hover": { backgroundColor: "transparent" },
 						"& svg": { width: sizes[size], height: sizes[size] },
 						alignSelf: "flex-start",
@@ -89,6 +107,7 @@ const Checkbox = ({
 
 Checkbox.propTypes = {
 	id: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
 	size: PropTypes.oneOf(["small", "medium", "large"]),
 	isChecked: PropTypes.bool.isRequired,

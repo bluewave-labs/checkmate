@@ -91,10 +91,24 @@ const credentials = joi.object({
 });
 
 const monitorValidation = joi.object({
-	url: joi.string().uri({ allowRelative: true }).trim().messages({
-		"string.empty": "This field is required.",
-		"string.uri": "The URL you provided is not valid.",
-	}),
+	url: joi
+		.string()
+		.trim()
+		.custom((value, helpers) => {
+			const urlRegex =
+				/^(https?:\/\/)?(([0-9]{1,3}\.){3}[0-9]{1,3}|[\da-z\.-]+)(\.[a-z\.]{2,6})?(:(\d+))?([\/\w \.-]*)*\/?$/i;
+
+			if (!urlRegex.test(value)) {
+				return helpers.error("string.invalidUrl");
+			}
+
+			return value;
+		})
+		.messages({
+			"string.empty": "This field is required.",
+			"string.uri": "The URL you provided is not valid.",
+			"string.invalidUrl": "Please enter a valid URL with optional port",
+		}),
 	name: joi.string().trim().max(50).allow("").messages({
 		"string.max": "This field should not exceed the 50 characters limit.",
 	}),
@@ -176,10 +190,24 @@ const advancedSettingsValidation = joi.object({
 });
 
 const infrastructureMonitorValidation = joi.object({
-	url: joi.string().uri({ allowRelative: true }).trim().messages({
-		"string.empty": "This field is required.",
-		"string.uri": "The URL you provided is not valid.",
-	}),
+	url: joi
+		.string()
+		.trim()
+		.custom((value, helpers) => {
+			const urlRegex =
+				/^(https?:\/\/)?(([0-9]{1,3}\.){3}[0-9]{1,3}|[\da-z\.-]+)(\.[a-z\.]{2,6})?(:(\d+))?([\/\w \.-]*)*\/?$/i;
+
+			if (!urlRegex.test(value)) {
+				return helpers.error("string.invalidUrl");
+			}
+
+			return value;
+		})
+		.messages({
+			"string.empty": "This field is required.",
+			"string.uri": "The URL you provided is not valid.",
+			"string.invalidUrl": "Please enter a valid URL with optional port",
+		}),
 	name: joi.string().trim().max(50).allow("").messages({
 		"string.max": "This field should not exceed the 50 characters limit.",
 	}),
