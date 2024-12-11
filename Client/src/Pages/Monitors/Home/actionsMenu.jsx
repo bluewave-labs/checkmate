@@ -14,7 +14,7 @@ import Settings from "../../../assets/icons/settings-bold.svg?react";
 import PropTypes from "prop-types";
 import Dialog from "../../../Components/Dialog";
 
-const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
+const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [actions, setActions] = useState({});
 	const [isOpen, setIsOpen] = useState(false);
@@ -47,9 +47,9 @@ const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
 				pauseUptimeMonitor({ authToken, monitorId: monitor._id })
 			);
 			if (pauseUptimeMonitor.fulfilled.match(action)) {
-				updateCallback();
 				const state = action?.payload?.data.isActive === false ? "paused" : "resumed";
 				createToast({ body: `Monitor ${state} successfully.` });
+				pauseCallback();
 			} else {
 				throw new Error(action?.error?.message ?? "Failed to pause monitor.");
 			}
@@ -219,7 +219,8 @@ ActionsMenu.propTypes = {
 		isActive: PropTypes.bool,
 	}).isRequired,
 	isAdmin: PropTypes.bool,
-	updateCallback: PropTypes.func,
+	updateRowCallback: PropTypes.func,
+	pauseCallback: PropTypes.func,
 };
 
 export default ActionsMenu;

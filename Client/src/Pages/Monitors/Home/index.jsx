@@ -1,5 +1,5 @@
 import "./index.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getUptimeMonitorsByTeamId } from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
 import { useNavigate } from "react-router-dom";
@@ -19,10 +19,15 @@ const Monitors = ({ isAdmin }) => {
 	const monitorState = useSelector((state) => state.uptimeMonitors);
 	const authState = useSelector((state) => state.auth);
 	const dispatch = useDispatch({});
+	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
+
+	const handlePause = () => {
+		setMonitorUpdateTrigger((prev) => !prev);
+	};
 
 	useEffect(() => {
 		dispatch(getUptimeMonitorsByTeamId(authState.authToken));
-	}, [authState.authToken, dispatch]);
+	}, [authState.authToken, dispatch, monitorUpdateTrigger]);
 
 	//TODO bring fetching to this component, like on pageSpeed
 
@@ -92,6 +97,7 @@ const Monitors = ({ isAdmin }) => {
 								isAdmin={isAdmin}
 								monitors={monitorState.monitorsSummary.monitors}
 								totalMonitors={totalMonitors}
+								handlePause={handlePause}
 							/>
 						</>
 					)}

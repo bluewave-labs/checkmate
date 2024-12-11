@@ -7,7 +7,7 @@ import useDebounce from "../../../../Utils/debounce";
 import PropTypes from "prop-types";
 import { Heading } from "../../../../Components/Heading";
 
-const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin }) => {
+const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin, handlePause }) => {
 	const theme = useTheme();
 	const [search, setSearch] = useState("");
 	const [isSearching, setIsSearching] = useState(false);
@@ -55,12 +55,14 @@ const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin }) => {
 				filter={debouncedFilter}
 				setIsSearching={setIsSearching}
 				isSearching={isSearching}
+				handlePause={handlePause}
 			/>
 		</Box>
 	);
 };
 
 CurrentMonitoring.propTypes = {
+	handlePause: PropTypes.func,
 	totalMonitors: PropTypes.number,
 	monitors: PropTypes.array,
 	isAdmin: PropTypes.bool,
