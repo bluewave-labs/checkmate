@@ -15,7 +15,10 @@ const typographyLevels = {
 
 /* TODO Review color palette and semantic colors */
 const paletteColors = {
+	transparent: "#00000000",
 	white: "#FFFFFF",
+	white200:"#F6F6F6",
+	grey25: "#FCFCFC",
 	gray50: "#FEFEFE",
 	gray60: "#FEFDFE",
 	gray70: "#FDFDFD",
@@ -35,6 +38,7 @@ const paletteColors = {
 	gray880: "#0C0C0E",
 	gray890: "#09090B",
 	blueGray20: "#E8F0FE",
+	blueGray50: "#CDE2FF",
 	blueGray150: "#667085",
 	blueGray200: "#475467",
 	blueGray400: "#344054",
@@ -183,6 +187,18 @@ const semanticColors = {
 			light: paletteColors.gray100,
 			dark: paletteColors.gray850,
 		},
+		stroke: {
+			light: paletteColors.blueGray50,
+			dark: paletteColors.gray800,
+		}, 
+		gauge: {
+			light: paletteColors.grey25,
+			dark: paletteColors.transparent
+		},
+		textcard:{
+			light:paletteColors.white200,
+			dark:paletteColors.transparent
+		}
 	},
 	text: {
 		primary: {

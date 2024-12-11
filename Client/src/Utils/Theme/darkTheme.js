@@ -69,7 +69,7 @@ const palette = {
 		line: border.light.dark,
 		fill: background.accent.dark,
 		grid: other.grid.dark,
-		autofill: secondary.main.dark,
+		autofill: secondary.main.dark
 	},
 	gradient: {
 		color1,
@@ -89,6 +89,10 @@ const palette = {
 		alt: background.alt.dark,
 		fill: background.fill.dark,
 		accent: background.accent.dark,
+		stroke: background.stroke.dark,
+		gauge: background.gauge.dark,
+		textCard: background.textcard.dark
+
 	},
 	border: {
 		light: border.light.dark,
