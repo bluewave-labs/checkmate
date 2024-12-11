@@ -120,6 +120,30 @@ const imageValidation = joi.object({
 		}),
 });
 
+const logoImageValidation = joi.object({
+	type: joi.string().valid("image/jpeg", "image/png").messages({
+		"any.only": "Invalid file format.",
+		"string.empty": "File type required.",
+	}),
+	size: joi
+		.number()
+		.max(800*800)
+		.messages({
+			"number.base": "File size must be a number.",
+			"number.max": "File size must be less than 640000 pixels.",
+			"number.empty": "File size required.",
+		}),
+});
+
+const publicPageGeneralSettingsValidation = joi.object({
+	companyName: joi.string().trim().messages({ "string.empty": "Company name is required." }),
+	url: joi.string().trim().messages({ "string.empty": "URL is required." }),
+	timezone: joi.string().trim().messages({ "string.empty": "Timezone is required." }),
+	color: joi.string().trim().messages({ "string.empty": "Color is required." }),
+	theme: joi.string().trim().messages({ "string.empty": "Theme is required." })
+}
+
+)
 const settingsValidation = joi.object({
 	ttl: joi.number().required().messages({
 		"string.empty": "TTL is required",
@@ -220,4 +244,6 @@ export {
 	maintenanceWindowValidation,
 	advancedSettingsValidation,
 	infrastructureMonitorValidation,
+	publicPageGeneralSettingsValidation,
+	logoImageValidation
 };

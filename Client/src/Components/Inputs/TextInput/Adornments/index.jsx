@@ -4,6 +4,9 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
+import Docs from "../../../../assets/icons/docs.svg?react";
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+
 export const HttpAdornment = ({ https }) => {
 	const theme = useTheme();
 	return (
@@ -62,4 +65,39 @@ export const PasswordEndAdornment = ({ fieldType, setFieldType }) => {
 PasswordEndAdornment.propTypes = {
 	fieldType: PropTypes.string,
 	setFieldType: PropTypes.func,
+};
+
+export const ServerStartAdornment = () => {
+	return (
+		<InputAdornment position="start">
+			<Docs/>
+		</InputAdornment>
+	);
+};
+
+
+export const ServerEndAdornment = ({ id, removeItem }) => {
+	const theme = useTheme();
+	return (
+		<InputAdornment position="end">
+			<IconButton
+				aria-label="remove server"
+				onClick={() => removeItem(id)}
+				sx={{
+					color: theme.palette.border.dark,
+					padding: theme.spacing(1),
+					"&:focus-visible": {
+						outline: `2px solid ${theme.palette.primary.main}`,
+						outlineOffset: `2px`,
+					},
+					"& .MuiTouchRipple-root": {
+						pointerEvents: "none",
+						display: "none",
+					},
+				}}
+			>
+				<DeleteTwoToneIcon/>
+			</IconButton>
+		</InputAdornment>
+	);
 };
