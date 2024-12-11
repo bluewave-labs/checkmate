@@ -20,99 +20,6 @@ import "./index.css";
 const DEMO = import.meta.env.VITE_APP_DEMO;
 
 /**
- * Displays the initial landing page.
- *
- * @param {Object} props
- * @param {Function} props.onContinue - Callback function to handle "Continue with Email" button click.
- * @returns {JSX.Element}
- */
-const LandingPage = ({ onContinue }) => {
-	const theme = useTheme();
-
-	return (
-		<>
-			<Stack
-				gap={{ xs: theme.spacing(8), sm: theme.spacing(12) }}
-				alignItems="center"
-				textAlign="center"
-			>
-				<Box>
-					<Typography component="h1">Log In</Typography>
-					<Typography>We are pleased to see you again!</Typography>
-				</Box>
-				<Box width="100%">
-					<Button
-						variant="outlined"
-						color="info"
-						onClick={onContinue}
-						sx={{
-							width: "100%",
-							"& svg": {
-								mr: theme.spacing(4),
-								"& path": {
-									stroke: theme.palette.other.icon,
-								},
-							},
-							"&:focus-visible": {
-								outline: `2px solid ${theme.palette.primary.main}`,
-								outlineOffset: `2px`,
-							},
-						}}
-					>
-						<Mail />
-						Continue with Email
-					</Button>
-				</Box>
-				<Box maxWidth={400}>
-					<Typography className="tos-p">
-						By continuing, you agree to our{" "}
-						<Typography
-							component="span"
-							onClick={() => {
-								window.open(
-									"https://bluewavelabs.ca/terms-of-service-open-source",
-									"_blank",
-									"noreferrer"
-								);
-							}}
-							sx={{
-								"&:hover": {
-									color: theme.palette.text.tertiary,
-								},
-							}}
-						>
-							Terms of Service
-						</Typography>{" "}
-						and{" "}
-						<Typography
-							component="span"
-							onClick={() => {
-								window.open(
-									"https://bluewavelabs.ca/privacy-policy-open-source",
-									"_blank",
-									"noreferrer"
-								);
-							}}
-							sx={{
-								"&:hover": {
-									color: theme.palette.text.tertiary,
-								},
-							}}
-						>
-							Privacy Policy.
-						</Typography>
-					</Typography>
-				</Box>
-			</Stack>
-		</>
-	);
-};
-
-LandingPage.propTypes = {
-	onContinue: PropTypes.func.isRequired,
-};
-
-/**
  * Renders the first step of the login process.
  *
  * @param {Object} props
@@ -168,26 +75,8 @@ const StepOne = ({ form, errors, onSubmit, onChange, onBack }) => {
 					/>
 					<Stack
 						direction="row"
-						justifyContent="space-between"
+						justifyContent="flex-end"
 					>
-						<Button
-							variant="outlined"
-							color="info"
-							onClick={onBack}
-							sx={{
-								px: theme.spacing(5),
-								"& svg.MuiSvgIcon-root": {
-									mr: theme.spacing(3),
-								},
-								"&:focus-visible": {
-									outline: `2px solid ${theme.palette.primary.main}`,
-									outlineOffset: `2px`,
-								},
-							}}
-						>
-							<ArrowBackRoundedIcon />
-							Back
-						</Button>
 						<Button
 							variant="contained"
 							color="primary"
@@ -216,7 +105,6 @@ StepOne.propTypes = {
 	errors: PropTypes.object.isRequired,
 	onSubmit: PropTypes.func.isRequired,
 	onChange: PropTypes.func.isRequired,
-	onBack: PropTypes.func.isRequired,
 };
 
 /**
@@ -384,7 +272,7 @@ const Login = () => {
 		password: DEMO !== undefined ? "Demouser1!" : "",
 	});
 	const [errors, setErrors] = useState({});
-	const [step, setStep] = useState(0);
+	const [step, setStep] = useState(1);
 
 	useEffect(() => {
 		if (authToken) {
@@ -533,15 +421,12 @@ const Login = () => {
 					},
 				}}
 			>
-				{step === 0 ? (
-					<LandingPage onContinue={() => setStep(1)} />
-				) : step === 1 ? (
+				{step === 1 ? (
 					<StepOne
 						form={form}
 						errors={errors}
 						onSubmit={handleSubmit}
 						onChange={handleChange}
-						onBack={() => setStep(0)}
 					/>
 				) : (
 					step === 2 && (
