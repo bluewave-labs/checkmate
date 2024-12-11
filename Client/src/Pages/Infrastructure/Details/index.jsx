@@ -283,7 +283,7 @@ const InfrastructureDetails = () => {
 			{
 				type: "memory",
 				value: decimalToPercentage(memoryUsagePercent),
-				heading: "Memory Usage",
+				heading: "Memory usage",
 				metricOne: "Used",
 				valueOne: formatBytes(memoryUsedBytes),
 				metricTwo: "Total",
@@ -292,7 +292,7 @@ const InfrastructureDetails = () => {
 			{
 				type: "cpu",
 				value: decimalToPercentage(cpuUsagePercent),
-				heading: "CPU Usage",
+				heading: "CPU usage",
 				metricOne: "Cores",
 				valueOne: cpuPhysicalCores ?? 0,
 				metricTwo: "Frequency",
@@ -364,7 +364,7 @@ const InfrastructureDetails = () => {
 				heading: "Memory usage",
 				strokeColor: theme.palette.primary.main,
 				gradientStartColor: theme.palette.primary.main,
-				yLabel: "Memory Usage",
+				yLabel: "Memory usage",
 				yDomain: [0, 1],
 				yTick: <PercentTick />,
 				xTick: <TzTick />,
@@ -372,7 +372,7 @@ const InfrastructureDetails = () => {
 					<InfrastructureTooltip
 						dotColor={theme.palette.primary.main}
 						yKey={"memory.usage_percent"}
-						yLabel={"Memory Usage"}
+						yLabel={"Memory usage"}
 					/>
 				),
 			},
@@ -383,7 +383,7 @@ const InfrastructureDetails = () => {
 				heading: "CPU usage",
 				strokeColor: theme.palette.success.main,
 				gradientStartColor: theme.palette.success.main,
-				yLabel: "CPU Usage",
+				yLabel: "CPU usage",
 				yDomain: [0, 1],
 				yTick: <PercentTick />,
 				xTick: <TzTick />,
@@ -391,7 +391,7 @@ const InfrastructureDetails = () => {
 					<InfrastructureTooltip
 						dotColor={theme.palette.success.main}
 						yKey={"cpu.usage_percent"}
-						yLabel={"CPU Usage"}
+						yLabel={"CPU usage"}
 					/>
 				),
 			},
