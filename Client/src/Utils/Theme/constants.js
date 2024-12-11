@@ -51,7 +51,8 @@ const paletteColors = {
 	red50: "#F9ECED",
 	red100: "#FBD1D1",
 	red200: "#F04438",
-	red300: "#D32F2F",
+	red300: "#EBA8A9",
+	red400: "#D32F2F",
 	red700: "#542426",
 	red800: "#301A1F",
 	orange50: "#FEF8EA",
@@ -109,12 +110,12 @@ const semanticColors = {
 	},
 	error: {
 		main: {
-			light: paletteColors.red300,
-			dark: paletteColors.red300,
+			light: paletteColors.red400,
+			dark: paletteColors.red400,
 		},
 		contrastText: {
-			light: paletteColors.gray50,
-			dark: paletteColors.gray50,
+			light: paletteColors.red300,
+			dark: paletteColors.red300,
 		},
 		light: {
 			light: paletteColors.red100,
