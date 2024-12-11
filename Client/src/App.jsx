@@ -41,6 +41,7 @@ import { logger } from "./Utils/Logger"; // Import the logger
 import { networkService } from "./main";
 import { Infrastructure } from "./Pages/Infrastructure";
 import InfrastructureDetails from "./Pages/Infrastructure/Details";
+import CreateStatus from "./Pages/Status/CreateStatus";
 function App() {
 	const AdminCheckedRegister = withAdminCheck(Register);
 	const MonitorsWithAdminProp = withAdminProp(Monitors);
@@ -148,6 +149,10 @@ function App() {
 						path="status"
 						element={<ProtectedRoute Component={Status} />}
 					/>
+					<Route
+						path="status/create"
+						element={<ProtectedRoute Component={CreateStatus} />}
+					/>					
 					<Route
 						path="integrations"
 						element={<ProtectedRoute Component={Integrations} />}
