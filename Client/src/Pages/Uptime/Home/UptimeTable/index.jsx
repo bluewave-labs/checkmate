@@ -32,7 +32,7 @@ import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
 
 import { Pagination } from "../../../Infrastructure/components/TablePagination";
 
-const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching }) => {
+const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePause }) => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching }) => {
 	const [sort, setSort] = useState({});
 	const prevFilter = useRef(filter);
 
-	const handleActionMenuDelete = () => {
+	const handleRowUpdate = () => {
 		setUpdateTrigger((prev) => !prev);
 	};
 
@@ -268,7 +268,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching }) => {
 											},
 										}}
 										onClick={() => {
-											navigate(`/monitors/${monitor._id}`);
+											navigate(`/uptime/${monitor._id}`);
 										}}
 									>
 										<TableCell>
@@ -297,7 +297,8 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching }) => {
 											<ActionsMenu
 												monitor={monitor}
 												isAdmin={isAdmin}
-												updateCallback={handleActionMenuDelete}
+												updateRowCallback={handleRowUpdate}
+												pauseCallback={handlePause}
 											/>
 										</TableCell>
 									</TableRow>
@@ -325,6 +326,7 @@ MonitorTable.propTypes = {
 	filter: PropTypes.string,
 	setIsSearching: PropTypes.func,
 	isSearching: PropTypes.bool,
+	setMonitorUpdateTrigger: PropTypes.func,
 };
 
 const MemoizedMonitorTable = memo(MonitorTable);

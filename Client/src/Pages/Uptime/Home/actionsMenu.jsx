@@ -14,7 +14,7 @@ import Settings from "../../../assets/icons/settings-bold.svg?react";
 import PropTypes from "prop-types";
 import Dialog from "../../../Components/Dialog";
 
-const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
+const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [actions, setActions] = useState({});
 	const [isOpen, setIsOpen] = useState(false);
@@ -47,9 +47,9 @@ const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
 				pauseUptimeMonitor({ authToken, monitorId: monitor._id })
 			);
 			if (pauseUptimeMonitor.fulfilled.match(action)) {
-				updateCallback();
 				const state = action?.payload?.data.isActive === false ? "paused" : "resumed";
 				createToast({ body: `Monitor ${state} successfully.` });
+				pauseCallback();
 			} else {
 				throw new Error(action?.error?.message ?? "Failed to pause monitor.");
 			}
@@ -131,7 +131,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
 				<MenuItem
 					onClick={(e) => {
 						e.stopPropagation();
-						navigate(`/monitors/${actions.id}`);
+						navigate(`/uptime/${actions.id}`);
 					}}
 				>
 					Details
@@ -150,7 +150,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
 						onClick={(e) => {
 							e.stopPropagation();
 
-							navigate(`/monitors/configure/${actions.id}`);
+							navigate(`/uptime/configure/${actions.id}`);
 						}}
 					>
 						Configure
@@ -160,7 +160,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateCallback }) => {
 					<MenuItem
 						onClick={(e) => {
 							e.stopPropagation();
-							navigate(`/monitors/create/${actions.id}`);
+							navigate(`/uptime/create/${actions.id}`);
 						}}
 					>
 						Clone
@@ -219,7 +219,8 @@ ActionsMenu.propTypes = {
 		isActive: PropTypes.bool,
 	}).isRequired,
 	isAdmin: PropTypes.bool,
-	updateCallback: PropTypes.func,
+	updateRowCallback: PropTypes.func,
+	pauseCallback: PropTypes.func,
 };
 
 export default ActionsMenu;

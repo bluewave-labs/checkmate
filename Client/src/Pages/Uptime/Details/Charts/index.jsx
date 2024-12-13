@@ -262,7 +262,7 @@ const ResponseGaugeChart = ({ data }) => {
 						}
 					: {
 							category: "Poor",
-							main: theme.palette.error.contrastText,
+							main: theme.palette.error.light,
 							bg: theme.palette.error.dark,
 						};
 

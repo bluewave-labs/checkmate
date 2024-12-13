@@ -44,7 +44,7 @@
 			}
 		},
 		{
-			"url": "https://uptime-demo.bluewavelabs.ca/{API_PATH}",
+			"url": "https://checkmate-demo.bluewavelabs.ca/{API_PATH}",
 			"description": "Bluewave Demo Server",
 			"variables": {
 				"PORT": {

@@ -201,7 +201,7 @@ Our API is documented in accordance with the [OpenAPI spec](https://www.openapis
 
 You can see the documentation on your local development server at http://localhost:{port}/api-docs
 
-You can also view the documentation on our demo server at [https://uptime-demo.bluewavelabs.ca/api-docs](https://uptime-demo.bluewavelabs.ca/api-docs)
+You can also view the documentation on our demo server at [https://checkmate-demo.bluewavelabs.ca/api-docs](https://checkmate-demo.bluewavelabs.ca/api-docs)
 
 ### Error handling
 

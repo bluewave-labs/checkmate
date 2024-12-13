@@ -1,3 +1,5 @@
+**Need support or have a suggestion? Check our [Discord channel](https://discord.gg/NAb6H3UTjK)**
+
 ![](https://img.shields.io/github/license/bluewave-labs/bluewave-uptime)
 ![](https://img.shields.io/github/repo-size/bluewave-labs/bluewave-uptime)
 ![](https://img.shields.io/github/commit-activity/w/bluewave-labs/bluewave-uptime)
@@ -28,11 +30,11 @@ Usage instructions can be found [here](https://bluewavelabs.gitbook.io/checkmate
 
 ## 🛠️ Installation
 
-See installation instructions in [Checkmate documentation portal](https://bluewavelabs.gitbook.io/checkmate/quickstart).
+See installation instructions in [Checkmate documentation portal](https://bluewavelabs.gitbook.io/checkmate/quickstart). Alternatively, you can also use [Coolify](https://coolify.io/) for a one click Docker deployment.
 
 ## 💚 Questions & ideas
 
-We've just launched our [Discussions](https://github.com/bluewave-labs/bluewave-uptime/discussions) page! Feel free to ask questions or share your ideas—we'd love to hear from you!
+If you have any questions, suggestions or comments, please use our [Discord channel](https://discord.gg/NAb6H3UTjK). We've also launched our [Discussions](https://github.com/bluewave-labs/bluewave-uptime/discussions) page! Feel free to ask questions or share your ideas—we'd love to hear from you!
 
 ## 🧩 Features
 
@@ -72,7 +74,7 @@ We've just launched our [Discussions](https://github.com/bluewave-labs/bluewave-
 
 ## 🤝 Contributing
 
-We pride ourselves on building strong connections with contributors at every level. Despite being a young project, Checkmate has already earned 600+ stars and attracted 30+ contributors from around the globe. So, don’t hold back — jump in, contribute and learn with us!
+We pride ourselves on building strong connections with contributors at every level. Despite being a young project, Checkmate has already earned 1500 stars and attracted 35+ contributors from around the globe. So, don’t hold back — jump in, contribute and learn with us!
 
 Here's how you can contribute:
 

@@ -237,7 +237,7 @@ const Register = ({ isSuperAdmin }) => {
 		if (action.payload.success) {
 			const authToken = action.payload.data;
 			localStorage.setItem("token", authToken);
-			navigate("/monitors");
+			navigate("/uptime");
 			createToast({
 				body: "Welcome! Your account was created successfully.",
 			});

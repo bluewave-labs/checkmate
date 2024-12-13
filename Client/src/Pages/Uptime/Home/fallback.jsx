@@ -41,7 +41,7 @@ const Fallback = ({ isAdmin }) => {
 					variant="contained"
 					color="primary"
 					onClick={() => {
-						navigate("/monitors/create");
+						navigate("/uptime/create");
 					}}
 					sx={{ mt: theme.spacing(12) }}
 				>

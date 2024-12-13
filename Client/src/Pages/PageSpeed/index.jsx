@@ -92,7 +92,7 @@ const PageSpeed = ({ isAdmin }) => {
 									variant="contained"
 									color="primary"
 									onClick={() => navigate("/pagespeed/create")}
-									sx={{ whiteSpace: "nowrap" }}
+									sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
 								>
 									Create new
 								</Button>

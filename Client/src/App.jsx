@@ -8,8 +8,8 @@ import NotFound from "./Pages/NotFound";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register/Register";
 import Account from "./Pages/Account";
-import Monitors from "./Pages/Monitors/Home";
-import CreateMonitor from "./Pages/Monitors/CreateMonitor";
+import Uptime from "./Pages/Uptime/Home";
+import CreateMonitor from "./Pages/Uptime/CreateUptime";
 import CreateInfrastructureMonitor from "./Pages/Infrastructure/CreateMonitor";
 import Incidents from "./Pages/Incidents";
 import Status from "./Pages/Status";
@@ -20,10 +20,10 @@ import CheckEmail from "./Pages/Auth/CheckEmail";
 import SetNewPassword from "./Pages/Auth/SetNewPassword";
 import NewPasswordConfirmed from "./Pages/Auth/NewPasswordConfirmed";
 import ProtectedRoute from "./Components/ProtectedRoute";
-import Details from "./Pages/Monitors/Details";
+import UptimeDetails from "./Pages/Uptime/Details";
 import AdvancedSettings from "./Pages/AdvancedSettings";
 import Maintenance from "./Pages/Maintenance";
-import Configure from "./Pages/Monitors/Configure";
+import Configure from "./Pages/Uptime/Configure";
 import PageSpeed from "./Pages/PageSpeed";
 import CreatePageSpeed from "./Pages/PageSpeed/CreatePageSpeed";
 import CreateNewMaintenanceWindow from "./Pages/Maintenance/CreateMaintenance";
@@ -43,8 +43,8 @@ import { Infrastructure } from "./Pages/Infrastructure";
 import InfrastructureDetails from "./Pages/Infrastructure/Details";
 function App() {
 	const AdminCheckedRegister = withAdminCheck(Register);
-	const MonitorsWithAdminProp = withAdminProp(Monitors);
-	const MonitorDetailsWithAdminProp = withAdminProp(Details);
+	const UptimeWithAdminProp = withAdminProp(Uptime);
+	const UptimeDetailsWithAdminProp = withAdminProp(UptimeDetails);
 	const PageSpeedWithAdminProp = withAdminProp(PageSpeed);
 	const PageSpeedDetailsWithAdminProp = withAdminProp(PageSpeedDetails);
 	const MaintenanceWithAdminProp = withAdminProp(Maintenance);
@@ -92,22 +92,22 @@ function App() {
 					<Route
 						exact
 						path="/"
-						element={<Navigate to="/monitors" />}
+						element={<Navigate to="/uptime" />}
 					/>
 					<Route
-						path="/monitors"
-						element={<ProtectedRoute Component={MonitorsWithAdminProp} />}
+						path="/uptime"
+						element={<ProtectedRoute Component={UptimeWithAdminProp} />}
 					/>
 					<Route
-						path="/monitors/create/:monitorId?"
+						path="/uptime/create/:monitorId?"
 						element={<ProtectedRoute Component={CreateMonitor} />}
 					/>
 					<Route
-						path="/monitors/:monitorId/"
-						element={<ProtectedRoute Component={MonitorDetailsWithAdminProp} />}
+						path="/uptime/:monitorId/"
+						element={<ProtectedRoute Component={UptimeDetailsWithAdminProp} />}
 					/>
 					<Route
-						path="/monitors/configure/:monitorId/"
+						path="/uptime/configure/:monitorId/"
 						element={<ProtectedRoute Component={Configure} />}
 					/>
 					<Route

@@ -363,7 +363,7 @@ const ProfilePanel = () => {
 							component="p"
 							sx={{ opacity: 0.6 }}
 						>
-							Note that deleting your account will remove all data from our system. This
+							Note that deleting your account will remove all data from the server. This
 							is permanent and non-recoverable.
 						</Typography>
 					</Box>

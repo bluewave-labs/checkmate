@@ -332,6 +332,7 @@ const deleteMonitor = async (req, res, next) => {
 			await req.db.deleteChecks(monitor._id);
 			await req.db.deletePageSpeedChecksByMonitorId(monitor._id);
 			await req.db.deleteNotificationsByMonitorId(monitor._id);
+			await req.db.deleteHardwareChecksByMonitorId(monitor._id);
 		} catch (error) {
 			logger.error({
 				message: `Error deleting associated records for monitor ${monitor._id} with name ${monitor.name}`,

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { /* useDispatch, */ useSelector } from "react-redux";
 import { useTheme } from "@emotion/react";
-import useUtils from "../Monitors/utils";
+import useUtils from "../Uptime/utils.jsx";
 import { jwtDecode } from "jwt-decode";
 import SkeletonLayout from "./skeleton";
 import Fallback from "../../Components/Fallback";
@@ -28,7 +28,7 @@ import { Pagination } from "./components/TablePagination";
 // import { getInfrastructureMonitorsByTeamId } from "../../Features/InfrastructureMonitors/infrastructureMonitorsSlice";
 import { networkService } from "../../Utils/NetworkService.js";
 import CustomGauge from "../../Components/Charts/CustomGauge/index.jsx";
-import Host from "../Monitors/Home/host.jsx";
+import Host from "../Uptime/Home/host.jsx";
 import { useIsAdmin } from "../../Hooks/useIsAdmin.js";
 import { InfrastructureMenu } from "./components/Menu";
 
@@ -203,8 +203,8 @@ function Infrastructure() {
 								<Button
 									variant="contained"
 									color="primary"
-									onClick={() => navigate("/infrastructure/create")}
-									sx={{ whiteSpace: "nowrap" }}
+									onClick={navigateToCreate}
+									sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
 								>
 									Create new
 								</Button>

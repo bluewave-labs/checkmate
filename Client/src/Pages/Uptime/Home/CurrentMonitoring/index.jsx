@@ -1,13 +1,13 @@
 import { useTheme } from "@emotion/react";
 import { Box, Stack } from "@mui/material";
 import Search from "../../../../Components/Inputs/Search";
-import MemoizedMonitorTable from "../MonitorTable";
+import MemoizedMonitorTable from "../UptimeTable";
 import { useState } from "react";
 import useDebounce from "../../../../Utils/debounce";
 import PropTypes from "prop-types";
 import { Heading } from "../../../../Components/Heading";
 
-const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin }) => {
+const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin, handlePause }) => {
 	const theme = useTheme();
 	const [search, setSearch] = useState("");
 	const [isSearching, setIsSearching] = useState(false);
@@ -26,7 +26,7 @@ const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin }) => {
 				alignItems="center"
 				mb={theme.spacing(8)}
 			>
-				<Heading component="h2">Actively monitoring</Heading>
+				<Heading component="h2">Uptime monitors</Heading>
 
 				<Box
 					className="current-monitors-counter"
@@ -55,12 +55,14 @@ const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin }) => {
 				filter={debouncedFilter}
 				setIsSearching={setIsSearching}
 				isSearching={isSearching}
+				handlePause={handlePause}
 			/>
 		</Box>
 	);
 };
 
 CurrentMonitoring.propTypes = {
+	handlePause: PropTypes.func,
 	totalMonitors: PropTypes.number,
 	monitors: PropTypes.array,
 	isAdmin: PropTypes.bool,

@@ -388,7 +388,7 @@ const Login = () => {
 
 	useEffect(() => {
 		if (authToken) {
-			navigate("/monitors");
+			navigate("/uptime");
 			return;
 		}
 		networkService
@@ -454,7 +454,7 @@ const Login = () => {
 			} else {
 				const action = await dispatch(login(form));
 				if (action.payload.success) {
-					navigate("/monitors");
+					navigate("/uptime");
 					createToast({
 						body: "Welcome back! You're successfully logged in.",
 					});
