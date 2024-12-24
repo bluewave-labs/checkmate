@@ -92,6 +92,7 @@ const Account = ({ open = "profile" }) => {
 									paddingY: theme.spacing(4),
 									fontWeight: 400,
 									marginRight: theme.spacing(8),
+									borderBottom: "2px solid transparent",
 									"&:focus": {
 										borderBottom: `2px solid ${theme.palette.border.light}`,
 									},

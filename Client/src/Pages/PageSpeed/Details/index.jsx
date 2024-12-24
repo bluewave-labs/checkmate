@@ -5,7 +5,7 @@ import { useTheme } from "@emotion/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { formatDurationRounded, formatDurationSplit } from "../../../Utils/timeUtils";
-import { ChartBox, IconBox, StatBox } from "./styled";
+import { ChartBox } from "./styled";
 import { logger } from "../../../Utils/Logger";
 import { networkService } from "../../../main";
 import SkeletonLayout from "./skeleton";
@@ -22,6 +22,8 @@ import PieChart from "./Charts/PieChart";
 import useUtils from "../../Uptime/utils";
 import "./index.css";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
+import StatBox from "../../../Components/StatBox";
+import IconBox from "../../../Components/IconBox";
 
 const PageSpeedDetails = () => {
 	const theme = useTheme();
@@ -187,20 +189,24 @@ const PageSpeedDetails = () => {
 						direction="row"
 						gap={theme.spacing(8)}
 					>
-						<StatBox>
-							<Typography component="h2">checks since</Typography>
-							<Typography>
-								{splitDuration(monitor?.uptimeDuration)}
-								<Typography component="span">ago</Typography>
-							</Typography>
-						</StatBox>
-						<StatBox>
-							<Typography component="h2">last check</Typography>
-							<Typography>
-								{splitDuration(monitor?.lastChecked)}
-								<Typography component="span">ago</Typography>
-							</Typography>
-						</StatBox>
+						<StatBox
+							heading="checks since"
+							subHeading={
+								<>
+									{splitDuration(monitor?.uptimeDuration)}
+									<Typography component="span">ago</Typography>
+								</>
+							}
+						/>
+						<StatBox
+							heading="last check"
+							subHeading={
+								<>
+									{splitDuration(monitor?.lastChecked)}
+									<Typography component="span">ago</Typography>
+								</>
+							}
+						/>
 					</Stack>
 					<Box>
 						<Typography
@@ -288,6 +294,7 @@ const PageSpeedDetails = () => {
 					</Box>
 					<ChartBox
 						flex={1}
+						/* TODO apply 1fr 1fr for columns, and auto 1fr for Rows */
 						sx={{ gridTemplateColumns: "50% 50%", gridTemplateRows: "15% 85%" }}
 					>
 						<Stack

@@ -6,12 +6,12 @@ import { forgotPassword } from "../../Features/Auth/authSlice";
 import { useEffect, useState } from "react";
 import { credentials } from "../../Validation/validation";
 import { useNavigate } from "react-router-dom";
-import { IconBox } from "./styled";
 import TextInput from "../../Components/Inputs/TextInput";
 import Logo from "../../assets/icons/bwu-icon.svg?react";
 import Key from "../../assets/icons/key.svg?react";
 import Background from "../../assets/Images/background-grid.svg?react";
 import LoadingButton from "@mui/lab/LoadingButton";
+import IconBox from "../../Components/IconBox";
 import "./index.css";
 
 const ForgotPassword = () => {
@@ -146,9 +146,22 @@ const ForgotPassword = () => {
 					textAlign="center"
 				>
 					<Box>
-						<IconBox>
-							<Key alt="password key icon" />
-						</IconBox>
+						<Stack
+							direction="row"
+							justifyContent="center"
+						>
+							<IconBox
+								height={48}
+								width={48}
+								minWidth={48}
+								borderRadius={12}
+								svgWidth={24}
+								svgHeight={24}
+								mb={theme.spacing(4)}
+							>
+								<Key alt="password key icon" />
+							</IconBox>
+						</Stack>
 						<Typography component="h1">Forgot password?</Typography>
 						<Typography>No worries, we&apos;ll send you reset instructions.</Typography>
 					</Box>

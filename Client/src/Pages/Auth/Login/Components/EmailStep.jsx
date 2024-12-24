@@ -1,4 +1,4 @@
-import { useRef, useEffect  } from "react";
+import { useRef, useEffect } from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import TextInput from "../../../../Components/Inputs/TextInput";
@@ -30,6 +30,7 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 			<Stack
 				gap={{ xs: theme.spacing(12), sm: theme.spacing(16) }}
 				textAlign="center"
+				position="relative"
 			>
 				<Box>
 					<Typography component="h1">Log In</Typography>

@@ -20,6 +20,7 @@ import {
 	TemperatureTooltip,
 } from "../../../Components/Charts/Utils/chartUtils";
 import PropTypes from "prop-types";
+import StatBox from "../../../Components/StatBox";
 
 const BASE_BOX_PADDING_VERTICAL = 4;
 const BASE_BOX_PADDING_HORIZONTAL = 8;
@@ -29,18 +30,50 @@ const TYPOGRAPHY_PADDING = 8;
  * @param {number} bytes - Number of bytes to convert
  * @returns {number} Converted value in gigabytes
  */
-const formatBytes = (bytes) => {
-	if (bytes === undefined || bytes === null) return "0 GB";
-	if (typeof bytes !== "number") return "0 GB";
-	if (bytes === 0) return "0 GB";
+const formatBytes = (bytes, space = false) => {
+	if (bytes === undefined || bytes === null)
+		return (
+			<>
+				{0}
+				{space ? " " : ""}
+				<Typography component="span">GB</Typography>
+			</>
+		);
+	if (typeof bytes !== "number")
+		return (
+			<>
+				{0}
+				{space ? " " : ""}
+				<Typography component="span">GB</Typography>
+			</>
+		);
+	if (bytes === 0)
+		return (
+			<>
+				{0}
+				{space ? " " : ""}
+				<Typography component="span">GB</Typography>
+			</>
+		);
 
 	const GB = bytes / (1024 * 1024 * 1024);
 	const MB = bytes / (1024 * 1024);
 
 	if (GB >= 1) {
-		return `${Number(GB.toFixed(0))} GB`;
+		return (
+			<>
+				{Number(GB.toFixed(0))}
+				{space ? " " : ""}
+				<Typography component="span">GB</Typography>
+			</>
+		);
 	} else {
-		return `${Number(MB.toFixed(0))} MB`;
+		return (
+			<>
+				{Number(MB.toFixed(0))}
+				<Typography component="span">MB</Typography>
+			</>
+		);
 	}
 };
 
@@ -91,27 +124,6 @@ const BaseBox = ({ children, sx = {} }) => {
 BaseBox.propTypes = {
 	children: PropTypes.node.isRequired,
 	sx: PropTypes.object,
-};
-
-/**
- * Renders a statistic box with a heading and subheading
- * @param {Object} props - Component properties
- * @param {string} props.heading - Primary heading text
- * @param {string} props.subHeading - Secondary heading text
- * @returns {React.ReactElement} Stat box component
- */
-const StatBox = ({ heading, subHeading }) => {
-	return (
-		<BaseBox>
-			<Typography component="h2">{heading}</Typography>
-			<Typography>{subHeading}</Typography>
-		</BaseBox>
-	);
-};
-
-StatBox.propTypes = {
-	heading: PropTypes.string.isRequired,
-	subHeading: PropTypes.string.isRequired,
 };
 
 /**
@@ -193,7 +205,7 @@ const InfrastructureDetails = () => {
 	const [monitor, setMonitor] = useState(null);
 	const { authToken } = useSelector((state) => state.auth);
 	const [dateRange, setDateRange] = useState("all");
-	const { statusColor, determineState } = useUtils();
+	const { statusColor, statusStyles, determineState } = useUtils();
 	// These calculations are needed because ResponsiveContainer
 	// doesn't take padding of parent/siblings into account
 	// when calculating height.
@@ -205,7 +217,7 @@ const InfrastructureDetails = () => {
 		(chartContainerHeight - totalChartContainerPadding - totalTypographyPadding) * 0.95;
 	// end height calculations
 
-	const buildStatBoxes = (checks) => {
+	const buildStatBoxes = (checks, uptime) => {
 		let latestCheck = checks[0] ?? null;
 		if (latestCheck === null) return [];
 
@@ -225,24 +237,50 @@ const InfrastructureDetails = () => {
 		const osPlatform = os === null && platform === null ? null : `${os} ${platform}`;
 		return [
 			{
+				id: 7,
+				sx: statusStyles[determineState(monitor)],
+				heading: "Status",
+				subHeading: monitor?.status === true ? "Active" : "Inactive",
+			},
+			{
 				id: 0,
 				heading: "CPU (Physical)",
-				subHeading: `${physicalCores} cores`,
+				subHeading: (
+					<>
+						{physicalCores}
+						<Typography component="span">cores</Typography>
+					</>
+				),
 			},
 			{
 				id: 1,
 				heading: "CPU (Logical)",
-				subHeading: `${logicalCores} cores`,
+				subHeading: (
+					<>
+						{logicalCores}
+						<Typography component="span">cores</Typography>
+					</>
+				),
 			},
 			{
 				id: 2,
 				heading: "CPU Frequency",
-				subHeading: `${(cpuFrequency / 1000).toFixed(2)} Ghz`,
+				subHeading: (
+					<>
+						{(cpuFrequency / 1000).toFixed(2)}
+						<Typography component="span">Ghz</Typography>
+					</>
+				),
 			},
 			{
 				id: 3,
 				heading: "Average CPU Temperature",
-				subHeading: `${cpuTemperature.toFixed(2)} C`,
+				subHeading: (
+					<>
+						{cpuTemperature.toFixed(2)}
+						<Typography component="span">C</Typography>
+					</>
+				),
 			},
 			{
 				id: 4,
@@ -254,12 +292,17 @@ const InfrastructureDetails = () => {
 				heading: "Disk",
 				subHeading: formatBytes(diskTotalBytes),
 			},
-			{ id: 6, heading: "Uptime", subHeading: "100%" },
 			{
-				id: 7,
-				heading: "Status",
-				subHeading: monitor?.status === true ? "Active" : "Inactive",
+				id: 6,
+				heading: "Uptime",
+				subHeading: (
+					<>
+						{(uptime * 100).toFixed(2)}
+						<Typography component="span">%</Typography>
+					</>
+				),
 			},
+
 			{
 				id: 8,
 				heading: "OS",
@@ -285,9 +328,9 @@ const InfrastructureDetails = () => {
 				value: decimalToPercentage(memoryUsagePercent),
 				heading: "Memory usage",
 				metricOne: "Used",
-				valueOne: formatBytes(memoryUsedBytes),
+				valueOne: formatBytes(memoryUsedBytes, true),
 				metricTwo: "Total",
-				valueTwo: formatBytes(memoryTotalBytes),
+				valueTwo: formatBytes(memoryTotalBytes, true),
 			},
 			{
 				type: "cpu",
@@ -304,9 +347,9 @@ const InfrastructureDetails = () => {
 				value: decimalToPercentage(disk.usage_percent),
 				heading: `Disk${idx} usage`,
 				metricOne: "Used",
-				valueOne: formatBytes(disk.total_bytes - disk.free_bytes),
+				valueOne: formatBytes(disk.total_bytes - disk.free_bytes, true),
 				metricTwo: "Total",
-				valueTwo: formatBytes(disk.total_bytes),
+				valueTwo: formatBytes(disk.total_bytes, true),
 			})),
 		];
 	};
@@ -466,7 +509,10 @@ const InfrastructureDetails = () => {
 		fetchData();
 	}, [authToken, monitorId, dateRange, navigate]);
 
-	const statBoxConfigs = buildStatBoxes(monitor?.checks ?? []);
+	const statBoxConfigs = buildStatBoxes(
+		monitor?.checks ?? [],
+		monitor?.uptimePercentage ?? "Unknown"
+	);
 	const gaugeBoxConfigs = buildGaugeBoxConfigs(monitor?.checks ?? []);
 	const areaChartConfigs = buildAreaChartConfigs(monitor?.checks ?? []);
 

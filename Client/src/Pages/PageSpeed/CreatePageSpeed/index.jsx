@@ -20,8 +20,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import TextInput from "../../../Components/Inputs/TextInput";
 import { HttpAdornment } from "../../../Components/Inputs/TextInput/Adornments";
-import { ConfigBox } from "../../Uptime/styled";
-
+import ConfigBox from "../../../Components/ConfigBox";
 import { createToast } from "../../../Utils/toastUtils";
 import Radio from "../../../Components/Inputs/Radio";
 import Checkbox from "../../../Components/Inputs/Checkbox";

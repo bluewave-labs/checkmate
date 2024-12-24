@@ -361,7 +361,7 @@ const requestRecovery = async (req, res, next) => {
 				url,
 			},
 			email,
-			"Bluewave Uptime Password Reset"
+			"Checkmate Password Reset"
 		);
 
 		return res.status(200).json({

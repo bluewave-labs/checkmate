@@ -6,7 +6,7 @@ import { Box, Stack, Tooltip, Typography } from "@mui/material";
 import { monitorValidation } from "../../../Validation/validation";
 import { createToast } from "../../../Utils/toastUtils";
 import { logger } from "../../../Utils/Logger";
-import { ConfigBox } from "../styled";
+import ConfigBox from "../../../Components/ConfigBox";
 import {
 	updateUptimeMonitor,
 	pauseUptimeMonitor,

@@ -13,7 +13,7 @@ import {
 import { monitorValidation } from "../../../Validation/validation";
 import { createToast } from "../../../Utils/toastUtils";
 import { logger } from "../../../Utils/Logger";
-import { ConfigBox } from "../../Uptime/styled";
+import ConfigBox from "../../../Components/ConfigBox";
 import TextInput from "../../../Components/Inputs/TextInput";
 import Select from "../../../Components/Inputs/Select";
 import Checkbox from "../../../Components/Inputs/Checkbox";

@@ -17,14 +17,13 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 //Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
-import { ConfigBox } from "../styled";
 import TextInput from "../../../Components/Inputs/TextInput";
 import { HttpAdornment } from "../../../Components/Inputs/TextInput/Adornments";
 import { createToast } from "../../../Utils/toastUtils";
 import Radio from "../../../Components/Inputs/Radio";
 import Checkbox from "../../../Components/Inputs/Checkbox";
 import Select from "../../../Components/Inputs/Select";
-
+import ConfigBox from "../../../Components/ConfigBox";
 const CreateMonitor = () => {
 	const MS_PER_MINUTE = 60000;
 	const SELECT_VALUES = [

@@ -5,10 +5,10 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { createToast } from "../../Utils/toastUtils";
 import { forgotPassword } from "../../Features/Auth/authSlice";
-import { IconBox } from "./styled";
 import Background from "../../assets/Images/background-grid.svg?react";
 import EmailIcon from "../../assets/icons/email.svg?react";
 import Logo from "../../assets/icons/bwu-icon.svg?react";
+import IconBox from "../../Components/IconBox";
 import "./index.css";
 
 const CheckEmail = () => {
@@ -144,9 +144,22 @@ const CheckEmail = () => {
 					textAlign="center"
 				>
 					<Box>
-						<IconBox>
-							<EmailIcon alt="email icon" />
-						</IconBox>
+						<Stack
+							direction="row"
+							justifyContent="center"
+						>
+							<IconBox
+								height={48}
+								width={48}
+								minWidth={48}
+								borderRadius={12}
+								svgWidth={24}
+								svgHeight={24}
+								mb={theme.spacing(4)}
+							>
+								<EmailIcon alt="email icon" />
+							</IconBox>
+						</Stack>
 						<Typography component="h1">Check your email</Typography>
 						<Typography>
 							We sent a password reset link to{" "}

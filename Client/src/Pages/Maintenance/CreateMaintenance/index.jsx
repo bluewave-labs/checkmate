@@ -2,7 +2,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useTheme } from "@emotion/react";
 import { useEffect, useState } from "react";
-import { ConfigBox } from "./styled";
+import ConfigBox from "../../../Components/ConfigBox";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -321,18 +321,27 @@ const CreateMaintenance = () => {
 						Your pings won&apos;t be sent during this time frame
 					</Typography>
 				</Box>
-				<ConfigBox direction="row">
-					<Typography
-						component="h2"
-						variant="h2"
-					>
-						General Settings
-					</Typography>
-					<Box
-						px={theme.spacing(14)}
-						borderLeft={1}
-						borderLeftColor={theme.palette.border.light}
-					>
+				<ConfigBox>
+					<Box>
+						<Typography
+							component="h2"
+							variant="h2"
+						>
+							General Settings
+						</Typography>
+					</Box>
+					<Stack gap={theme.spacing(15)}>
+						<TextInput
+							id="name"
+							label="Friendly name"
+							placeholder="Maintenance at __ : __ for ___ minutes"
+							value={form.name}
+							onChange={(event) => {
+								handleFormChange("name", event.target.value);
+							}}
+							error={errors["name"] ? true : false}
+							helperText={errors["name"]}
+						/>
 						<Select
 							id="repeat"
 							name="maintenance-repeat"
@@ -346,15 +355,12 @@ const CreateMaintenance = () => {
 							}}
 							items={repeatConfig}
 						/>
-						<Stack
-							gap={theme.spacing(2)}
-							mt={theme.spacing(16)}
-						>
-							<Typography component="h3">Date</Typography>
+						<Stack>
 							<LocalizationProvider dateAdapter={AdapterDayjs}>
 								<DatePicker
 									id="startDate"
 									disablePast
+									label="Date"
 									disableHighlightToday
 									value={form.startDate}
 									slots={{ openPickerIcon: CalendarIcon }}
@@ -403,72 +409,64 @@ const CreateMaintenance = () => {
 								/>
 							</LocalizationProvider>
 						</Stack>
-					</Box>
+					</Stack>
 				</ConfigBox>
 				<ConfigBox>
-					<Stack direction="row">
-						<Box>
-							<Typography
-								component="h2"
-								variant="h2"
-							>
-								Start time
-							</Typography>
-							<Typography>All dates and times are in GMT+0 time zone.</Typography>
-						</Box>
-						<Stack direction="row">
-							<LocalizationProvider dateAdapter={AdapterDayjs}>
-								<MobileTimePicker
-									id="startTime"
-									value={form.startTime}
-									onChange={(newTime) => {
-										handleTimeChange("startTime", newTime);
-									}}
-									slotProps={{
-										nextIconButton: { sx: { ml: theme.spacing(2) } },
-										field: {
-											sx: {
-												width: "fit-content",
-												"& > .MuiOutlinedInput-root": {
-													flexDirection: "row-reverse",
-												},
-												"& input": {
-													height: 34,
-													p: 0,
-													pl: theme.spacing(5),
-												},
-												"& fieldset": {
-													borderColor: theme.palette.border.dark,
-													borderRadius: theme.shape.borderRadius,
-												},
-												"&:not(:has(.Mui-disabled)):not(:has(.Mui-error)) .MuiOutlinedInput-root:not(:has(input:focus)):hover fieldset":
-													{
-														borderColor: theme.palette.border.dark,
-													},
+					<Box>
+						<Typography
+							component="h2"
+							variant="h2"
+						>
+							Start time
+						</Typography>
+						<Typography>All dates and times are in GMT+0 time zone.</Typography>
+					</Box>
+					<Stack gap={theme.spacing(15)}>
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
+							<MobileTimePicker
+								id="startTime"
+								label="Start time"
+								value={form.startTime}
+								onChange={(newTime) => {
+									handleTimeChange("startTime", newTime);
+								}}
+								slotProps={{
+									nextIconButton: { sx: { ml: theme.spacing(2) } },
+									field: {
+										sx: {
+											width: "fit-content",
+											"& > .MuiOutlinedInput-root": {
+												flexDirection: "row-reverse",
 											},
+											"& input": {
+												height: 34,
+												p: 0,
+												pl: theme.spacing(5),
+											},
+											"& fieldset": {
+												borderColor: theme.palette.border.dark,
+												borderRadius: theme.shape.borderRadius,
+											},
+											"&:not(:has(.Mui-disabled)):not(:has(.Mui-error)) .MuiOutlinedInput-root:not(:has(input:focus)):hover fieldset":
+												{
+													borderColor: theme.palette.border.dark,
+												},
 										},
-									}}
-									error={errors["startTime"]}
-								/>
-							</LocalizationProvider>
-						</Stack>
-					</Stack>
-					<Stack direction="row">
-						<Box>
-							<Typography
-								component="h2"
-								variant="h2"
-							>
-								Duration
-							</Typography>
-						</Box>
+									},
+								}}
+								error={errors["startTime"]}
+							/>
+						</LocalizationProvider>
+
 						<Stack
 							direction="row"
+							alignItems="end"
 							spacing={theme.spacing(8)}
 						>
 							<TextInput
 								type="number"
 								id="duration"
+								label="Duration"
 								value={form.duration}
 								onChange={(event) => {
 									handleFormChange("duration", event.target.value);
@@ -491,66 +489,34 @@ const CreateMaintenance = () => {
 						</Stack>
 					</Stack>
 				</ConfigBox>
-				<Box>
-					<Typography
-						component="h2"
-						variant="h2"
-						fontSize={16}
-						my={theme.spacing(6)}
-					>
-						Monitor related settings
-					</Typography>
-					<ConfigBox>
-						<Stack direction="row">
-							<Box>
-								<Typography
-									component="h2"
-									variant="h2"
-								>
-									Friendly name
-								</Typography>
-							</Box>
-							<Box>
-								<TextInput
-									id="name"
-									placeholder="Maintenance at __ : __ for ___ minutes"
-									value={form.name}
-									onChange={(event) => {
-										handleFormChange("name", event.target.value);
-									}}
-									error={errors["name"] ? true : false}
-									helperText={errors["name"]}
-								/>
-							</Box>
-						</Stack>
-						<Stack direction="row">
-							<Box>
-								<Typography
-									component="h2"
-									variant="h2"
-								>
-									Add monitors
-								</Typography>
-							</Box>
-							<Box>
-								<Search
-									id={"monitors"}
-									multiple={true}
-									isAdorned={false}
-									options={monitors ? monitors : []}
-									filteredBy="name"
-									secondaryLabel={"type"}
-									inputValue={search}
-									value={form.monitors}
-									handleInputChange={handleSearch}
-									handleChange={handleSelectMonitors}
-									error={errors["monitors"]}
-									disabled={maintenanceWindowId !== undefined}
-								/>
-							</Box>
-						</Stack>
-					</ConfigBox>
-				</Box>
+
+				<ConfigBox>
+					<Box>
+						<Typography
+							component="h2"
+							variant="h2"
+						>
+							Monitors to apply maintenance window to
+						</Typography>
+					</Box>
+					<Stack gap={theme.spacing(15)}>
+						<Search
+							id={"monitors"}
+							label="Add monitors"
+							multiple={true}
+							isAdorned={false}
+							options={monitors ? monitors : []}
+							filteredBy="name"
+							secondaryLabel={"type"}
+							inputValue={search}
+							value={form.monitors}
+							handleInputChange={handleSearch}
+							handleChange={handleSelectMonitors}
+							error={errors["monitors"]}
+							disabled={maintenanceWindowId !== undefined}
+						/>
+					</Stack>
+				</ConfigBox>
 				<Box
 					ml="auto"
 					display="inline-block"
