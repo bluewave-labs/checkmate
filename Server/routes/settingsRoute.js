@@ -1,10 +1,25 @@
 import { Router } from "express";
-import { getAppSettings, updateAppSettings } from "../controllers/settingsController.js";
 import { isAllowed } from "../middleware/isAllowed.js";
 
-const router = Router();
+class SettingsRoutes {
+	constructor(settingsController) {
+		this.router = Router();
+		this.settingsController = settingsController;
+		this.initRoutes();
+	}
 
-router.get("/", getAppSettings);
-router.put("/", isAllowed(["superadmin"]), updateAppSettings);
+	initRoutes() {
+		this.router.get("/", this.settingsController.getAppSettings);
+		this.router.put(
+			"/",
+			isAllowed(["superadmin"]),
+			this.settingsController.updateAppSettings
+		);
+	}
 
-export default router;
+	getRouter() {
+		return this.router;
+	}
+}
+
+export default SettingsRoutes;

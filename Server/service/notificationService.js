@@ -1,4 +1,7 @@
+const SERVICE_NAME = "NotificationService";
+
 class NotificationService {
+	static SERVICE_NAME = SERVICE_NAME;
 	/**
 	 * Creates an instance of NotificationService.
 	 *
@@ -7,7 +10,7 @@ class NotificationService {
 	 * @param {Object} logger - The logger instance for logging activities.
 	 */
 	constructor(emailService, db, logger) {
-		this.SERVICE_NAME = "NotificationService";
+		this.SERVICE_NAME = SERVICE_NAME;
 		this.emailService = emailService;
 		this.db = db;
 		this.logger = logger;

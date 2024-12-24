@@ -5,34 +5,56 @@ import { isAllowed } from "../middleware/isAllowed.js";
 import multer from "multer";
 import User from "../db/models/User.js";
 
-const router = Router();
 const upload = multer();
 
-import {
-	registerUser,
-	loginUser,
-  refreshAuthToken,
-	editUser,
-	requestRecovery,
-	validateRecovery,
-	resetPassword,
-	checkSuperadminExists,
-	getAllUsers,
-	deleteUser,
-} from "../controllers/authController.js";
+class AuthRoutes {
+	constructor(authController) {
+		this.router = Router();
+		this.authController = authController;
+		this.initRoutes();
+	}
 
-//Auth routes
-router.post("/register", upload.single("profileImage"), registerUser);
-router.post("/login", loginUser);
-router.post("/refresh", refreshAuthToken);
-router.put("/user/:userId", upload.single("profileImage"), verifyJWT, editUser);
-router.get("/users/superadmin", checkSuperadminExists);
-router.get("/users", verifyJWT, isAllowed(["admin", "superadmin"]), getAllUsers);
-router.delete("/user/:userId", verifyJWT, verifyOwnership(User, "userId"), deleteUser);
+	initRoutes() {
+		this.router.post(
+			"/register",
+			upload.single("profileImage"),
+			this.authController.registerUser
+		);
+		this.router.post("/login", this.authController.loginUser);
+		this.router.post("/refresh", this.authController.refreshAuthToken);
 
-//Recovery routes
-router.post("/recovery/request", requestRecovery);
-router.post("/recovery/validate", validateRecovery);
-router.post("/recovery/reset/", resetPassword);
+		this.router.put(
+			"/user/:userId",
+			upload.single("profileImage"),
+			verifyJWT,
+			this.authController.editUser
+		);
 
-export default router;
+		this.router.get("/users/superadmin", this.authController.checkSuperadminExists);
+
+		this.router.get(
+			"/users",
+			verifyJWT,
+			isAllowed(["admin", "superadmin"]),
+			this.authController.getAllUsers
+		);
+
+		this.router.delete(
+			"/user/:userId",
+			verifyJWT,
+			verifyOwnership(User, "userId"),
+			this.authController.deleteUser
+		);
+
+		// Recovery routes
+		this.router.post("/recovery/request", this.authController.requestRecovery);
+		this.router.post("/recovery/validate", this.authController.validateRecovery);
+		this.router.post("/recovery/reset/", this.authController.resetPassword);
+	}
+
+	getRouter() {
+		return this.router;
+	}
+}
+
+export default AuthRoutes;

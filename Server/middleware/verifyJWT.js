@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { errorMessages } from "../utils/messages.js";
-
+import ServiceRegistry from "../service/serviceRegistry.js";
+import SettingsService from "../service/settingsService.js";
 const SERVICE_NAME = "verifyJWT";
 const TOKEN_PREFIX = "Bearer ";
 
@@ -34,7 +35,7 @@ const verifyJWT = (req, res, next) => {
 
 	const parsedToken = token.slice(TOKEN_PREFIX.length, token.length);
 	// Verify the token's authenticity
-	const { jwtSecret } = req.settingsService.getSettings();
+	const { jwtSecret } = ServiceRegistry.get(SettingsService.SERVICE_NAME).getSettings();
 	jwt.verify(parsedToken, jwtSecret, (err, decoded) => {
 		if (err) {
 			if (err.name === "TokenExpiredError") {
@@ -67,7 +68,9 @@ function handleExpiredJwtToken(req, res, next) {
 	}
 
 	// Verify refresh token
-	const { refreshTokenSecret } = req.settingsService.getSettings();
+	const { refreshTokenSecret } = ServiceRegistry.get(
+		SettingsService.SERVICE_NAME
+	).getSettings();
 	jwt.verify(refreshToken, refreshTokenSecret, (refreshErr, refreshDecoded) => {
 		if (refreshErr) {
 			// Invalid or expired refresh token, trigger logout

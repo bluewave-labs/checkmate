@@ -1,4 +1,7 @@
+const SERVICE_NAME = "StatusService";
+
 class StatusService {
+	static SERVICE_NAME = SERVICE_NAME;
 	/**
 	 * Creates an instance of StatusService.
 	 *
@@ -8,7 +11,7 @@ class StatusService {
 	constructor(db, logger) {
 		this.db = db;
 		this.logger = logger;
-		this.SERVICE_NAME = "StatusService";
+		this.SERVICE_NAME = SERVICE_NAME;
 	}
 
 	getStatusString = (status) => {

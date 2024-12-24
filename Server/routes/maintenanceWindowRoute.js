@@ -1,31 +1,37 @@
 import { Router } from "express";
-import {
-	createMaintenanceWindows,
-	getMaintenanceWindowById,
-	getMaintenanceWindowsByTeamId,
-	getMaintenanceWindowsByMonitorId,
-	deleteMaintenanceWindow,
-	editMaintenanceWindow,
-} from "../controllers/maintenanceWindowController.js";
 import { verifyOwnership } from "../middleware/verifyOwnership.js";
 import Monitor from "../db/models/Monitor.js";
 
-const router = Router();
+class MaintenanceWindowRoutes {
+	constructor(maintenanceWindowController) {
+		this.router = Router();
+		this.maintenanceWindowController = maintenanceWindowController;
+		this.initRoutes();
+	}
+	initRoutes() {
+		this.router.post("/", this.maintenanceWindowController.createMaintenanceWindows);
 
-router.post("/", createMaintenanceWindows);
+		this.router.get(
+			"/monitor/:monitorId",
+			verifyOwnership(Monitor, "monitorId"),
+			this.maintenanceWindowController.getMaintenanceWindowsByMonitorId
+		);
 
-router.get(
-	"/monitor/:monitorId",
-	verifyOwnership(Monitor, "monitorId"),
-	getMaintenanceWindowsByMonitorId
-);
+		this.router.get(
+			"/team/",
+			this.maintenanceWindowController.getMaintenanceWindowsByTeamId
+		);
 
-router.get("/team/", getMaintenanceWindowsByTeamId);
+		this.router.get("/:id", this.maintenanceWindowController.getMaintenanceWindowById);
 
-router.get("/:id", getMaintenanceWindowById);
+		this.router.put("/:id", this.maintenanceWindowController.editMaintenanceWindow);
 
-router.put("/:id", editMaintenanceWindow);
+		this.router.delete("/:id", this.maintenanceWindowController.deleteMaintenanceWindow);
+	}
 
-router.delete("/:id", deleteMaintenanceWindow);
+	getRouter() {
+		return this.router;
+	}
+}
 
-export default router;
+export default MaintenanceWindowRoutes;

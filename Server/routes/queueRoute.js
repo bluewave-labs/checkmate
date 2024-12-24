@@ -1,21 +1,21 @@
 import { Router } from "express";
-import {
-	getMetrics,
-	getJobs,
-	addJob,
-	obliterateQueue,
-} from "../controllers/queueController.js";
 
-const router = Router();
-router.get("/metrics", getMetrics);
+class QueueRoutes {
+	constructor(queueController) {
+		this.router = Router();
+		this.queueController = queueController;
+		this.initRoutes();
+	}
+	initRoutes() {
+		this.router.get("/metrics", this.queueController.getMetrics);
+		this.router.get("/jobs", this.queueController.getJobs);
+		this.router.post("/jobs", this.queueController.addJob);
+		this.router.post("/obliterate", this.queueController.obliterateQueue);
+	}
 
-// Get Jobs
-router.get("/jobs", getJobs);
+	getRouter() {
+		return this.router;
+	}
+}
 
-// Add Job
-router.post("/jobs", addJob);
-
-// Obliterate Queue
-router.post("/obliterate", obliterateQueue);
-
-export default router;
+export default QueueRoutes;

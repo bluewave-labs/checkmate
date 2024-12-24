@@ -10,6 +10,7 @@ const SERVICE_NAME = "EmailService";
  * Represents an email service that can load templates, build, and send emails.
  */
 class EmailService {
+	static SERVICE_NAME = SERVICE_NAME;
 	/**
 	 * Constructs an instance of the EmailService, initializing template loaders and the email transporter.
 	 * @param {Object} settingsService - The settings service to get email configuration.

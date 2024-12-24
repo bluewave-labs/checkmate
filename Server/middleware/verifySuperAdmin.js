@@ -3,6 +3,8 @@ const logger = require("../utils/logger");
 const SERVICE_NAME = "verifyAdmin";
 const TOKEN_PREFIX = "Bearer ";
 const { errorMessages } = require("../utils/messages");
+import ServiceRegistry from "../service/serviceRegistry.js";
+import SettingsService from "../service/settingsService.js";
 /**
  * Verifies the JWT token
  * @function
@@ -33,7 +35,7 @@ const verifySuperAdmin = (req, res, next) => {
 
 	const parsedToken = token.slice(TOKEN_PREFIX.length, token.length);
 	// verify admin role is present
-	const { jwtSecret } = req.settingsService.getSettings();
+	const { jwtSecret } = ServiceRegistry.get(SettingsService.SERVICE_NAME).getSettings();
 
 	jwt.verify(parsedToken, jwtSecret, (err, decoded) => {
 		if (err) {
