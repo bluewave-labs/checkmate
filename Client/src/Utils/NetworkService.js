@@ -856,6 +856,16 @@ class NetworkService {
 			},
 		});
 	}
+
+	async createStatusPage(config) {
+		const { url, authToken, data } = config;
+		return this.axiosInstance.post(`/status-page/${url}`, data, {		
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+				"Content-Type": "application/json",
+			},
+		});
+	}
 }
 
 export default NetworkService;

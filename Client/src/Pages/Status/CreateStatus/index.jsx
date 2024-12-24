@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, Tab, useTheme, Stack, Button } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -21,6 +21,7 @@ import { networkService } from "../../../main";
 
 	const CreateStatus = ({ initForm }) => {
 	const theme = useTheme();	
+	const mode = useSelector((state) => state.ui.mode);
 	const {authToken} = useSelector((state) => state.auth);
 	const {apiBaseUrl} = useSelector((state) => state.settings);	
 	const [tabIdx, setTabIdx] = useState(0);
@@ -46,31 +47,36 @@ import { networkService } from "../../../main";
 				}
 	);
 
-	// switch to the respective tab when there is error on it
-	useEffect(() => {		
+	const setActiveTabOnErrors = () => {
 		let newIdx = -1;
-		Object.keys(errors).map(id=>{
-			error_tab_maping.map((val, idx)  => {
-				let anyMatch = val.some(vl=> vl==id )
-				if(anyMatch){
-					newIdx = idx;					
+		Object.keys(errors).map((id) => {
+			if (newIdx !== -1) return;
+			error_tab_maping.map((val, idx) => {
+				let anyMatch = val.some((vl) => vl == id);
+				if (anyMatch) {
+					newIdx = idx;
+					return;
 				}
-			})
-		})
-		if (newIdx !== -1) setTabIdx(newIdx);		
-	}, [errors]);
+			});
+		});
+		if (newIdx !== -1) setTabIdx(newIdx);
+	};
 
 	const handleTabChange = (_, newTab) => {
 		setTabIdx(tabList.indexOf(newTab));
 	};
 
-	const handleSubmit = async () => {
+	const handleSubmit = async (e) => {
+		e.preventDefault();
 		//validate rest of the form
 		delete form.logo;
+		//let localData = {...form, monitors: form.monitors.map(m=>m.url)}
+		let localData = {...form, monitors: form.monitors, theme: mode}
 		
-		if (hasValidationErrors(form, publicPageGeneralSettingsValidation, setErrors)) {
+		if (hasValidationErrors(localData, publicPageGeneralSettingsValidation, setErrors)) {
+			setActiveTabOnErrors();
 			return;
-		}
+		 }
 		// //validate image field, double check if it is required
 		// let error = validateField(
 		// 	{ type: logo?.type ?? null, size: logo?.size ?? null },
@@ -78,8 +84,8 @@ import { networkService } from "../../../main";
 		// );
 		//		if (error) return;
 
-		//form.logo = { ...logo, size: formatBytes(logo?.size) };
-		let config = { authToken: authToken, url: apiBaseUrl, data: form };
+		//form.logo = { ...logo, size: formatBytes(logo?.size) };	
+		let config = { authToken: authToken, url: apiBaseUrl, data: localData };
 		try{
 			const res = await networkService.createStatusPage(config)
 			if (!res.status === 200) {

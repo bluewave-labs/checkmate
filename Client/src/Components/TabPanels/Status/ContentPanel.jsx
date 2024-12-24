@@ -3,16 +3,13 @@ import { Button, Box, Stack, Typography } from "@mui/material";
 import ConfigBox from "../../../Components/ConfigBox";
 import { useTheme } from "@emotion/react";
 import TabPanel from "@mui/lab/TabPanel";
-import { publicPageGeneralSettingsValidation } from "../../../Validation/validation";
-import { buildErrors } from "../../../Validation/error";
 import Card from "./Card";
 import update from "immutability-helper";
-import Checkbox from "../../Inputs/Checkbox";
 import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
 
 const ContentPanel = () => {
 	const theme = useTheme();
-	const { form, setForm, errors, setErrors  } = useContext(StatusFormContext);
+	const { form, setForm, errors, setErrors } = useContext(StatusFormContext);
 	const [cards, setCards] = useState(form.monitors);
 
 	const moveCard = useCallback(
@@ -30,44 +27,31 @@ const ContentPanel = () => {
 		[cards]
 	);
 
-	const handleChange = (event) => {
-		event.preventDefault();
-		const { value, id } = event.target;
-		setForm((prev) => ({
-			...prev,
-			[id]: value,
-		}));
-	};
-
 	const handleCardChange = (event) => {
 		event.preventDefault();
 		const { value, id } = event.target;
 		let idx = cards.findIndex((a) => a.id == id);
+		let newCards;
 		if (idx >= 0) {
 			let x = JSON.parse(JSON.stringify(cards[idx]));
 			x.url = value;
-			setCards(update(cards, { $splice: [[idx, 1, x]] }));
-		} else setCards(update(cards, { $push: [{ id: id, url: value }] }));
-	}
+			newCards = update(cards, { $splice: [[idx, 1, x]] });
+			setCards(newCards);
+		} else {
+			newCards = update(cards, { $push: [{ id: id, url: value }] });
+			setCards(newCards);
+		}
+		setForm({ ...form, monitors: newCards });
+	};
 	const handleAddNew = () => {
-		setCards([...cards, { id: "" + Math.random() }]);
+		const newCards = [...cards, { id: "" + Math.random() }];
+		setCards(newCards);
+		setForm({ ...form, monitors: newCards });
 	};
 	const removeCard = (id) => {
-		setCards(cards.filter((c) => c?.id != id));
-	};
-	const handleBlur = (event) => {
-		event.preventDefault();
-		const { value, id } = event.target;
-		const { error } = publicPageGeneralSettingsValidation.validate(
-			{ [id]: value },
-			{
-				abortEarly: false,
-			}
-		);
-
-		setErrors((prev) => {
-			return buildErrors(prev, id, error);
-		});
+		const newCards = cards.filter((c) => c?.id != id);
+		setCards(newCards);
+		setForm({ ...form, monitors: newCards });
 	};
 
 	return (
@@ -101,7 +85,6 @@ const ContentPanel = () => {
 						className="status-contents-server-list"
 						sx={{
 							margin: theme.spacing(20),
-							//padding: theme.spacing(20),
 							border: "solid",
 							borderRadius: theme.shape.borderRadius,
 							borderColor: theme.palette.border.light,
@@ -113,48 +96,54 @@ const ContentPanel = () => {
 							},
 						}}
 					>
-						<Box>
-							<Stack
-								direction="row"
-								justifyContent="space-around"
+						<Stack
+							direction="row"
+							justifyContent="space-around"
+						>
+							<Typography
+								component="p"
+								alignSelf={"center"}
 							>
-								<Typography
-									component="p"
-									alignSelf={"center"}
-								>
-									{" "}
-									Servers list{" "}
-								</Typography>
-								<Button onClick={handleAddNew}>Add New</Button>
+								{" "}
+								Servers list{" "}
+							</Typography>
+							<Button onClick={handleAddNew}>Add New</Button>
+						</Stack>
+						{cards.length > 0 && (
+							<Stack
+								id="monitors"
+								direction="column"
+								gap={theme.spacing(2)}
+							>
+								{cards.map((card, idx) => (
+									<Card
+										key={idx}
+										index={idx}
+										id={card?.id ?? "" + Math.random()}
+										text={"" + idx}
+										moveCard={moveCard}
+										removeCard={removeCard}
+										value={card?.url ?? ""}
+										onChange={handleCardChange}
+									/>
+								))}
 							</Stack>
-							{cards.length > 0 && (
-								<Stack
-									direction="column"
-									alignItems="center"
-									gap={theme.spacing(6)}
-									sx={{
-										ml: theme.spacing(4),
-										mr: theme.spacing(8),
-										mb: theme.spacing(8),
-									}}
-								>
-									{cards.map((card, idx) => (
-										<Card
-											key={idx}
-											index={idx}
-											id={card?.id ?? "" + Math.random()}
-											text={"" + idx}
-											moveCard={moveCard}
-											removeCard={removeCard}
-											value={card?.url??""}
-											onChange = {handleCardChange}
-										/>
-									))}
-								</Stack>
-							)}
-						</Box>
+						)}
+						{errors["monitors"] && (
+							<Typography
+								component="span"
+								className="input-error"
+								color={theme.palette.error.main}
+								sx={{
+									opacity: 0.8,
+								}}
+							>
+								{errors["monitors"]}
+							</Typography>
+						)}
 					</Box>
 				</ConfigBox>
+
 				<ConfigBox>
 					<Box>
 						<Stack gap={theme.spacing(6)}>
@@ -162,7 +151,7 @@ const ContentPanel = () => {
 							<Typography component="p">Show more details on the status page</Typography>
 						</Stack>
 					</Box>
-					<Stack	sx={{margin: theme.spacing(20)}}
+					{/* <Stack	sx={{margin: theme.spacing(20)}}
 					>
 						<Checkbox
 							id="show-barcode"
@@ -178,7 +167,7 @@ const ContentPanel = () => {
 							onChange={handleChange}
 							onBlur={handleBlur}
 						/>						
-					</Stack>
+					</Stack> */}
 				</ConfigBox>
 			</Stack>
 		</TabPanel>

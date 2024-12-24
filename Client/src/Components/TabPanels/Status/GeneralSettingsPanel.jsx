@@ -64,7 +64,6 @@ const GeneralSettingsPanel = () => {
 				abortEarly: false,
 			}
 		);
-
 		setErrors((prev) => {
 			return buildErrors(prev, id, error);
 		});
@@ -186,7 +185,7 @@ const GeneralSettingsPanel = () => {
 					</Box>
 					<Stack gap={theme.spacing(6)}>
 						<Select
-							id="display-timezone"
+							id="timezone"
 							label="Display timezone"
 							value={form.timezone}
 							onChange={handleChange}

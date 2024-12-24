@@ -1,6 +1,16 @@
+/**
+ * Update errors if passed id matches the error.details[0].path, otherwise remove
+ * the error for the id
+ * @param {*} prev Previous errors * 
+ * @param {*} id ID of the field whose error is to be either updated or removed
+ * @param {*} error the error object 
+ * @returns the Update Errors with the specific field with id being either removed or updated
+ */
+
+
 const buildErrors = (prev, id, error) => {
 	const updatedErrors = { ...prev };
-	if (error) {
+	if (error && id == error.details[0].path) {
 		updatedErrors[id] = error.details[0].message ?? "Validation error";
 	} else {
 		delete updatedErrors[id];
@@ -32,7 +42,15 @@ const getTouchedFieldErrors = (validation, touchedErrors) => {
 
 	return newErrors;
 };
-
+/**
+ * 
+ * @param {*} form The form object of the submitted form data
+ * @param {*} validation The Joi validation rules
+ * @param {*} setErrors The function used to set the local errors
+ * @returns true if there is no error or false if there is error after validating the form
+ * the error will be reset to {} if returns false; otherwise the errors object will be set with
+ * the new value
+ */
 const hasValidationErrors = (form, validation, setErrors) => {
 	const { error } = validation.validate(form, {
 		abortEarly: false,
@@ -66,8 +84,7 @@ const hasValidationErrors = (form, validation, setErrors) => {
 				newErrors["usage_temperature"] = null;
 			}
 		});
-
-		console.log("newErrors", newErrors);
+		
 		if (Object.values(newErrors).some((v) => v)) {
 			setErrors(newErrors);
 			return true;
@@ -76,6 +93,7 @@ const hasValidationErrors = (form, validation, setErrors) => {
 			return false;
 		}
 	}
+	setErrors({});
 	return false;
 };
 export { buildErrors, hasValidationErrors, getTouchedFieldErrors };
