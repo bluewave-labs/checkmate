@@ -1,6 +1,6 @@
 import { useState, useCallback, useContext } from "react";
 import { Button, Box, Stack, Typography } from "@mui/material";
-import { ConfigBox } from "../../../Pages/Uptime/styled";
+import ConfigBox from "../../../Components/ConfigBox";
 import { useTheme } from "@emotion/react";
 import TabPanel from "@mui/lab/TabPanel";
 import { publicPageGeneralSettingsValidation } from "../../../Validation/validation";

@@ -1,6 +1,6 @@
 import { useState, useRef, useContext } from "react";
 import { Box, Stack, Typography } from "@mui/material";
-import { ConfigBox } from "../../../Pages/Uptime/styled";
+import ConfigBox  from "../../../Components/ConfigBox";
 import Checkbox from "../../Inputs/Checkbox";
 import { useTheme } from "@emotion/react";
 import TabPanel from "@mui/lab/TabPanel";
