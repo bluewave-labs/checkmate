@@ -58,7 +58,7 @@ const DetailsPage = () => {
 		setAnchorEl(null);
 	};
 
-	const dateFormat = dateRange === "day" ? "MMM D, YYYY h A" : "MMM D";
+	const dateFormat = dateRange === "day" ? "MMM D, h A" : "MMM D";
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 
 	const fetchMonitor = useCallback(async () => {
@@ -210,7 +210,56 @@ const DetailsPage = () => {
 									alignSelf: "flex-end",
 								}}
 							>
-								
+								<IconBox
+									mr={theme.spacing(4)}
+									onClick={openCertificate}
+									sx={{
+										cursor: "pointer",
+										"& svg": {
+											width: 23,
+											height: 23,
+											top: "52%",
+										},
+									}}
+								>
+									<CertificateIcon />
+								</IconBox>
+								<Popover
+									id="certificate-dropdown"
+									anchorEl={anchorEl}
+									open={Boolean(anchorEl)}
+									onClose={closeCertificate}
+									disableScrollLock
+									marginThreshold={null}
+									anchorOrigin={{
+										vertical: "bottom",
+										horizontal: "center",
+									}}
+									transformOrigin={{
+										vertical: "top",
+										horizontal: "center",
+									}}
+									slotProps={{
+										paper: {
+											sx: {
+												mt: theme.spacing(4),
+												py: theme.spacing(2),
+												px: theme.spacing(4),
+												width: 140,
+												backgroundColor: theme.palette.background.accent,
+											},
+										},
+									}}
+								>
+									<Typography variant="body2">Certificate Expiry</Typography>
+									<Typography
+										component="span"
+										fontSize={13}
+										color={theme.palette.text.primary}
+									>
+										{certificateExpiry}
+									</Typography>
+								</Popover>
 								{isAdmin && (
 									<Button
 										variant="contained"
@@ -251,18 +300,6 @@ const DetailsPage = () => {
 										{monitor?.latestResponseTime}
 										<Typography component="span">{"ms"}</Typography>
 									</>
-								}
-							/>
-							<StatBox
-								heading="certificate expiry"
-								subHeading={
-									<Typography
-										component="span"
-										fontSize={13}
-										color={theme.palette.text.primary}
-									>
-										{certificateExpiry}
-									</Typography>
 								}
 							/>
 						</Stack>
