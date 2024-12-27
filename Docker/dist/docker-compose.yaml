@@ -1,6 +1,7 @@
 services:
   client:
     image: bluewaveuptime/uptime_client:latest
+    restart: always
     environment:
       UPTIME_APP_API_BASE_URL: "http://localhost:5000/api/v1"
     ports:
@@ -10,6 +11,7 @@ services:
       - server
   server:
     image: bluewaveuptime/uptime_server:latest
+    restart: always
     ports:
       - "5000:5000"
     depends_on:
@@ -22,12 +24,14 @@ services:
     # - /var/run/docker.sock:/var/run/docker.sock:ro
   redis:
     image: bluewaveuptime/uptime_redis:latest
+    restart: always
     ports:
       - "6379:6379"
     volumes:
       - ./redis/data:/data
   mongodb:
     image: bluewaveuptime/uptime_database_mongo:latest
+    restart: always
     volumes:
       - ./mongo/data:/data/db
     command: ["mongod", "--quiet"]

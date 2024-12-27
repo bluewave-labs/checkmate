@@ -294,6 +294,7 @@ const PageSpeedDetails = () => {
 					</Box>
 					<ChartBox
 						flex={1}
+						/* TODO apply 1fr 1fr for columns, and auto 1fr for Rows */
 						sx={{ gridTemplateColumns: "50% 50%", gridTemplateRows: "15% 85%" }}
 					>
 						<Stack

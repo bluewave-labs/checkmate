@@ -649,7 +649,7 @@ describe("Auth Controller - requestRecovery", () => {
 					url: "http://localhost/set-new-password/recovery-token",
 				},
 				"test@test.com",
-				"Bluewave Uptime Password Reset"
+				"Checkmate Password Reset"
 			)
 		).to.be.true;
 		expect(res.status.calledOnceWith(200)).to.be.true;

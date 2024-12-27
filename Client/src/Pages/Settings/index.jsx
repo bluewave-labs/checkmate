@@ -20,7 +20,6 @@ import timezones from "../../Utils/timezones.json";
 import { useState, useEffect } from "react";
 import { networkService } from "../../main";
 import { settingsValidation } from "../../Validation/validation";
-import { useNavigate } from "react-router";
 import Dialog from "../../Components/Dialog";
 import { useIsAdmin } from "../../Hooks/useIsAdmin";
 import ConfigBox from "../../Components/ConfigBox";
@@ -44,7 +43,6 @@ const Settings = () => {
 	const deleteStatsMonitorsInitState = { deleteMonitors: false, deleteStats: false };
 	const [isOpen, setIsOpen] = useState(deleteStatsMonitorsInitState);
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
 	//Fetching latest release version from github
 	useEffect(() => {

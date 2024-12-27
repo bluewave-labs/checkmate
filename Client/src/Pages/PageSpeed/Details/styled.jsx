@@ -2,7 +2,7 @@ import { Stack, styled } from "@mui/material";
 
 export const ChartBox = styled(Stack)(({ theme }) => ({
 	display: "grid",
-	height: 300,
+	minHeight: 300,
 	minWidth: 250,
 	border: 1,
 	borderStyle: "solid",

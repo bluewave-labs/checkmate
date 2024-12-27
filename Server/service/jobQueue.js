@@ -1,7 +1,8 @@
 const QUEUE_NAME = "monitors";
 const JOBS_PER_WORKER = 5;
-import { errorMessages, successMessages } from "../utils/messages.js";
 const SERVICE_NAME = "JobQueue";
+
+import { errorMessages, successMessages } from "../utils/messages.js";
 /**
  * JobQueue
  *
@@ -10,6 +11,7 @@ const SERVICE_NAME = "JobQueue";
  * It scales the number of workers based on the number of jobs/worker
  */
 class JobQueue {
+	static SERVICE_NAME = SERVICE_NAME;
 	/**
 	 * @class JobQueue
 	 * @classdesc Manages job queue and workers.

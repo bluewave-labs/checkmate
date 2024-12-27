@@ -1,4 +1,6 @@
 import { errorMessages, successMessages } from "../utils/messages.js";
+const SERVICE_NAME = "NetworkService";
+
 /**
  * Constructs a new NetworkService instance.
  *
@@ -8,13 +10,14 @@ import { errorMessages, successMessages } from "../utils/messages.js";
  * @param {Object} http - The HTTP utility for network operations.
  */
 class NetworkService {
+	static SERVICE_NAME = SERVICE_NAME;
 	constructor(axios, ping, logger, http, Docker) {
 		this.TYPE_PING = "ping";
 		this.TYPE_HTTP = "http";
 		this.TYPE_PAGESPEED = "pagespeed";
 		this.TYPE_HARDWARE = "hardware";
 		this.TYPE_DOCKER = "docker";
-		this.SERVICE_NAME = "NetworkService";
+		this.SERVICE_NAME = SERVICE_NAME;
 		this.NETWORK_ERROR = 5000;
 		this.PING_ERROR = 5001;
 		this.axios = axios;

@@ -13,6 +13,8 @@ import { logger } from "../../../Utils/Logger";
 import "../index.css";
 import EmailStep from "./Components/EmailStep";
 import PasswordStep from "./Components/PasswordStep";
+import ThemeSwitch from "../../../Components/ThemeSwitch";
+import ForgotPasswordLabel from "./Components/ForgotPasswordLabel";
 
 const DEMO = import.meta.env.VITE_APP_DEMO;
 
@@ -174,6 +176,7 @@ const Login = () => {
 				px={{ xs: theme.spacing(12), lg: theme.spacing(20) }}
 				pb={theme.spacing(20)}
 				mx="auto"
+				rowGap={theme.spacing(8)}
 				sx={{
 					"& > .MuiStack-root": {
 						border: 1,
@@ -205,6 +208,13 @@ const Login = () => {
 						/>
 					)
 				)}
+				<ForgotPasswordLabel
+					email={form.email}
+					errorEmail={errors.email}
+				/>
+				<Box marginX={"auto"}>
+					<ThemeSwitch />
+				</Box>
 			</Stack>
 		</Stack>
 	);

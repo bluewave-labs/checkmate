@@ -216,7 +216,9 @@ const BasicTable = ({ data, paginated, reversed, table, emptyMessage = "No data"
 									sx={{
 										cursor: row.handleClick ? "pointer" : "default",
 										"&:hover": {
-											backgroundColor: theme.palette.background.accent,
+											filter: "brightness(.75)",
+											opacity: 0.75,
+											transition: "filter 0.3s ease, opacity 0.3s ease",
 										},
 									}}
 									key={row.id}

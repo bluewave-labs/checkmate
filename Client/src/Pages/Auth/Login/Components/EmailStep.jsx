@@ -3,7 +3,6 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import TextInput from "../../../../Components/Inputs/TextInput";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router";
 
 /**
  * Renders the email step of the login process which includes an email field.
@@ -19,20 +18,12 @@ import { useNavigate } from "react-router";
 const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 	const theme = useTheme();
 	const inputRef = useRef(null);
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (inputRef.current) {
 			inputRef.current.focus();
 		}
 	}, []);
-
-	const handleNavigate = () => {
-		if (form.email !== "" && !errors.email) {
-			sessionStorage.setItem("email", form.email);
-		}
-		navigate("/forgot-password");
-	};
 
 	return (
 		<>
@@ -89,32 +80,6 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 							Continue
 						</Button>
 					</Stack>
-				</Box>
-				<Box
-					textAlign="center"
-					sx={{
-						position: "absolute",
-						bottom: 0,
-						left: "50%",
-						transform: `translate(-50%, 150%)`,
-					}}
-				>
-					<Typography
-						className="forgot-p"
-						display="inline-block"
-						color={theme.palette.primary.main}
-					>
-						Forgot password?
-					</Typography>
-					<Typography
-						component="span"
-						color={theme.palette.primary.main}
-						ml={theme.spacing(2)}
-						sx={{ userSelect: "none" }}
-						onClick={handleNavigate}
-					>
-						Reset password
-					</Typography>
 				</Box>
 			</Stack>
 		</>
