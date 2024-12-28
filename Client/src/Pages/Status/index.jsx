@@ -6,6 +6,8 @@ import CreateStatus from "./CreateStatus";
 import { useEffect, useState } from "react";
 import { networkService } from "../../main";
 import { useSelector } from "react-redux";
+import { createToast }  from "../../Utils/toastUtils"
+import { logger } from "../../Utils/Logger";
 
 const Status = () => {
 	const theme = useTheme();
@@ -13,13 +15,18 @@ const Status = () => {
 	const {authToken} = useSelector((state) => state.auth);
 	const {apiBaseUrl} = useSelector((state) => state.settings);	
 	const [initForm, setInitForm] = useState({});
-
 	useEffect(() => {
 		const getStatusPage = async () => {
-			let config = { authToken: authToken, url: apiBaseUrl };
-			let res = await networkService.getStatusPageByUrl(config);			
-			if(res && res.data)
-				setInitForm( res.data.data)
+			let config = { authToken: authToken, url: "status-page" };
+			try {
+				let res = await networkService.getStatusPageByUrl(config);			
+				if(res && res.data)
+					setInitForm( res.data.data)
+			}catch (error) {
+				createToast({ body: "Failed to fetch status page data" });
+				logger.error("Failed to fetch status page", error);
+			} 
+			
 		};
 		getStatusPage();
 	}, []);

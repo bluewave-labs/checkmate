@@ -13,12 +13,13 @@ const CustomCard = React.forwardRef((props, ref) => (
 				removeItem={props.removeCard}
 				value={props.value}
 				onChange={props.onChange}
+        monitors={props.monitors}
 			/>
 		</CardContent>
 	</Card>
 ));
 
-const MyCard = ({ id, index, moveCard, removeCard, value, onChange }) => {
+const MyCard = ({ id, index, moveCard, removeCard, value, onChange, monitors }) => {
   const ref = useRef(null);
   const [, drop] = useDrop({
     accept: ItemTypes.CARD,
@@ -80,6 +81,7 @@ const MyCard = ({ id, index, moveCard, removeCard, value, onChange }) => {
 			removeCard={removeCard}
 			value={value}
 			onChange={onChange}
+      monitors={monitors}
 		/>
 	);
 };

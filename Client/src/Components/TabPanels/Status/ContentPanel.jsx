@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from "react";
+import { useState, useCallback, useContext, useEffect } from "react";
 import { Button, Box, Stack, Typography } from "@mui/material";
 import ConfigBox from "../../../Components/ConfigBox";
 import { useTheme } from "@emotion/react";
@@ -6,11 +6,38 @@ import TabPanel from "@mui/lab/TabPanel";
 import Card from "./Card";
 import update from "immutability-helper";
 import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
+import { useSelector } from "react-redux";
+import { logger } from "../../../Utils/Logger"
+import { createToast } from "../../../Utils/toastUtils";
+import { networkService } from "../../../main";
 
 const ContentPanel = () => {
 	const theme = useTheme();
 	const { form, setForm, errors, setErrors } = useContext(StatusFormContext);
-	const [cards, setCards] = useState(form.monitors);
+	const [cards, setCards] = useState(form.monitors.length>0? form.monitors.map((m, idx)=>({id: idx, val: m})): []);
+	const {user, authToken } = useSelector((state) => state.auth);	
+	const [monitors, setMonitors] = useState([]);
+
+	useEffect(() => {
+		const fetchMonitors = async () => {
+			try {
+				const response = await networkService.getMonitorsByTeamId({
+					authToken: authToken,
+					teamId: user.teamId,
+					limit: -1,
+					types: ["http", "ping", "pagespeed", "hardware"],
+				});
+				if(response.data.data.monitors.length==0){
+					setErrors({monitors: "Please config monitors to setup status page"})
+				}
+				setMonitors(response.data.data.monitors);
+			} catch (error) {
+				createToast({ body: "Failed to fetch monitors data" });
+				logger.error("Failed to fetch monitors", error);
+			}
+		};			
+		fetchMonitors();
+	}, [user, authToken]);
 
 	const moveCard = useCallback(
 		(dragIndex, hoverIndex) => {
@@ -27,31 +54,40 @@ const ContentPanel = () => {
 		[cards]
 	);
 
-	const handleCardChange = (event) => {
+	const handleCardChange = (event, val) => {
 		event.preventDefault();
-		const { value, id } = event.target;
-		let idx = cards.findIndex((a) => a.id == id);
+		const { id } = event.target;
+		let idx = cards.findIndex((a) => {
+			let found = false;
+			let optionIdx = id.indexOf("-option");
+			if (optionIdx !== -1) found = a.id == id.substr(0, optionIdx);
+			else found = a.id == id;
+			return found;
+		});
 		let newCards;
 		if (idx >= 0) {
 			let x = JSON.parse(JSON.stringify(cards[idx]));
-			x.url = value;
+			x.val = val;
 			newCards = update(cards, { $splice: [[idx, 1, x]] });
 			setCards(newCards);
 		} else {
-			newCards = update(cards, { $push: [{ id: id, url: value }] });
+			newCards = update(cards, { $push: [{ id: id, val: val }] });
 			setCards(newCards);
 		}
-		setForm({ ...form, monitors: newCards });
+		setForm({ ...form, monitors: newCards.map(c=>c.val) });
 	};
 	const handleAddNew = () => {
+		if (cards.length === monitors.length) return;
 		const newCards = [...cards, { id: "" + Math.random() }];
 		setCards(newCards);
-		setForm({ ...form, monitors: newCards });
 	};
 	const removeCard = (id) => {
 		const newCards = cards.filter((c) => c?.id != id);
 		setCards(newCards);
-		setForm({ ...form, monitors: newCards });
+		setForm({
+			...form,
+			monitors: newCards.filter((c) => c.val !== undefined).map((c) => c.val),
+		});
 	};
 
 	return (
@@ -107,7 +143,12 @@ const ContentPanel = () => {
 								{" "}
 								Servers list{" "}
 							</Typography>
-							<Button onClick={handleAddNew}>Add New</Button>
+							<Button
+								onClick={handleAddNew}
+								disabled={monitors.length === 0 || monitors.length <= cards.length}
+							>
+								Add New
+							</Button>
 						</Stack>
 						{cards.length > 0 && (
 							<Stack
@@ -115,18 +156,21 @@ const ContentPanel = () => {
 								direction="column"
 								gap={theme.spacing(2)}
 							>
-								{cards.map((card, idx) => (
-									<Card
-										key={idx}
-										index={idx}
-										id={card?.id ?? "" + Math.random()}
-										text={"" + idx}
-										moveCard={moveCard}
-										removeCard={removeCard}
-										value={card?.url ?? ""}
-										onChange={handleCardChange}
-									/>
-								))}
+								{cards.map((card, idx) => {
+									return (
+										<Card
+											key={idx}
+											index={idx}
+											id={card?.id ?? "" + Math.random()}
+											text={"" + idx}
+											moveCard={moveCard}
+											removeCard={removeCard}
+											value={card.val ?? {}}
+											onChange={handleCardChange}
+											monitors={monitors}
+										/>
+									);
+								})}
 							</Stack>
 						)}
 						{errors["monitors"] && (

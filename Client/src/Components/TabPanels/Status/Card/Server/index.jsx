@@ -1,11 +1,21 @@
-import TextInput from "../../../../Inputs/TextInput";
 import { ServerStartAdornment, ServerEndAdornment } from "../../../../Inputs/TextInput/Adornments";
+import Search from "../../../../Inputs/Search";
+import {useState} from "react"
 
-
-const Server = ({ id, removeItem, value, onChange }) => {
+const Server = ({ id, removeItem, onChange, monitors, value, label }) => {
+	const [search, setSearch] = useState("");	
+	const handleSearch = (val) => {
+		setSearch(val);
+	};
 	return (
-		<TextInput
-			type="text"
+		<Search
+			id={id}
+			multiple={false}
+			isAdorned={false}
+			options={monitors ? monitors : []}
+			filteredBy="name"
+			inputValue={search}
+			value={value}		
 			startAdornment={<ServerStartAdornment />}
 			endAdornment={
 				<ServerEndAdornment
@@ -13,10 +23,9 @@ const Server = ({ id, removeItem, value, onChange }) => {
 					removeItem={removeItem}
 				/>
 			}
-			id={id}
-			value= {value}
-			onChange ={ onChange }
-		></TextInput>
+			handleInputChange={handleSearch}
+			handleChange={onChange}
+		/>
 	);
 };
 

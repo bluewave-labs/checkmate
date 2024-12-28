@@ -3,8 +3,8 @@ import { useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
-import Docs from "../../../../assets/icons/docs.svg?react";
-import DeleteIcon from "../../../../assets/icons/trash-bin.svg?react";
+import ReorderRoundedIcon from '@mui/icons-material/ReorderRounded';
+import DeleteIcon  from "../../../../assets/icons/trash-bin.svg?react";
 
 export const HttpAdornment = ({ https, prefix }) => {
 	const theme = useTheme();
@@ -70,7 +70,7 @@ PasswordEndAdornment.propTypes = {
 export const ServerStartAdornment = () => {
 	return (
 		<InputAdornment position="start">
-			<Docs />
+			<ReorderRoundedIcon />
 		</InputAdornment>
 	);
 };

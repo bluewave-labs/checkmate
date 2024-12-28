@@ -22,7 +22,7 @@ import { networkService } from "../../../main";
 	const CreateStatus = ({ initForm }) => {
 	const theme = useTheme();	
 	const mode = useSelector((state) => state.ui.mode);
-	const {authToken} = useSelector((state) => state.auth);
+	const { authToken } = useSelector((state) => state.auth);
 	const {apiBaseUrl} = useSelector((state) => state.settings);	
 	const [tabIdx, setTabIdx] = useState(0);
 	const [errors, setErrors] = useState({});
@@ -46,7 +46,6 @@ import { networkService } from "../../../main";
 					// showBarcode: false,
 				}
 	);
-
 	const setActiveTabOnErrors = () => {
 		let newIdx = -1;
 		Object.keys(errors).map((id) => {
@@ -72,7 +71,6 @@ import { networkService } from "../../../main";
 		delete form.logo;
 		//let localData = {...form, monitors: form.monitors.map(m=>m.url)}
 		let localData = {...form, monitors: form.monitors, theme: mode}
-		
 		if (hasValidationErrors(localData, publicPageGeneralSettingsValidation, setErrors)) {
 			setActiveTabOnErrors();
 			return;
@@ -85,7 +83,8 @@ import { networkService } from "../../../main";
 		//		if (error) return;
 
 		//form.logo = { ...logo, size: formatBytes(logo?.size) };	
-		let config = { authToken: authToken, url: apiBaseUrl, data: localData };
+		localData = {...form, monitors: form.monitors.map(m=>m.url),theme: mode}
+		let config = { authToken: authToken, url: "status-page", data: localData };
 		try{
 			const res = await networkService.createStatusPage(config)
 			if (!res.status === 200) {
