@@ -98,7 +98,7 @@ const PATH_MAP = {
 	pagespeed: "Dashboard",
 	infrastructure: "Dashboard",
 	account: "Account",
-	settings: "Other",
+	settings: "Settings",
 };
 
 /**
