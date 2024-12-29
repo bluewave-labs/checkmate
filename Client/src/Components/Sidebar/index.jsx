@@ -44,6 +44,7 @@ import ChangeLog from "../../assets/icons/changeLog.svg?react";
 import Docs from "../../assets/icons/docs.svg?react";
 import Folder from "../../assets/icons/folder.svg?react";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
+import CloseIcon from "@mui/icons-material/Close"; // Importing CloseIcon from MUI
 
 import "./index.css";
 
@@ -119,6 +120,7 @@ function Sidebar() {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popup, setPopup] = useState();
 	const { user } = useSelector((state) => state.auth);
+	const [showStarRepo, setShowStarRepo] = useState(true);
 
 	const accountMenuItem = menu.find((item) => item.name === "Account");
 	if (user.role?.includes("demo") && accountMenuItem) {
@@ -155,6 +157,18 @@ function Sidebar() {
 			setOpen((prev) => ({ ...prev, [PATH_MAP[matchedKey]]: true }));
 		}
 	}, [location]);
+
+	useEffect(() => {
+		const hasClosed = localStorage.getItem("starRepoClosed");
+		if (hasClosed) {
+			setShowStarRepo(false);
+		}
+	}, []);
+
+	const handleCloseStarRepo = () => {
+		setShowStarRepo(false);
+		localStorage.setItem("starRepoClosed", "true");
+	};
 
 	/* TODO refactor this, there are a some ternaries and comments in the return  */
 
@@ -507,6 +521,44 @@ function Sidebar() {
 				)}
 			</List>
 			<Divider sx={{ mt: "auto" }} />
+
+			{showStarRepo && (
+				<Box
+					sx={{
+						backgroundColor: "white",
+						padding: theme.spacing(4),
+						borderRadius: theme.shape.borderRadius,
+						position: "relative",
+						height: "100px",
+						display: "flex",
+						flexDirection: "column",
+						justifyContent: "center",
+						margin: theme.spacing(3),
+					}}
+				>
+					<Typography style={{ fontStyle: "bold" , marginTop: "5px",color: "black" , fontSize: "16px"  }} variant="body2" color="black">
+						 Star Checkmate
+					</Typography>
+					<Typography style={{  fontSize: "13px" , marginTop: "10px" , color: "black"  }} variant="body2" color="black">
+						See the latest releases and help grow the community on GitHub
+					</Typography>
+					<Box sx={{ display: "flex", justifyContent: "Start", alignItems: "center" , marginTop: "10px" , marginBottom: "10px" }}>
+					<a href="https://github.com/bluewave-labs/checkmate" target="_blank" rel="noopener noreferrer"> <img src="https://img.shields.io/github/stars/bluewave-labs/checkmate?label=checkmate&style=social" alt="Checkmate Logo"  /> </a>
+					</Box>
+					<Box sx={{ borderTop: '1px solid', borderColor: theme.palette.divider, my: 2 }} />
+					<IconButton
+						sx={{
+							position: "absolute",
+							top: 0,
+							right: 0,
+							mt: "-10px",
+						}}
+						onClick={handleCloseStarRepo}
+					>
+						<CloseIcon />
+					</IconButton>
+				</Box>
+			)}
 
 			<Stack
 				direction="row"
