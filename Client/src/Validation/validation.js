@@ -158,18 +158,14 @@ const publicPageGeneralSettingsValidation = joi.object({
 	url: joi.string().trim().messages({ "string.empty": "URL is required." }),
 	timezone: joi.string().trim().messages({ "string.empty": "Timezone is required." }),
 	color: joi.string().trim().messages({ "string.empty": "Color is required." }),
-	
+
 	theme: joi.string(),
-	monitors: joi
-		.array()
-		.min(1)
-		.items({ id: joi.string(), url: joi.string().required() })
-		.messages({
-			"string.pattern.base": "Must be a valid monitor ID",
-			"array.base": "Monitors must be an array",
-			"array.empty": "At least one monitor is required",
-			"any.required": "Monitors are required",
-		}),	
+	monitors: joi.array().min(1).items(joi.string().required()).messages({
+		"string.pattern.base": "Must be a valid monitor ID",
+		"array.base": "Monitors must be an array",
+		"array.empty": "At least one monitor is required",
+		"any.required": "Monitors are required",
+	}),
 });
 const settingsValidation = joi.object({
 	ttl: joi.number().required().messages({

@@ -14,7 +14,7 @@ import { networkService } from "../../../main";
 const ContentPanel = () => {
 	const theme = useTheme();
 	const { form, setForm, errors, setErrors } = useContext(StatusFormContext);
-	const [cards, setCards] = useState(form.monitors.length>0? form.monitors.map((m, idx)=>({id: idx, val: m})): []);
+	const [cards, setCards] = useState([]);
 	const {user, authToken } = useSelector((state) => state.auth);	
 	const [monitors, setMonitors] = useState([]);
 
@@ -30,7 +30,15 @@ const ContentPanel = () => {
 				if(response.data.data.monitors.length==0){
 					setErrors({monitors: "Please config monitors to setup status page"})
 				}
-				setMonitors(response.data.data.monitors);
+				const fullMonitors = response.data.data.monitors ;
+				setMonitors(fullMonitors);
+				if (form.monitors.length > 0)
+					setCards(
+						form.monitors.map((mid, idx) => ({
+							id: "" + idx,
+							val: fullMonitors.filter((fM) => fM._id == mid)[0],
+						}))
+					);
 			} catch (error) {
 				createToast({ body: "Failed to fetch monitors data" });
 				logger.error("Failed to fetch monitors", error);

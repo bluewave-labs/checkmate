@@ -69,12 +69,18 @@ import { networkService } from "../../../main";
 		e.preventDefault();
 		//validate rest of the form
 		delete form.logo;
-		//let localData = {...form, monitors: form.monitors.map(m=>m.url)}
-		let localData = {...form, monitors: form.monitors, theme: mode}
+		let localData = {
+			...form,
+			monitors:
+				form.monitors[0] && Object.keys(form.monitors[0]).includes("_id")
+					? form.monitors.map((m) => m._id)
+					: form.monitors,
+			theme: mode,
+		};
 		if (hasValidationErrors(localData, publicPageGeneralSettingsValidation, setErrors)) {
 			setActiveTabOnErrors();
 			return;
-		 }
+		}
 		// //validate image field, double check if it is required
 		// let error = validateField(
 		// 	{ type: logo?.type ?? null, size: logo?.size ?? null },
@@ -82,20 +88,17 @@ import { networkService } from "../../../main";
 		// );
 		//		if (error) return;
 
-		//form.logo = { ...logo, size: formatBytes(logo?.size) };	
-		localData = {...form, monitors: form.monitors.map(m=>m.url),theme: mode}
+		//form.logo = { ...logo, size: formatBytes(logo?.size) };
 		let config = { authToken: authToken, url: "status-page", data: localData };
-		try{
-			const res = await networkService.createStatusPage(config)
+		try {
+			const res = await networkService.createStatusPage(config);
 			if (!res.status === 200) {
 				throw new Error("Failed to create status page");
 			}
 			createToast({ body: "Status page created successfully!" });
-		}
-		catch(e){
+		} catch (e) {
 			createToast({ body: e.message || "Error creating status page" });
-		}		
-
+		}
 	};
 
 	return (
@@ -144,7 +147,7 @@ import { networkService } from "../../../main";
 					</TabList>
 				</Box>
 				<StatusFormProvider
-					form={hasInitForm ? initForm : form}
+					form={form}
 					setForm={setForm}
 					errors={errors}
 					setErrors={setErrors}

@@ -66,6 +66,10 @@ const hasValidationErrors = (form, validation, setErrors) => {
 					"refreshTokenTTL",
 					"jwtTTL",
 					"notify-email-list",
+					"_id",
+					"__v",
+					"createdAt",
+					"updatedAt"
 				].includes(err.path[0])
 			) {
 				newErrors[err.path[0]] = err.message ?? "Validation error";
@@ -84,7 +88,6 @@ const hasValidationErrors = (form, validation, setErrors) => {
 				newErrors["usage_temperature"] = null;
 			}
 		});
-		
 		if (Object.values(newErrors).some((v) => v)) {
 			setErrors(newErrors);
 			return true;

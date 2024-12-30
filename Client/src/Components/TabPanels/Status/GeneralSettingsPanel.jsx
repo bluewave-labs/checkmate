@@ -1,7 +1,6 @@
 import { useState, useRef, useContext } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import ConfigBox  from "../../../Components/ConfigBox";
-import Checkbox from "../../Inputs/Checkbox";
 import { useTheme } from "@emotion/react";
 import TabPanel from "@mui/lab/TabPanel";
 import TextInput from "../../Inputs/TextInput";
@@ -25,7 +24,7 @@ const GeneralSettingsPanel = () => {
 	const { form, setForm, errors, setErrors  } = useContext(StatusFormContext);
 	const [progress, setProgress] = useState({ value: 0, isLoading: false });
 	const intervalRef = useRef(null);
-	
+
 	// Clears specific error from errors state
 	const clearError = (err) => {
 		setErrors((prev) => {
@@ -131,13 +130,13 @@ const GeneralSettingsPanel = () => {
 						</Stack>
 					</Box>
 					<Stack gap={theme.spacing(6)}>
-						<Checkbox
+						{/* <Checkbox
 							id="published-to-public"
 							label={`Published and visible to the public`}
 							isChecked={form.publish}
 							onChange={handleChange}
 							onBlur={handleBlur}
-						/>
+						/> */}
 					</Stack>
 				</ConfigBox>
 
