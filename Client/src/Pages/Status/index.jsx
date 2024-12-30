@@ -6,9 +6,13 @@ import CreateStatus from "./CreateStatus";
 import { useEffect, useState } from "react";
 import { networkService } from "../../main";
 import { useSelector } from "react-redux";
-import { createToast }  from "../../Utils/toastUtils"
 import { logger } from "../../Utils/Logger";
 
+/**
+ * The configuration page for public page that contains a general settings and 
+ * content tabs, It will display a static page if there is no status page configured
+ * or the status page if one is already configured
+ */
 const Status = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();	
@@ -23,7 +27,6 @@ const Status = () => {
 				if(res && res.data)
 					setInitForm( res.data.data)
 			}catch (error) {
-				createToast({ body: "Failed to fetch status page data" });
 				logger.error("Failed to fetch status page", error);
 			} 
 			

@@ -100,3 +100,8 @@ export const ServerEndAdornment = ({ id, removeItem }) => {
 		</InputAdornment>
 	);
 };
+
+ServerEndAdornment.propTypes = {
+	id: PropTypes.string.isRequired,
+	removeItem: PropTypes.func.isRequired,
+};

@@ -5,6 +5,11 @@ import Card from "@mui/material/Card";
 import Server from "./Server"
 import { CardContent } from "@mui/material";
 
+/**
+ * CustomCard is a React Forward Ref component that 
+ * passes properties to its wrapped component with
+ * ref that carrys the drag and drop feature etc 
+ */
 const CustomCard = React.forwardRef((props, ref) => (
 	<Card ref={ref}>
 		<CardContent>
@@ -18,6 +23,19 @@ const CustomCard = React.forwardRef((props, ref) => (
 		</CardContent>
 	</Card>
 ));
+
+/** 
+ * @param {*} id The Id of the Server component
+ * @param {*} index The index of the Card in its natural order of placement
+ * @param {*} moveCard The function to actually move a card
+ * @param {*} removeCard The function to remote the card
+ * @param {*} onChange The Change handler function to handle when the server value is changed
+ * used to update the server(monitor) lists
+ * @param {*} monitors The server monitors options
+ * @param {*} value the option label of the server/monitor, namely the monitor name field
+ * @returns The Card component representing a singler server/monitor that is capable of being 
+ * dragged and droped
+ */
 
 const MyCard = ({ id, index, moveCard, removeCard, value, onChange, monitors }) => {
   const ref = useRef(null);

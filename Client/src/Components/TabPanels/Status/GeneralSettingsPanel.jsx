@@ -18,6 +18,10 @@ import ImageIcon from "@mui/icons-material/Image";
 import { HttpAdornment } from "../../Inputs/TextInput/Adornments";
 import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
 
+/**
+ * General settings panel is ued to compose part of the public static page
+ * for general informations like company name, subdomain url, logo and color etc
+ */
 const GeneralSettingsPanel = () => {
 	const theme = useTheme();	
 	const [logo, setLogo] = useState();

@@ -11,6 +11,12 @@ import { logger } from "../../../Utils/Logger"
 import { createToast } from "../../../Utils/toastUtils";
 import { networkService } from "../../../main";
 
+/**
+ * Content Panel is used to compose the second part of the status page
+ * for the servers/monitors to watch for in its public page presence and some 
+ * other server related configurations etc
+ * 
+ */
 const ContentPanel = () => {
 	const theme = useTheme();
 	const { form, setForm, errors, setErrors } = useContext(StatusFormContext);
