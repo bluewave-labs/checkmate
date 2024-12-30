@@ -1,10 +1,12 @@
 import { Stack, Typography, InputAdornment, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useState } from "react";
 import PropTypes from "prop-types";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
-export const HttpAdornment = ({ https }) => {
+import ReorderRoundedIcon from '@mui/icons-material/ReorderRounded';
+import DeleteIcon  from "../../../../assets/icons/trash-bin.svg?react";
+
+export const HttpAdornment = ({ https, prefix }) => {
 	const theme = useTheme();
 	return (
 		<Stack
@@ -23,7 +25,7 @@ export const HttpAdornment = ({ https }) => {
 				color={theme.palette.text.secondary}
 				sx={{ lineHeight: 1, opacity: 0.8 }}
 			>
-				{https ? "https" : "http"}://
+				{prefix !== undefined ? prefix : https ? "https://" : "http://"}
 			</Typography>
 		</Stack>
 	);
@@ -31,6 +33,7 @@ export const HttpAdornment = ({ https }) => {
 
 HttpAdornment.propTypes = {
 	https: PropTypes.bool.isRequired,
+	prefix: PropTypes.string,
 };
 
 export const PasswordEndAdornment = ({ fieldType, setFieldType }) => {
@@ -62,4 +65,38 @@ export const PasswordEndAdornment = ({ fieldType, setFieldType }) => {
 PasswordEndAdornment.propTypes = {
 	fieldType: PropTypes.string,
 	setFieldType: PropTypes.func,
+};
+
+export const ServerStartAdornment = () => {
+	return (
+		<InputAdornment position="start">
+			<ReorderRoundedIcon />
+		</InputAdornment>
+	);
+};
+
+export const ServerEndAdornment = ({ id, removeItem }) => {
+	const theme = useTheme();
+	return (
+		<InputAdornment position="end">
+			<IconButton
+				aria-label="remove server"
+				onClick={() => removeItem(id)}
+				sx={{
+					color: theme.palette.border.dark,
+					padding: theme.spacing(1),
+					"&:focus-visible": {
+						outline: `2px solid ${theme.palette.primary.main}`,
+						outlineOffset: `2px`,
+					},
+					"& .MuiTouchRipple-root": {
+						pointerEvents: "none",
+						display: "none",
+					},
+				}}
+			>
+				<DeleteIcon />
+			</IconButton>
+		</InputAdornment>
+	);
 };
