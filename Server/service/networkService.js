@@ -1,4 +1,6 @@
 import { errorMessages, successMessages } from "../utils/messages.js";
+const SERVICE_NAME = "NetworkService";
+
 /**
  * Constructs a new NetworkService instance.
  *
@@ -6,15 +8,18 @@ import { errorMessages, successMessages } from "../utils/messages.js";
  * @param {Object} ping - The ping utility for network checks.
  * @param {Object} logger - The logger instance for logging.
  * @param {Object} http - The HTTP utility for network operations.
+ * @param {Object} net - The net utility for network operations.
  */
 class NetworkService {
-	constructor(axios, ping, logger, http, Docker) {
+	static SERVICE_NAME = SERVICE_NAME;
+	constructor(axios, ping, logger, http, Docker, net) {
 		this.TYPE_PING = "ping";
 		this.TYPE_HTTP = "http";
 		this.TYPE_PAGESPEED = "pagespeed";
 		this.TYPE_HARDWARE = "hardware";
 		this.TYPE_DOCKER = "docker";
-		this.SERVICE_NAME = "NetworkService";
+		this.TYPE_PORT = "port";
+		this.SERVICE_NAME = SERVICE_NAME;
 		this.NETWORK_ERROR = 5000;
 		this.PING_ERROR = 5001;
 		this.axios = axios;
@@ -22,6 +27,7 @@ class NetworkService {
 		this.logger = logger;
 		this.http = http;
 		this.Docker = Docker;
+		this.net = net;
 	}
 
 	/**
@@ -262,6 +268,60 @@ class NetworkService {
 		}
 	}
 
+	async requestPort(job) {
+		try {
+			const { url, port } = job.data;
+			const { response, responseTime, error } = await this.timeRequest(async () => {
+				return new Promise((resolve, reject) => {
+					const socket = this.net.createConnection(
+						{
+							host: url,
+							port,
+						},
+						() => {
+							socket.end();
+							socket.destroy();
+							resolve({ success: true });
+						}
+					);
+
+					socket.setTimeout(5000);
+					socket.on("timeout", () => {
+						socket.destroy();
+						reject(new Error("Connection timeout"));
+					});
+
+					socket.on("error", (err) => {
+						socket.destroy();
+						reject(err);
+					});
+				});
+			});
+
+			const portResponse = {
+				monitorId: job.data._id,
+				type: job.data.type,
+				responseTime,
+			};
+
+			if (error) {
+				portResponse.status = false;
+				portResponse.code = this.NETWORK_ERROR;
+				portResponse.message = errorMessages.PORT_FAIL;
+				return portResponse;
+			}
+
+			portResponse.status = response.success;
+			portResponse.code = 200;
+			portResponse.message = successMessages.PORT_SUCCESS;
+			return portResponse;
+		} catch (error) {
+			error.service = this.SERVICE_NAME;
+			error.method = "requestTCP";
+			throw error;
+		}
+	}
+
 	/**
 	 * Handles unsupported job types by throwing an error with details.
 	 *
@@ -297,6 +357,9 @@ class NetworkService {
 				return await this.requestHardware(job);
 			case this.TYPE_DOCKER:
 				return await this.requestDocker(job);
+			case this.TYPE_PORT:
+				return await this.requestPort(job);
+
 			default:
 				return this.handleUnsupportedType(type);
 		}

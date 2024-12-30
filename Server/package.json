@@ -18,7 +18,7 @@
 	"dependencies": {
 		"axios": "^1.7.2",
 		"bcrypt": "5.1.1",
-		"bullmq": "5.34.4",
+		"bullmq": "5.34.5",
 		"cors": "^2.8.5",
 		"dockerode": "4.0.2",
 		"dotenv": "^16.4.5",

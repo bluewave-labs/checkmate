@@ -74,7 +74,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 				authToken,
 				teamId: user.teamId,
 				limit: 25,
-				types: ["http", "ping", "docker"],
+				types: ["http", "ping", "docker", "port"],
 				status: null,
 				checkOrder: "desc",
 				normalize: true,

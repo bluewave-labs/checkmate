@@ -54,7 +54,7 @@ const paletteColors = {
 	red200: "#F04438",
 	red300: "#D32F2F",
 	red700: "#542426",
-	red800: "#301A1F",
+	red800: "#912018",
 	orange50: "#FEF8EA",
 	orange100: "#FFECBC",
 	orange300: "#FDB022",
@@ -128,7 +128,7 @@ const semanticColors = {
 			dark: paletteColors.red700,
 		},
 		dark: {
-			light: paletteColors.red50,
+			light: paletteColors.red800,
 			dark: paletteColors.red800,
 		},
 	},

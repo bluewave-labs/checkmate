@@ -1,11 +1,22 @@
-import express from "express";
-import { verifyJWT } from "../middleware/verifyJWT.js";
-import {
-	createStatusPage,
-	getStatusPageByUrl,
-} from "../controllers/statusPageController.js";
-const router = express.Router();
+import { Router } from "express";
 
-router.get("/:url", getStatusPageByUrl);
-router.post("/:url", verifyJWT, createStatusPage);
-export default router;
+import { verifyJWT } from "../middleware/verifyJWT.js";
+
+class StatusPageRoutes {
+	constructor(statusPageController) {
+		this.router = Router();
+		this.statusPageController = statusPageController;
+		this.initRoutes();
+	}
+
+	initRoutes() {
+		this.router.get("/:url", this.statusPageController.getStatusPageByUrl);
+		this.router.post("/:url", verifyJWT, this.statusPageController.createStatusPage);
+	}
+
+	getRouter() {
+		return this.router;
+	}
+}
+
+export default StatusPageRoutes;

@@ -109,6 +109,7 @@ const monitorValidation = joi.object({
 			"string.uri": "The URL you provided is not valid.",
 			"string.invalidUrl": "Please enter a valid URL with optional port",
 		}),
+	port: joi.number(),
 	name: joi.string().trim().max(50).allow("").messages({
 		"string.max": "This field should not exceed the 50 characters limit.",
 	}),

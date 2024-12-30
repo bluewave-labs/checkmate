@@ -1,14 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState, useCallback } from "react";
-import {
-	Box,
-	Button,
-	Popover,
-	Stack,
-	Tooltip,
-	Typography,
-	useTheme,
-} from "@mui/material";
+import { Box, Button, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { networkService } from "../../../main";
@@ -17,7 +9,6 @@ import { formatDurationRounded, formatDurationSplit } from "../../../Utils/timeU
 import MonitorDetailsAreaChart from "../../../Components/Charts/MonitorDetailsAreaChart";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import SettingsIcon from "../../../assets/icons/settings-bold.svg?react";
-import CertificateIcon from "../../../assets/icons/certificate.svg?react";
 import UptimeIcon from "../../../assets/icons/uptime-icon.svg?react";
 import ResponseTimeIcon from "../../../assets/icons/response-time-icon.svg?react";
 import AverageResponseIcon from "../../../assets/icons/average-response-icon.svg?react";
@@ -50,14 +41,7 @@ const DetailsPage = () => {
 	const [certificateExpiry, setCertificateExpiry] = useState("N/A");
 	const navigate = useNavigate();
 
-	const [anchorEl, setAnchorEl] = useState(null);
-	const openCertificate = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const closeCertificate = () => {
-		setAnchorEl(null);
-	};
-
+	const certificateDateFormat = "MMM D, YYYY h A";
 	const dateFormat = dateRange === "day" ? "MMM D, h A" : "MMM D";
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 
@@ -72,6 +56,7 @@ const DetailsPage = () => {
 				numToDisplay: 50,
 				normalize: true,
 			});
+			console.log(res?.data?.data);
 			setMonitor(res?.data?.data ?? {});
 		} catch (error) {
 			logger.error(error);
@@ -95,7 +80,9 @@ const DetailsPage = () => {
 				});
 				if (res?.data?.data?.certificateDate) {
 					const date = res.data.data.certificateDate;
-					setCertificateExpiry(formatDateWithTz(date, dateFormat, uiTimezone) ?? "N/A");
+					setCertificateExpiry(
+						formatDateWithTz(date, certificateDateFormat, uiTimezone) ?? "N/A"
+					);
 				}
 			} catch (error) {
 				setCertificateExpiry("N/A");
@@ -210,56 +197,6 @@ const DetailsPage = () => {
 									alignSelf: "flex-end",
 								}}
 							>
-								<IconBox
-									mr={theme.spacing(4)}
-									onClick={openCertificate}
-									sx={{
-										cursor: "pointer",
-										"& svg": {
-											width: 23,
-											height: 23,
-											top: "52%",
-										},
-									}}
-								>
-									<CertificateIcon />
-								</IconBox>
-								<Popover
-									id="certificate-dropdown"
-									anchorEl={anchorEl}
-									open={Boolean(anchorEl)}
-									onClose={closeCertificate}
-									disableScrollLock
-									marginThreshold={null}
-									anchorOrigin={{
-										vertical: "bottom",
-										horizontal: "center",
-									}}
-									transformOrigin={{
-										vertical: "top",
-										horizontal: "center",
-									}}
-									slotProps={{
-										paper: {
-											sx: {
-												mt: theme.spacing(4),
-												py: theme.spacing(2),
-												px: theme.spacing(4),
-												width: 140,
-												backgroundColor: theme.palette.background.accent,
-											},
-										},
-									}}
-								>
-									<Typography variant="body2">Certificate Expiry</Typography>
-									<Typography
-										component="span"
-										fontSize={13}
-										color={theme.palette.text.primary}
-									>
-										{certificateExpiry}
-									</Typography>
-								</Popover>
 								{isAdmin && (
 									<Button
 										variant="contained"
@@ -300,6 +237,18 @@ const DetailsPage = () => {
 										{monitor?.latestResponseTime}
 										<Typography component="span">{"ms"}</Typography>
 									</>
+								}
+							/>
+							<StatBox
+								heading="certificate expiry"
+								subHeading={
+									<Typography
+										component="span"
+										fontSize={13}
+										color={theme.palette.text.primary}
+									>
+										{certificateExpiry}
+									</Typography>
 								}
 							/>
 						</Stack>
