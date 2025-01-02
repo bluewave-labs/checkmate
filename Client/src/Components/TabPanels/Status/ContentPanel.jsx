@@ -38,13 +38,15 @@ const ContentPanel = () => {
 				}
 				const fullMonitors = response.data.data.monitors ;
 				setMonitors(fullMonitors);
-				if (form.monitors.length > 0)
-					setCards(
-						form.monitors.map((mid, idx) => ({
-							id: "" + idx,
-							val: fullMonitors.filter((fM) => fM._id == mid)[0],
-						}))
-					);
+				if (form.monitors.length > 0) {
+					const initiCards = form.monitors.map((mid, idx) => ({
+						id: "" + idx,
+						val: fullMonitors.filter((fM) =>
+							mid._id ? fM._id == mid._id : fM._id == mid
+						)[0],
+					}));
+					setCards(initiCards);
+				}
 			} catch (error) {
 				createToast({ body: "Failed to fetch monitors data" });
 				logger.error("Failed to fetch monitors", error);
@@ -92,7 +94,7 @@ const ContentPanel = () => {
 	};
 	const handleAddNew = () => {
 		if (cards.length === monitors.length) return;
-		const newCards = [...cards, { id: "" + Math.random() }];
+		const newCards = [...cards, { id: "" + Math.random(),val:{} }];
 		setCards(newCards);
 	};
 	const removeCard = (id) => {

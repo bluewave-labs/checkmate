@@ -1,5 +1,5 @@
 import { useState, useRef, useContext } from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import ConfigBox  from "../../../Components/ConfigBox";
 import { useTheme } from "@emotion/react";
 import TabPanel from "@mui/lab/TabPanel";
@@ -24,8 +24,9 @@ import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
  */
 const GeneralSettingsPanel = () => {
 	const theme = useTheme();	
-	const [logo, setLogo] = useState();
 	const { form, setForm, errors, setErrors  } = useContext(StatusFormContext);
+	const [logo, setLogo] = useState(form.logo);
+
 	const [progress, setProgress] = useState({ value: 0, isLoading: false });
 	const intervalRef = useRef(null);
 
@@ -95,6 +96,12 @@ const GeneralSettingsPanel = () => {
 			type: pic.type,
 			size: pic.size,
 		});
+		setForm({...form, logo: {
+			src: URL.createObjectURL(pic),
+			name: pic.name,
+			type: pic.type,
+			size: pic.size,
+		}})
 		intervalRef.current = setInterval(() => {
 			const buffer = 12;
 			setProgress((prev) => {
@@ -169,7 +176,12 @@ const GeneralSettingsPanel = () => {
 							type="url"
 							label="SubURL"
 							value={form.url}
-							startAdornment={<HttpAdornment prefix = {"http://uptimegenie.com/"} https={false} />}
+							startAdornment={
+								<HttpAdornment
+									prefix={"http://uptimegenie.com/"}
+									https={false}
+								/>
+							}
 							onChange={handleChange}
 							onBlur={handleBlur}
 							helperText={errors["url"]}
@@ -212,6 +224,19 @@ const GeneralSettingsPanel = () => {
 								onClick={removeLogo}
 								error={errors["logo"]}
 							/>
+						) : logo && logo.type ? (
+							<Button
+								variant="contained"
+								color="secondary"
+								onClick={removeLogo}
+								sx={{
+									width: "100%",
+									maxWidth:"200px",
+									alignSelf: "center"
+								}}
+							>
+								Remove Logo
+							</Button>
 						) : (
 							""
 						)}

@@ -67,8 +67,6 @@ import { networkService } from "../../../main";
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		//validate rest of the form
-		delete form.logo;
 		let localData = {
 			...form,
 			monitors:
@@ -76,17 +74,13 @@ import { networkService } from "../../../main";
 					? form.monitors.map((m) => m._id)
 					: form.monitors,
 			theme: mode,
+			logo: { type: form.logo?.type ?? "", size: form.logo?.size ?? "" },
 		};
+		//delete localData.logo
 		if (hasValidationErrors(localData, publicPageGeneralSettingsValidation, setErrors)) {
 			setActiveTabOnErrors();
 			return;
 		}
-		// //validate image field, double check if it is required
-		// let error = validateField(
-		// 	{ type: logo?.type ?? null, size: logo?.size ?? null },
-		// 	logoImageValidation
-		// );
-		//		if (error) return;
 
 		//form.logo = { ...logo, size: formatBytes(logo?.size) };
 		let config = { authToken: authToken, url: "status-page", data: localData };
