@@ -98,7 +98,11 @@ class MongoDB {
 				await model.syncIndexes();
 			}
 
-			logger.info({ message: "Connected to MongoDB" });
+			logger.info({
+				message: "Connected to MongoDB",
+				service: this.SERVICE_NAME,
+				method: "connect",
+			});
 		} catch (error) {
 			logger.error({
 				message: error.message,
