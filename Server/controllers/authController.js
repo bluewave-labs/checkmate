@@ -8,14 +8,12 @@ import {
 	newPasswordValidation,
 } from "../validation/joi.js";
 import logger from "../utils/logger.js";
-import dotenv from "dotenv";
 import { errorMessages, successMessages } from "../utils/messages.js";
 import jwt from "jsonwebtoken";
 import { getTokenFromHeaders, tokenType } from "../utils/utils.js";
 import crypto from "crypto";
 import { handleValidationError, handleError } from "./controllerUtils.js";
 const SERVICE_NAME = "authController";
-dotenv.config();
 
 class AuthController {
 	constructor(db, settingsService, emailService, jobQueue) {
