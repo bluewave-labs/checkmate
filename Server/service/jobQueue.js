@@ -215,12 +215,52 @@ class NewJobQueue {
 			connection: this.connection,
 			concurrency: 5,
 		});
+		worker.on("active", (job) => {
+			this.logger.info({
+				message: `Job started: ${job.id}`,
+				service: SERVICE_NAME,
+				method: "createWorker",
+				details: `Processing job with data: ${JSON.stringify(job.data)}`,
+			});
+		});
+
+		// Log when a job completes successfully
+		worker.on("completed", (job, result) => {
+			this.logger.info({
+				message: `Job completed: ${job.id}`,
+				service: SERVICE_NAME,
+				method: "createWorker",
+				details: `Result: ${JSON.stringify(result)}`,
+			});
+		});
+
+		// Log job progress updates
+		worker.on("progress", (job, progress) => {
+			this.logger.info({
+				message: `Job progress: ${job.id}`,
+				service: SERVICE_NAME,
+				method: "createWorker",
+				details: `Progress: ${progress}%`,
+			});
+		});
+
+		// Log when a job fails
 		worker.on("failed", (job, err) => {
 			this.logger.error({
 				message: `Worker failed job: ${job.id}`,
 				service: SERVICE_NAME,
 				method: "createWorker",
+				details: `Error: ${err.message}`,
 				stack: err.stack,
+			});
+		});
+
+		// Log when a job is stalled
+		worker.on("stalled", (job) => {
+			this.logger.warn({
+				message: `Job stalled: ${job.id}`,
+				service: SERVICE_NAME,
+				method: "createWorker",
 			});
 		});
 		return worker;
