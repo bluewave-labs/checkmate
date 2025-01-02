@@ -1,5 +1,5 @@
 const QUEUE_NAMES = ["uptime", "pagespeed", "hardware"];
-const SERVICE_NAME = "NewJobQueue";
+const SERVICE_NAME = "JobQueue";
 const JOBS_PER_WORKER = 5;
 const QUEUE_LOOKUP = {
 	hardware: "hardware",
@@ -63,12 +63,14 @@ class NewJobQueue {
 				.filter((monitor) => monitor.isActive)
 				.map(async (monitor) => {
 					try {
-						console.log(`Adding job for monitor: ${monitor._id} (${monitor.type})`);
 						await this.addJob(monitor._id, monitor);
-						console.log(`Successfully added job for monitor: ${monitor._id}`);
 					} catch (error) {
-						console.error(`Failed to add job for monitor ${monitor._id}:`, error);
-						// Don't throw here to allow other jobs to continue
+						this.logger.error({
+							message: `Failed to add job for monitor ${monitor._id}:`,
+							service: SERVICE_NAME,
+							method: "initJobQueue",
+							stack: error.stack,
+						});
 					}
 				})
 		);
@@ -387,7 +389,11 @@ class NewJobQueue {
 	 */
 	async addJob(jobName, monitor) {
 		try {
-			this.logger.info({ message: `Adding job ${monitor?.url ?? "No URL"}` });
+			this.logger.info({
+				message: `Adding job ${monitor?.url ?? "No URL"}`,
+				service: SERVICE_NAME,
+				method: "addJob",
+			});
 
 			// Find the correct queue
 
@@ -545,7 +551,11 @@ class NewJobQueue {
 
 	async obliterate() {
 		try {
-			this.logger.info({ message: "Attempting to obliterate job queue..." });
+			this.logger.info({
+				message: "Attempting to obliterate job queue...",
+				service: SERVICE_NAME,
+				method: "obliterate",
+			});
 			await Promise.all(
 				QUEUE_NAMES.map(async (name) => {
 					const queue = this.queues[name];

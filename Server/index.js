@@ -34,6 +34,9 @@ import StatusPageController from "./controllers/statusPageController.js";
 import QueueRoutes from "./routes/queueRoute.js";
 import QueueController from "./controllers/queueController.js";
 
+import DistributedUptimeRoutes from "./routes/distributedUptimeRoute.js";
+import DistributedUptimeController from "./controllers/distributedUptimeController.js";
+
 //JobQueue service and dependencies
 import JobQueue from "./service/jobQueue.js";
 import { Queue, Worker } from "bullmq";
@@ -45,7 +48,7 @@ import ping from "ping";
 import http from "http";
 import Docker from "dockerode";
 import net from "net";
-
+import ngrok from "ngrok";
 // Email service and dependencies
 import EmailService from "./service/emailService.js";
 import nodemailer from "nodemailer";
@@ -80,6 +83,7 @@ const openApiSpec = JSON.parse(
 );
 
 let server;
+let ngrokUrl;
 
 const PORT = 5000;
 
@@ -127,6 +131,29 @@ const shutdown = async () => {
 // Need to wrap server setup in a function to handle async nature of JobQueue
 const startApp = async () => {
 	const app = express();
+	if (process.env.NODE_ENV === "development") {
+		try {
+			ngrokUrl = await ngrok.connect({
+				proto: "http",
+				addr: PORT,
+				authtoken: process.env.NGROK_AUTH_TOKEN,
+				api_addr: false,
+			});
+			process.env.NGROK_URL = ngrokUrl;
+			logger.info({
+				message: `ngrok url: ${ngrokUrl}`,
+				service: SERVICE_NAME,
+				method: "startApp",
+			});
+		} catch (error) {
+			logger.error({
+				message: `Error connecting to ngrok`,
+				service: SERVICE_NAME,
+				method: "startApp",
+				stack: error.stack,
+			});
+		}
+	}
 
 	// Create DB
 	const db = new MongoDB();
@@ -216,6 +243,8 @@ const startApp = async () => {
 		ServiceRegistry.get(MongoDB.SERVICE_NAME)
 	);
 
+	const distributedUptimeController = new DistributedUptimeController();
+
 	//Create routes
 	const authRoutes = new AuthRoutes(authController);
 	const monitorRoutes = new MonitorRoutes(monitorController);
@@ -227,6 +256,9 @@ const startApp = async () => {
 	);
 	const queueRoutes = new QueueRoutes(queueController);
 	const statusPageRoutes = new StatusPageRoutes(statusPageController);
+	const distributedUptimeRoutes = new DistributedUptimeRoutes(
+		distributedUptimeController
+	);
 	// Init job queue
 	await jobQueue.initJobQueue();
 	// Middleware
@@ -247,6 +279,7 @@ const startApp = async () => {
 	app.use("/api/v1/checks", verifyJWT, checkRoutes.getRouter());
 	app.use("/api/v1/maintenance-window", verifyJWT, maintenanceWindowRoutes.getRouter());
 	app.use("/api/v1/queue", verifyJWT, queueRoutes.getRouter());
+	app.use("/api/v1/distributed-uptime", distributedUptimeRoutes.getRouter());
 	app.use("/api/v1/status-page", statusPageRoutes.getRouter());
 	app.use(handleErrors);
 };
