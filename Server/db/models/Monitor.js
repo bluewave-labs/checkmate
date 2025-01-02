@@ -28,7 +28,15 @@ const MonitorSchema = mongoose.Schema(
 		type: {
 			type: String,
 			required: true,
-			enum: ["http", "ping", "pagespeed", "hardware", "docker", "port"],
+			enum: [
+				"http",
+				"ping",
+				"pagespeed",
+				"hardware",
+				"docker",
+				"port",
+				"distributed_http",
+			],
 		},
 		url: {
 			type: String,
