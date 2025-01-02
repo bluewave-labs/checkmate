@@ -34,6 +34,9 @@ import StatusPageController from "./controllers/statusPageController.js";
 import QueueRoutes from "./routes/queueRoute.js";
 import QueueController from "./controllers/queueController.js";
 
+import DistributedUptimeRoutes from "./routes/distributedUptimeRoute.js";
+import DistributedUptimeController from "./controllers/distributedUptimeController.js";
+
 //JobQueue service and dependencies
 import JobQueue from "./service/jobQueue.js";
 import { Queue, Worker } from "bullmq";
@@ -240,6 +243,8 @@ const startApp = async () => {
 		ServiceRegistry.get(MongoDB.SERVICE_NAME)
 	);
 
+	const distributedUptimeController = new DistributedUptimeController();
+
 	//Create routes
 	const authRoutes = new AuthRoutes(authController);
 	const monitorRoutes = new MonitorRoutes(monitorController);
@@ -251,6 +256,9 @@ const startApp = async () => {
 	);
 	const queueRoutes = new QueueRoutes(queueController);
 	const statusPageRoutes = new StatusPageRoutes(statusPageController);
+	const distributedUptimeRoutes = new DistributedUptimeRoutes(
+		distributedUptimeController
+	);
 	// Init job queue
 	await jobQueue.initJobQueue();
 	// Middleware
@@ -271,6 +279,7 @@ const startApp = async () => {
 	app.use("/api/v1/checks", verifyJWT, checkRoutes.getRouter());
 	app.use("/api/v1/maintenance-window", verifyJWT, maintenanceWindowRoutes.getRouter());
 	app.use("/api/v1/queue", verifyJWT, queueRoutes.getRouter());
+	app.use("/api/v1/distributed-uptime", distributedUptimeRoutes.getRouter());
 	app.use("/api/v1/status-page", statusPageRoutes.getRouter());
 	app.use(handleErrors);
 };
