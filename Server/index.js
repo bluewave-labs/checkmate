@@ -45,7 +45,7 @@ import ping from "ping";
 import http from "http";
 import Docker from "dockerode";
 import net from "net";
-
+import ngrok from "ngrok";
 // Email service and dependencies
 import EmailService from "./service/emailService.js";
 import nodemailer from "nodemailer";
@@ -80,6 +80,7 @@ const openApiSpec = JSON.parse(
 );
 
 let server;
+let ngrokUrl;
 
 const PORT = 5000;
 
@@ -127,6 +128,29 @@ const shutdown = async () => {
 // Need to wrap server setup in a function to handle async nature of JobQueue
 const startApp = async () => {
 	const app = express();
+	if (process.env.NODE_ENV === "development") {
+		try {
+			ngrokUrl = await ngrok.connect({
+				proto: "http",
+				addr: PORT,
+				authtoken: process.env.NGROK_AUTH_TOKEN,
+				api_addr: false,
+			});
+			process.env.NGROK_URL = ngrokUrl;
+			logger.info({
+				message: `ngrok url: ${ngrokUrl}`,
+				service: SERVICE_NAME,
+				method: "startApp",
+			});
+		} catch (error) {
+			logger.error({
+				message: `Error connecting to ngrok`,
+				service: SERVICE_NAME,
+				method: "startApp",
+				stack: error.stack,
+			});
+		}
+	}
 
 	// Create DB
 	const db = new MongoDB();
