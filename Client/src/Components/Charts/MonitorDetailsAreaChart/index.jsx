@@ -13,15 +13,14 @@ import { useTheme } from "@emotion/react";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { formatDateWithTz } from "../../../Utils/timeUtils";
+import {
+	tooltipDateFormatLookup,
+	tickDateFormatLookup,
+} from "../Utils/chartUtilFunctions";
+
 import "./index.css";
-// ddd, MMMM D, YYYY, h:mm A
 const CustomToolTip = ({ active, payload, label, dateRange }) => {
-	const formatLookup = {
-		day: "ddd. MMMM D, YYYY, hh:mm A",
-		week: "ddd. MMMM D, YYYY, hh:mm A",
-		month: "ddd. MMMM D, YYYY",
-	};
-	const format = formatLookup[dateRange];
+	const format = tooltipDateFormatLookup(dateRange);
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 	const theme = useTheme();
 	if (active && payload && payload.length) {
@@ -111,12 +110,7 @@ CustomToolTip.propTypes = {
 	dateRange: PropTypes.string,
 };
 const CustomTick = ({ x, y, payload, index, dateRange }) => {
-	const formatLookup = {
-		day: "h:mm A",
-		week: "MM/D, h:mm A",
-		month: "ddd. M/D",
-	};
-	const format = formatLookup[dateRange];
+	const format = tickDateFormatLookup(dateRange);
 	const theme = useTheme();
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 	return (
