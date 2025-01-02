@@ -84,6 +84,8 @@ const User = mongoose.model("User", UserSchema);
 User.init().then(() => {
 	logger.info({
 		message: "User model initialized",
+		service: "UserModel",
+		method: "init",
 	});
 });
 
