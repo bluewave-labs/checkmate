@@ -34,7 +34,6 @@ import { useTheme } from "@emotion/react";
 
 const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
 	const theme = useTheme();
-
 	if ((headers?.length ?? 0) === 0) {
 		return "No data";
 	}
@@ -58,7 +57,7 @@ const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{(data?.length ?? 0 === 0) ? (
+					{(data?.length ?? 0) === 0 ? (
 						<TableRow>
 							<TableCell
 								colSpan={headers.length}
