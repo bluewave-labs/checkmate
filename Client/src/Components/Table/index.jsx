@@ -32,7 +32,7 @@ import { useTheme } from "@emotion/react";
  * @returns {JSX.Element} The rendered table component.
  */
 
-const DataTable = ({ headers, data, config }) => {
+const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
 	const theme = useTheme();
 
 	if ((headers?.length ?? 0) === 0) {
@@ -58,7 +58,7 @@ const DataTable = ({ headers, data, config }) => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{data.length === 0 ? (
+					{(data?.length ?? 0 === 0) ? (
 						<TableRow>
 							<TableCell
 								colSpan={headers.length}
