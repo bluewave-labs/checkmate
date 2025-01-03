@@ -35,7 +35,7 @@ import { useTheme } from "@emotion/react";
 const DataTable = ({ headers, data, config }) => {
 	const theme = useTheme();
 
-	if ((headers?.length ?? 0) === 0 || (data?.length ?? 0) === 0) {
+	if ((headers?.length ?? 0) === 0) {
 		return "No data";
 	}
 
@@ -58,26 +58,37 @@ const DataTable = ({ headers, data, config }) => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{data.map((row) => {
-						return (
-							<TableRow
-								key={row.id}
-								sx={config?.rowSX ?? {}}
-								onClick={() => config?.onRowClick(row)}
+					{data.length === 0 ? (
+						<TableRow>
+							<TableCell
+								colSpan={headers.length}
+								align="center"
 							>
-								{headers.map((header, index) => {
-									return (
-										<TableCell
-											align={index === 0 ? "left" : "center"}
-											key={header.id}
-										>
-											{header.render(row)}
-										</TableCell>
-									);
-								})}
-							</TableRow>
-						);
-					})}
+								{config.emptyView}
+							</TableCell>
+						</TableRow>
+					) : (
+						data.map((row) => {
+							return (
+								<TableRow
+									key={row.id}
+									sx={config?.rowSX ?? {}}
+									onClick={() => config?.onRowClick(row)}
+								>
+									{headers.map((header, index) => {
+										return (
+											<TableCell
+												align={index === 0 ? "left" : "center"}
+												key={header.id}
+											>
+												{header.render(row)}
+											</TableCell>
+										);
+									})}
+								</TableRow>
+							);
+						})
+					)}
 				</TableBody>
 			</Table>
 		</TableContainer>
@@ -96,6 +107,7 @@ DataTable.propTypes = {
 	config: PropTypes.shape({
 		onRowClick: PropTypes.func.isRequired,
 		rowSX: PropTypes.object,
+		emptyView: PropTypes.node,
 	}),
 };
 
