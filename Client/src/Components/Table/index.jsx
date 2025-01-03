@@ -62,8 +62,8 @@ const DataTable = ({ headers, data, config }) => {
 						return (
 							<TableRow
 								key={row.id}
-								sx={config.rowSX}
-								onClick={() => config.onRowClick(row)}
+								sx={config?.rowSX ?? {}}
+								onClick={() => config?.onRowClick(row)}
 							>
 								{headers.map((header, index) => {
 									return (
@@ -96,7 +96,7 @@ DataTable.propTypes = {
 	config: PropTypes.shape({
 		onRowClick: PropTypes.func.isRequired,
 		rowSX: PropTypes.object,
-	}).isRequired,
+	}),
 };
 
 export default DataTable;
