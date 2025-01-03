@@ -47,7 +47,8 @@ const baseTheme = (palette) => ({
 						{
 							props: (props) => props.variant === "group",
 							style: {
-								color: theme.palette.secondary.contrastText,
+								/* color: theme.palette.secondary.contrastText, */
+								color: theme.palette.neutral.contrastText,
 								backgroundColor: theme.palette.background.main,
 								border: 1,
 								borderStyle: "solid",
@@ -238,8 +239,8 @@ const baseTheme = (palette) => ({
 						},
 					},
 					"& .MuiInputBase-input:-webkit-autofill": {
-						transition: "background-color 5000s ease-in-out 0s", 
-						WebkitBoxShadow: `0 0 0px 1000px ${theme.palette.background.main} inset`, 
+						transition: "background-color 5000s ease-in-out 0s",
+						WebkitBoxShadow: `0 0 0px 1000px ${theme.palette.background.main} inset`,
 						WebkitTextFillColor: theme.palette.text.primary,
 					},
 					"& .MuiInputBase-input.MuiOutlinedInput-input": {

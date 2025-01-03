@@ -8,13 +8,14 @@ import { useSelector } from "react-redux";
 import { networkService } from "../../main";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import { useNavigate } from "react-router-dom";
+import { useIsAdmin } from "../../Hooks/useIsAdmin";
 
-const Maintenance = ({ isAdmin }) => {
+const Maintenance = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const { authToken } = useSelector((state) => state.auth);
 	const { rowsPerPage } = useSelector((state) => state.ui.maintenance);
-
+	const isAdmin = useIsAdmin();
 	const [maintenanceWindows, setMaintenanceWindows] = useState([]);
 	const [maintenanceWindowCount, setMaintenanceWindowCount] = useState(0);
 	const [page, setPage] = useState(0);
@@ -99,7 +100,7 @@ const Maintenance = ({ isAdmin }) => {
 						"Stop sending alerts in maintenance windows",
 					]}
 					link="/maintenance/create"
-					isAdmin={true}
+					isAdmin={isAdmin}
 				/>
 			)}
 		</Box>

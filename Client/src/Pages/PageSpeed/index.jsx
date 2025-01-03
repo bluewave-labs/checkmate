@@ -12,11 +12,12 @@ import SkeletonLayout from "./skeleton";
 import Card from "./card";
 import { networkService } from "../../main";
 import { Heading } from "../../Components/Heading";
-const PageSpeed = ({ isAdmin }) => {
+import { useIsAdmin } from "../../Hooks/useIsAdmin";
+const PageSpeed = () => {
 	const theme = useTheme();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
+	const isAdmin = useIsAdmin();
 	const { user, authToken } = useSelector((state) => state.auth);
 	const [isLoading, setIsLoading] = useState(true);
 	const [monitors, setMonitors] = useState([]);

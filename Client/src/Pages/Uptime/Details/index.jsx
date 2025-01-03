@@ -26,20 +26,23 @@ import HistoryIcon from "../../../assets/icons/history-icon.svg?react";
 import PaginationTable from "./PaginationTable";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import PulseDot from "../../../Components/Animated/PulseDot";
-import { StatBox, ChartBox, IconBox } from "./styled";
+import { ChartBox } from "./styled";
 import { DownBarChart, ResponseGaugeChart, UpBarChart } from "./Charts";
 import SkeletonLayout from "./skeleton";
 import "./index.css";
 import useUtils from "../utils";
 import { formatDateWithTz } from "../../../Utils/timeUtils";
-
+import { useIsAdmin } from "../../../Hooks/useIsAdmin";
+import IconBox from "../../../Components/IconBox";
+import StatBox from "../../../Components/StatBox";
 /**
  * Details page component displaying monitor details and related information.
  * @component
  */
-const DetailsPage = ({ isAdmin }) => {
+const DetailsPage = () => {
 	const theme = useTheme();
 	const { statusColor, statusStyles, statusMsg, determineState } = useUtils();
+	const isAdmin = useIsAdmin();
 	const [monitor, setMonitor] = useState({});
 	const { monitorId } = useParams();
 	const { authToken } = useSelector((state) => state.auth);
@@ -281,24 +284,24 @@ const DetailsPage = ({ isAdmin }) => {
 							direction="row"
 							gap={theme.spacing(8)}
 						>
-							<StatBox sx={statusStyles[determineState(monitor)]}>
-								<Typography component="h2">active for</Typography>
-								<Typography>{splitDuration(monitor?.uptimeDuration)}</Typography>
-							</StatBox>
-							<StatBox>
-								<Typography component="h2">last check</Typography>
-								<Typography>
-									{splitDuration(monitor?.lastChecked)}
-									<Typography component="span">ago</Typography>
-								</Typography>
-							</StatBox>
-							<StatBox>
-								<Typography component="h2">last response time</Typography>
-								<Typography>
-									{monitor?.latestResponseTime}
-									<Typography component="span">ms</Typography>
-								</Typography>
-							</StatBox>
+							<StatBox
+								sx={statusStyles[determineState(monitor)]}
+								heading={"active for"}
+								subHeading={splitDuration(monitor?.uptimeDuration)}
+							/>
+							<StatBox
+								heading="last check"
+								subHeading={splitDuration(monitor?.lastChecked)}
+							/>
+							<StatBox
+								heading="last response time"
+								subHeading={
+									<>
+										{monitor?.latestResponseTime}
+										<Typography component="span">{"ms"}</Typography>
+									</>
+								}
+							/>
 						</Stack>
 						<Box>
 							<Stack

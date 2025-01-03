@@ -12,12 +12,14 @@ import StatusBox from "./StatusBox";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import Greeting from "../../../Utils/greeting";
 import { CurrentMonitoring } from "./CurrentMonitoring";
+import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 
 const BREADCRUMBS = [{ name: `Uptime`, path: "/uptime" }];
 
-const UptimeMonitors = ({ isAdmin }) => {
+const UptimeMonitors = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
+	const isAdmin = useIsAdmin();
 	const uptimeMonitorsState = useSelector((state) => state.uptimeMonitors);
 	const authState = useSelector((state) => state.auth);
 	const dispatch = useDispatch({});
@@ -70,11 +72,11 @@ const UptimeMonitors = ({ isAdmin }) => {
 				</Stack>
 				<Greeting type="uptime" />
 			</Box>
-			{noMonitors && <Fallback isAdmin={isAdmin} />}
 			{loading ? (
 				<SkeletonLayout />
 			) : (
 				<>
+					{noMonitors && <Fallback isAdmin={isAdmin} />}
 					{hasMonitors && (
 						<>
 							<Stack

@@ -19,18 +19,25 @@ const createHardwareCheck = async (hardwareCheckData) => {
 			return null;
 		}
 
+		let newUptimePercentage;
 		if (monitor.uptimePercentage === undefined) {
-			monitor.uptimePercentage = status === true ? 1 : 0;
+			newUptimePercentage = status === true ? 1 : 0;
 		} else {
-			monitor.uptimePercentage =
+			newUptimePercentage =
 				(monitor.uptimePercentage * (n - 1) + (status === true ? 1 : 0)) / n;
 		}
-		await monitor.save();
+
+		await Monitor.findOneAndUpdate(
+			{ _id: monitorId },
+			{ uptimePercentage: newUptimePercentage }
+		);
+
 		const hardwareCheck = await new HardwareCheck({
 			...hardwareCheckData,
 		}).save();
 		return hardwareCheck;
 	} catch (error) {
+		console.log("error creating hardware check", error);
 		error.service = SERVICE_NAME;
 		error.method = "createHardwareCheck";
 		throw error;

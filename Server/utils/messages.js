@@ -100,7 +100,6 @@ const successMessages = {
 
 	// Queue Controller
 	QUEUE_GET_METRICS: "Got metrics successfully",
-	QUEUE_GET_METRICS: "Got job stats successfully",
 	QUEUE_ADD_JOB: "Job added successfully",
 	QUEUE_OBLITERATE: "Queue obliterated",
 

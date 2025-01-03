@@ -21,7 +21,7 @@
 				<mj-text
 					align="left"
 					font-size="10px"
-					>Message from BlueWave Uptime Service</mj-text
+					>Message from Checkmate Service</mj-text
 				>
 			</mj-column>
 			<mj-column
@@ -58,7 +58,7 @@
 					border-color="#E0E0E0"
 				></mj-divider>
 				<mj-text font-size="12px">
-					<p>This email was sent by BlueWave Uptime.</p>
+					<p>This email was sent by Checkmate.</p>
 				</mj-text>
 			</mj-column>
 		</mj-section>

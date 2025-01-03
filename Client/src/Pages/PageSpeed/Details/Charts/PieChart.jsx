@@ -101,20 +101,20 @@ PieValueLabel.propTypes = {
 	highlighted: PropTypes.bool.isRequired,
 };
 
+/**
+ * Weight constants for different performance metrics.
+ * @type {Object}
+ */
+const weights = {
+	fcp: 10,
+	si: 10,
+	lcp: 25,
+	tbt: 30,
+	cls: 25,
+};
+
 const PieChart = ({ audits }) => {
 	const theme = useTheme();
-
-	/**
-	 * Weight constants for different performance metrics.
-	 * @type {Object}
-	 */
-	const weights = {
-		fcp: 10,
-		si: 10,
-		lcp: 25,
-		tbt: 30,
-		cls: 25,
-	};
 
 	/**
 	 * Retrieves color properties based on the performance value.
@@ -128,7 +128,7 @@ const PieChart = ({ audits }) => {
 				stroke: theme.palette.success.main,
 				strokeBg: theme.palette.success.light,
 				text: theme.palette.success.contrastText,
-				bg: theme.palette.success.dark,
+				bg: theme.palette.success.light,
 			};
 		else if (value >= 50 && value < 90)
 			return {

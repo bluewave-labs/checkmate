@@ -6,7 +6,7 @@ import { Box, Stack, Tooltip, Typography } from "@mui/material";
 import { monitorValidation } from "../../../Validation/validation";
 import { createToast } from "../../../Utils/toastUtils";
 import { logger } from "../../../Utils/Logger";
-import { ConfigBox } from "../styled";
+import ConfigBox from "../../../Components/ConfigBox";
 import {
 	updateUptimeMonitor,
 	pauseUptimeMonitor,
@@ -141,6 +141,8 @@ const Configure = () => {
 			if (pauseUptimeMonitor.fulfilled.match(action)) {
 				const monitor = action.payload.data;
 				setMonitor(monitor);
+				const state = action?.payload?.data.isActive === false ? "paused" : "resumed";
+				createToast({ body: `Monitor ${state} successfully.` });
 			} else if (pauseUptimeMonitor.rejected.match(action)) {
 				throw new Error(action.error.message);
 			}

@@ -9,6 +9,6 @@ import {
 const router = Router();
 
 router.post("/", isAllowed(["admin", "superadmin"]), verifyJWT, issueInvitation);
-router.post("/verify", issueInvitation);
+router.post("/verify", inviteVerifyController);
 
 export default router;

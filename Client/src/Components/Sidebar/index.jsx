@@ -21,13 +21,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearAuthState } from "../../Features/Auth/authSlice";
 import { toggleSidebar } from "../../Features/UI/uiSlice";
 import { clearUptimeMonitorState } from "../../Features/UptimeMonitors/uptimeMonitorsSlice";
+import ThemeSwitch from "../ThemeSwitch";
 import Avatar from "../Avatar";
 import LockSvg from "../../assets/icons/lock.svg?react";
 import UserSvg from "../../assets/icons/user.svg?react";
 import TeamSvg from "../../assets/icons/user-two.svg?react";
 import LogoutSvg from "../../assets/icons/logout.svg?react";
 import Support from "../../assets/icons/support.svg?react";
-import Dashboard from "../../assets/icons/dashboard.svg?react";
 import Account from "../../assets/icons/user-edit.svg?react";
 import Maintenance from "../../assets/icons/maintenance.svg?react";
 import Monitors from "../../assets/icons/monitors.svg?react";
@@ -43,6 +43,7 @@ import DotsVertical from "../../assets/icons/dots-vertical.svg?react";
 import ChangeLog from "../../assets/icons/changeLog.svg?react";
 import Docs from "../../assets/icons/docs.svg?react";
 import Folder from "../../assets/icons/folder.svg?react";
+import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 
 import "./index.css";
 
@@ -64,19 +65,30 @@ const menu = [
 		],
 	},
 	{
+		name: "Settings",
+		icon: <Settings />,
+		path: "settings",
+	},
+	{
 		name: "Other",
 		icon: <Folder />,
 		nested: [
-			{ name: "Settings", path: "settings", icon: <Settings /> },
 			{ name: "Support", path: "support", icon: <Support /> },
+			{
+				name: "Discussions",
+				path: "discussions",
+				icon: <ChatBubbleOutlineRoundedIcon />,
+			},
 			{ name: "Docs", path: "docs", icon: <Docs /> },
 			{ name: "Changelog", path: "changelog", icon: <ChangeLog /> },
 		],
 	},
 ];
 
+/* TODO this could be a key in nested Path would be the link */
 const URL_MAP = {
-	support: "https://github.com/bluewave-labs/bluewave-uptime/issues",
+	support: "https://discord.com/invite/NAb6H3UTjK",
+	discussions: "https://github.com/bluewave-labs/checkmate/discussions",
 	docs: "https://bluewavelabs.gitbook.io/checkmate",
 	changelog: "https://github.com/bluewave-labs/bluewave-uptime/releases",
 };
@@ -177,13 +189,7 @@ function Sidebar() {
 					direction="row"
 					alignItems="center"
 					gap={theme.spacing(4)}
-					onClick={() =>
-						window.open(
-							"https://github.com/bluewave-labs/bluewave-uptime",
-							"_blank",
-							"noreferrer"
-						)
-					}
+					onClick={() => navigate("/")}
 					sx={{ cursor: "pointer" }}
 				>
 					<Stack
@@ -551,28 +557,35 @@ function Sidebar() {
 								{authState.user?.role}
 							</Typography>
 						</Box>
-						<Tooltip
-							title="Controls"
-							disableInteractive
+						<Stack
+							flexDirection={"row"}
+							marginLeft={"auto"}
+							columnGap={theme.spacing(2)}
 						>
-							<IconButton
-								sx={{
-									ml: "auto",
-									mr: "-8px",
-									"&:focus": { outline: "none" },
-									"& svg": {
-										width: "20px",
-										height: "20px",
-									},
-									"& svg path": {
-										stroke: theme.palette.other.icon,
-									},
-								}}
-								onClick={(event) => openPopup(event, "logout")}
+							<ThemeSwitch />
+							<Tooltip
+								title="Controls"
+								disableInteractive
 							>
-								<DotsVertical />
-							</IconButton>
-						</Tooltip>
+								<IconButton
+									sx={{
+										ml: "auto",
+										mr: "-8px",
+										"&:focus": { outline: "none" },
+										"& svg": {
+											width: "20px",
+											height: "20px",
+										},
+										"& svg path": {
+											stroke: theme.palette.other.icon,
+										},
+									}}
+									onClick={(event) => openPopup(event, "logout")}
+								>
+									<DotsVertical />
+								</IconButton>
+							</Tooltip>
+						</Stack>
 					</>
 				)}
 				<Menu

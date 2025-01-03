@@ -144,7 +144,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 		setMonitors(res?.data?.data?.monitors ?? []);
 		setMonitorCount(res?.data?.data?.monitorCount ?? 0);
 	};
-
+	/* TODO Apply component basic table? */
 	return (
 		<Box position="relative">
 			{isSearching && (
@@ -264,7 +264,9 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 										sx={{
 											cursor: "pointer",
 											"&:hover": {
-												backgroundColor: theme.palette.background.accent,
+												filter: "brightness(.75)",
+												opacity: 0.75,
+												transition: "filter 0.3s ease, opacity 0.3s ease",
 											},
 										}}
 										onClick={() => {
@@ -327,6 +329,7 @@ MonitorTable.propTypes = {
 	setIsSearching: PropTypes.func,
 	isSearching: PropTypes.bool,
 	setMonitorUpdateTrigger: PropTypes.func,
+	handlePause: PropTypes.func,
 };
 
 const MemoizedMonitorTable = memo(MonitorTable);

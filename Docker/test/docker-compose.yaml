@@ -1,8 +1,9 @@
 services:
   client:
     image: uptime_client:latest
+    restart: always
     environment:
-      UPTIME_APP_API_BASE_URL: "https://checkmate-demo.bluewavelabs.ca/api/v1"
+      UPTIME_APP_API_BASE_URL: "https://checkmate-test.bluewavelabs.ca/api/v1"
     ports:
       - "80:80"
       - "443:443"
@@ -15,11 +16,13 @@ services:
 
   certbot:
     image: certbot/certbot:latest
+    restart: always
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
   server:
     image: uptime_server:latest
+    restart: always
     ports:
       - "5000:5000"
     env_file:
@@ -29,6 +32,7 @@ services:
       - mongodb
   redis:
     image: uptime_redis:latest
+    restart: always
     ports:
       - "6379:6379"
     volumes:

@@ -16,7 +16,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 //Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import Link from "../../../Components/Link";
-import { ConfigBox } from "../../Uptime/styled";
+import ConfigBox from "../../../Components/ConfigBox";
 import TextInput from "../../../Components/Inputs/TextInput";
 import { HttpAdornment } from "../../../Components/Inputs/TextInput/Adornments";
 import { createToast } from "../../../Utils/toastUtils";

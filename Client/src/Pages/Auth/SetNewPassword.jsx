@@ -11,8 +11,7 @@ import { credentials } from "../../Validation/validation";
 import Check from "../../Components/Check/Check";
 import TextInput from "../../Components/Inputs/TextInput";
 import { PasswordEndAdornment } from "../../Components/Inputs/TextInput/Adornments";
-
-import { IconBox } from "./styled";
+import IconBox from "../../Components/IconBox";
 import LockIcon from "../../assets/icons/lock.svg?react";
 import Logo from "../../assets/icons/bwu-icon.svg?react";
 import Background from "../../assets/Images/background-grid.svg?react";
@@ -126,9 +125,22 @@ const SetNewPassword = () => {
 					textAlign="center"
 				>
 					<Box>
-						<IconBox>
-							<LockIcon alt="lock icon" />
-						</IconBox>
+						<Stack
+							direction="row"
+							justifyContent="center"
+						>
+							<IconBox
+								height={48}
+								width={48}
+								minWidth={48}
+								borderRadius={12}
+								svgWidth={24}
+								svgHeight={24}
+								mb={theme.spacing(4)}
+							>
+								<LockIcon alt="lock icon" />
+							</IconBox>
+						</Stack>
 						<Typography component="h1">Set new password</Typography>
 						<Typography>
 							Your new password must be different to previously used passwords.

@@ -281,10 +281,11 @@ const editUser = async (req, res, next) => {
 			const user = await req.db.getUserByEmail(email);
 			// Compare passwords
 			const match = await user.comparePassword(req.body.password);
-			// If not a match, throw a 401
+			// If not a match, throw a 403
+			// 403 instead of 401 to avoid triggering axios interceptor
 			if (!match) {
 				const error = new Error(errorMessages.AUTH_INCORRECT_PASSWORD);
-				error.status = 401;
+				error.status = 403;
 				next(error);
 				return;
 			}
@@ -360,7 +361,7 @@ const requestRecovery = async (req, res, next) => {
 				url,
 			},
 			email,
-			"Bluewave Uptime Password Reset"
+			"Checkmate Password Reset"
 		);
 
 		return res.status(200).json({

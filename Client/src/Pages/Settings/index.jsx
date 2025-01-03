@@ -18,16 +18,16 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { setTimezone, setMode } from "../../Features/UI/uiSlice";
 import timezones from "../../Utils/timezones.json";
 import { useState, useEffect } from "react";
-import { ConfigBox } from "./styled";
 import { networkService } from "../../main";
 import { settingsValidation } from "../../Validation/validation";
-import { useNavigate } from "react-router";
 import Dialog from "../../Components/Dialog";
-
+import { useIsAdmin } from "../../Hooks/useIsAdmin";
+import ConfigBox from "../../Components/ConfigBox";
 const SECONDS_PER_DAY = 86400;
 
-const Settings = ({ isAdmin }) => {
+const Settings = () => {
 	const theme = useTheme();
+	const isAdmin = useIsAdmin();
 	const { user, authToken } = useSelector((state) => state.auth);
 	const { checkTTL } = user;
 	const { isLoading } = useSelector((state) => state.uptimeMonitors);
@@ -43,7 +43,6 @@ const Settings = ({ isAdmin }) => {
 	const deleteStatsMonitorsInitState = { deleteMonitors: false, deleteStats: false };
 	const [isOpen, setIsOpen] = useState(deleteStatsMonitorsInitState);
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
 	//Fetching latest release version from github
 	useEffect(() => {
@@ -322,28 +321,7 @@ const Settings = ({ isAdmin }) => {
 						/>
 					</ConfigBox>
 				)}
-				{isAdmin && (
-					<ConfigBox>
-						<Box>
-							<Typography component="h1">Advanced settings</Typography>
-							<Typography sx={{ mt: theme.spacing(2) }}>
-								Click here to modify advanced settings
-							</Typography>
-						</Box>
-						<Stack gap={theme.spacing(20)}>
-							<Box>
-								<Button
-									variant="contained"
-									onClick={() => {
-										navigate("/advanced-settings");
-									}}
-								>
-									Advanced Settings
-								</Button>
-							</Box>
-						</Stack>
-					</ConfigBox>
-				)}
+
 				<ConfigBox>
 					<Box>
 						<Typography component="h1">About</Typography>

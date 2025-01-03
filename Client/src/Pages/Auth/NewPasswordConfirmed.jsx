@@ -4,10 +4,10 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { clearAuthState } from "../../Features/Auth/authSlice";
 import { clearUptimeMonitorState } from "../../Features/UptimeMonitors/uptimeMonitorsSlice";
-import { IconBox } from "./styled";
 import Background from "../../assets/Images/background-grid.svg?react";
 import ConfirmIcon from "../../assets/icons/check-outlined.svg?react";
 import Logo from "../../assets/icons/bwu-icon.svg?react";
+import IconBox from "../../Components/IconBox";
 import "./index.css";
 
 const NewPasswordConfirmed = () => {
@@ -80,9 +80,22 @@ const NewPasswordConfirmed = () => {
 					textAlign="center"
 				>
 					<Box>
-						<IconBox>
-							<ConfirmIcon alt="password confirm icon" />
-						</IconBox>
+						<Stack
+							direction="row"
+							justifyContent="center"
+						>
+							<IconBox
+								height={48}
+								width={48}
+								minWidth={48}
+								borderRadius={12}
+								svgWidth={24}
+								svgHeight={24}
+								mb={theme.spacing(4)}
+							>
+								<ConfirmIcon alt="password confirm icon" />
+							</IconBox>
+						</Stack>
 						<Typography component="h1">Password reset</Typography>
 						<Typography mb={theme.spacing(2)}>
 							Your password has been successfully reset. Click below to log in magically.
@@ -91,7 +104,7 @@ const NewPasswordConfirmed = () => {
 					<Button
 						variant="contained"
 						color="primary"
-						onClick={() => navigate("/monitors")}
+						onClick={() => navigate("/uptime")}
 						sx={{
 							width: "100%",
 							maxWidth: 400,
