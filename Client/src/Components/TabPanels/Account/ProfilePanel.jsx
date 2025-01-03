@@ -29,6 +29,8 @@ import Dialog from "../../Dialog";
 const ProfilePanel = () => {
 	const theme = useTheme();
 	const dispatch = useDispatch();
+	
+	const SPACING_GAP = theme.spacing(12);
 
 	//redux state
 	const { user, authToken, isLoading } = useSelector((state) => state.auth);
@@ -223,9 +225,9 @@ const ProfilePanel = () => {
 				className="edit-profile-form"
 				noValidate
 				spellCheck="false"
-				gap={theme.spacing(20)}
+				gap={SPACING_GAP} 
 			>
-				<Stack direction="row">
+				<Stack direction="row" gap={SPACING_GAP}>
 					<Box flex={0.9}>
 						<Typography component="h1">First name</Typography>
 					</Box>
@@ -240,7 +242,7 @@ const ProfilePanel = () => {
 						flex={1}
 					/>
 				</Stack>
-				<Stack direction="row">
+				<Stack direction="row" gap={SPACING_GAP}>
 					<Box flex={0.9}>
 						<Typography component="h1">Last name</Typography>
 					</Box>
@@ -255,7 +257,7 @@ const ProfilePanel = () => {
 						flex={1}
 					/>
 				</Stack>
-				<Stack direction="row">
+				<Stack direction="row" gap={SPACING_GAP}>
 					<Stack flex={0.9}>
 						<Typography component="h1">Email</Typography>
 						<Typography
@@ -275,7 +277,7 @@ const ProfilePanel = () => {
 						flex={1}
 					/>
 				</Stack>
-				<Stack direction="row">
+				<Stack direction="row" gap={SPACING_GAP}>
 					<Stack flex={0.9}>
 						<Typography component="h1">Your photo</Typography>
 						<Typography
@@ -361,7 +363,7 @@ const ProfilePanel = () => {
 							component="p"
 							sx={{ opacity: 0.6 }}
 						>
-							Note that deleting your account will remove all data from our system. This
+							Note that deleting your account will remove all data from the server. This
 							is permanent and non-recoverable.
 						</Typography>
 					</Box>

@@ -1,4 +1,6 @@
 const SERVICE_NAME = "SettingsService";
+import dotenv from "dotenv";
+dotenv.config();
 const envConfig = {
 	logLevel: undefined,
 	apiBaseUrl: undefined,
@@ -25,6 +27,7 @@ const envConfig = {
  * from the database if they are not set in the environment.
  */
 class SettingsService {
+	static SERVICE_NAME = SERVICE_NAME;
 	/**
 	 * Constructs a new SettingsService
 	 * @constructor

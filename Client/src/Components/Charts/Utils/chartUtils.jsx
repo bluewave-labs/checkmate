@@ -17,7 +17,6 @@ import { Box, Stack, Typography } from "@mui/material";
  */
 export const TzTick = ({ x, y, payload, index }) => {
 	const theme = useTheme();
-
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 	return (
 		<Text
@@ -163,7 +162,7 @@ export const InfrastructureTooltip = ({
 						>
 							{yIdx >= 0
 								? `${yLabel} ${getFormattedPercentage(payload[0].payload[hardwareType][yIdx][metric])}`
-								: `${yLabel} ${getFormattedPercentage(payload[0].payload[hardwareType][metric])}`}
+								: `${yLabel} ${getFormattedPercentage(payload[0].payload[yKey])}`}
 						</Typography>
 					</Stack>
 				</Box>

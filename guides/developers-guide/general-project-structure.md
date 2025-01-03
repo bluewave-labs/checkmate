@@ -20,7 +20,7 @@ When making changes to the Front end please always keep future developers in min
 
 ### Back end
 
-The back end of this project is not especially complex and is built around Express.  The back end is a RESTful API and the [documentation can be found here](https://uptime-demo.bluewavelabs.ca/api-docs).
+The back end of this project is not especially complex and is built around Express.  The back end is a RESTful API and the [documentation can be found here](https://checkmate-demo.bluewavelabs.ca/api-docs).
 
 The application consists of several main conceptual models:
 

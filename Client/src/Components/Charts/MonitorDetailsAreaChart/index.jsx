@@ -17,9 +17,11 @@ import "./index.css";
 
 const CustomToolTip = ({ active, payload, label }) => {
 	const uiTimezone = useSelector((state) => state.ui.timezone);
-
 	const theme = useTheme();
 	if (active && payload && payload.length) {
+		const responseTime = payload[0]?.payload?.originalAvgResponseTime
+			? payload[0]?.payload?.originalAvgResponseTime
+			: (payload[0]?.payload?.avgResponseTime ?? 0);
 		return (
 			<Box
 				className="area-tooltip"
@@ -69,7 +71,7 @@ const CustomToolTip = ({ active, payload, label }) => {
 							Response Time
 						</Typography>{" "}
 						<Typography component="span">
-							{payload[0].payload.originalResponseTime}
+							{Math.floor(responseTime)}
 							<Typography
 								component="span"
 								sx={{ opacity: 0.8 }}
@@ -87,11 +89,24 @@ const CustomToolTip = ({ active, payload, label }) => {
 	return null;
 };
 
+CustomToolTip.propTypes = {
+	active: PropTypes.bool,
+	payload: PropTypes.arrayOf(
+		PropTypes.shape({
+			value: PropTypes.number,
+			payload: PropTypes.shape({
+				_id: PropTypes.string,
+				avgResponseTime: PropTypes.number,
+				originalAvgResponseTime: PropTypes.number,
+			}),
+		})
+	),
+	label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
 const CustomTick = ({ x, y, payload, index }) => {
 	const theme = useTheme();
 
 	const uiTimezone = useSelector((state) => state.ui.timezone);
-
 	// Render nothing for the first tick
 	if (index === 0) return null;
 	return (
@@ -168,7 +183,7 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 				</defs>
 				<XAxis
 					stroke={theme.palette.border.dark}
-					dataKey="createdAt"
+					dataKey="_id"
 					tick={<CustomTick />}
 					minTickGap={0}
 					axisLine={false}
@@ -183,7 +198,7 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 				/>
 				<Area
 					type="monotone"
-					dataKey="responseTime"
+					dataKey="avgResponseTime"
 					stroke={theme.palette.primary.main}
 					fill="url(#colorUv)"
 					strokeWidth={isHovered ? 2.5 : 1.5}
@@ -198,15 +213,4 @@ MonitorDetailsAreaChart.propTypes = {
 	checks: PropTypes.array,
 };
 
-CustomToolTip.propTypes = {
-	active: PropTypes.bool,
-	payload: PropTypes.arrayOf(
-		PropTypes.shape({
-			payload: PropTypes.shape({
-				originalResponseTime: PropTypes.number.isRequired,
-			}).isRequired,
-		})
-	),
-	label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
 export default MonitorDetailsAreaChart;

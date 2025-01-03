@@ -141,9 +141,9 @@ const StatusLabel = ({ status, text, customStyles }) => {
 			borderColor: theme.palette.warning.light,
 		},
 		pending: {
-			dotColor: theme.palette.warning.main,
-			bgColor: theme.palette.warning.dark,
-			borderColor: theme.palette.warning.light,
+			dotColor: theme.palette.text.secondary,
+			bgColor: theme.palette.background.main,
+			borderColor: theme.palette.border.dark,
 		},
 		"cannot resolve": {
 			dotColor: theme.palette.unresolved.main,

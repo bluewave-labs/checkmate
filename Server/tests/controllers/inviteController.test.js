@@ -5,9 +5,10 @@ import {
 import jwt from "jsonwebtoken";
 import sinon from "sinon";
 import joi from "joi";
-describe("inviteController - issueInvitation", () => {
+describe("inviteController - issueInvitation", function() {
 	let req, res, next, stub;
-	beforeEach(() => {
+
+	beforeEach(function() {
 		req = {
 			headers: { authorization: "Bearer token" },
 			body: {
@@ -26,11 +27,11 @@ describe("inviteController - issueInvitation", () => {
 		next = sinon.stub();
 	});
 
-	afterEach(() => {
+	afterEach(function() {
 		sinon.restore();
 	});
 
-	it("should reject with an error if role validation fails", async () => {
+	it("should reject with an error if role validation fails", async function() {
 		stub = sinon.stub(jwt, "decode").callsFake(() => {
 			return { role: ["bad_role"], firstname: "first_name", teamId: "1" };
 		});
@@ -41,7 +42,7 @@ describe("inviteController - issueInvitation", () => {
 		stub.restore();
 	});
 
-	it("should reject with an error if body validation fails", async () => {
+	it("should reject with an error if body validation fails", async function() {
 		stub = sinon.stub(jwt, "decode").callsFake(() => {
 			return { role: ["admin"], firstname: "first_name", teamId: "1" };
 		});
@@ -52,7 +53,7 @@ describe("inviteController - issueInvitation", () => {
 		stub.restore();
 	});
 
-	it("should reject with an error if DB operations fail", async () => {
+	it("should reject with an error if DB operations fail", async function() {
 		stub = sinon.stub(jwt, "decode").callsFake(() => {
 			return { role: ["admin"], firstname: "first_name", teamId: "1" };
 		});
@@ -63,7 +64,7 @@ describe("inviteController - issueInvitation", () => {
 		stub.restore();
 	});
 
-	it("should send an invite successfully", async () => {
+	it("should send an invite successfully", async function() {
 		const token = "token";
 		const decodedToken = {
 			role: "admin",
@@ -91,7 +92,7 @@ describe("inviteController - issueInvitation", () => {
 		stub.restore();
 	});
 
-	it("should send an email successfully", async () => {
+	it("should send an email successfully", async function() {
 		const token = "token";
 		const decodedToken = {
 			role: "admin",
@@ -124,7 +125,7 @@ describe("inviteController - issueInvitation", () => {
 		stub.restore();
 	});
 
-	it("should continue executing if sending an email fails", async () => {
+	it("should continue executing if sending an email fails", async function() {
 		const token = "token";
 		req.emailService.buildAndSendEmail.rejects(new Error("Email error"));
 		const decodedToken = {
@@ -153,9 +154,10 @@ describe("inviteController - issueInvitation", () => {
 	});
 });
 
-describe("inviteController - inviteVerifyController", () => {
+describe("inviteController - inviteVerifyController", function() {
 	let req, res, next;
-	beforeEach(() => {
+
+	beforeEach(function() {
 		req = {
 			body: { token: "token" },
 			db: {
@@ -169,25 +171,25 @@ describe("inviteController - inviteVerifyController", () => {
 		next = sinon.stub();
 	});
 
-	afterEach(() => {
+	afterEach(function() {
 		sinon.restore();
 	});
 
-	it("should reject with an error if body validation fails", async () => {
+	it("should reject with an error if body validation fails", async function() {
 		req.body = {};
 		await inviteVerifyController(req, res, next);
 		expect(next.firstCall.args[0]).to.be.an("error");
 		expect(next.firstCall.args[0].status).to.equal(422);
 	});
 
-	it("should reject with an error if DB operations fail", async () => {
+	it("should reject with an error if DB operations fail", async function() {
 		req.db.getInviteToken.throws(new Error("DB error"));
 		await inviteVerifyController(req, res, next);
 		expect(next.firstCall.args[0]).to.be.an("error");
 		expect(next.firstCall.args[0].message).to.equal("DB error");
 	});
 
-	it("should return 200 and invite data when validation and invite retrieval are successful", async () => {
+	it("should return 200 and invite data when validation and invite retrieval are successful", async function() {
 		req.db.getInviteToken.resolves({ invite: "data" });
 		await inviteVerifyController(req, res, next);
 		expect(res.status.calledWith(200)).to.be.true;

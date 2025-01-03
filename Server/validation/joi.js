@@ -144,10 +144,12 @@ const getMonitorsAndSummaryByTeamIdQueryValidation = joi.object({
 	type: joi
 		.alternatives()
 		.try(
-			joi.string().valid("http", "ping", "pagespeed", "docker", "hardware"),
+			joi.string().valid("http", "ping", "pagespeed", "docker", "hardware", "port"),
 			joi
 				.array()
-				.items(joi.string().valid("http", "ping", "pagespeed", "docker", "hardware"))
+				.items(
+					joi.string().valid("http", "ping", "pagespeed", "docker", "hardware", "port")
+				)
 		),
 });
 
@@ -163,10 +165,12 @@ const getMonitorsByTeamIdQueryValidation = joi.object({
 	type: joi
 		.alternatives()
 		.try(
-			joi.string().valid("http", "ping", "pagespeed", "docker", "hardware"),
+			joi.string().valid("http", "ping", "pagespeed", "docker", "hardware", "port"),
 			joi
 				.array()
-				.items(joi.string().valid("http", "ping", "pagespeed", "docker", "hardware"))
+				.items(
+					joi.string().valid("http", "ping", "pagespeed", "docker", "hardware", "port")
+				)
 		),
 	page: joi.number(),
 	rowsPerPage: joi.number(),
@@ -199,6 +203,7 @@ const createMonitorBodyValidation = joi.object({
 	description: joi.string().required(),
 	type: joi.string().required(),
 	url: joi.string().required(),
+	port: joi.number(),
 	isActive: joi.boolean(),
 	interval: joi.number(),
 	thresholds: joi.object().keys({
@@ -225,6 +230,14 @@ const pauseMonitorParamValidation = joi.object({
 
 const getMonitorURLByQueryValidation = joi.object({
 	monitorURL: joi.string().uri().required(),
+});
+
+const getHardwareDetailsByIdParamValidation = joi.object({
+	monitorId: joi.string().required(),
+});
+
+const getHardwareDetailsByIdQueryValidation = joi.object({
+	dateRange: joi.string().valid("day", "week", "month"),
 });
 
 //****************************************
@@ -460,6 +473,8 @@ export {
 	getMonitorsByTeamIdQueryValidation,
 	getMonitorStatsByIdParamValidation,
 	getMonitorStatsByIdQueryValidation,
+	getHardwareDetailsByIdParamValidation,
+	getHardwareDetailsByIdQueryValidation,
 	getCertificateParamValidation,
 	editMonitorBodyValidation,
 	pauseMonitorParamValidation,

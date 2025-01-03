@@ -43,7 +43,7 @@ const createQueryChain = (finalResult, comparePasswordResult = false) => ({
 	save: sinon.stub().resolves(),
 });
 
-describe("recoveryModule", () => {
+describe("recoveryModule", function() {
 	let deleteManyStub,
 		saveStub,
 		findOneStub,
@@ -51,7 +51,8 @@ describe("recoveryModule", () => {
 		userSaveStub,
 		userFindOneStub;
 	let req, res;
-	beforeEach(() => {
+
+	beforeEach(function() {
 		req = {
 			body: { email: "test@test.com" },
 		};
@@ -63,18 +64,19 @@ describe("recoveryModule", () => {
 		userFindOneStub = sinon.stub().resolves();
 	});
 
-	afterEach(() => {
+	afterEach(function() {
 		sinon.restore();
 	});
 
-	describe("requestRecoveryToken", () => {
-		it("should return a recovery token", async () => {
+	describe("requestRecoveryToken", function() {
+		it("should return a recovery token", async function() {
 			deleteManyStub.resolves();
 			saveStub.resolves(mockRecoveryToken);
 			const result = await requestRecoveryToken(req, res);
 			expect(result.email).to.equal(mockRecoveryToken.email);
 		});
-		it("should handle an error", async () => {
+
+		it("should handle an error", async function() {
 			const err = new Error("Test error");
 			deleteManyStub.rejects(err);
 			try {
@@ -85,13 +87,15 @@ describe("recoveryModule", () => {
 			}
 		});
 	});
-	describe("validateRecoveryToken", () => {
-		it("should return a recovery token if found", async () => {
+
+	describe("validateRecoveryToken", function() {
+		it("should return a recovery token if found", async function() {
 			findOneStub.resolves(mockRecoveryToken);
 			const result = await validateRecoveryToken(req, res);
 			expect(result).to.deep.equal(mockRecoveryToken);
 		});
-		it("should thrown an error if a token is not found", async () => {
+
+		it("should thrown an error if a token is not found", async function() {
 			findOneStub.resolves(null);
 			try {
 				await validateRecoveryToken(req, res);
@@ -100,7 +104,8 @@ describe("recoveryModule", () => {
 				expect(error.message).to.equal(errorMessages.DB_TOKEN_NOT_FOUND);
 			}
 		});
-		it("should handle DB errors", async () => {
+
+		it("should handle DB errors", async function() {
 			const err = new Error("Test error");
 			findOneStub.rejects(err);
 			try {
@@ -112,19 +117,19 @@ describe("recoveryModule", () => {
 		});
 	});
 
-	describe("resetPassword", () => {
-		beforeEach(() => {
+	describe("resetPassword", function() {
+		beforeEach(function() {
 			req.body = {
 				password: "test",
 				newPassword: "test1",
 			};
 		});
 
-		afterEach(() => {
+		afterEach(function() {
 			sinon.restore();
 		});
 
-		it("should thrown an error if a recovery token is not found", async () => {
+		it("should thrown an error if a recovery token is not found", async function() {
 			findOneStub.resolves(null);
 			try {
 				await resetPassword(req, res);
@@ -133,7 +138,8 @@ describe("recoveryModule", () => {
 				expect(error.message).to.equal(errorMessages.DB_TOKEN_NOT_FOUND);
 			}
 		});
-		it("should throw an error if a user is not found", async () => {
+
+		it("should throw an error if a user is not found", async function() {
 			findOneStub.resolves(mockRecoveryToken);
 			userFindOneStub = sinon.stub(User, "findOne").resolves(null);
 			try {
@@ -143,7 +149,8 @@ describe("recoveryModule", () => {
 				expect(error.message).to.equal(errorMessages.DB_USER_NOT_FOUND);
 			}
 		});
-		it("should throw an error if the passwords match", async () => {
+
+		it("should throw an error if the passwords match", async function() {
 			findOneStub.resolves(mockRecoveryToken);
 			saveStub.resolves();
 			userFindOneStub = sinon
@@ -156,7 +163,8 @@ describe("recoveryModule", () => {
 				expect(error.message).to.equal(errorMessages.DB_RESET_PASSWORD_BAD_MATCH);
 			}
 		});
-		it("should return a user without password if successful", async () => {
+
+		it("should return a user without password if successful", async function() {
 			findOneStub.resolves(mockRecoveryToken);
 			saveStub.resolves();
 			userFindOneStub = sinon

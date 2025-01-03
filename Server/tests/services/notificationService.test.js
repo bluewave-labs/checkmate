@@ -2,9 +2,10 @@ import sinon from "sinon";
 import NotificationService from "../../service/notificationService.js";
 import { expect } from "chai";
 
-describe("NotificationService", () => {
+describe("NotificationService", function() {
 	let emailService, db, logger, notificationService;
-	beforeEach(() => {
+
+	beforeEach(function() {
 		db = {
 			getNotificationsByMonitorId: sinon.stub(),
 		};
@@ -17,18 +18,19 @@ describe("NotificationService", () => {
 
 		notificationService = new NotificationService(emailService, db, logger);
 	});
-	afterEach(() => {
+
+	afterEach(function() {
 		sinon.restore();
 	});
 
-	describe("constructor", () => {
-		it("should create a new instance of NotificationService", () => {
+	describe("constructor", function() {
+		it("should create a new instance of NotificationService", function() {
 			expect(notificationService).to.be.an.instanceOf(NotificationService);
 		});
 	});
 
-	describe("sendEmail", async () => {
-		it("should send an email notification with Up Template", async () => {
+	describe("sendEmail", function() {
+		it("should send an email notification with Up Template", async function() {
 			const networkResponse = {
 				monitor: {
 					name: "Test Monitor",
@@ -47,7 +49,8 @@ describe("NotificationService", () => {
 				)
 			);
 		});
-		it("should send an email notification with Down Template", async () => {
+
+		it("should send an email notification with Down Template", async function() {
 			const networkResponse = {
 				monitor: {
 					name: "Test Monitor",
@@ -60,7 +63,8 @@ describe("NotificationService", () => {
 			await notificationService.sendEmail(networkResponse, address);
 			expect(notificationService.emailService.buildAndSendEmail.calledOnce).to.be.true;
 		});
-		it("should send an email notification with Up Template", async () => {
+
+		it("should send an email notification with Up Template", async function() {
 			const networkResponse = {
 				monitor: {
 					name: "Test Monitor",
@@ -75,8 +79,8 @@ describe("NotificationService", () => {
 		});
 	});
 
-	describe("handleNotifications", async () => {
-		it("should handle notifications based on the network response", async () => {
+	describe("handleNotifications", function() {
+		it("should handle notifications based on the network response", async function() {
 			notificationService.sendEmail = sinon.stub();
 			const res = await notificationService.handleNotifications({
 				monitor: {
@@ -86,7 +90,8 @@ describe("NotificationService", () => {
 			});
 			expect(res).to.be.true;
 		});
-		it("should handle hardware notifications", async () => {
+
+		it("should handle hardware notifications", async function() {
 			notificationService.sendEmail = sinon.stub();
 			const res = await notificationService.handleNotifications({
 				monitor: {
@@ -97,7 +102,7 @@ describe("NotificationService", () => {
 			expect(res).to.be.true;
 		});
 
-		it("should handle an error when getting notifications", async () => {
+		it("should handle an error when getting notifications", async function() {
 			const testError = new Error("Test Error");
 			notificationService.db.getNotificationsByMonitorId.rejects(testError);
 			await notificationService.handleNotifications({ monitorId: "123" });
@@ -105,9 +110,10 @@ describe("NotificationService", () => {
 		});
 	});
 
-	describe("sendHardwareEmail", async () => {
+	describe("sendHardwareEmail", function() {
 		let networkResponse, address, alerts;
-		beforeEach(() => {
+
+		beforeEach(function() {
 			networkResponse = {
 				monitor: {
 					name: "Test Monitor",
@@ -120,10 +126,11 @@ describe("NotificationService", () => {
 			alerts = ["test"];
 		});
 
-		afterEach(() => {
+		afterEach(function() {
 			sinon.restore();
 		});
-		it("should send an email notification with Hardware Template", async () => {
+
+		it("should send an email notification with Hardware Template", async function() {
 			emailService.buildAndSendEmail.resolves(true);
 			const res = await notificationService.sendHardwareEmail(
 				networkResponse,
@@ -132,7 +139,8 @@ describe("NotificationService", () => {
 			);
 			expect(res).to.be.true;
 		});
-		it("should return false if no alerts are provided", async () => {
+
+		it("should return false if no alerts are provided", async function() {
 			alerts = [];
 			emailService.buildAndSendEmail.resolves(true);
 			const res = await notificationService.sendHardwareEmail(
@@ -143,9 +151,11 @@ describe("NotificationService", () => {
 			expect(res).to.be.false;
 		});
 	});
-	describe("handleStatusNotifications", async () => {
+
+	describe("handleStatusNotifications", function() {
 		let networkResponse;
-		beforeEach(() => {
+
+		beforeEach(function() {
 			networkResponse = {
 				monitor: {
 					name: "Test Monitor",
@@ -157,28 +167,31 @@ describe("NotificationService", () => {
 			};
 		});
 
-		afterEach(() => {
+		afterEach(function() {
 			sinon.restore();
 		});
 
-		it("should handle status notifications", async () => {
+		it("should handle status notifications", async function() {
 			db.getNotificationsByMonitorId.resolves([
 				{ type: "email", address: "test@test.com" },
 			]);
 			const res = await notificationService.handleStatusNotifications(networkResponse);
 			expect(res).to.be.true;
 		});
-		it("should return false if status hasn't changed", async () => {
+
+		it("should return false if status hasn't changed", async function() {
 			networkResponse.statusChanged = false;
 			const res = await notificationService.handleStatusNotifications(networkResponse);
 			expect(res).to.be.false;
 		});
-		it("should return false if prevStatus is undefined", async () => {
+
+		it("should return false if prevStatus is undefined", async function() {
 			networkResponse.prevStatus = undefined;
 			const res = await notificationService.handleStatusNotifications(networkResponse);
 			expect(res).to.be.false;
 		});
-		it("should handle an error", async () => {
+
+		it("should handle an error", async function() {
 			const testError = new Error("Test Error");
 			db.getNotificationsByMonitorId.rejects(testError);
 			try {
@@ -190,9 +203,10 @@ describe("NotificationService", () => {
 		});
 	});
 
-	describe("handleHardwareNotifications", async () => {
+	describe("handleHardwareNotifications", function() {
 		let networkResponse;
-		beforeEach(() => {
+
+		beforeEach(function() {
 			networkResponse = {
 				monitor: {
 					name: "Test Monitor",
@@ -225,26 +239,27 @@ describe("NotificationService", () => {
 				},
 			};
 		});
-		afterEach(() => {
+
+		afterEach(function() {
 			sinon.restore();
 		});
 
-		describe("it should return false if no thresholds are set", () => {
-			it("should return false if no thresholds are set", async () => {
+		describe("it should return false if no thresholds are set", function() {
+			it("should return false if no thresholds are set", async function() {
 				networkResponse.monitor.thresholds = undefined;
 				const res =
 					await notificationService.handleHardwareNotifications(networkResponse);
 				expect(res).to.be.false;
 			});
 
-			it("should return false if metrics are null", async () => {
+			it("should return false if metrics are null", async function() {
 				networkResponse.payload.data = null;
 				const res =
 					await notificationService.handleHardwareNotifications(networkResponse);
 				expect(res).to.be.false;
 			});
 
-			it("should return true if request is well formed and thresholds > 0", async () => {
+			it("should return true if request is well formed and thresholds > 0", async function() {
 				db.getNotificationsByMonitorId.resolves([
 					{
 						type: "email",
@@ -261,7 +276,7 @@ describe("NotificationService", () => {
 				expect(res).to.be.true;
 			});
 
-			it("should return true if thresholds are exceeded", async () => {
+			it("should return true if thresholds are exceeded", async function() {
 				db.getNotificationsByMonitorId.resolves([
 					{
 						type: "email",

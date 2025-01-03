@@ -1,51 +1,87 @@
 import { Router } from "express";
-import {
-	getAllMonitors,
-	getAllMonitorsWithUptimeStats,
-	getMonitorStatsById,
-	getMonitorCertificate,
-	getMonitorById,
-	getMonitorsAndSummaryByTeamId,
-	getMonitorsByTeamId,
-	createMonitor,
-	checkEndpointResolution,
-	deleteMonitor,
-	deleteAllMonitors,
-	editMonitor,
-	pauseMonitor,
-	addDemoMonitors,
-} from "../controllers/monitorController.js";
 import { isAllowed } from "../middleware/isAllowed.js";
 import { fetchMonitorCertificate } from "../controllers/controllerUtils.js";
 
-const router = Router();
+class MonitorRoutes {
+	constructor(monitorController) {
+		this.router = Router();
+		this.monitorController = monitorController;
+		this.initRoutes();
+	}
 
-router.get("/", getAllMonitors);
-router.get("/uptime", getAllMonitorsWithUptimeStats);
-router.get("/stats/:monitorId", getMonitorStatsById);
-router.get("/certificate/:monitorId", (req, res, next) => {
-	getMonitorCertificate(req, res, next, fetchMonitorCertificate);
-});
-router.get("/:monitorId", getMonitorById);
-router.get("/team/summary/:teamId", getMonitorsAndSummaryByTeamId);
-router.get("/team/:teamId", getMonitorsByTeamId);
+	initRoutes() {
+		this.router.get("/", this.monitorController.getAllMonitors);
+		this.router.get("/uptime", this.monitorController.getAllMonitorsWithUptimeStats);
+		this.router.get("/stats/:monitorId", this.monitorController.getMonitorStatsById);
+		this.router.get(
+			"/hardware/details/:monitorId",
+			this.monitorController.getHardwareDetailsById
+		);
+		this.router.get(
+			"/uptime/details/:monitorId",
+			this.monitorController.getUptimeDetailsById
+		);
+		this.router.get("/certificate/:monitorId", (req, res, next) => {
+			this.monitorController.getMonitorCertificate(
+				req,
+				res,
+				next,
+				fetchMonitorCertificate
+			);
+		});
+		this.router.get("/:monitorId", this.monitorController.getMonitorById);
+		this.router.get(
+			"/team/summary/:teamId",
+			this.monitorController.getMonitorsAndSummaryByTeamId
+		);
+		this.router.get("/team/:teamId", this.monitorController.getMonitorsByTeamId);
 
-router.get(
-	"/resolution/url",
-	isAllowed(["admin", "superadmin"]),
-	checkEndpointResolution
-);
+		this.router.get(
+			"/resolution/url",
+			isAllowed(["admin", "superadmin"]),
+			this.monitorController.checkEndpointResolution
+		);
 
-router.delete("/:monitorId", isAllowed(["admin", "superadmin"]), deleteMonitor);
+		this.router.delete(
+			"/:monitorId",
+			isAllowed(["admin", "superadmin"]),
+			this.monitorController.deleteMonitor
+		);
 
-router.post("/", isAllowed(["admin", "superadmin"]), createMonitor);
+		this.router.post(
+			"/",
+			isAllowed(["admin", "superadmin"]),
+			this.monitorController.createMonitor
+		);
 
-router.put("/:monitorId", isAllowed(["admin", "superadmin"]), editMonitor);
+		this.router.put(
+			"/:monitorId",
+			isAllowed(["admin", "superadmin"]),
+			this.monitorController.editMonitor
+		);
 
-router.delete("/", isAllowed(["superadmin"]), deleteAllMonitors);
+		this.router.delete(
+			"/",
+			isAllowed(["superadmin"]),
+			this.monitorController.deleteAllMonitors
+		);
 
-router.post("/pause/:monitorId", isAllowed(["admin", "superadmin"]), pauseMonitor);
+		this.router.post(
+			"/pause/:monitorId",
+			isAllowed(["admin", "superadmin"]),
+			this.monitorController.pauseMonitor
+		);
 
-router.post("/demo", isAllowed(["admin", "superadmin"]), addDemoMonitors);
+		this.router.post(
+			"/demo",
+			isAllowed(["admin", "superadmin"]),
+			this.monitorController.addDemoMonitors
+		);
+	}
 
-export default router;
+	getRouter() {
+		return this.router;
+	}
+}
+
+export default MonitorRoutes;

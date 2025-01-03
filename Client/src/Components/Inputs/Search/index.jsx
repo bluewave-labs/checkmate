@@ -40,6 +40,7 @@ const SearchAdornment = () => {
 
 //TODO keep search state inside of component
 const Search = ({
+	label,
 	id,
 	options,
 	filteredBy,
@@ -76,6 +77,14 @@ const Search = ({
 			getOptionLabel={(option) => option[filteredBy]}
 			renderInput={(params) => (
 				<Stack>
+					<Typography
+						component="h3"
+						fontSize={"var(--env-var-font-size-medium)"}
+						color={theme.palette.text.secondary}
+						fontWeight={500}
+					>
+						{label}
+					</Typography>
 					<TextField
 						{...params}
 						error={Boolean(error)}
@@ -93,6 +102,9 @@ const Search = ({
 								{
 									borderColor: theme.palette.border.light,
 								},
+							"& .MuiOutlinedInput-root": {
+								paddingY: 0,
+							},
 						}}
 					/>
 					{error && (

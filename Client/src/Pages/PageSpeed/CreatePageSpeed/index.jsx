@@ -1,42 +1,50 @@
-import { useState } from "react";
-import { Box, Button, ButtonGroup, Stack, Typography } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { useSelector, useDispatch } from "react-redux";
-import { monitorValidation } from "../../../Validation/validation";
+// React, Redux, Router
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "@emotion/react";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+// Utility and Network
+import { monitorValidation } from "../../../Validation/validation";
 import {
 	createPageSpeed,
 	checkEndpointResolution,
 } from "../../../Features/PageSpeedMonitor/pageSpeedMonitorSlice";
-import { createToast } from "../../../Utils/toastUtils";
-import { logger } from "../../../Utils/Logger";
-import { ConfigBox } from "../../Monitors/styled";
-import Radio from "../../../Components/Inputs/Radio";
+import { parseDomainName } from "../../../Utils/monitorUtils";
+
+// MUI
+import { useTheme } from "@emotion/react";
+import { Box, Stack, Typography, Button, ButtonGroup } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+
+//Components
+import Breadcrumbs from "../../../Components/Breadcrumbs";
 import TextInput from "../../../Components/Inputs/TextInput";
 import { HttpAdornment } from "../../../Components/Inputs/TextInput/Adornments";
-import Select from "../../../Components/Inputs/Select";
+import ConfigBox from "../../../Components/ConfigBox";
+import { createToast } from "../../../Utils/toastUtils";
+import Radio from "../../../Components/Inputs/Radio";
 import Checkbox from "../../../Components/Inputs/Checkbox";
-import Breadcrumbs from "../../../Components/Breadcrumbs";
-import { parseDomainName } from "../../../Utils/monitorUtils";
-import "./index.css";
+import Select from "../../../Components/Inputs/Select";
+
+const MS_PER_MINUTE = 60000;
+
+const CRUMBS = [
+	{ name: "pagespeed", path: "/pagespeed" },
+	{ name: "create", path: `/pagespeed/create` },
+];
+
+const SELECT_VALUES = [
+	{ _id: 3, name: "3 minutes" },
+	{ _id: 5, name: "5 minutes" },
+	{ _id: 10, name: "10 minutes" },
+	{ _id: 20, name: "20 minutes" },
+	{ _id: 60, name: "1 hour" },
+	{ _id: 1440, name: "1 day" },
+	{ _id: 10080, name: "1 week" },
+];
 
 const CreatePageSpeed = () => {
-	const MS_PER_MINUTE = 60000;
-	const { user, authToken } = useSelector((state) => state.auth);
-	const { isLoading } = useSelector((state) => state.pageSpeedMonitors);
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
-	const theme = useTheme();
-
-	const idMap = {
-		"monitor-url": "url",
-		"monitor-name": "name",
-		"monitor-checks-http": "type",
-		"monitor-checks-ping": "type",
-		"notify-email-default": "notification-email",
-	};
-
+	// State
 	const [monitor, setMonitor] = useState({
 		url: "",
 		name: "",
@@ -44,71 +52,20 @@ const CreatePageSpeed = () => {
 		notifications: [],
 		interval: 3,
 	});
+
 	const [https, setHttps] = useState(true);
 	const [errors, setErrors] = useState({});
+	const { user, authToken } = useSelector((state) => state.auth);
+	const { isLoading } = useSelector((state) => state.pageSpeedMonitors);
 
-	const handleChange = (event, name) => {
-		const { value, id } = event.target;
-		if (!name) name = idMap[id];
+	// Setup
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const theme = useTheme();
 
-		if (name.includes("notification-")) {
-			name = name.replace("notification-", "");
-			let hasNotif = monitor.notifications.some(
-				(notification) => notification.type === name
-			);
-			setMonitor((prev) => {
-				const notifs = [...prev.notifications];
-				if (hasNotif) {
-					return {
-						...prev,
-						notifications: notifs.filter((notif) => notif.type !== name),
-					};
-				} else {
-					return {
-						...prev,
-						notifications: [
-							...notifs,
-							name === "email"
-								? { type: name, address: value }
-								: // TODO - phone number
-									{ type: name, phone: value },
-						],
-					};
-				}
-			});
-		} else {
-			setMonitor((prev) => ({
-				...prev,
-				[name]: value,
-			}));
-
-			const { error } = monitorValidation.validate(
-				{ [name]: value },
-				{ abortEarly: false }
-			);
-
-			setErrors((prev) => {
-				const updatedErrors = { ...prev };
-				if (error) updatedErrors[name] = error.details[0].message;
-				else delete updatedErrors[name];
-				return updatedErrors;
-			});
-		}
-	};
-
-	const onUrlBlur = (event) => {
-		const { value } = event.target;
-		if (monitor.name === "") {
-			setMonitor((prev) => ({
-				...prev,
-				name: parseDomainName(value),
-			}));
-		}
-	};
-
+	// Handlers
 	const handleCreateMonitor = async (event) => {
 		event.preventDefault();
-		//obj to submit
 		let form = {
 			url: `http${https ? "s" : ""}://` + monitor.url,
 			name: monitor.name === "" ? monitor.url : monitor.name,
@@ -126,46 +83,97 @@ const CreatePageSpeed = () => {
 				newErrors[err.path[0]] = err.message;
 			});
 			setErrors(newErrors);
-			createToast({ body: "Error validation data." });
-		} else {
-			const checkEndpointAction = await dispatch(
-				checkEndpointResolution({ authToken, monitorURL: form.url })
-			);
-			if (checkEndpointAction.meta.requestStatus === "rejected") {
-				createToast({
-					body: "The endpoint you entered doesn't resolve. Check the URL again.",
-				});
-				setErrors({ url: "The entered URL is not reachable." });
-				return;
-			}
+			createToast({ body: "Please check the form for errors." });
+			return;
+		}
 
-			form = {
-				...form,
-				description: form.name,
-				teamId: user.teamId,
-				userId: user._id,
-				notifications: monitor.notifications,
-			};
-			const action = await dispatch(createPageSpeed({ authToken, monitor: form }));
-			if (action.meta.requestStatus === "fulfilled") {
-				createToast({ body: "Monitor created successfully!" });
-				navigate("/pagespeed");
-			} else {
-				createToast({ body: "Failed to create monitor." });
-			}
+		const checkEndpointAction = await dispatch(
+			checkEndpointResolution({ authToken, monitorURL: form.url })
+		);
+
+		if (checkEndpointAction.meta.requestStatus === "rejected") {
+			createToast({
+				body: "The endpoint you entered doesn't resolve. Check the URL again.",
+			});
+			setErrors({ url: "The entered URL is not reachable." });
+			return;
+		}
+
+		form = {
+			...form,
+			description: form.name,
+			teamId: user.teamId,
+			userId: user._id,
+			notifications: monitor.notifications,
+		};
+
+		const action = await dispatch(createPageSpeed({ authToken, monitor: form }));
+		if (action.meta.requestStatus === "fulfilled") {
+			createToast({ body: "Monitor created successfully!" });
+			navigate("/pagespeed");
+		} else {
+			createToast({ body: "Failed to create monitor." });
 		}
 	};
 
-	//select values
-	const frequencies = [
-		{ _id: 3, name: "3 minutes" },
-		{ _id: 5, name: "5 minutes" },
-		{ _id: 10, name: "10 minutes" },
-		{ _id: 20, name: "20 minutes" },
-		{ _id: 60, name: "1 hour" },
-		{ _id: 1440, name: "1 day" },
-		{ _id: 10080, name: "1 week" },
-	];
+	const handleChange = (event) => {
+		const { value, name } = event.target;
+		setMonitor({
+			...monitor,
+			[name]: value,
+		});
+
+		const { error } = monitorValidation.validate(
+			{ [name]: value },
+			{ abortEarly: false }
+		);
+
+		setErrors((prev) => ({
+			...prev,
+			...(error ? { [name]: error.details[0].message } : { [name]: undefined }),
+		}));
+	};
+
+	const handleNotifications = (event, type) => {
+		const { value } = event.target;
+		let notifications = [...monitor.notifications];
+		const notificationExists = notifications.some((notification) => {
+			if (notification.type === type && notification.address === value) {
+				return true;
+			}
+			return false;
+		});
+		if (notificationExists) {
+			notifications = notifications.filter((notification) => {
+				if (notification.type === type && notification.address === value) {
+					return false;
+				}
+				return true;
+			});
+		} else {
+			notifications.push({ type, address: value });
+		}
+
+		setMonitor((prev) => ({
+			...prev,
+			notifications,
+		}));
+	};
+
+	const handleBlur = (event) => {
+		const { name } = event.target;
+		if (name === "url") {
+			const { value } = event.target;
+			if (monitor.name !== "") {
+				return;
+			}
+			setMonitor((prev) => ({
+				...prev,
+				name: parseDomainName(value),
+			}));
+		}
+	};
+
 	return (
 		<Box
 			className="create-monitor"
@@ -175,12 +183,7 @@ const CreatePageSpeed = () => {
 				},
 			}}
 		>
-			<Breadcrumbs
-				list={[
-					{ name: "pagespeed", path: "/pagespeed" },
-					{ name: "create", path: `/pagespeed/create` },
-				]}
-			/>
+			<Breadcrumbs list={CRUMBS} />
 			<Stack
 				component="form"
 				className="create-monitor-form"
@@ -206,7 +209,7 @@ const CreatePageSpeed = () => {
 						fontWeight="inherit"
 						color={theme.palette.text.secondary}
 					>
-						pagespeed monitor
+						PageSpeed monitor
 					</Typography>
 				</Typography>
 				<ConfigBox>
@@ -219,19 +222,21 @@ const CreatePageSpeed = () => {
 					<Stack gap={theme.spacing(15)}>
 						<TextInput
 							type={"url"}
+							name="url"
 							id="monitor-url"
 							label="URL to monitor"
 							startAdornment={<HttpAdornment https={https} />}
 							placeholder="google.com"
 							value={monitor.url}
 							onChange={handleChange}
-							onBlur={onUrlBlur}
+							onBlur={handleBlur}
 							error={errors["url"] ? true : false}
 							helperText={errors["url"]}
 						/>
 						<TextInput
 							type="text"
 							id="monitor-name"
+							name="name"
 							label="Display name"
 							isOptional={true}
 							placeholder="Google"
@@ -253,12 +258,11 @@ const CreatePageSpeed = () => {
 						<Stack gap={theme.spacing(6)}>
 							<Radio
 								id="monitor-checks-http"
-								title="Website monitoring"
-								desc="Use HTTP(s) to monitor your website or API endpoint."
+								title="PageSpeed"
+								desc="Use the Lighthouse PageSpeed API to monitor your website"
 								size="small"
 								value="http"
 								checked={monitor.type === "pagespeed"}
-								onChange={(event) => handleChange(event)}
 							/>
 							<ButtonGroup sx={{ ml: "32px" }}>
 								<Button
@@ -269,8 +273,8 @@ const CreatePageSpeed = () => {
 									HTTPS
 								</Button>
 								<Button
-									variant="group"
-									filled={(!https).toString()}
+									variant="group" // Why does this work?
+									filled={(!https).toString()} // There's nothing in the docs about this either
 									onClick={() => setHttps(false)}
 								>
 									HTTP
@@ -302,48 +306,14 @@ const CreatePageSpeed = () => {
 					<Stack gap={theme.spacing(6)}>
 						<Typography component="p">When there is a new incident,</Typography>
 						<Checkbox
-							id="notify-sms"
-							label="Notify via SMS (coming soon)"
-							isChecked={false}
-							value=""
-							onChange={() => logger.warn("disabled")}
-							isDisabled={true}
-						/>
-						<Checkbox
 							id="notify-email-default"
 							label={`Notify via email (to ${user.email})`}
 							isChecked={monitor.notifications.some(
 								(notification) => notification.type === "email"
 							)}
 							value={user?.email}
-							onChange={(event) => handleChange(event)}
+							onChange={(event) => handleNotifications(event, "email")}
 						/>
-						<Checkbox
-							id="notify-email"
-							label="Also notify via email to multiple addresses (coming soon)"
-							isChecked={false}
-							value=""
-							onChange={() => logger.warn("disabled")}
-							isDisabled={true}
-						/>
-						{monitor.notifications.some(
-							(notification) => notification.type === "emails"
-						) ? (
-							<Box mx={theme.spacing(16)}>
-								<TextInput
-									id="notify-email-list"
-									type="text"
-									placeholder="name@gmail.com"
-									value=""
-									onChange={() => logger.warn("disabled")}
-								/>
-								<Typography mt={theme.spacing(4)}>
-									You can separate multiple emails with a comma
-								</Typography>
-							</Box>
-						) : (
-							""
-						)}
 					</Stack>
 				</ConfigBox>
 				<ConfigBox>
@@ -353,10 +323,11 @@ const CreatePageSpeed = () => {
 					<Stack gap={theme.spacing(12)}>
 						<Select
 							id="monitor-interval"
+							name="interval"
 							label="Check frequency"
 							value={monitor.interval || 3}
-							onChange={(event) => handleChange(event, "interval")}
-							items={frequencies}
+							onChange={handleChange}
+							items={SELECT_VALUES}
 						/>
 					</Stack>
 				</ConfigBox>
@@ -368,7 +339,7 @@ const CreatePageSpeed = () => {
 						variant="contained"
 						color="primary"
 						onClick={handleCreateMonitor}
-						disabled={Object.keys(errors).length !== 0 && true}
+						disabled={!Object.values(errors).every((value) => value === undefined)}
 						loading={isLoading}
 					>
 						Create monitor
@@ -378,5 +349,4 @@ const CreatePageSpeed = () => {
 		</Box>
 	);
 };
-
 export default CreatePageSpeed;

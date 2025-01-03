@@ -1,8 +1,8 @@
 import { NormalizeData, calculatePercentile } from "../../utils/dataUtils.js";
 import sinon from "sinon";
 
-describe("NormalizeData", () => {
-	it("should normalize response times when checks length is greater than 1", () => {
+describe("NormalizeData", function() {
+	it("should normalize response times when checks length is greater than 1", function() {
 		const checks = [
 			{ responseTime: 20, _doc: { id: 1 } },
 			{ responseTime: 40, _doc: { id: 2 } },
@@ -21,7 +21,7 @@ describe("NormalizeData", () => {
 		});
 	});
 
-	it("should return checks with original response times when checks length is 1", () => {
+	it("should return checks with original response times when checks length is 1", function() {
 		const checks = [{ responseTime: 20, _doc: { id: 1 } }];
 		const rangeMin = 1;
 		const rangeMax = 100;
@@ -32,7 +32,7 @@ describe("NormalizeData", () => {
 		expect(result[0]).to.have.property("originalResponseTime", 20);
 	});
 
-	it("should handle edge cases with extreme response times", () => {
+	it("should handle edge cases with extreme response times", function() {
 		const checks = [
 			{ responseTime: 5, _doc: { id: 1 } },
 			{ responseTime: 95, _doc: { id: 2 } },
@@ -49,8 +49,8 @@ describe("NormalizeData", () => {
 	});
 });
 
-describe("calculatePercentile", () => {
-	it("should return the lower value when upper is greater than or equal to the length of the sorted array", () => {
+describe("calculatePercentile", function() {
+	it("should return the lower value when upper is greater than or equal to the length of the sorted array", function() {
 		const checks = [
 			{ responseTime: 10 },
 			{ responseTime: 20 },

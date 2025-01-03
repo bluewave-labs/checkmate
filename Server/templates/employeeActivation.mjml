@@ -22,7 +22,7 @@
 				<mj-text
 					align="left"
 					font-size="10px"
-					>Message from BlueWave Uptime Service</mj-text
+					>Message from Checkmate Service</mj-text
 				>
 			</mj-column>
 		</mj-section>
@@ -31,7 +31,7 @@
 				<mj-text>
 					<p>Hello {{name}}!</p>
 					<p>
-						One of the admins created an account for you on the BlueWave Uptime server.
+						One of the admins created an account for you on the Checkmate server.
 					</p>
 					<p>You can go ahead and create your account using this link.</p>
 					<p><a href="{{link}}">{{link}}</a></p>
@@ -44,7 +44,7 @@
 					border-color="#E0E0E0"
 				></mj-divider>
 				<mj-text font-size="12px">
-					<p>This email was sent by BlueWave Uptime.</p>
+					<p>This email was sent by Checkmate.</p>
 				</mj-text>
 			</mj-column>
 		</mj-section>

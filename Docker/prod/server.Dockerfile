@@ -1,5 +1,7 @@
 FROM node:20-alpine
 
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+
 WORKDIR /app
 
 COPY ./Server/package*.json ./

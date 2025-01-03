@@ -26,7 +26,7 @@ It regularly checks whether a server/website is accessible and performs optimall
 
 ## Demo
 
-We have a [demo](https://uptime-demo.bluewavelabs.ca/) where you can test how the Uptime Manager works. The username is [uptimedemo@demo.com](mailto:uptimedemo@demo.com) and the password is Demouser1!
+We have a [demo](https://checkmate-demo.bluewavelabs.ca/) where you can test how the Uptime Manager works. The username is [uptimedemo@demo.com](mailto:uptimedemo@demo.com) and the password is Demouser1!
 
 ## Questions & ideas
 

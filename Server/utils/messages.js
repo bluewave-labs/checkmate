@@ -59,6 +59,9 @@ const errorMessages = {
 	// Docker
 	DOCKER_FAIL: "Failed to fetch Docker container information",
 	DOCKER_NOT_FOUND: "Docker container not found",
+
+	// Port
+	PORT_FAIL: "Failed to connect to port",
 };
 
 const successMessages = {
@@ -100,7 +103,6 @@ const successMessages = {
 
 	// Queue Controller
 	QUEUE_GET_METRICS: "Got metrics successfully",
-	QUEUE_GET_METRICS: "Got job stats successfully",
 	QUEUE_ADD_JOB: "Job added successfully",
 	QUEUE_OBLITERATE: "Queue obliterated",
 
@@ -130,6 +132,9 @@ const successMessages = {
 
 	// Docker
 	DOCKER_SUCCESS: "Docker container status fetched successfully",
+
+	// Port
+	PORT_SUCCESS: "Port connected successfully",
 };
 
 export { errorMessages, successMessages };

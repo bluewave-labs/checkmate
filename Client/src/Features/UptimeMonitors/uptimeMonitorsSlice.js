@@ -86,7 +86,7 @@ export const getUptimeMonitorsByTeamId = createAsyncThunk(
 			const res = await networkService.getMonitorsAndSummaryByTeamId({
 				authToken: token,
 				teamId: user.teamId,
-				types: ["http", "ping", "docker"],
+				types: ["http", "ping", "docker", "port"],
 			});
 			return res.data;
 		} catch (error) {

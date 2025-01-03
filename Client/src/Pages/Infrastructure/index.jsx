@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { /* useDispatch, */ useSelector } from "react-redux";
 import { useTheme } from "@emotion/react";
-import useUtils from "../Monitors/utils";
+import useUtils from "../Uptime/utils.jsx";
 import { jwtDecode } from "jwt-decode";
 import SkeletonLayout from "./skeleton";
 import Fallback from "../../Components/Fallback";
@@ -28,7 +28,7 @@ import { Pagination } from "./components/TablePagination";
 // import { getInfrastructureMonitorsByTeamId } from "../../Features/InfrastructureMonitors/infrastructureMonitorsSlice";
 import { networkService } from "../../Utils/NetworkService.js";
 import CustomGauge from "../../Components/Charts/CustomGauge/index.jsx";
-import Host from "../Monitors/Home/host.jsx";
+import Host from "../Uptime/Home/host.jsx";
 import { useIsAdmin } from "../../Hooks/useIsAdmin.js";
 import { InfrastructureMenu } from "./components/Menu";
 
@@ -191,31 +191,26 @@ function Infrastructure() {
 				<SkeletonLayout />
 			) : monitorState.monitors?.length !== 0 ? (
 				<Stack gap={theme.spacing(8)}>
-					<Breadcrumbs list={BREADCRUMBS} />
-					<Stack
-						direction="row"
-						sx={{
-							justifyContent: "end",
-							alignItems: "center",
-							gap: "1rem",
-							flexWrap: "wrap",
-							marginBottom: "2rem",
-						}}
-					>
-						{/* 
-				This will be removed from here, but keeping the commented code to remind me to add a max width to the greeting component
-				<Box style={{ maxWidth: "65ch" }}>
-					<Greeting type="uptime" />
-				</Box> */}
-						<Button
-							variant="contained"
-							color="primary"
-							onClick={navigateToCreate}
-							sx={{ fontWeight: 500 }}
+					<Box>
+						<Breadcrumbs list={BREADCRUMBS} />
+						<Stack
+							direction="row"
+							justifyContent="end"
+							alignItems="center"
+							mt={theme.spacing(5)}
 						>
-							Create infrastructure monitor
-						</Button>
-					</Stack>
+							{isAdmin && (
+								<Button
+									variant="contained"
+									color="primary"
+									onClick={navigateToCreate}
+									sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
+								>
+									Create new
+								</Button>
+							)}
+						</Stack>
+					</Box>
 					<Stack
 						sx={{
 							gap: "1rem",

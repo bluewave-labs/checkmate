@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
-import { Stack, Box, Typography } from "@mui/material";
+import { Button, ButtonGroup, Stack, Box, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import CustomGauge from "../../../Components/Charts/CustomGauge";
 import AreaChart from "../../../Components/Charts/AreaChart";
 import { useSelector } from "react-redux";
 import { networkService } from "../../../main";
 import PulseDot from "../../../Components/Animated/PulseDot";
-import useUtils from "../../Monitors/utils";
+import useUtils from "../../Uptime/utils";
 import { useNavigate } from "react-router-dom";
 import Empty from "./empty";
 import { logger } from "../../../Utils/Logger";
@@ -20,6 +20,7 @@ import {
 	TemperatureTooltip,
 } from "../../../Components/Charts/Utils/chartUtils";
 import PropTypes from "prop-types";
+import StatBox from "../../../Components/StatBox";
 
 const BASE_BOX_PADDING_VERTICAL = 4;
 const BASE_BOX_PADDING_HORIZONTAL = 4;
@@ -30,18 +31,50 @@ const TEXT_FONT_SIZE = 13;
  * @param {number} bytes - Number of bytes to convert
  * @returns {number} Converted value in gigabytes
  */
-const formatBytes = (bytes) => {
-	if (bytes === undefined || bytes === null) return "0 GB";
-	if (typeof bytes !== "number") return "0 GB";
-	if (bytes === 0) return "0 GB";
+const formatBytes = (bytes, space = false) => {
+	if (bytes === undefined || bytes === null)
+		return (
+			<>
+				{0}
+				{space ? " " : ""}
+				<Typography component="span">GB</Typography>
+			</>
+		);
+	if (typeof bytes !== "number")
+		return (
+			<>
+				{0}
+				{space ? " " : ""}
+				<Typography component="span">GB</Typography>
+			</>
+		);
+	if (bytes === 0)
+		return (
+			<>
+				{0}
+				{space ? " " : ""}
+				<Typography component="span">GB</Typography>
+			</>
+		);
 
 	const GB = bytes / (1024 * 1024 * 1024);
 	const MB = bytes / (1024 * 1024);
 
 	if (GB >= 1) {
-		return `${Number(GB.toFixed(0))} GB`;
+		return (
+			<>
+				{Number(GB.toFixed(0))}
+				{space ? " " : ""}
+				<Typography component="span">GB</Typography>
+			</>
+		);
 	} else {
-		return `${Number(MB.toFixed(0))} MB`;
+		return (
+			<>
+				{Number(MB.toFixed(0))}
+				<Typography component="span">MB</Typography>
+			</>
+		);
 	}
 };
 
@@ -93,42 +126,6 @@ const BaseBox = ({ children, sx = {} }) => {
 BaseBox.propTypes = {
 	children: PropTypes.node.isRequired,
 	sx: PropTypes.object,
-};
-
-/**
- * Renders a statistic box with a heading and subheading
- * @param {Object} props - Component properties
- * @param {string} props.heading - Primary heading text
- * @param {string} props.subHeading - Secondary heading text
- * @returns {React.ReactElement} Stat box component
- */
-const StatBox = ({ heading, subHeading }) => {
-	const theme = useTheme();
-	return (
-		<BaseBox
-			sx={{
-				padding: `${theme.spacing(8)} ${theme.spacing(6)}`,
-			}}
-		>
-			<Typography
-				component="h2"
-				fontSize={TEXT_FONT_SIZE}
-			>
-				{heading}
-			</Typography>
-			<Typography
-				fontSize="16px"
-				fontWeight="600"
-			>
-				{subHeading}
-			</Typography>
-		</BaseBox>
-	);
-};
-
-StatBox.propTypes = {
-	heading: PropTypes.string.isRequired,
-	subHeading: PropTypes.string.isRequired,
 };
 
 /**
@@ -215,9 +212,11 @@ GaugeBox.propTypes = {
 	value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 	heading: PropTypes.string.isRequired,
 	metricOne: PropTypes.string.isRequired,
-	valueOne: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+	valueOne: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.element])
+		.isRequired,
 	metricTwo: PropTypes.string.isRequired,
-	valueTwo: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+	valueTwo: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.element])
+		.isRequired,
 };
 
 /**
@@ -234,8 +233,8 @@ const InfrastructureDetails = () => {
 	];
 	const [monitor, setMonitor] = useState(null);
 	const { authToken } = useSelector((state) => state.auth);
-	const [dateRange, setDateRange] = useState("all");
-	const { statusColor, determineState, statusMsg } = useUtils();
+	const [dateRange, setDateRange] = useState("day");
+	const { statusColor, statusStyles, determineState } = useUtils();
 	// These calculations are needed because ResponsiveContainer
 	// doesn't take padding of parent/siblings into account
 	// when calculating height.
@@ -247,8 +246,9 @@ const InfrastructureDetails = () => {
 		(chartContainerHeight - totalChartContainerPadding - totalTypographyPadding) * 0.95;
 	// end height calculations
 
-	const buildStatBoxes = (checks) => {
-		let latestCheck = checks[0] ?? null;
+	const buildStatBoxes = (stats, uptime) => {
+		if (Object.keys(stats).length === 0) return [];
+		let latestCheck = stats?.aggregateData?.latestCheck ?? null;
 		if (latestCheck === null) return [];
 
 		// Extract values from latest check
@@ -267,24 +267,50 @@ const InfrastructureDetails = () => {
 		const osPlatform = os === null && platform === null ? null : `${os} ${platform}`;
 		return [
 			{
+				id: 7,
+				sx: statusStyles[determineState(monitor)],
+				heading: "Status",
+				subHeading: monitor?.status === true ? "Active" : "Inactive",
+			},
+			{
 				id: 0,
 				heading: "CPU (Physical)",
-				subHeading: `${physicalCores} cores`,
+				subHeading: (
+					<>
+						{physicalCores}
+						<Typography component="span">cores</Typography>
+					</>
+				),
 			},
 			{
 				id: 1,
 				heading: "CPU (Logical)",
-				subHeading: `${logicalCores} cores`,
+				subHeading: (
+					<>
+						{logicalCores}
+						<Typography component="span">cores</Typography>
+					</>
+				),
 			},
 			{
 				id: 2,
 				heading: "CPU Frequency",
-				subHeading: `${(cpuFrequency / 1000).toFixed(2)} Ghz`,
+				subHeading: (
+					<>
+						{(cpuFrequency / 1000).toFixed(2)}
+						<Typography component="span">Ghz</Typography>
+					</>
+				),
 			},
 			{
 				id: 3,
 				heading: "Average CPU Temperature",
-				subHeading: `${cpuTemperature.toFixed(2)} C`,
+				subHeading: (
+					<>
+						{cpuTemperature.toFixed(2)}
+						<Typography component="span">C</Typography>
+					</>
+				),
 			},
 			{
 				id: 4,
@@ -296,12 +322,17 @@ const InfrastructureDetails = () => {
 				heading: "Disk",
 				subHeading: formatBytes(diskTotalBytes),
 			},
-			{ id: 6, heading: "Uptime", subHeading: "100%" },
 			{
-				id: 7,
-				heading: "Status",
-				subHeading: monitor?.status === true ? "Active" : "Inactive",
+				id: 6,
+				heading: "Uptime",
+				subHeading: (
+					<>
+						{(uptime * 100).toFixed(2)}
+						<Typography component="span">%</Typography>
+					</>
+				),
 			},
+
 			{
 				id: 8,
 				heading: "OS",
@@ -310,8 +341,10 @@ const InfrastructureDetails = () => {
 		];
 	};
 
-	const buildGaugeBoxConfigs = (checks) => {
-		let latestCheck = checks[0] ?? null;
+	const buildGaugeBoxConfigs = (stats) => {
+		if (Object.keys(stats).length === 0) return [];
+
+		let latestCheck = stats?.aggregateData?.latestCheck ?? null;
 		if (latestCheck === null) return [];
 
 		// Extract values from latest check
@@ -325,16 +358,16 @@ const InfrastructureDetails = () => {
 			{
 				type: "memory",
 				value: decimalToPercentage(memoryUsagePercent),
-				heading: "Memory Usage",
+				heading: "Memory usage",
 				metricOne: "Used",
-				valueOne: formatBytes(memoryUsedBytes),
+				valueOne: formatBytes(memoryUsedBytes, true),
 				metricTwo: "Total",
-				valueTwo: formatBytes(memoryTotalBytes),
+				valueTwo: formatBytes(memoryTotalBytes, true),
 			},
 			{
 				type: "cpu",
 				value: decimalToPercentage(cpuUsagePercent),
-				heading: "CPU Usage",
+				heading: "CPU usage",
 				metricOne: "Cores",
 				valueOne: cpuPhysicalCores ?? 0,
 				metricTwo: "Frequency",
@@ -346,9 +379,9 @@ const InfrastructureDetails = () => {
 				value: decimalToPercentage(disk.usage_percent),
 				heading: `Disk${idx} usage`,
 				metricOne: "Used",
-				valueOne: formatBytes(disk.total_bytes - disk.free_bytes),
+				valueOne: formatBytes(disk.total_bytes - disk.free_bytes, true),
 				metricTwo: "Total",
-				valueTwo: formatBytes(disk.total_bytes),
+				valueTwo: formatBytes(disk.total_bytes, true),
 			})),
 		];
 	};
@@ -358,27 +391,27 @@ const InfrastructureDetails = () => {
 		if (checks === null) return { temps: [], tempKeys: [] };
 
 		for (const check of checks) {
-			if (check?.cpu?.temperature?.length > numCores) {
-				numCores = check.cpu.temperature.length;
+			if (check?.avgTemperature?.length > numCores) {
+				numCores = check.avgTemperature.length;
 				break;
 			}
 		}
 		const temps = checks.map((check) => {
 			// If there's no data, set the temperature to 0
 			if (
-				check?.cpu?.temperature?.length === 0 ||
-				check?.cpu?.temperature === undefined ||
-				check?.cpu?.temperature === null
+				check?.avgTemperature?.length === 0 ||
+				check?.avgTemperature === undefined ||
+				check?.avgTemperature === null
 			) {
-				check.cpu.temperature = Array(numCores).fill(0);
+				check.avgTemperature = Array(numCores).fill(0);
 			}
-			const res = check?.cpu?.temperature?.reduce(
+			const res = check?.avgTemperature?.reduce(
 				(acc, cur, idx) => {
 					acc[`core${idx + 1}`] = cur;
 					return acc;
 				},
 				{
-					createdAt: check.createdAt,
+					_id: check._id,
 				}
 			);
 			return res;
@@ -388,7 +421,7 @@ const InfrastructureDetails = () => {
 		}
 
 		return {
-			tempKeys: Object.keys(temps[0] || {}).filter((key) => key !== "createdAt"),
+			tempKeys: Object.keys(temps[0] || {}).filter((key) => key !== "_id"),
 			temps,
 		};
 	};
@@ -396,51 +429,50 @@ const InfrastructureDetails = () => {
 	const buildAreaChartConfigs = (checks) => {
 		let latestCheck = checks[0] ?? null;
 		if (latestCheck === null) return [];
-		const reversedChecks = checks.toReversed();
-		const tempData = buildTemps(reversedChecks);
+		const { temps, tempKeys } = buildTemps(checks);
 		return [
 			{
 				type: "memory",
-				data: reversedChecks,
-				dataKeys: ["memory.usage_percent"],
+				data: checks,
+				dataKeys: ["avgMemoryUsage"],
 				heading: "Memory usage",
 				strokeColor: theme.palette.primary.main,
 				gradientStartColor: theme.palette.primary.main,
-				yLabel: "Memory Usage",
+				yLabel: "Memory usage",
 				yDomain: [0, 1],
 				yTick: <PercentTick />,
 				xTick: <TzTick />,
 				toolTip: (
 					<InfrastructureTooltip
 						dotColor={theme.palette.primary.main}
-						yKey={"memory.usage_percent"}
-						yLabel={"Memory Usage"}
+						yKey={"avgMemoryUsage"}
+						yLabel={"Memory usage"}
 					/>
 				),
 			},
 			{
 				type: "cpu",
-				data: reversedChecks,
-				dataKeys: ["cpu.usage_percent"],
+				data: checks,
+				dataKeys: ["avgCpuUsage"],
 				heading: "CPU usage",
 				strokeColor: theme.palette.success.main,
 				gradientStartColor: theme.palette.success.main,
-				yLabel: "CPU Usage",
+				yLabel: "CPU usage",
 				yDomain: [0, 1],
 				yTick: <PercentTick />,
 				xTick: <TzTick />,
 				toolTip: (
 					<InfrastructureTooltip
 						dotColor={theme.palette.success.main}
-						yKey={"cpu.usage_percent"}
-						yLabel={"CPU Usage"}
+						yKey={"avgCpuUsage"}
+						yLabel={"CPU usage"}
 					/>
 				),
 			},
 			{
 				type: "temperature",
-				data: tempData.temps,
-				dataKeys: tempData.tempKeys,
+				data: temps,
+				dataKeys: tempKeys,
 				strokeColor: theme.palette.error.main,
 				gradientStartColor: theme.palette.error.main,
 				heading: "CPU Temperature",
@@ -449,24 +481,22 @@ const InfrastructureDetails = () => {
 				yDomain: [
 					0,
 					Math.max(
-						Math.max(
-							...tempData.temps.flatMap((t) => tempData.tempKeys.map((k) => t[k]))
-						) * 1.1,
+						Math.max(...temps.flatMap((t) => tempKeys.map((k) => t[k]))) * 1.1,
 						200
 					),
 				],
 				toolTip: (
 					<TemperatureTooltip
-						keys={tempData.tempKeys}
+						keys={tempKeys}
 						dotColor={theme.palette.error.main}
 					/>
 				),
 			},
-			...(latestCheck?.disk?.map((disk, idx) => ({
+			...(latestCheck?.disks?.map((disk, idx) => ({
 				type: "disk",
-				data: reversedChecks,
+				data: checks,
 				diskIndex: idx,
-				dataKeys: [`disk[${idx}].usage_percent`],
+				dataKeys: [`disks[${idx}].usagePercent`],
 				heading: `Disk${idx} usage`,
 				strokeColor: theme.palette.warning.main,
 				gradientStartColor: theme.palette.warning.main,
@@ -477,7 +507,7 @@ const InfrastructureDetails = () => {
 				toolTip: (
 					<InfrastructureTooltip
 						dotColor={theme.palette.warning.main}
-						yKey={`disk.usage_percent`}
+						yKey={`disks.usagePercent`}
 						yLabel={"Disc usage"}
 						yIdx={idx}
 					/>
@@ -490,15 +520,12 @@ const InfrastructureDetails = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await networkService.getStatsByMonitorId({
+				const response = await networkService.getHardwareDetailsByMonitorId({
 					authToken: authToken,
 					monitorId: monitorId,
-					sortOrder: null,
-					limit: null,
 					dateRange: dateRange,
-					numToDisplay: 50,
-					normalize: false,
 				});
+				response.data.data;
 				setMonitor(response.data.data);
 			} catch (error) {
 				navigate("/not-found", { replace: true });
@@ -508,14 +535,18 @@ const InfrastructureDetails = () => {
 		fetchData();
 	}, [authToken, monitorId, dateRange, navigate]);
 
-	const statBoxConfigs = buildStatBoxes(monitor?.checks ?? []);
-	const gaugeBoxConfigs = buildGaugeBoxConfigs(monitor?.checks ?? []);
-	const areaChartConfigs = buildAreaChartConfigs(monitor?.checks ?? []);
-
+	const statBoxConfigs = buildStatBoxes(
+		monitor?.stats ?? {},
+		monitor?.uptimePercentage ?? "Unknown"
+	);
+	const gaugeBoxConfigs = buildGaugeBoxConfigs(monitor?.stats ?? {});
+	const areaChartConfigs = buildAreaChartConfigs(monitor?.stats?.checks ?? []);
+	const lastChecked =
+		Date.now() - new Date(monitor?.stats?.aggregateData?.latestCheck?.createdAt);
 	return (
 		<Box>
 			<Breadcrumbs list={navList} />
-			{monitor?.checks?.length > 0 ? (
+			{monitor?.stats.checks?.length > 0 ? (
 				<Stack
 					direction="column"
 					gap={theme.spacing(10)}
@@ -538,18 +569,12 @@ const InfrastructureDetails = () => {
 						</Typography>
 						<Typography alignSelf="center">{monitor.url || "..."}</Typography>
 						<Box sx={{ flexGrow: 1 }} />
-						<Typography
-							alignSelf="center"
-							color={statusColor[determineState(monitor)]}
-						>
-							{statusMsg[determineState(monitor)]}
-						</Typography>
 						<Typography alignSelf="center">
 							Checking every {formatDurationRounded(monitor?.interval)}
 						</Typography>
-						<Typography alignSelf="center">
-							Last checked {formatDurationSplit(monitor?.lastChecked).time}{" "}
-							{formatDurationSplit(monitor?.lastChecked).format} ago
+						<Typography alignSelf="end">
+							Last checked {formatDurationSplit(lastChecked).time}{" "}
+							{formatDurationSplit(lastChecked).format} ago
 						</Typography>
 					</Stack>
 
@@ -565,21 +590,64 @@ const InfrastructureDetails = () => {
 							/>
 						))}
 					</Stack>
+
 					<Stack
 						direction="row"
 						gap={theme.spacing(8)}
 					>
-						{gaugeBoxConfigs.map((config) => (
-							<GaugeBox
-								key={`${config.type}-${config.diskIndex ?? ""}`}
-								value={config.value}
-								heading={config.heading}
-								metricOne={config.metricOne}
-								valueOne={config.valueOne}
-								metricTwo={config.metricTwo}
-								valueTwo={config.valueTwo}
-							/>
-						))}
+						{gaugeBoxConfigs.map((config) => {
+							return (
+								<GaugeBox
+									key={`${config.type}-${config.diskIndex ?? ""}`}
+									value={config.value}
+									heading={config.heading}
+									metricOne={config.metricOne}
+									valueOne={config.valueOne}
+									metricTwo={config.metricTwo}
+									valueTwo={config.valueTwo}
+								/>
+							);
+						})}
+					</Stack>
+					<Stack
+						direction="row"
+						justifyContent="space-between"
+						alignItems="flex-end"
+						gap={theme.spacing(8)}
+						mb={theme.spacing(8)}
+					>
+						<Typography variant="body2">
+							Showing statistics for past{" "}
+							{dateRange === "day"
+								? "24 hours"
+								: dateRange === "week"
+									? "7 days"
+									: "30 days"}
+							.
+						</Typography>
+						<ButtonGroup sx={{ height: 32 }}>
+							<Button
+								variant="group"
+								filled={(dateRange === "day").toString()}
+								onClick={() => setDateRange("day")}
+							>
+								Day
+							</Button>
+							<Button
+								variant="group"
+								filled={(dateRange === "week").toString()}
+								onClick={() => setDateRange("week")}
+							>
+								Week
+							</Button>
+							<Button
+								variant="group"
+								filled={(dateRange === "month").toString()}
+								onClick={() => setDateRange("month")}
+							>
+								Month
+							</Button>
+						</ButtonGroup>
 					</Stack>
 					<Stack
 						direction={"row"}
@@ -613,7 +681,7 @@ const InfrastructureDetails = () => {
 										height={areaChartHeight}
 										data={config.data}
 										dataKeys={config.dataKeys}
-										xKey="createdAt"
+										xKey="_id"
 										yDomain={config.yDomain}
 										customTooltip={config.toolTip}
 										xTick={config.xTick}

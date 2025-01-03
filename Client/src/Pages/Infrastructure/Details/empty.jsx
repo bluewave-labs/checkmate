@@ -21,8 +21,7 @@ const Empty = ({ styles }) => {
 					textAlign="center"
 					color={theme.palette.text.secondary}
 				>
-					Hang tight! When we receive data, we'll show it here. Please check back in a few
-					minutes.
+					Hang tight! Data is loading
 				</Typography>
 			</Stack>
 		</Box>

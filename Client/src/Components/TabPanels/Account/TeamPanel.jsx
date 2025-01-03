@@ -30,6 +30,8 @@ const TeamPanel = () => {
 
 	const theme = useTheme();
 
+	const SPACING_GAP = theme.spacing(12);
+
 	const { authToken, user } = useSelector((state) => state.auth);
 	//TODO
 	// const [orgStates, setOrgStates] = useState({
@@ -62,7 +64,7 @@ const TeamPanel = () => {
 		};
 
 		fetchTeam();
-	}, [user]);
+	}, [authToken]);
 
 	useEffect(() => {
 		let team = members;
@@ -79,8 +81,6 @@ const TeamPanel = () => {
 				{ id: 1, name: "NAME" },
 				{ id: 2, name: "EMAIL" },
 				{ id: 3, name: "ROLE" },
-				// FEATURE STILL TO BE IMPLEMENTED
-				// { id: 4, name: "ACTION" },
 			],
 			rows: team?.map((member, idx) => {
 				const roles = member.role.map((role) => roleMap[role]).join(",");
@@ -102,45 +102,19 @@ const TeamPanel = () => {
 						},
 						{ id: idx + 1, data: member.email },
 						{
-							// TODO - Add select dropdown
 							id: idx + 2,
 							data: roles,
 						},
-						// FEATURE STILL TO BE IMPLEMENTED
-						// {
-						//   // TODO - Add delete onClick
-						//   id: idx + 3,
-						//   data: (
-						//     <IconButton
-						//       aria-label="remove member"
-						//       sx={{
-						//         "&:focus": {
-						//           outline: "none",
-						//         },
-						//       }}
-						//     >
-						//       <Remove />
-						//     </IconButton>
-						//   ),
-						// },
 					],
 				};
 			}),
 		};
 
 		setTableData(data);
-	}, [members, filter]);
+	}, [filter, members, roleMap, theme]);
 	useEffect(() => {
 		setIsDisabled(Object.keys(errors).length !== 0 || toInvite.email === "");
 	}, [errors, toInvite.email]);
-
-	// RENAME ORGANIZATION
-	// const toggleEdit = () => {
-	// 	setOrgStates((prev) => ({ ...prev, isEdit: !prev.isEdit }));
-	// };
-	// const handleRename = () => {};
-
-	// INVITE MEMBER
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleChange = (event) => {
@@ -224,58 +198,11 @@ const TeamPanel = () => {
 					},
 			}}
 		>
-			{/* FEATURE STILL TO BE IMPLEMENTED */}
-			{/* <Stack component="form">
-        <Box sx={{ alignSelf: "flex-start" }}>
-          <Typography component="h1">Organization name</Typography>
-        </Box>
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          alignItems="center"
-          sx={{ height: "34px" }}
-        >
-          <TextField
-            value={orgStates.name}
-            onChange={(event) =>
-              setOrgStates((prev) => ({
-                ...prev,
-                name: event.target.value,
-              }))
-            }
-            disabled={!orgStates.isEdit}
-            sx={{
-              color: theme.palette.otherColors.bluishGray,
-              "& .Mui-disabled": {
-                WebkitTextFillColor: "initial !important",
-              },
-              "& .Mui-disabled fieldset": {
-                borderColor: "transparent !important",
-              },
-            }}
-            inputProps={{
-              sx: { textAlign: "end", padding: theme.spacing(4) },
-            }}
-          />
-          <Button
-            level={orgStates.isEdit ? "secondary" : "tertiary"}
-            label={orgStates.isEdit ? "Save" : ""}
-            img={!orgStates.isEdit ? <EditSvg /> : ""}
-            onClick={() => toggleEdit()}
-            sx={{
-              minWidth: 0,
-              paddingX: theme.spacing(4),
-              ml: orgStates.isEdit ? theme.spacing(4) : 0,
-            }}
-          />
-        </Stack>
-      </Stack>
-      <Divider aria-hidden="true" sx={{ marginY: theme.spacing(4) }} /> */}
 			<Stack
 				component="form"
 				noValidate
 				spellCheck="false"
-				gap={theme.spacing(12)}
+				gap={SPACING_GAP}
 			>
 				<Typography component="h1">Team members</Typography>
 				<Stack
@@ -326,6 +253,7 @@ const TeamPanel = () => {
 					paginated={false}
 					reversed={true}
 					table={"team"}
+					emptyMessage={"There are no team members with this role"}
 				/>
 			</Stack>
 
@@ -339,7 +267,7 @@ const TeamPanel = () => {
 				theme={theme}
 			>
 				<TextInput
-					marginBottom={theme.spacing(12)}
+					marginBottom={SPACING_GAP}
 					type="email"
 					id="input-team-member"
 					placeholder="Email"

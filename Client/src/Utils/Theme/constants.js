@@ -50,6 +50,7 @@ const paletteColors = {
 	green50: "#D4F4E1",
 	green150: "#45BB7A",
 	green400: "#079455",
+	green500: "#07B467",
 	green800: "#1C4428",
 	green900: "#12261E",
 	red50: "#F9ECED",
@@ -57,7 +58,7 @@ const paletteColors = {
 	red200: "#F04438",
 	red300: "#D32F2F",
 	red700: "#542426",
-	red800: "#301A1F",
+	red800: "#912018",
 	orange50: "#FEF8EA",
 	orange100: "#FFECBC",
 	orange300: "#FDB022",
@@ -100,15 +101,21 @@ const semanticColors = {
 		},
 		contrastText: {
 			light: paletteColors.green50,
-			dark: paletteColors.green900,
+			dark: paletteColors.green50,
 		},
 		light: {
-			light: paletteColors.green50,
+			light: paletteColors.green500,
 			dark: paletteColors.green800,
 		},
 		dark: {
 			light: paletteColors.green400,
 			dark: paletteColors.green900,
+		},
+	},
+	neutral: {
+		contrastText: {
+			light: paletteColors.blueGray900,
+			dark: paletteColors.gray100,
 		},
 	},
 	error: {
@@ -125,7 +132,7 @@ const semanticColors = {
 			dark: paletteColors.red700,
 		},
 		dark: {
-			light: paletteColors.red50,
+			light: paletteColors.red800,
 			dark: paletteColors.red800,
 		},
 	},

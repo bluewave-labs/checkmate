@@ -5,7 +5,7 @@ import { useTheme } from "@emotion/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { formatDurationRounded, formatDurationSplit } from "../../../Utils/timeUtils";
-import { ChartBox, IconBox, StatBox } from "./styled";
+import { ChartBox } from "./styled";
 import { logger } from "../../../Utils/Logger";
 import { networkService } from "../../../main";
 import SkeletonLayout from "./skeleton";
@@ -19,12 +19,16 @@ import PulseDot from "../../../Components/Animated/PulseDot";
 import PagespeedDetailsAreaChart from "./Charts/AreaChart";
 import Checkbox from "../../../Components/Inputs/Checkbox";
 import PieChart from "./Charts/PieChart";
-import useUtils from "../../Monitors/utils";
+import useUtils from "../../Uptime/utils";
 import "./index.css";
+import { useIsAdmin } from "../../../Hooks/useIsAdmin";
+import StatBox from "../../../Components/StatBox";
+import IconBox from "../../../Components/IconBox";
 
-const PageSpeedDetails = ({ isAdmin }) => {
+const PageSpeedDetails = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
+	const isAdmin = useIsAdmin();
 	const { statusColor, pagespeedStatusMsg, determineState } = useUtils();
 	const [monitor, setMonitor] = useState({});
 	const [audits, setAudits] = useState({});
@@ -185,20 +189,24 @@ const PageSpeedDetails = ({ isAdmin }) => {
 						direction="row"
 						gap={theme.spacing(8)}
 					>
-						<StatBox>
-							<Typography component="h2">checks since</Typography>
-							<Typography>
-								{splitDuration(monitor?.uptimeDuration)}
-								<Typography component="span">ago</Typography>
-							</Typography>
-						</StatBox>
-						<StatBox>
-							<Typography component="h2">last check</Typography>
-							<Typography>
-								{splitDuration(monitor?.lastChecked)}
-								<Typography component="span">ago</Typography>
-							</Typography>
-						</StatBox>
+						<StatBox
+							heading="checks since"
+							subHeading={
+								<>
+									{splitDuration(monitor?.uptimeDuration)}
+									<Typography component="span">ago</Typography>
+								</>
+							}
+						/>
+						<StatBox
+							heading="last check"
+							subHeading={
+								<>
+									{splitDuration(monitor?.lastChecked)}
+									<Typography component="span">ago</Typography>
+								</>
+							}
+						/>
 					</Stack>
 					<Box>
 						<Typography
@@ -286,6 +294,7 @@ const PageSpeedDetails = ({ isAdmin }) => {
 					</Box>
 					<ChartBox
 						flex={1}
+						/* TODO apply 1fr 1fr for columns, and auto 1fr for Rows */
 						sx={{ gridTemplateColumns: "50% 50%", gridTemplateRows: "15% 85%" }}
 					>
 						<Stack

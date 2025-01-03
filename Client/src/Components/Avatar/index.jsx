@@ -2,28 +2,7 @@ import { Avatar as MuiAvatar } from "@mui/material";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-
-/**
- * Generates a color based on the input string.
- * @param {string} string - The input string to generate the color from.
- * @returns {string}
- */
-const stringToColor = (string) => {
-	let hash = 0;
-	let i;
-	for (i = 0; i < string.length; i += 1) {
-		hash = string.charCodeAt(i) + ((hash << 5) - hash);
-	}
-
-	let color = "#";
-	for (i = 0; i < 3; i += 1) {
-		const value = (hash >> (i * 8)) & 0xff;
-		color += `00${value.toString(16)}`.slice(-2);
-	}
-
-	return color;
-};
-
+import { useTheme } from "@emotion/react";
 /**
  * @component
  * @param {Object} props
@@ -38,6 +17,7 @@ const stringToColor = (string) => {
 
 const Avatar = ({ src, small, sx }) => {
 	const { user } = useSelector((state) => state.auth);
+	const theme = useTheme();
 
 	const style = small ? { width: 32, height: 32 } : { width: 64, height: 64 };
 	const border = small ? 1 : 3;
@@ -57,7 +37,7 @@ const Avatar = ({ src, small, sx }) => {
 				fontSize: small ? "16px" : "22px",
 				color: "white",
 				fontWeight: 400,
-				backgroundColor: stringToColor(`${user?.firstName} ${user?.lastName}`),
+				backgroundColor: theme.palette.primary.main, // Same BG color as checkmate BG in sidebar
 				display: "inline-flex",
 				"&::before": {
 					content: `""`,
@@ -74,7 +54,7 @@ const Avatar = ({ src, small, sx }) => {
 			}}
 		>
 			{user.firstName?.charAt(0)}
-			{user.lastName?.charAt(0)}
+			{user.lastName?.charAt(0) || ''} 
 		</MuiAvatar>
 	);
 };

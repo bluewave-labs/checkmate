@@ -115,7 +115,7 @@ TablePaginationActions.propTypes = {
  * @param {boolean} [props.paginated=false] - Flag to enable pagination.
  * @param {boolean} [props.reversed=false] - Flag to enable reverse order.
  * @param {number} props.rowsPerPage- Number of rows per page (table).
- *
+ * @param {string} props.emptyMessage - Message to display when there is no data.
  * @example
  * const data = {
  *   cols: [
@@ -149,7 +149,7 @@ TablePaginationActions.propTypes = {
  * <BasicTable data={data} rows={rows} paginated={true} />
  */
 
-const BasicTable = ({ data, paginated, reversed, table }) => {
+const BasicTable = ({ data, paginated, reversed, table, emptyMessage = "No data" }) => {
 	const DEFAULT_ROWS_PER_PAGE = 5;
 	const theme = useTheme();
 	const dispatch = useDispatch();
@@ -216,7 +216,9 @@ const BasicTable = ({ data, paginated, reversed, table }) => {
 									sx={{
 										cursor: row.handleClick ? "pointer" : "default",
 										"&:hover": {
-											backgroundColor: theme.palette.background.accent,
+											filter: "brightness(.75)",
+											opacity: 0.75,
+											transition: "filter 0.3s ease, opacity 0.3s ease",
 										},
 									}}
 									key={row.id}
@@ -228,6 +230,16 @@ const BasicTable = ({ data, paginated, reversed, table }) => {
 								</TableRow>
 							);
 						})}
+						{displayData.length === 0 && (
+							<TableRow>
+								<TableCell
+									sx={{ textAlign: "center" }}
+									colSpan={data.cols.length}
+								>
+									{emptyMessage}
+								</TableCell>
+							</TableRow>
+						)}
 					</TableBody>
 				</Table>
 			</TableContainer>
@@ -317,6 +329,7 @@ BasicTable.propTypes = {
 	reversed: PropTypes.bool,
 	rowPerPage: PropTypes.number,
 	table: PropTypes.string,
+	emptyMessage: PropTypes.string,
 };
 
 export default BasicTable;

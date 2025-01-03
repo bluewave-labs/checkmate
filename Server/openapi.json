@@ -1,9 +1,9 @@
 {
 	"openapi": "3.1.0",
 	"info": {
-		"title": "BlueWave Uptime",
-		"summary": "BlueWave Uptime OpenAPI Specifications",
-		"description": "BlueWave Uptime is an open source server monitoring application used to track the operational status and performance of servers and websites. It regularly checks whether a server/website is accessible and performs optimally, providing real-time alerts and reports on the monitored services' availability, downtime, and response time.",
+		"title": "Checkmate",
+		"summary": "Checkmate OpenAPI Specifications",
+		"description": "Checkmate is an open source monitoring tool used to track the operational status and performance of servers and websites. It regularly checks whether a server/website is accessible and performs optimally, providing real-time alerts and reports on the monitored services' availability, downtime, and response time.",
 		"contact": {
 			"name": "API Support",
 			"url": "mailto:support@bluewavelabs.ca",
@@ -11,7 +11,7 @@
 		},
 		"license": {
 			"name": "AGPLv3",
-			"url": "https://github.com/bluewave-labs/bluewave-uptime/tree/HEAD/LICENSE"
+			"url": "https://github.com/bluewave-labs/checkmate/tree/HEAD/LICENSE"
 		},
 		"version": "1.0"
 	},
@@ -44,8 +44,8 @@
 			}
 		},
 		{
-			"url": "https://uptime-demo.bluewavelabs.ca/{API_PATH}",
-			"description": "Bluewave Demo Server",
+			"url": "https://checkmate-demo.bluewavelabs.ca/{API_PATH}",
+			"description": "Checkmate Demo Server",
 			"variables": {
 				"PORT": {
 					"description": "API Port",

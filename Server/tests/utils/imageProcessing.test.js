@@ -3,8 +3,8 @@ import sinon from "sinon";
 import sharp from "sharp";
 import { GenerateAvatarImage } from "../../utils/imageProcessing.js";
 
-describe("imageProcessing - GenerateAvatarImage", () => {
-	it("should resize the image to 64x64 and return a base64 string", async () => {
+describe("imageProcessing - GenerateAvatarImage", function() {
+	it("should resize the image to 64x64 and return a base64 string", async function() {
 		const file = {
 			buffer: Buffer.from("test image buffer"),
 		};
@@ -30,7 +30,7 @@ describe("imageProcessing - GenerateAvatarImage", () => {
 		sharpStub.restore();
 	});
 
-	it("should throw an error if resizing fails", async () => {
+	it("should throw an error if resizing fails", async function() {
 		const file = {
 			buffer: Buffer.from("test image buffer"),
 		};
