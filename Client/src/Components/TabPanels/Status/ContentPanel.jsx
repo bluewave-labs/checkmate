@@ -150,7 +150,7 @@ const ContentPanel = () => {
 					>
 						<Stack
 							direction="row"
-							justifyContent="space-around"
+							justifyContent="space-between"
 						>
 							<Typography
 								component="p"
@@ -163,7 +163,7 @@ const ContentPanel = () => {
 								onClick={handleAddNew}
 								disabled={monitors.length === 0 || monitors.length <= cards.length}
 							>
-								Add New
+								Add new
 							</Button>
 						</Stack>
 						{cards.length > 0 && (

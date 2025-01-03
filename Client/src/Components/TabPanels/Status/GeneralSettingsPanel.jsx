@@ -29,6 +29,8 @@ const GeneralSettingsPanel = () => {
 
 	const [progress, setProgress] = useState({ value: 0, isLoading: false });
 	const intervalRef = useRef(null);
+	const SUBDOAMIN_PREFIX =
+		import.meta.env.VITE_STATUS_PAGE_SUBDOMAIN_PREFIX ?? "http://localhost/";
 
 	// Clears specific error from errors state
 	const clearError = (err) => {
@@ -178,7 +180,7 @@ const GeneralSettingsPanel = () => {
 							value={form.url}
 							startAdornment={
 								<HttpAdornment
-									prefix={"http://uptimegenie.com/"}
+									prefix={SUBDOAMIN_PREFIX}
 									https={false}
 								/>
 							}
