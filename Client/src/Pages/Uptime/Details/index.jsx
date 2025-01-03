@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { networkService } from "../../../main";
 import { logger } from "../../../Utils/Logger";
-import { formatDurationRounded, formatDurationSplit } from "../../../Utils/timeUtils";
 import MonitorDetailsAreaChart from "../../../Components/Charts/MonitorDetailsAreaChart";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import SettingsIcon from "../../../assets/icons/settings-bold.svg?react";
@@ -18,14 +17,16 @@ import PaginationTable from "./PaginationTable";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import PulseDot from "../../../Components/Animated/PulseDot";
 import { ChartBox } from "./styled";
-import { DownBarChart, ResponseGaugeChart, UpBarChart } from "./Charts";
 import SkeletonLayout from "./skeleton";
 import "./index.css";
 import useUtils from "../utils";
-import { formatDateWithTz } from "../../../Utils/timeUtils";
+import { formatDateWithTz, formatDurationSplit } from "../../../Utils/timeUtils";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import IconBox from "../../../Components/IconBox";
 import StatBox from "../../../Components/StatBox";
+import UpBarChart from "./Charts/UpBarChart";
+import DownBarChart from "./Charts/DownBarChart";
+import ResponseGaugeChart from "./Charts/ResponseGaugeChart";
 /**
  * Details page component displaying monitor details and related information.
  * @component
@@ -47,16 +48,12 @@ const DetailsPage = () => {
 
 	const fetchMonitor = useCallback(async () => {
 		try {
-			const res = await networkService.getStatsByMonitorId({
+			const res = await networkService.getUptimeDetailsById({
 				authToken: authToken,
 				monitorId: monitorId,
-				sortOrder: null,
-				limit: null,
 				dateRange: dateRange,
-				numToDisplay: 50,
 				normalize: true,
 			});
-			console.log(res?.data?.data);
 			setMonitor(res?.data?.data ?? {});
 		} catch (error) {
 			logger.error(error);
@@ -185,7 +182,7 @@ const DetailsPage = () => {
 											},
 										}}
 									>
-										Checking every {formatDurationRounded(monitor?.interval)}.
+										{/* Checking every {formatDurationRounded(monitor?.interval)}. */}
 									</Typography>
 								</Stack>
 							</Box>
@@ -224,17 +221,17 @@ const DetailsPage = () => {
 							<StatBox
 								sx={statusStyles[determineState(monitor)]}
 								heading={"active for"}
-								subHeading={splitDuration(monitor?.uptimeDuration)}
+								subHeading={splitDuration(monitor?.stats?.timeSinceLastFalseCheck)}
 							/>
 							<StatBox
 								heading="last check"
-								subHeading={splitDuration(monitor?.lastChecked)}
+								subHeading={splitDuration(monitor?.stats?.timeSinceLastCheck)}
 							/>
 							<StatBox
 								heading="last response time"
 								subHeading={
 									<>
-										{monitor?.latestResponseTime}
+										{monitor?.stats?.latestResponseTime}
 										<Typography component="span">{"ms"}</Typography>
 									</>
 								}
@@ -311,7 +308,7 @@ const DetailsPage = () => {
 											<Typography component="span">
 												{hoveredUptimeData !== null
 													? hoveredUptimeData.totalChecks
-													: monitor?.periodTotalChecks}
+													: (monitor.stats?.upChecksAggregate?.totalChecks ?? 0)}
 											</Typography>
 											{hoveredUptimeData !== null && hoveredUptimeData.time !== null && (
 												<Typography
@@ -322,7 +319,7 @@ const DetailsPage = () => {
 													color={theme.palette.text.tertiary}
 												>
 													{formatDateWithTz(
-														hoveredUptimeData.time,
+														hoveredUptimeData._id,
 														dateFormat,
 														uiTimezone
 													)}
@@ -330,17 +327,27 @@ const DetailsPage = () => {
 											)}
 										</Box>
 										<Box>
-											<Typography>Uptime Percentage</Typography>
+											<Typography>
+												{hoveredUptimeData !== null
+													? "Avg Response Time"
+													: "Uptime Percentage"}
+											</Typography>
 											<Typography component="span">
 												{hoveredUptimeData !== null
-													? Math.floor(hoveredUptimeData.uptimePercentage * 10) / 10
-													: Math.floor(monitor?.periodUptime * 10) / 10}
-												<Typography component="span">%</Typography>
+													? Math.floor(hoveredUptimeData?.avgResponseTime ?? 0)
+													: Math.floor(
+															((monitor?.stats?.upChecksAggregate?.totalChecks ?? 0) /
+																(monitor?.stats?.totalChecks ?? 1)) *
+																100
+														)}
+												<Typography component="span">
+													{hoveredUptimeData !== null ? " ms" : " %"}
+												</Typography>
 											</Typography>
 										</Box>
 									</Stack>
 									<UpBarChart
-										data={monitor?.aggregateData}
+										stats={monitor?.stats}
 										type={dateRange}
 										onBarHover={setHoveredUptimeData}
 									/>
@@ -356,8 +363,8 @@ const DetailsPage = () => {
 										<Typography>Total Incidents</Typography>
 										<Typography component="span">
 											{hoveredIncidentsData !== null
-												? hoveredIncidentsData.totalIncidents
-												: monitor?.periodIncidents}
+												? hoveredIncidentsData.totalChecks
+												: (monitor.stats?.downChecksAggregate?.totalChecks ?? 0)}
 										</Typography>
 										{hoveredIncidentsData !== null &&
 											hoveredIncidentsData.time !== null && (
@@ -369,7 +376,7 @@ const DetailsPage = () => {
 													color={theme.palette.text.tertiary}
 												>
 													{formatDateWithTz(
-														hoveredIncidentsData.time,
+														hoveredIncidentsData._id,
 														dateFormat,
 														uiTimezone
 													)}
@@ -377,7 +384,7 @@ const DetailsPage = () => {
 											)}
 									</Box>
 									<DownBarChart
-										data={monitor?.aggregateData}
+										stats={monitor?.stats}
 										type={dateRange}
 										onBarHover={setHoveredIncidentsData}
 									/>
@@ -390,7 +397,7 @@ const DetailsPage = () => {
 										<Typography component="h2">Average Response Time</Typography>
 									</Stack>
 									<ResponseGaugeChart
-										data={[{ response: monitor?.periodAvgResponseTime }]}
+										avgResponseTime={monitor?.stats?.groupAggregate?.avgResponseTime ?? 0}
 									/>
 								</ChartBox>
 								<ChartBox sx={{ padding: 0 }}>
@@ -403,7 +410,7 @@ const DetailsPage = () => {
 										</IconBox>
 										<Typography component="h2">Response Times</Typography>
 									</Stack>
-									<MonitorDetailsAreaChart checks={[...monitor.checks].reverse()} />
+									<MonitorDetailsAreaChart checks={monitor?.stats?.groupChecks ?? []} />
 								</ChartBox>
 								<ChartBox
 									gap={theme.spacing(8)}

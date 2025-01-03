@@ -34,6 +34,9 @@ import StatusPageController from "./controllers/statusPageController.js";
 import QueueRoutes from "./routes/queueRoute.js";
 import QueueController from "./controllers/queueController.js";
 
+import DistributedUptimeRoutes from "./routes/distributedUptimeRoute.js";
+import DistributedUptimeController from "./controllers/distributedUptimeController.js";
+
 //JobQueue service and dependencies
 import JobQueue from "./service/jobQueue.js";
 import { Queue, Worker } from "bullmq";
@@ -45,7 +48,7 @@ import ping from "ping";
 import http from "http";
 import Docker from "dockerode";
 import net from "net";
-
+import ngrok from "ngrok";
 // Email service and dependencies
 import EmailService from "./service/emailService.js";
 import nodemailer from "nodemailer";
@@ -68,6 +71,8 @@ import ServiceRegistry from "./service/serviceRegistry.js";
 
 import MongoDB from "./db/mongo/MongoDB.js";
 
+import IORedis from "ioredis";
+
 const SERVICE_NAME = "Server";
 const SHUTDOWN_TIMEOUT = 1000;
 let isShuttingDown = false;
@@ -78,6 +83,7 @@ const openApiSpec = JSON.parse(
 );
 
 let server;
+let ngrokUrl;
 
 const PORT = 5000;
 
@@ -87,12 +93,24 @@ const shutdown = async () => {
 	}
 	isShuttingDown = true;
 	logger.info({ message: "Attempting graceful shutdown" });
-	setTimeout(() => {
+	setTimeout(async () => {
 		logger.error({
 			message: "Could not shut down in time, forcing shutdown",
 			service: SERVICE_NAME,
 			method: "shutdown",
 		});
+		// flush Redis
+		const settings =
+			ServiceRegistry.get(SettingsService.SERVICE_NAME).getSettings() || {};
+
+		const { redisHost = "127.0.0.1", redisPort = 6379 } = settings;
+		const redis = new IORedis({
+			host: redisHost,
+			port: redisPort,
+		});
+		logger.info({ message: "Flushing Redis" });
+		await redis.flushall();
+		logger.info({ message: "Redis flushed" });
 		process.exit(1);
 	}, SHUTDOWN_TIMEOUT);
 	try {
@@ -113,6 +131,29 @@ const shutdown = async () => {
 // Need to wrap server setup in a function to handle async nature of JobQueue
 const startApp = async () => {
 	const app = express();
+	if (process.env.NODE_ENV === "development") {
+		try {
+			ngrokUrl = await ngrok.connect({
+				proto: "http",
+				addr: PORT,
+				authtoken: process.env.NGROK_AUTH_TOKEN,
+				api_addr: false,
+			});
+			process.env.NGROK_URL = ngrokUrl;
+			logger.info({
+				message: `ngrok url: ${ngrokUrl}`,
+				service: SERVICE_NAME,
+				method: "startApp",
+			});
+		} catch (error) {
+			logger.error({
+				message: `Error connecting to ngrok`,
+				service: SERVICE_NAME,
+				method: "startApp",
+				stack: error.stack,
+			});
+		}
+	}
 
 	// Create DB
 	const db = new MongoDB();
@@ -133,10 +174,11 @@ const startApp = async () => {
 	const networkService = new NetworkService(axios, ping, logger, http, Docker, net);
 	const statusService = new StatusService(db, logger);
 	const notificationService = new NotificationService(emailService, db, logger);
-	const jobQueue = await JobQueue.createJobQueue(
+
+	const jobQueue = new JobQueue(
 		db,
-		networkService,
 		statusService,
+		networkService,
 		notificationService,
 		settingsService,
 		logger,
@@ -201,6 +243,8 @@ const startApp = async () => {
 		ServiceRegistry.get(MongoDB.SERVICE_NAME)
 	);
 
+	const distributedUptimeController = new DistributedUptimeController();
+
 	//Create routes
 	const authRoutes = new AuthRoutes(authController);
 	const monitorRoutes = new MonitorRoutes(monitorController);
@@ -212,6 +256,11 @@ const startApp = async () => {
 	);
 	const queueRoutes = new QueueRoutes(queueController);
 	const statusPageRoutes = new StatusPageRoutes(statusPageController);
+	const distributedUptimeRoutes = new DistributedUptimeRoutes(
+		distributedUptimeController
+	);
+	// Init job queue
+	await jobQueue.initJobQueue();
 	// Middleware
 	app.use(
 		cors()
@@ -230,6 +279,7 @@ const startApp = async () => {
 	app.use("/api/v1/checks", verifyJWT, checkRoutes.getRouter());
 	app.use("/api/v1/maintenance-window", verifyJWT, maintenanceWindowRoutes.getRouter());
 	app.use("/api/v1/queue", verifyJWT, queueRoutes.getRouter());
+	app.use("/api/v1/distributed-uptime", distributedUptimeRoutes.getRouter());
 	app.use("/api/v1/status-page", statusPageRoutes.getRouter());
 	app.use(handleErrors);
 };

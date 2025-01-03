@@ -232,6 +232,14 @@ const getMonitorURLByQueryValidation = joi.object({
 	monitorURL: joi.string().uri().required(),
 });
 
+const getHardwareDetailsByIdParamValidation = joi.object({
+	monitorId: joi.string().required(),
+});
+
+const getHardwareDetailsByIdQueryValidation = joi.object({
+	dateRange: joi.string().valid("day", "week", "month"),
+});
+
 //****************************************
 // Alerts
 //****************************************
@@ -465,6 +473,8 @@ export {
 	getMonitorsByTeamIdQueryValidation,
 	getMonitorStatsByIdParamValidation,
 	getMonitorStatsByIdQueryValidation,
+	getHardwareDetailsByIdParamValidation,
+	getHardwareDetailsByIdQueryValidation,
 	getCertificateParamValidation,
 	editMonitorBodyValidation,
 	pauseMonitorParamValidation,

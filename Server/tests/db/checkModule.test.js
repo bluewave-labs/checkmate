@@ -13,8 +13,8 @@ import Monitor from "../../db/models/Monitor.js";
 import User from "../../db/models/User.js";
 import logger from "../../utils/logger.js";
 
-describe("checkModule", () => {
-	describe("createCheck", () => {
+describe("checkModule", function() {
+	describe("createCheck", function() {
 		let checkCountDocumentsStub, checkSaveStub, monitorFindByIdStub, monitorSaveStub;
 		const mockMonitor = {
 			_id: "123",
@@ -23,31 +23,33 @@ describe("checkModule", () => {
 			save: () => this,
 		};
 		const mockCheck = { active: true };
-		beforeEach(() => {
+
+		beforeEach(function() {
 			checkSaveStub = sinon.stub(Check.prototype, "save");
 			checkCountDocumentsStub = sinon.stub(Check, "countDocuments");
 			monitorFindByIdStub = sinon.stub(Monitor, "findById");
 			monitorSaveStub = sinon.stub(Monitor.prototype, "save");
 		});
 
-		afterEach(() => {
+		afterEach(function() {
 			sinon.restore();
 		});
 
-		it("should return undefined early if no monitor is found", async () => {
+		it("should return undefined early if no monitor is found", async function() {
 			monitorFindByIdStub.returns(null);
 			const check = await createCheck({ monitorId: "123" });
 			expect(check).to.be.undefined;
 		});
 
-		it("should return a check", async () => {
+		it("should return a check", async function() {
 			monitorFindByIdStub.returns(mockMonitor);
 			checkSaveStub.returns(mockCheck);
 			monitorSaveStub.returns(mockMonitor);
 			const check = await createCheck({ monitorId: "123", status: true });
 			expect(check).to.deep.equal(mockCheck);
 		});
-		it("should return a check if status is down", async () => {
+
+		it("should return a check if status is down", async function() {
 			mockMonitor.status = false;
 			monitorFindByIdStub.returns(mockMonitor);
 			checkSaveStub.returns(mockCheck);
@@ -55,7 +57,8 @@ describe("checkModule", () => {
 			const check = await createCheck({ monitorId: "123", status: false });
 			expect(check).to.deep.equal(mockCheck);
 		});
-		it("should return a check if uptimePercentage is undefined", async () => {
+
+		it("should return a check if uptimePercentage is undefined", async function() {
 			mockMonitor.uptimePercentage = undefined;
 			monitorFindByIdStub.returns(mockMonitor);
 			checkSaveStub.returns(mockCheck);
@@ -63,7 +66,8 @@ describe("checkModule", () => {
 			const check = await createCheck({ monitorId: "123", status: true });
 			expect(check).to.deep.equal(mockCheck);
 		});
-		it("should return a check if uptimePercentage is undefined and status is down", async () => {
+
+		it("should return a check if uptimePercentage is undefined and status is down", async function() {
 			mockMonitor.uptimePercentage = undefined;
 			monitorFindByIdStub.returns(mockMonitor);
 			checkSaveStub.returns(mockCheck);
@@ -71,7 +75,8 @@ describe("checkModule", () => {
 			const check = await createCheck({ monitorId: "123", status: false });
 			expect(check).to.deep.equal(mockCheck);
 		});
-		it("should monitor save error", async () => {
+
+		it("should monitor save error", async function() {
 			const err = new Error("Save Error");
 			monitorSaveStub.throws(err);
 			try {
@@ -80,7 +85,8 @@ describe("checkModule", () => {
 				expect(error).to.deep.equal(err);
 			}
 		});
-		it("should handle errors", async () => {
+
+		it("should handle errors", async function() {
 			const err = new Error("DB Error");
 			checkCountDocumentsStub.throws(err);
 			try {
@@ -90,18 +96,19 @@ describe("checkModule", () => {
 			}
 		});
 	});
-	describe("getChecksCount", () => {
+
+	describe("getChecksCount", function() {
 		let checkCountDocumentStub;
 
-		beforeEach(() => {
+		beforeEach(function() {
 			checkCountDocumentStub = sinon.stub(Check, "countDocuments");
 		});
 
-		afterEach(() => {
+		afterEach(function() {
 			checkCountDocumentStub.restore();
 		});
 
-		it("should return count with basic monitorId query", async () => {
+		it("should return count with basic monitorId query", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: {},
@@ -117,7 +124,7 @@ describe("checkModule", () => {
 			});
 		});
 
-		it("should include dateRange in query when provided", async () => {
+		it("should include dateRange in query when provided", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { dateRange: "day" },
@@ -131,7 +138,7 @@ describe("checkModule", () => {
 			expect(checkCountDocumentStub.firstCall.args[0].createdAt).to.have.property("$gte");
 		});
 
-		it('should handle "all" filter correctly', async () => {
+		it('should handle "all" filter correctly', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "all" },
@@ -147,7 +154,7 @@ describe("checkModule", () => {
 			});
 		});
 
-		it('should handle "down" filter correctly', async () => {
+		it('should handle "down" filter correctly', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "down" },
@@ -163,7 +170,7 @@ describe("checkModule", () => {
 			});
 		});
 
-		it('should handle "resolve" filter correctly', async () => {
+		it('should handle "resolve" filter correctly', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "resolve" },
@@ -179,7 +186,8 @@ describe("checkModule", () => {
 				statusCode: 5000,
 			});
 		});
-		it("should handle unknown filter correctly", async () => {
+
+		it("should handle unknown filter correctly", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "unknown" },
@@ -195,7 +203,7 @@ describe("checkModule", () => {
 			});
 		});
 
-		it("should combine dateRange and filter in query", async () => {
+		it("should combine dateRange and filter in query", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: {
@@ -215,10 +223,11 @@ describe("checkModule", () => {
 			);
 		});
 	});
-	describe("getChecks", () => {
+
+	describe("getChecks", function() {
 		let checkFindStub, monitorFindStub;
 
-		beforeEach(() => {
+		beforeEach(function() {
 			checkFindStub = sinon.stub(Check, "find").returns({
 				skip: sinon.stub().returns({
 					limit: sinon.stub().returns({
@@ -228,11 +237,11 @@ describe("checkModule", () => {
 			});
 		});
 
-		afterEach(() => {
+		afterEach(function() {
 			sinon.restore();
 		});
 
-		it("should return checks with basic monitorId query", async () => {
+		it("should return checks with basic monitorId query", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: {},
@@ -242,7 +251,8 @@ describe("checkModule", () => {
 
 			expect(result).to.deep.equal([{ id: 1 }, { id: 2 }]);
 		});
-		it("should return checks with limit query", async () => {
+
+		it("should return checks with limit query", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { limit: 10 },
@@ -253,7 +263,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal([{ id: 1 }, { id: 2 }]);
 		});
 
-		it("should handle pagination correctly", async () => {
+		it("should handle pagination correctly", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: {
@@ -267,7 +277,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal([{ id: 1 }, { id: 2 }]);
 		});
 
-		it("should handle dateRange filter", async () => {
+		it("should handle dateRange filter", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { dateRange: "week" },
@@ -277,7 +287,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal([{ id: 1 }, { id: 2 }]);
 		});
 
-		it('should handle "all" filter', async () => {
+		it('should handle "all" filter', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "all" },
@@ -287,7 +297,8 @@ describe("checkModule", () => {
 			const result = await getChecks(req);
 			expect(result).to.deep.equal([{ id: 1 }, { id: 2 }]);
 		});
-		it('should handle "down" filter', async () => {
+
+		it('should handle "down" filter', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "down" },
@@ -298,7 +309,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal([{ id: 1 }, { id: 2 }]);
 		});
 
-		it('should handle "resolve" filter', async () => {
+		it('should handle "resolve" filter', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "resolve" },
@@ -308,7 +319,8 @@ describe("checkModule", () => {
 			const result = await getChecks(req);
 			expect(result).to.deep.equal([{ id: 1 }, { id: 2 }]);
 		});
-		it('should handle "unknown" filter', async () => {
+
+		it('should handle "unknown" filter', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "unknown" },
@@ -319,7 +331,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal([{ id: 1 }, { id: 2 }]);
 		});
 
-		it("should handle ascending sort order", async () => {
+		it("should handle ascending sort order", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { sortOrder: "asc" },
@@ -330,7 +342,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal([{ id: 1 }, { id: 2 }]);
 		});
 
-		it("should handle error case", async () => {
+		it("should handle error case", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: {},
@@ -347,10 +359,12 @@ describe("checkModule", () => {
 			}
 		});
 	});
-	describe("getTeamChecks", () => {
+
+	describe("getTeamChecks", function() {
 		let checkFindStub, checkCountDocumentsStub, monitorFindStub;
 		const mockMonitors = [{ _id: "123" }];
-		beforeEach(() => {
+
+		beforeEach(function() {
 			monitorFindStub = sinon.stub(Monitor, "find").returns({
 				select: sinon.stub().returns(mockMonitors),
 			});
@@ -366,11 +380,11 @@ describe("checkModule", () => {
 			});
 		});
 
-		afterEach(() => {
+		afterEach(function() {
 			sinon.restore();
 		});
 
-		it("should return checks with basic monitorId query", async () => {
+		it("should return checks with basic monitorId query", async function() {
 			const req = {
 				params: { teamId: "test123" },
 				query: {},
@@ -380,7 +394,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal({ checksCount: 2, checks: [{ id: 1 }, { id: 2 }] });
 		});
 
-		it("should handle pagination correctly", async () => {
+		it("should handle pagination correctly", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { limit: 1, page: 2, rowsPerPage: 10 },
@@ -390,7 +404,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal({ checksCount: 2, checks: [{ id: 1 }, { id: 2 }] });
 		});
 
-		it("should handle dateRange filter", async () => {
+		it("should handle dateRange filter", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { dateRange: "week" },
@@ -399,7 +413,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal({ checksCount: 2, checks: [{ id: 1 }, { id: 2 }] });
 		});
 
-		it('should handle "all" filter', async () => {
+		it('should handle "all" filter', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "all" },
@@ -409,7 +423,8 @@ describe("checkModule", () => {
 			const result = await getTeamChecks(req);
 			expect(result).to.deep.equal({ checksCount: 2, checks: [{ id: 1 }, { id: 2 }] });
 		});
-		it('should handle "down" filter', async () => {
+
+		it('should handle "down" filter', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "down" },
@@ -420,7 +435,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal({ checksCount: 2, checks: [{ id: 1 }, { id: 2 }] });
 		});
 
-		it('should handle "resolve" filter', async () => {
+		it('should handle "resolve" filter', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "resolve" },
@@ -430,7 +445,8 @@ describe("checkModule", () => {
 			const result = await getTeamChecks(req);
 			expect(result).to.deep.equal({ checksCount: 2, checks: [{ id: 1 }, { id: 2 }] });
 		});
-		it('should handle "unknown" filter', async () => {
+
+		it('should handle "unknown" filter', async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { filter: "unknown" },
@@ -441,7 +457,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal({ checksCount: 2, checks: [{ id: 1 }, { id: 2 }] });
 		});
 
-		it("should handle ascending sort order", async () => {
+		it("should handle ascending sort order", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: { sortOrder: "asc" },
@@ -452,7 +468,7 @@ describe("checkModule", () => {
 			expect(result).to.deep.equal({ checksCount: 2, checks: [{ id: 1 }, { id: 2 }] });
 		});
 
-		it("should handle error case", async () => {
+		it("should handle error case", async function() {
 			const req = {
 				params: { monitorId: "test123" },
 				query: {},
@@ -469,20 +485,24 @@ describe("checkModule", () => {
 			}
 		});
 	});
-	describe("deleteChecks", () => {
+
+	describe("deleteChecks", function() {
 		let checkDeleteManyStub;
-		beforeEach(() => {
+
+		beforeEach(function() {
 			checkDeleteManyStub = sinon.stub(Check, "deleteMany").resolves({ deletedCount: 1 });
 		});
-		afterEach(() => {
+
+		afterEach(function() {
 			sinon.restore();
 		});
 
-		it("should return a value if a check is deleted", async () => {
+		it("should return a value if a check is deleted", async function() {
 			const result = await deleteChecks("123");
 			expect(result).to.equal(1);
 		});
-		it("should handle an error", async () => {
+
+		it("should handle an error", async function() {
 			checkDeleteManyStub.throws(new Error("Database error"));
 			try {
 				await deleteChecks("123");
@@ -492,22 +512,27 @@ describe("checkModule", () => {
 			}
 		});
 	});
-	describe("deleteChecksByTeamId", () => {
+
+	describe("deleteChecksByTeamId", function() {
 		let mockMonitors = [{ _id: 123, save: () => this }];
 		let monitorFindStub, monitorSaveStub, checkDeleteManyStub;
-		beforeEach(() => {
+
+		beforeEach(function() {
 			monitorSaveStub = sinon.stub(Monitor.prototype, "save");
 			monitorFindStub = sinon.stub(Monitor, "find").returns(mockMonitors);
 			checkDeleteManyStub = sinon.stub(Check, "deleteMany").resolves({ deletedCount: 1 });
 		});
-		afterEach(() => {
+
+		afterEach(function() {
 			sinon.restore();
 		});
-		it("should return a deleted count", async () => {
+
+		it("should return a deleted count", async function() {
 			const result = await deleteChecksByTeamId("123");
 			expect(result).to.equal(1);
 		});
-		it("should handle errors", async () => {
+
+		it("should handle errors", async function() {
 			const err = new Error("DB Error");
 			monitorFindStub.throws(err);
 			try {
@@ -517,25 +542,27 @@ describe("checkModule", () => {
 			}
 		});
 	});
-	describe("updateChecksTTL", () => {
+
+	describe("updateChecksTTL", function() {
 		let userUpdateManyStub;
 		let loggerStub;
-		beforeEach(() => {
+
+		beforeEach(function() {
 			loggerStub = sinon.stub(logger, "error");
 			userUpdateManyStub = sinon.stub(User, "updateMany");
 			Check.collection = { dropIndex: sinon.stub(), createIndex: sinon.stub() };
 		});
 
-		afterEach(() => {
+		afterEach(function() {
 			sinon.restore();
 		});
 
-		it("should return undefined", async () => {
+		it("should return undefined", async function() {
 			const result = await updateChecksTTL("123", 10);
 			expect(result).to.be.undefined;
 		});
 
-		it("should log an error if dropIndex throws an error", async () => {
+		it("should log an error if dropIndex throws an error", async function() {
 			const err = new Error("Drop Index Error");
 			Check.collection.dropIndex.throws(err);
 			await updateChecksTTL("123", 10);
@@ -543,7 +570,7 @@ describe("checkModule", () => {
 			expect(loggerStub.firstCall.args[0].message).to.equal(err.message);
 		});
 
-		it("should throw an error if createIndex throws an error", async () => {
+		it("should throw an error if createIndex throws an error", async function() {
 			const err = new Error("Create Index Error");
 			Check.collection.createIndex.throws(err);
 			try {
@@ -552,7 +579,8 @@ describe("checkModule", () => {
 				expect(error).to.deep.equal(err);
 			}
 		});
-		it("should throw an error if User.updateMany throws an error", async () => {
+
+		it("should throw an error if User.updateMany throws an error", async function() {
 			const err = new Error("Update Many Error");
 			userUpdateManyStub.throws(err);
 			try {

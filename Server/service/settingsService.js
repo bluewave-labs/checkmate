@@ -1,4 +1,6 @@
 const SERVICE_NAME = "SettingsService";
+import dotenv from "dotenv";
+dotenv.config();
 const envConfig = {
 	logLevel: undefined,
 	apiBaseUrl: undefined,

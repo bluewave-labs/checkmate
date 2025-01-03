@@ -12,6 +12,8 @@ import {
 	getMonitorStatsByIdParamValidation,
 	getMonitorStatsByIdQueryValidation,
 	getCertificateParamValidation,
+	getHardwareDetailsByIdParamValidation,
+	getHardwareDetailsByIdQueryValidation,
 } from "../validation/joi.js";
 import sslChecker from "ssl-checker";
 import { successMessages } from "../utils/messages.js";
@@ -74,6 +76,19 @@ class MonitorController {
 		}
 	};
 
+	getUptimeDetailsById = async (req, res, next) => {
+		try {
+			const monitor = await this.db.getUptimeDetailsById(req);
+			return res.status(200).json({
+				success: true,
+				msg: successMessages.MONITOR_GET_BY_ID,
+				data: monitor,
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "getMonitorDetailsById"));
+		}
+	};
+
 	/**
 	 * Returns monitor stats for monitor with matching ID
 	 * @async
@@ -101,6 +116,35 @@ class MonitorController {
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "getMonitorStatsById"));
+		}
+	};
+
+	/**
+	 * Get hardware details for a specific monitor by ID
+	 * @async
+	 * @param {Express.Request} req - Express request object containing monitorId in params
+	 * @param {Express.Response} res - Express response object
+	 * @param {Express.NextFunction} next - Express next middleware function
+	 * @returns {Promise<Express.Response>}
+	 * @throws {Error} - Throws error if monitor not found or other database errors
+	 */
+	getHardwareDetailsById = async (req, res, next) => {
+		try {
+			await getHardwareDetailsByIdParamValidation.validateAsync(req.params);
+			await getHardwareDetailsByIdQueryValidation.validateAsync(req.query);
+		} catch (error) {
+			next(handleValidationError(error, SERVICE_NAME));
+			return;
+		}
+		try {
+			const monitor = await this.db.getHardwareDetailsById(req);
+			return res.status(200).json({
+				success: true,
+				msg: successMessages.MONITOR_GET_BY_ID,
+				data: monitor,
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "getHardwareDetailsById"));
 		}
 	};
 

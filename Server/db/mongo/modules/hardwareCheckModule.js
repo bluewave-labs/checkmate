@@ -47,7 +47,6 @@ const createHardwareCheck = async (hardwareCheckData) => {
 const deleteHardwareChecksByMonitorId = async (monitorId) => {
 	try {
 		const result = await HardwareCheck.deleteMany({ monitorId });
-		console.log("deleted hardware checks", result);
 		return result.deletedCount;
 	} catch (error) {
 		error.service = SERVICE_NAME;

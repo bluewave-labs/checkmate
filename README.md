@@ -1,10 +1,9 @@
-**Need support or have a suggestion? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.**
 
-**Checkmate is on [GitHub trending](https://github.com/trending) and #1 trending for JavaScript apps on Fri Dec 13th & 15th**
+# **We're opening our $5000 grant funding announcement soon, powered by Checkmate and [UpRock](https://uprock.com) - check [our web page](https://checkmate.so) for preliminary details.** 
 
-**If you would like to support us, please consider giving it a ⭐, and think about contributing or providing feedback.**
+**If you would like to support us, please consider giving it a ⭐, and think about contributing or providing feedback. Need support or have a suggestion? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.**
 
-![Frame 34](https://github.com/user-attachments/assets/4bf57845-3f47-4759-835b-285a5486191d)
+<img width="1259" alt="Frame 34" src="https://github.com/user-attachments/assets/d491a734-fd7a-4841-9f84-fb5bef5ad586" />
 
 
 ![](https://img.shields.io/github/license/bluewave-labs/checkmate)
@@ -53,20 +52,21 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 - Infrastructure monitoring (memory, disk usage, CPU performance etc) - requires [Capture](https://github.com/bluewave-labs/capture)
 - Docker monitoring
 - Ping monitoring
+- SSL monitoring
 - Incidents at a glance
 - E-mail notifications
 - Scheduled maintenance
-- Can monitor 1000+ servers at the same time on a moderate server
 
 **Short term roadmap:**
 
-- Global (distributed) uptime checking on Solana network
-- Status pages
-- Better notification options (think Discord, Telegram, Slack)
+- Port monitoring (**complete**, waiting to be deployed to stable version)
+- Global (distributed) uptime checking on Solana network (**in progress**)
+- Status pages (**in progress**)
+- Better notification options (Webhooks, Discord, Telegram, Slack)
 - More configuration options
+- Translations
+- Tagging/grouping monitors
 - DNS monitoring
-- SSL monitoring
-- Port monitoring
 
 ## 🏗️ Screenshots
 

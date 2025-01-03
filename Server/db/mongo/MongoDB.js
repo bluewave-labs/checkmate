@@ -91,7 +91,18 @@ class MongoDB {
 				appSettings = new AppSettings({});
 				await appSettings.save();
 			}
-			logger.info({ message: "Connected to MongoDB" });
+			// Sync indexes
+			const models = mongoose.modelNames();
+			for (const modelName of models) {
+				const model = mongoose.model(modelName);
+				await model.syncIndexes();
+			}
+
+			logger.info({
+				message: "Connected to MongoDB",
+				service: this.SERVICE_NAME,
+				method: "connect",
+			});
 		} catch (error) {
 			logger.error({
 				message: error.message,

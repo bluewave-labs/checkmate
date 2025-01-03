@@ -574,9 +574,12 @@ function Sidebar() {
 										ml: "auto",
 										mr: "-8px",
 										"&:focus": { outline: "none" },
+										alignSelf: "center",
+										padding: '10px',
+
 										"& svg": {
-											width: "20px",
-											height: "20px",
+											width: "22px",
+											height: "22px",
 										},
 										"& svg path": {
 											stroke: theme.palette.other.icon,

@@ -9,23 +9,26 @@ const mockAppSettings = {
 	appName: "Test App",
 };
 
-describe("SettingsModule", () => {
+describe("SettingsModule", function() {
 	let appSettingsFindOneStub, appSettingsFindOneAndUpdateStub;
-	beforeEach(() => {
+
+	beforeEach(function() {
 		appSettingsFindOneStub = sinon.stub(AppSettings, "findOne");
 		appSettingsFindOneAndUpdateStub = sinon.stub(AppSettings, "findOneAndUpdate");
 	});
-	afterEach(() => {
+
+	afterEach(function() {
 		sinon.restore();
 	});
 
-	describe("getAppSettings", () => {
-		it("should return app settings", async () => {
+	describe("getAppSettings", function() {
+		it("should return app settings", async function() {
 			appSettingsFindOneStub.resolves(mockAppSettings);
 			const result = await getAppSettings();
 			expect(result).to.deep.equal(mockAppSettings);
 		});
-		it("should handle an error", async () => {
+
+		it("should handle an error", async function() {
 			const err = new Error("Test error");
 			appSettingsFindOneStub.throws(err);
 			try {
@@ -35,13 +38,15 @@ describe("SettingsModule", () => {
 			}
 		});
 	});
-	describe("updateAppSettings", () => {
-		it("should update app settings", async () => {
+
+	describe("updateAppSettings", function() {
+		it("should update app settings", async function() {
 			appSettingsFindOneAndUpdateStub.resolves(mockAppSettings);
 			const result = await updateAppSettings(mockAppSettings);
 			expect(result).to.deep.equal(mockAppSettings);
 		});
-		it("should handle an error", async () => {
+
+		it("should handle an error", async function() {
 			const err = new Error("Test error");
 			appSettingsFindOneAndUpdateStub.throws(err);
 			try {
