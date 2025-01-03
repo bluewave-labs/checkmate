@@ -25,7 +25,6 @@ import StatBox from "../../../Components/StatBox";
 const BASE_BOX_PADDING_VERTICAL = 4;
 const BASE_BOX_PADDING_HORIZONTAL = 4;
 const TYPOGRAPHY_PADDING = 8;
-const TEXT_FONT_SIZE = 13;
 /**
  * Converts bytes to gigabytes
  * @param {number} bytes - Number of bytes to convert
@@ -147,7 +146,7 @@ const GaugeBox = ({ value, heading, metricOne, valueOne, metricTwo, valueTwo }) 
 		borderRadius: "4px",
 		padding: "3px",
 		backgroundColor: theme.palette.background.textCard,
-		fontSize: TEXT_FONT_SIZE,
+		fontSize: 12,
 		fontWeight: "600"
 	};
 	return (
@@ -169,11 +168,12 @@ const GaugeBox = ({ value, heading, metricOne, valueOne, metricTwo, valueTwo }) 
 						progress={value}
 						radius={120}
 						color={theme.palette.primary.main}
+						percentageFontSize={20}
 					/>
 					<Typography
 						component="h2"
 						fontWeight="600"
-						fontSize={TEXT_FONT_SIZE}
+						fontSize={13}
 					>
 						{heading}
 					</Typography>
@@ -187,10 +187,11 @@ const GaugeBox = ({ value, heading, metricOne, valueOne, metricTwo, valueTwo }) 
 				>
 					<Stack
 						justifyContent={"space-between"}
+						alignItems={"center"}
 						direction="row"
 						gap={theme.spacing(2)}
 					>
-						<Typography fontSize={TEXT_FONT_SIZE}>{metricOne} </Typography>
+						<Typography fontSize={13}>{metricOne} </Typography>
 						<Typography sx={value_style}>{valueOne}</Typography>
 					</Stack>
 					<Stack
@@ -199,7 +200,7 @@ const GaugeBox = ({ value, heading, metricOne, valueOne, metricTwo, valueTwo }) 
 						marginTop={theme.spacing(3)}
 						gap={theme.spacing(2)}
 					>
-						<Typography fontSize={TEXT_FONT_SIZE}>{metricTwo}</Typography>
+						<Typography fontSize={13}>{metricTwo}</Typography>
 						<Typography sx={value_style}>{valueTwo}</Typography>
 					</Stack>
 				</Box>
@@ -234,7 +235,7 @@ const InfrastructureDetails = () => {
 	const [monitor, setMonitor] = useState(null);
 	const { authToken } = useSelector((state) => state.auth);
 	const [dateRange, setDateRange] = useState("day");
-	const { statusColor, statusStyles, determineState } = useUtils();
+	const { statusColor, statusStyles, determineState,statusMsg } = useUtils();
 	// These calculations are needed because ResponsiveContainer
 	// doesn't take padding of parent/siblings into account
 	// when calculating height.
@@ -569,6 +570,12 @@ const InfrastructureDetails = () => {
 						</Typography>
 						<Typography alignSelf="center">{monitor.url || "..."}</Typography>
 						<Box sx={{ flexGrow: 1 }} />
+						<Typography
+							alignSelf="center"
+							color={statusColor[determineState(monitor)]}
+						>
+							{statusMsg[determineState(monitor)]}
+						</Typography>
 						<Typography alignSelf="center">
 							Checking every {formatDurationRounded(monitor?.interval)}
 						</Typography>
@@ -662,8 +669,6 @@ const InfrastructureDetails = () => {
 						}}
 					>
 						{areaChartConfigs.map((config) => {
-							console.log(config);
-
 							return (
 								<BaseBox
 									key={`${config.type}-${config.diskIndex ?? ""}`}

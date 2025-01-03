@@ -15,10 +15,7 @@ const typographyLevels = {
 
 /* TODO Review color palette and semantic colors */
 const paletteColors = {
-	transparent: "#00000000",
 	white: "#FFFFFF",
-	white200:"#F6F6F6",
-	grey25: "#FCFCFC",
 	gray50: "#FEFEFE",
 	gray60: "#FEFDFE",
 	gray70: "#FDFDFD",
@@ -199,12 +196,10 @@ const semanticColors = {
 			dark: paletteColors.gray800,
 		}, 
 		gauge: {
-			light: paletteColors.grey25,
-			dark: paletteColors.transparent
+			light: paletteColors.gray90
 		},
-		textcard:{
-			light:paletteColors.white200,
-			dark:paletteColors.transparent
+		textCard:{
+			light:paletteColors.gray100
 		}
 	},
 	text: {
