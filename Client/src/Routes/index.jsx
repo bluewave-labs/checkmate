@@ -27,6 +27,7 @@ import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
 import PageSpeedDetails from "../Pages/PageSpeed/Details";
 import PageSpeedConfigure from "../Pages/PageSpeed/Configure";
 import withAdminCheck from "../Components/HOC/withAdminCheck";
+import CreateStatus from "../Pages/Status/CreateStatus";
 
 const Routes = () => {
 	const AdminCheckedRegister = withAdminCheck(Register);
@@ -96,6 +97,11 @@ const Routes = () => {
 				<Route
 					path="status"
 					element={<Status />}
+				/>
+
+				<Route
+					path="status/create"
+					element={<CreateStatus/>}
 				/>
 				<Route
 					path="integrations"

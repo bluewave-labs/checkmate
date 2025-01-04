@@ -54,6 +54,8 @@ const Search = ({
 	isAdorned = true,
 	error,
 	disabled,
+	startAdornment,
+	endAdornment
 }) => {
 	const theme = useTheme();
 
@@ -66,15 +68,15 @@ const Search = ({
 			onInputChange={(_, newValue) => {
 				handleInputChange(newValue);
 			}}
-			onChange={(_, newValue) => {
-				handleChange && handleChange(newValue);
+			onChange={(e, newValue) => {
+				handleChange && handleChange(e, newValue);
 			}}
 			fullWidth
 			freeSolo
 			disabled={disabled}
 			disableClearable
 			options={options}
-			getOptionLabel={(option) => option[filteredBy]}
+			getOptionLabel={(option) => option[filteredBy]??""}
 			renderInput={(params) => (
 				<Stack>
 					<Typography
@@ -89,9 +91,13 @@ const Search = ({
 						{...params}
 						error={Boolean(error)}
 						placeholder="Type to search"
-						InputProps={{
-							...params.InputProps,
-							...(isAdorned && { startAdornment: <SearchAdornment /> }),
+						slotProps={{
+							input: {
+								...params.InputProps,
+								...(isAdorned && { startAdornment: <SearchAdornment /> }),
+								...(startAdornment && { startAdornment: startAdornment }),
+								...(endAdornment && { endAdornment: endAdornment }),
+							},
 						}}
 						sx={{
 							"& fieldset": {
@@ -187,7 +193,7 @@ Search.propTypes = {
 	options: PropTypes.array.isRequired,
 	filteredBy: PropTypes.string.isRequired,
 	secondaryLabel: PropTypes.string,
-	value: PropTypes.array,
+	value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 	inputValue: PropTypes.string.isRequired,
 	handleInputChange: PropTypes.func.isRequired,
 	handleChange: PropTypes.func,
@@ -195,6 +201,8 @@ Search.propTypes = {
 	sx: PropTypes.object,
 	error: PropTypes.string,
 	disabled: PropTypes.bool,
+	startAdornment: PropTypes.object,
+	endAdornment: PropTypes.object
 };
 
 export default Search;
