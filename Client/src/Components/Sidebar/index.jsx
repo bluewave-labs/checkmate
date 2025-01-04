@@ -525,25 +525,50 @@ function Sidebar() {
 			{showStarRepo && (
 				<Box
 					sx={{
-						backgroundColor: "white",
+						backgroundColor: theme.palette.background.paper,
 						padding: theme.spacing(4),
 						borderRadius: theme.shape.borderRadius,
 						position: "relative",
-						height: "100px",
+						height: theme.spacing(50), // Converted 100px to theme spacing
 						display: "flex",
 						flexDirection: "column",
 						justifyContent: "center",
 						margin: theme.spacing(3),
 					}}
 				>
-					<Typography style={{ fontStyle: "bold" , marginTop: "5px",color: "black" , fontSize: "16px"  }} variant="body2" color="black">
-						 Star Checkmate
+					<Typography 
+						sx={{ 
+							fontWeight: theme.typography.fontWeightBold, // Use theme for font weight
+							marginTop: theme.spacing(1),
+							color: theme.palette.text.primary,
+							fontSize: theme.typography.pxToRem(16) // Use theme for font size
+						}} 
+						variant="body2"
+					>
+						Star Checkmate
 					</Typography>
-					<Typography style={{  fontSize: "13px" , marginTop: "10px" , color: "black"  }} variant="body2" color="black">
+					<Typography 
+						sx={{ 
+							fontSize: theme.typography.pxToRem(13), // Use theme for font size
+							marginTop: theme.spacing(2),
+							color: theme.palette.text.primary 
+						}} 
+						variant="body2"
+					>
 						See the latest releases and help grow the community on GitHub
 					</Typography>
-					<Box sx={{ display: "flex", justifyContent: "Start", alignItems: "center" , marginTop: "10px" , marginBottom: "10px" }}>
-					<a href="https://github.com/bluewave-labs/checkmate" target="_blank" rel="noopener noreferrer"> <img src="https://img.shields.io/github/stars/bluewave-labs/checkmate?label=checkmate&style=social" alt="Checkmate Logo"  /> </a>
+					<Box 
+						sx={{ 
+							display: "flex", 
+							justifyContent: "start", 
+							alignItems: "center", 
+							marginTop: theme.spacing(2.5), // Converted 10px to theme spacing
+							marginBottom: theme.spacing(2.5) // Converted 10px to theme spacing
+						}}
+					>
+						<a href="https://github.com/bluewave-labs/checkmate" target="_blank" rel="noopener noreferrer">
+							<img src="https://img.shields.io/github/stars/bluewave-labs/checkmate?label=checkmate&style=social" alt="Checkmate Logo" />
+						</a>
 					</Box>
 					<Box sx={{ borderTop: '1px solid', borderColor: theme.palette.divider, my: 2 }} />
 					<IconButton
