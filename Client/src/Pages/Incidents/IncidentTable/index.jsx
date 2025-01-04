@@ -1,17 +1,5 @@
 import PropTypes from "prop-types";
-import {
-	TableContainer,
-	Table,
-	TableHead,
-	TableRow,
-	TableCell,
-	TableBody,
-	Pagination,
-	PaginationItem,
-	Paper,
-	Typography,
-	Box,
-} from "@mui/material";
+import { Pagination, PaginationItem, Typography, Box } from "@mui/material";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
@@ -27,7 +15,7 @@ import PlaceholderDark from "../../../assets/Images/data_placeholder_dark.svg?re
 import { HttpStatusLabel } from "../../../Components/HttpStatusLabel";
 import { Empty } from "./Empty/Empty";
 import { IncidentSkeleton } from "./Skeleton/Skeleton";
-
+import DataTable from "../../../Components/Table";
 const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 
@@ -106,6 +94,46 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 		});
 	};
 
+	const headers = [
+		{
+			id: "monitorName",
+			content: "Monitor Name",
+			render: (row) => monitors[row.monitorId]?.name ?? "N/A",
+		},
+		{
+			id: "status",
+			content: "Status",
+			render: (row) => {
+				const status = row.status === true ? "up" : "down";
+				return (
+					<StatusLabel
+						status={status}
+						text={status}
+						customStyles={{ textTransform: "capitalize" }}
+					/>
+				);
+			},
+		},
+		{
+			id: "dateTime",
+			content: "Date & Time",
+			render: (row) => {
+				const formattedDate = formatDateWithTz(
+					row.createdAt,
+					"YYYY-MM-DD HH:mm:ss A",
+					uiTimezone
+				);
+				return formattedDate;
+			},
+		},
+		{
+			id: "statusCode",
+			content: "Status Code",
+			render: (row) => <HttpStatusLabel status={row.statusCode} />,
+		},
+		{ id: "message", content: "Message", render: (row) => row.message },
+	];
+
 	let paginationComponent = <></>;
 	if (checksCount > paginationController.rowsPerPage) {
 		paginationComponent = (
@@ -166,47 +194,11 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 				</Box>
 			) : (
 				<>
-					<TableContainer component={Paper}>
-						<Table>
-							<TableHead>
-								<TableRow>
-									<TableCell>Monitor Name</TableCell>
-									<TableCell>Status</TableCell>
-									<TableCell>Date & Time</TableCell>
-									<TableCell>Status Code</TableCell>
-									<TableCell>Message</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{checks.map((check) => {
-									const status = check.status === true ? "up" : "down";
-									const formattedDate = formatDateWithTz(
-										check.createdAt,
-										"YYYY-MM-DD HH:mm:ss A",
-										uiTimezone
-									);
-					
-									return (
-										<TableRow key={check._id}>
-											<TableCell>{monitors[check.monitorId]?.name}</TableCell>
-											<TableCell>
-												<StatusLabel
-													status={status}
-													text={status}
-													customStyles={{ textTransform: "capitalize" }}
-												/>
-											</TableCell>
-											<TableCell>{formattedDate}</TableCell>
-											<TableCell>
-												<HttpStatusLabel status={check.statusCode} />
-											</TableCell>
-											<TableCell>{check.message}</TableCell>
-										</TableRow>
-									);
-								})}
-							</TableBody>
-						</Table>
-					</TableContainer>
+					<DataTable
+						headers={headers}
+						data={checks}
+					/>
+
 					{paginationComponent}
 				</>
 			)}

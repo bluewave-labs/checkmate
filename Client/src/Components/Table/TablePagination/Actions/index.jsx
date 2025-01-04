@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import { Box, Button } from "@mui/material";
-import LeftArrowDouble from "../../../../../assets/icons/left-arrow-double.svg?react";
-import RightArrowDouble from "../../../../../assets/icons/right-arrow-double.svg?react";
-import LeftArrow from "../../../../../assets/icons/left-arrow.svg?react";
-import RightArrow from "../../../../../assets/icons/right-arrow.svg?react";
+import LeftArrowDouble from "../../../../assets/icons/left-arrow-double.svg?react";
+import RightArrowDouble from "../../../../assets/icons/right-arrow-double.svg?react";
+import LeftArrow from "../../../../assets/icons/left-arrow.svg?react";
+import RightArrow from "../../../../assets/icons/right-arrow.svg?react";
 
 TablePaginationActions.propTypes = {
 	count: PropTypes.number.isRequired,
