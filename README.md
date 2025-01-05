@@ -3,8 +3,7 @@
 
 **If you would like to support us, please consider giving it a ⭐, and think about contributing or providing feedback. Need support or have a suggestion? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.**
 
-<img width="1259" alt="Frame 34" src="https://github.com/user-attachments/assets/d491a734-fd7a-4841-9f84-fb5bef5ad586" />
-
+![Frame 34](https://github.com/user-attachments/assets/00db1520-24b6-42f2-aca2-a1c9794677da)
 
 ![](https://img.shields.io/github/license/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/repo-size/bluewave-labs/checkmate)
