@@ -308,7 +308,9 @@ const DetailsPage = () => {
 											<Typography component="span">
 												{hoveredUptimeData !== null
 													? hoveredUptimeData.totalChecks
-													: (monitor.stats?.upChecksAggregate?.totalChecks ?? 0)}
+													: (monitor.stats?.upChecks?.reduce((count, checkGroup) => {
+															return count + checkGroup.totalChecks;
+														}, 0) ?? 0)}
 											</Typography>
 											{hoveredUptimeData !== null && hoveredUptimeData.time !== null && (
 												<Typography
@@ -364,7 +366,9 @@ const DetailsPage = () => {
 										<Typography component="span">
 											{hoveredIncidentsData !== null
 												? hoveredIncidentsData.totalChecks
-												: (monitor.stats?.downChecksAggregate?.totalChecks ?? 0)}
+												: (monitor.stats?.downChecks?.reduce((count, checkGroup) => {
+														return count + checkGroup.totalChecks;
+													}, 0) ?? 0)}
 										</Typography>
 										{hoveredIncidentsData !== null &&
 											hoveredIncidentsData.time !== null && (
