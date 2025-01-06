@@ -95,6 +95,7 @@ const monitorValidation = joi.object({
 		.string()
 		.trim()
 		.custom((value, helpers) => {
+			// Regex from https://gist.github.com/dperini/729294
 			var urlRegex = new RegExp(
 				"^" +
 					// protocol identifier (optional)
