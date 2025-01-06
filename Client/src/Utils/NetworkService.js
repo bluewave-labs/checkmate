@@ -1,14 +1,20 @@
+import { toast } from 'react-toastify';
 import axios from "axios";
 const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 const FALLBACK_BASE_URL = "http://localhost:5000/api/v1";
 import { clearAuthState } from "../Features/Auth/authSlice";
 import { clearUptimeMonitorState } from "../Features/UptimeMonitors/uptimeMonitorsSlice";
+ 
 class NetworkService {
 	constructor(store, dispatch, navigate) {
 		this.store = store;
 		this.dispatch = dispatch;
 		this.navigate = navigate;
 		let baseURL = BASE_URL;
+		this.lastToastTimestamp = 0;
+		this.errorOccurred = false; 
+		this.user = this.store.getState().auth?.user;
+		this.isAdmin = (this.user?.role?.includes("admin") ?? false) || (this.user?.role?.includes("superadmin") ?? false);
 		this.axiosInstance = axios.create();
 		this.setBaseUrl(baseURL);
 		this.unsubscribe = store.subscribe(() => {
@@ -21,15 +27,17 @@ class NetworkService {
 				baseURL = FALLBACK_BASE_URL;
 			}
 			this.setBaseUrl(baseURL);
-		});
+		});		
 		this.axiosInstance.interceptors.response.use(
-			(response) => response,
-			(error) => {
-				if (error.response && error.response.status === 401) {
-					dispatch(clearAuthState());
-					dispatch(clearUptimeMonitorState());
-					navigate("/login");
+			(response) => {	
+				if (this.isAdmin && this.errorOccurred && response.status >= 200 && response.status < 300) {
+					this.debounceToast("Checkmate server is running properly.", "success");
+					this.errorOccurred = false;// Reset error flag if a successful response is received after errors
 				}
+				return response;
+			},
+			(error) => {
+				this.handleError(error);
 				return Promise.reject(error);
 			}
 		);
@@ -39,6 +47,29 @@ class NetworkService {
 		this.axiosInstance.defaults.baseURL = url;
 	};
 
+	handleError(error) {
+		if (error.response) {
+			const status = error.response.status;
+			if (status === 401) {
+				this.dispatch(clearAuthState());
+				this.dispatch(clearUptimeMonitorState());
+				this.navigate("/login");
+			} else if (this.isAdmin && status >= 500) {
+				this.debounceToast("Checkmate server is not running or has issues. Please check.", "error");
+				this.errorOccurred = true;
+			}
+		} 
+	}
+
+	debounceToast(message, type, debounceDuration = 5000) {
+		const now = Date.now();
+		if (now - this.lastToastTimestamp > debounceDuration) {
+			this.lastToastTimestamp = now;
+			type === "success" ? toast.success(message) : toast.error(message);
+		}
+	}
+
+	
 	cleanup() {
 		if (this.unsubscribe) {
 			this.unsubscribe();
