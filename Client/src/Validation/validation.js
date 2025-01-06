@@ -100,9 +100,8 @@ const monitorValidation = joi.object({
 				"^" +
 					// protocol identifier (optional)
 					// short syntax // still required
-					"(?:(?:(?:https?|ftp):)?\\/\\/)" +
+					"(?:(?:https?|ftp):\\/\\/)?" +
 					// user:pass BasicAuth (optional)
-					"(?:\\S+(?::\\S*)?@)?" +
 					"(?:" +
 					// IP address exclusion
 					// private & local networks
