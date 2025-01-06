@@ -111,8 +111,8 @@ Here's how you can contribute:
 
 Also check other developer and contributor-friendly projects of BlueWave:
 
-- [BlueWave DataRoom](https://github.com/bluewave-labs/bluewave-dataroom), an secure file sharing application, aka dataroom.
+- [DataRoom](https://github.com/bluewave-labs/bluewave-dataroom), an secure file sharing application, aka dataroom.
 - [BlueWave HRM](https://github.com/bluewave-labs/bluewave-hrm), a complete Human Resource Management platform.
-- [BlueWave Onboarding](https://github.com/bluewave-labs/bluewave-onboarding), an application that helps new users learn how to use your product via hints, tours, popups and banners.
+- [Guidefox](https://github.com/bluewave-labs/guidefox), an application that helps new users learn how to use your product via hints, tours, popups and banners.
 - [VerifyWise](https://github.com/bluewave-labs/verifywise), the first open source AI governance platform.
 
