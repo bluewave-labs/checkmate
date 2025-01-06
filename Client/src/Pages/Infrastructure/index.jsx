@@ -94,16 +94,6 @@ function Infrastructure() {
 		fetchMonitors();
 	}
 
-	const columns = [
-		{ label: "Host" },
-		{ label: "Status" },
-		{ label: "Frequency" },
-		{ label: "CPU" },
-		{ label: "Mem" },
-		{ label: "Disk" },
-		{ label: "Actions" },
-	];
-
 	const headers = [
 		{
 			id: "host",
