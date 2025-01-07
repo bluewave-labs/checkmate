@@ -24,32 +24,6 @@ import useDebounce from "../../../Utils/debounce";
 
 const BREADCRUMBS = [{ name: `Uptime`, path: "/uptime" }];
 
-const useWhyDidYouUpdate = (name, props) => {
-	const previousProps = useRef();
-
-	useEffect(() => {
-		if (previousProps.current) {
-			const allKeys = Object.keys({ ...previousProps.current, ...props });
-			const changesObj = {};
-
-			allKeys.forEach((key) => {
-				if (previousProps.current[key] !== props[key]) {
-					changesObj[key] = {
-						from: previousProps.current[key],
-						to: props[key],
-					};
-				}
-			});
-
-			if (Object.keys(changesObj).length) {
-				console.log("[why-did-you-update]", name, changesObj);
-			}
-		}
-
-		previousProps.current = props;
-	});
-};
-
 const UptimeMonitors = () => {
 	// Redux state
 	const { isLoading, monitorsSummary } = useSelector((state) => state.uptimeMonitors);
@@ -82,20 +56,6 @@ const UptimeMonitors = () => {
 		}),
 		[authState.authToken, authState.user.teamId, sort, debouncedFilter, page, rowsPerPage]
 	);
-
-	useWhyDidYouUpdate("UptimeMonitors", {
-		isLoading,
-		monitorsSummary,
-		authState,
-		rowsPerPage,
-		monitors,
-		sort,
-		search,
-		page,
-		isSearching,
-		monitorUpdateTrigger,
-		fetchParams,
-	});
 
 	const getMonitorWithPercentage = useCallback((monitor, theme) => {
 		let uptimePercentage = "";
