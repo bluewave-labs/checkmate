@@ -7,6 +7,8 @@ import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
 import Account from "../Pages/Account";
 import Monitors from "../Pages/Uptime/Home";
+import DistributedUptime from "../Pages/DistributedUptime";
+import DistributedUptimeDetails from "../Pages/DistributedUptime/Details";
 import CreateMonitor from "../Pages/Uptime/CreateUptime";
 import CreateInfrastructureMonitor from "../Pages/Infrastructure/CreateMonitor";
 import Incidents from "../Pages/Incidents";
@@ -47,6 +49,14 @@ const Routes = () => {
 				<Route
 					path="/uptime"
 					element={<Monitors />}
+				/>
+				<Route
+					path="/distributed-uptime"
+					element={<DistributedUptime />}
+				/>
+				<Route
+					path="/distributed-uptime/:monitorId"
+					element={<DistributedUptimeDetails />}
 				/>
 				<Route
 					path="/uptime/create/:monitorId?"

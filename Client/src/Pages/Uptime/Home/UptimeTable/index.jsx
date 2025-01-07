@@ -10,27 +10,18 @@ import { logger } from "../../../../Utils/Logger";
 import { jwtDecode } from "jwt-decode";
 import { networkService } from "../../../../main";
 
-import {
-	TableContainer,
-	Table,
-	TableHead,
-	TableRow,
-	TableCell,
-	TableBody,
-	Paper,
-	Box,
-	CircularProgress,
-} from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import ActionsMenu from "../actionsMenu";
 import Host from "../host";
 import { StatusLabel } from "../../../../Components/Label";
-import { TableBodySkeleton } from "./Skeleton";
+import { TableSkeleton } from "./Skeleton";
 import BarChart from "../../../../Components/Charts/BarChart";
 
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
 
-import { Pagination } from "../../../Infrastructure/components/TablePagination";
+import { Pagination } from "../../../../Components/Table/TablePagination";
+import DataTable from "../../../../Components/Table";
 
 const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePause }) => {
 	const theme = useTheme();
@@ -46,7 +37,95 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 	const [monitorCount, setMonitorCount] = useState(0);
 	const [updateTrigger, setUpdateTrigger] = useState(false);
 	const [sort, setSort] = useState({});
+	const [data, setData] = useState([]);
 	const prevFilter = useRef(filter);
+	const headers = [
+		{
+			id: "name",
+			content: (
+				<Box onClick={() => handleSort("name")}>
+					Host
+					<span
+						style={{
+							visibility: sort.field === "name" ? "visible" : "hidden",
+						}}
+					>
+						{sort.order === "asc" ? (
+							<ArrowUpwardRoundedIcon />
+						) : (
+							<ArrowDownwardRoundedIcon />
+						)}
+					</span>
+				</Box>
+			),
+			render: (row) => (
+				<Host
+					key={row._id}
+					url={row.url}
+					title={row.title}
+					percentageColor={row.percentageColor}
+					percentage={row.percentage}
+				/>
+			),
+		},
+		{
+			id: "status",
+			content: (
+				<Box
+					width="max-content"
+					onClick={() => handleSort("status")}
+				>
+					{" "}
+					Status
+					<span
+						style={{
+							visibility: sort.field === "status" ? "visible" : "hidden",
+						}}
+					>
+						{sort.order === "asc" ? (
+							<ArrowUpwardRoundedIcon />
+						) : (
+							<ArrowDownwardRoundedIcon />
+						)}
+					</span>
+				</Box>
+			),
+			render: (row) => {
+				const status = determineState(row.monitor);
+				return (
+					<StatusLabel
+						status={status}
+						text={status}
+						customStyles={{ textTransform: "capitalize" }}
+					/>
+				);
+			},
+		},
+		{
+			id: "responseTime",
+			content: "Response Time",
+			render: (row) => <BarChart checks={row.monitor.checks.slice().reverse()} />,
+		},
+		{
+			id: "type",
+			content: "Type",
+			render: (row) => (
+				<span style={{ textTransform: "uppercase" }}>{row.monitor.type}</span>
+			),
+		},
+		{
+			id: "actions",
+			content: "Actions",
+			render: (row) => (
+				<ActionsMenu
+					monitor={row.monitor}
+					isAdmin={isAdmin}
+					updateRowCallback={handleRowUpdate}
+					pauseCallback={handlePause}
+				/>
+			),
+		},
+	];
 
 	const handleRowUpdate = () => {
 		setUpdateTrigger((prev) => !prev);
@@ -144,7 +223,41 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 		setMonitors(res?.data?.data?.monitors ?? []);
 		setMonitorCount(res?.data?.data?.monitorCount ?? 0);
 	};
-	/* TODO Apply component basic table? */
+
+	useEffect(() => {
+		const mappedMonitors = monitors.map((monitor) => {
+			let uptimePercentage = "";
+			let percentageColor = theme.palette.percentage.uptimeExcellent;
+
+			// Determine uptime percentage and color based on the monitor's uptimePercentage value
+			if (monitor.uptimePercentage !== undefined) {
+				uptimePercentage =
+					monitor.uptimePercentage === 0
+						? "0"
+						: (monitor.uptimePercentage * 100).toFixed(2);
+
+				percentageColor =
+					monitor.uptimePercentage < 0.25
+						? theme.palette.percentage.uptimePoor
+						: monitor.uptimePercentage < 0.5
+							? theme.palette.percentage.uptimeFair
+							: monitor.uptimePercentage < 0.75
+								? theme.palette.percentage.uptimeGood
+								: theme.palette.percentage.uptimeExcellent;
+			}
+
+			return {
+				id: monitor._id,
+				url: monitor.url,
+				title: monitor.name,
+				percentage: uptimePercentage,
+				percentageColor,
+				monitor: monitor,
+			};
+		});
+		setData(mappedMonitors);
+	}, [monitors, theme]);
+
 	return (
 		<Box position="relative">
 			{isSearching && (
@@ -177,141 +290,37 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 					</Box>
 				</>
 			)}
-			<TableContainer component={Paper}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell
-								sx={{ cursor: "pointer" }}
-								onClick={() => handleSort("name")}
-							>
-								<Box>
-									Host
-									<span
-										style={{
-											visibility: sort.field === "name" ? "visible" : "hidden",
-										}}
-									>
-										{sort.order === "asc" ? (
-											<ArrowUpwardRoundedIcon />
-										) : (
-											<ArrowDownwardRoundedIcon />
-										)}
-									</span>
-								</Box>
-							</TableCell>
-							<TableCell
-								sx={{ cursor: "pointer" }}
-								onClick={() => handleSort("status")}
-							>
-								{" "}
-								<Box width="max-content">
-									{" "}
-									Status
-									<span
-										style={{
-											visibility: sort.field === "status" ? "visible" : "hidden",
-										}}
-									>
-										{sort.order === "asc" ? (
-											<ArrowUpwardRoundedIcon />
-										) : (
-											<ArrowDownwardRoundedIcon />
-										)}
-									</span>
-								</Box>
-							</TableCell>
-							<TableCell>Response Time</TableCell>
-							<TableCell>Type</TableCell>
-							<TableCell>Actions</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{/* TODO add empty state. Check if is searching, and empty => skeleton. Is empty, not searching => skeleton */}
-						{monitors.length > 0 ? (
-							monitors.map((monitor) => {
-								let uptimePercentage = "";
-								let percentageColor = theme.palette.percentage.uptimeExcellent;
-
-								// Determine uptime percentage and color based on the monitor's uptimePercentage value
-								if (monitor.uptimePercentage !== undefined) {
-									uptimePercentage =
-										monitor.uptimePercentage === 0
-											? "0"
-											: (monitor.uptimePercentage * 100).toFixed(2);
-
-									percentageColor =
-										monitor.uptimePercentage < 0.25
-											? theme.palette.percentage.uptimePoor
-											: monitor.uptimePercentage < 0.5
-												? theme.palette.percentage.uptimeFair
-												: monitor.uptimePercentage < 0.75
-													? theme.palette.percentage.uptimeGood
-													: theme.palette.percentage.uptimeExcellent;
-								}
-
-								const params = {
-									url: monitor.url,
-									title: monitor.name,
-									percentage: uptimePercentage,
-									percentageColor,
-									status: determineState(monitor),
-								};
-
-								return (
-									<TableRow
-										key={monitor._id}
-										sx={{
-											cursor: "pointer",
-											"&:hover": {
-												filter: "brightness(.75)",
-												opacity: 0.75,
-												transition: "filter 0.3s ease, opacity 0.3s ease",
-											},
-										}}
-										onClick={() => {
-											navigate(`/uptime/${monitor._id}`);
-										}}
-									>
-										<TableCell>
-											<Host
-												key={monitor._id}
-												url={params.url}
-												title={params.title}
-												percentageColor={params.percentageColor}
-												percentage={params.percentage}
-											/>
-										</TableCell>
-										<TableCell>
-											<StatusLabel
-												status={params.status}
-												text={params.status}
-												customStyles={{ textTransform: "capitalize" }}
-											/>
-										</TableCell>
-										<TableCell>
-											<BarChart checks={monitor.checks.slice().reverse()} />
-										</TableCell>
-										<TableCell>
-											<span style={{ textTransform: "uppercase" }}>{monitor.type}</span>
-										</TableCell>
-										<TableCell>
-											<ActionsMenu
-												monitor={monitor}
-												isAdmin={isAdmin}
-												updateRowCallback={handleRowUpdate}
-												pauseCallback={handlePause}
-											/>
-										</TableCell>
-									</TableRow>
-								);
-							})
-						) : (
-							<TableBodySkeleton />
-						)}
-					</TableBody>
-				</Table>
-			</TableContainer>
+			{/* 
+			This is the original SX for the row, doesn't match infrastructure table
+			rowSX: {
+				cursor: "pointer",
+				"&:hover": {
+					filter: "brightness(.75)",
+					opacity: 0.75,
+					transition: "filter 0.3s ease, opacity 0.3s ease",
+				},
+			}, 
+			*/}
+			{monitors.length > 0 ? (
+				<DataTable
+					headers={headers}
+					data={data}
+					config={{
+						rowSX: {
+							cursor: "pointer",
+							"&:hover": {
+								backgroundColor: theme.palette.background.accent,
+							},
+						},
+						onRowClick: (row) => {
+							navigate(`/uptime/${row.id}`);
+						},
+						emptyView: "No monitors found",
+					}}
+				/>
+			) : (
+				<TableSkeleton />
+			)}
 			<Pagination
 				monitorCount={monitorCount}
 				page={page}

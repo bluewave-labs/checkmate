@@ -49,6 +49,7 @@ import "./index.css";
 
 const menu = [
 	{ name: "Uptime", path: "uptime", icon: <Monitors /> },
+	{ name: "Distributed Uptime", path: "distributed-uptime", icon: <Monitors /> },
 	{ name: "Pagespeed", path: "pagespeed", icon: <PageSpeed /> },
 	{ name: "Infrastructure", path: "infrastructure", icon: <Integrations /> },
 	{ name: "Incidents", path: "incidents", icon: <Incidents /> },
@@ -95,6 +96,7 @@ const URL_MAP = {
 
 const PATH_MAP = {
 	monitors: "Dashboard",
+	["distributed-uptime"]: "Dashboard",
 	pagespeed: "Dashboard",
 	infrastructure: "Dashboard",
 	account: "Account",
@@ -295,7 +297,7 @@ function Sidebar() {
 							disableInteractive
 						>
 							<ListItemButton
-								className={location.pathname.includes(item.path) ? "selected-path" : ""}
+								className={location.pathname === `/${item.path}` ? "selected-path" : ""}
 								onClick={() => navigate(`/${item.path}`)}
 								sx={{
 									height: "37px",
@@ -573,7 +575,7 @@ function Sidebar() {
 										mr: "-8px",
 										"&:focus": { outline: "none" },
 										alignSelf: "center",
-										padding: '10px',
+										padding: "10px",
 
 										"& svg": {
 											width: "22px",
