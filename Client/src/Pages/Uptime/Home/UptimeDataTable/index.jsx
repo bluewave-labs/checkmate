@@ -17,6 +17,7 @@ import { useState } from "react";
 import useUtils from "../../utils";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
+import "../index.css";
 
 const UptimeDataTable = ({
 	isAdmin,
@@ -57,9 +58,15 @@ const UptimeDataTable = ({
 		{
 			id: "name",
 			content: (
-				<Box onClick={() => handleSort("name")}>
+				<Stack
+					gap={theme.spacing(4)}
+					alignItems="center"
+					direction="row"
+					onClick={() => handleSort("name")}
+				>
 					Host
-					<span
+					<Stack
+						justifyContent="center"
 						style={{
 							visibility: sort.field === "name" ? "visible" : "hidden",
 						}}
@@ -69,8 +76,8 @@ const UptimeDataTable = ({
 						) : (
 							<ArrowDownwardRoundedIcon />
 						)}
-					</span>
-				</Box>
+					</Stack>
+				</Stack>
 			),
 			render: (row) => (
 				<Host
@@ -85,13 +92,17 @@ const UptimeDataTable = ({
 		{
 			id: "status",
 			content: (
-				<Box
+				<Stack
+					direction="row"
+					gap={theme.spacing(4)}
+					alignItems="center"
 					width="max-content"
 					onClick={() => handleSort("status")}
 				>
 					{" "}
 					Status
-					<span
+					<Stack
+						justifyContent="center"
 						style={{
 							visibility: sort.field === "status" ? "visible" : "hidden",
 						}}
@@ -101,8 +112,8 @@ const UptimeDataTable = ({
 						) : (
 							<ArrowDownwardRoundedIcon />
 						)}
-					</span>
-				</Box>
+					</Stack>
+				</Stack>
 			),
 			render: (row) => {
 				const status = determineState(row.monitor);
