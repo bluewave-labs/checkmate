@@ -1,32 +1,92 @@
-import { Stack } from "@mui/material";
+import { Stack, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import DataTable from "../../Components/Table";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import { useNavigate } from "react-router-dom";
+import Host from "../Uptime/Home/host";
+import useUtils from "../Uptime/utils";
+import { StatusLabel } from "../../Components/Label";
+import BarChart from "../../Components/Charts/BarChart";
+import ActionsMenu from "../Uptime/Home/actionsMenu";
 const BREADCRUMBS = [{ name: `Distributed Uptime`, path: "/distributed-uptime" }];
 
 const DistributedUptime = () => {
 	const theme = useTheme();
+	const { determineState } = useUtils();
+
 	const navigate = useNavigate();
 	const headers = [
-		{ id: "host", content: "Host", render: (row) => row.host },
-		{ id: "status", content: "Status", render: (row) => row.status },
+		{
+			id: "name",
+			content: <Box>Host</Box>,
+			render: (row) => (
+				<Host
+					key={row.id}
+					url={row.host}
+					title={row.title}
+					percentageColor={row.percentageColor}
+					percentage={row.percentage}
+				/>
+			),
+		},
+		{
+			id: "status",
+			content: <Box width="max-content"> Status</Box>,
+			render: (row) => {
+				const status = determineState(row);
+				return (
+					<StatusLabel
+						status={status}
+						text={status}
+						customStyles={{ textTransform: "capitalize" }}
+					/>
+				);
+			},
+		},
 		{
 			id: "responseTime",
 			content: "Response Time",
-			render: (row) => `${row.responseTime} ms`,
+			render: (row) => <BarChart checks={row.checks.slice().reverse()} />,
 		},
-		{ id: "type", content: "Type", render: (row) => row.type },
-		{ id: "action", content: "Action", render: (row) => row.action },
+		{
+			id: "type",
+			content: "Type",
+			render: (row) => <span>{"Distributed uptime"}</span>,
+		},
+		{
+			id: "actions",
+			content: "Actions",
+			render: (row) => (
+				<ActionsMenu
+					monitor={row}
+					isAdmin={true}
+				/>
+			),
+		},
 	];
+
 	const data = [
 		{
 			id: 1,
 			host: "www.google.com",
-			status: "up",
+			title: "Google",
+			status: true,
 			responseTime: 123,
 			type: "distributed uptime",
 			action: "Action",
+			isActive: true,
+			percentage: 100,
+			percentageColor: theme.palette.percentage.uptimeExcellent,
+			checks: [
+				{ status: true, responseTime: 80 },
+				{ status: false, responseTime: 100 },
+				{ status: true, responseTime: 60 },
+				{ status: true, responseTime: 40 },
+				{ status: true, responseTime: 50 },
+				{ status: true, responseTime: 20 },
+				{ status: true, responseTime: 10 },
+				{ status: true, responseTime: 60 },
+			],
 		},
 	];
 	return (
