@@ -8,23 +8,12 @@ import SkeletonLayout from "./skeleton";
 import Fallback from "../../Components/Fallback";
 // import GearIcon from "../../Assets/icons/settings-bold.svg?react";
 import CPUChipIcon from "../../assets/icons/cpu-chip.svg?react";
-import {
-	Box,
-	Button,
-	IconButton,
-	Paper,
-	Stack,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-} from "@mui/material";
+import DataTable from "../../Components/Table";
+import { Box, Button, IconButton, Stack } from "@mui/material";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import { StatusLabel } from "../../Components/Label";
 import { Heading } from "../../Components/Heading";
-import { Pagination } from "./components/TablePagination";
+import { Pagination } from "../../Components/Table/TablePagination/index.jsx";
 // import { getInfrastructureMonitorsByTeamId } from "../../Features/InfrastructureMonitors/infrastructureMonitorsSlice";
 import { networkService } from "../../Utils/NetworkService.js";
 import CustomGauge from "../../Components/Charts/CustomGauge/index.jsx";
@@ -32,41 +21,7 @@ import Host from "../Uptime/Home/host.jsx";
 import { useIsAdmin } from "../../Hooks/useIsAdmin.js";
 import { InfrastructureMenu } from "./components/Menu";
 
-const columns = [
-	{ label: "Host" },
-	{ label: "Status" },
-	{ label: "Frequency" },
-	{ label: "CPU" },
-	{ label: "Mem" },
-	{ label: "Disk" },
-	{ label: "Actions" },
-];
-
 const BREADCRUMBS = [{ name: `infrastructure`, path: "/infrastructure" }];
-
-/* TODO 
-Create reusable table component.
-It should receive as a parameter the following object:
-tableData = [
-	 columns = [
-		{
-	 		id: example,
-			label: Example Extendable,
-			align: "center" | "left" (default)	
-		}
-	 ],
-	 rows: [
-	 	{
-	 		**Number of keys will be equal to number of columns**
-	 		key1: string,
-			key2: number,
-			key3: Component
-		}
-	 ]
-]
-Apply to Monitor Table, and Account/Team.
-Analyze existing BasicTable
-*/
 
 /**
  * This is the Infrastructure monitoring page. This is a work in progress
@@ -138,6 +93,71 @@ function Infrastructure() {
 	function handleActionMenuDelete() {
 		fetchMonitors();
 	}
+
+	const headers = [
+		{
+			id: "host",
+			content: "Host",
+			render: (row) => (
+				<Host
+					title={row.name}
+					url={row.url}
+					percentage={row.uptimePercentage}
+					percentageColor={row.percentageColor}
+				/>
+			),
+		},
+		{
+			id: "status",
+			content: "Status",
+			render: (row) => (
+				<StatusLabel
+					status={row.status}
+					text={row.status}
+				/>
+			),
+		},
+		{
+			id: "frequency",
+			content: "Frequency",
+			render: (row) => (
+				<Stack
+					direction={"row"}
+					justifyContent={"center"}
+					alignItems={"center"}
+					gap=".25rem"
+				>
+					<CPUChipIcon
+						width={20}
+						height={20}
+					/>
+					{row.processor}
+				</Stack>
+			),
+		},
+		{ id: "cpu", content: "CPU", render: (row) => <CustomGauge progress={row.cpu} /> },
+		{ id: "mem", content: "Mem", render: (row) => <CustomGauge progress={row.mem} /> },
+		{ id: "disk", content: "Disk", render: (row) => <CustomGauge progress={row.disk} /> },
+		{
+			id: "actions",
+			content: "Actions",
+			render: (row) => (
+				<IconButton
+					sx={{
+						"& svg path": {
+							stroke: theme.palette.other.icon,
+						},
+					}}
+				>
+					<InfrastructureMenu
+						monitor={row}
+						isAdmin={isAdmin}
+						updateCallback={handleActionMenuDelete}
+					/>
+				</IconButton>
+			),
+		},
+	];
 
 	const monitorsAsRows = monitors.map((monitor) => {
 		const processor =
@@ -237,103 +257,20 @@ function Infrastructure() {
 								{totalMonitors}
 							</Box>
 						</Stack>
-						<TableContainer component={Paper}>
-							<Table stickyHeader>
-								<TableHead sx={{ backgroundColor: theme.palette.background.accent }}>
-									<TableRow>
-										{columns.map((column, index) => (
-											<TableCell
-												key={index}
-												align={index === 0 ? "left" : "center"}
-												sx={{
-													backgroundColor: theme.palette.background.accent,
-												}}
-											>
-												{column.label}
-											</TableCell>
-										))}
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{monitorsAsRows.map((row) => {
-										return (
-											<TableRow
-												key={row.id}
-												onClick={() => openDetails(row.id)}
-												sx={{
-													cursor: "pointer",
-													"&:hover": {
-														backgroundColor: theme.palette.background.accent,
-													},
-												}}
-											>
-												{/* TODO iterate over column and get column id, applying row[column.id] */}
-												<TableCell>
-													<Host
-														title={row.name}
-														url={row.url}
-														percentage={row.uptimePercentage}
-														percentageColor={row.percentageColor}
-													/>
-												</TableCell>
-												<TableCell align="center">
-													<StatusLabel
-														status={row.status}
-														text={row.status}
-														/* Use capitalize inside of Status Label */
-														/* Update component so we don't need to pass text and status separately*/
-														customStyles={{ textTransform: "capitalize" }}
-													/>
-												</TableCell>
-												<TableCell align="center">
-													<Stack
-														direction={"row"}
-														justifyContent={"center"}
-														alignItems={"center"}
-														gap=".25rem"
-													>
-														<CPUChipIcon
-															width={20}
-															height={20}
-														/>
-														{row.processor}
-													</Stack>
-												</TableCell>
-												<TableCell align="center">
-													<CustomGauge progress={row.cpu} />
-												</TableCell>
-												<TableCell align="center">
-													<CustomGauge progress={row.mem} />
-												</TableCell>
-												<TableCell align="center">
-													<CustomGauge progress={row.disk} />
-												</TableCell>
-												<TableCell align="center">
-													{/* Get ActionsMenu from Monitor Table and create a component */}
-													<IconButton
-														sx={{
-															"& svg path": {
-																stroke: theme.palette.other.icon,
-															},
-														}}
-													>
-														<InfrastructureMenu
-															monitor={row}
-															isAdmin={isAdmin}
-															updateCallback={handleActionMenuDelete}
-														/>
-														{/* <GearIcon
-												width={20}
-												height={20}
-											/> */}
-													</IconButton>
-												</TableCell>
-											</TableRow>
-										);
-									})}
-								</TableBody>
-							</Table>
-						</TableContainer>
+
+						<DataTable
+							config={{
+								rowSX: {
+									cursor: "pointer",
+									"&:hover": {
+										backgroundColor: theme.palette.background.accent,
+									},
+								},
+								onRowClick: (row) => openDetails(row.id),
+							}}
+							headers={headers}
+							data={monitorsAsRows}
+						/>
 						<Pagination
 							monitorCount={totalMonitors}
 							page={page}

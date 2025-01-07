@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
 import { Stack, TablePagination, Typography } from "@mui/material";
 import { TablePaginationActions } from "./Actions";
-import SelectorVertical from "../../../../assets/icons/selector-vertical.svg?react";
+import SelectorVertical from "../../../assets/icons/selector-vertical.svg?react";
 
 Pagination.propTypes = {
 	monitorCount: PropTypes.number.isRequired, // Total number of items for pagination.
