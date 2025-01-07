@@ -1,46 +1,180 @@
-import "./index.css";
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getUptimeMonitorsByTeamId } from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
-import { useNavigate } from "react-router-dom";
-import { useTheme } from "@emotion/react";
-import { Box, Button, Stack } from "@mui/material";
-import PropTypes from "prop-types";
+// Components
+import { Box, Stack, Button } from "@mui/material";
+import Greeting from "../../../Utils/greeting";
 import SkeletonLayout from "./skeleton";
 import Fallback from "./fallback";
 import StatusBox from "./StatusBox";
-import Breadcrumbs from "../../../Components/Breadcrumbs";
-import Greeting from "../../../Utils/greeting";
-import { CurrentMonitoring } from "./CurrentMonitoring";
+import UptimeDataTable from "./UptimeDataTable";
+import { Pagination } from "../../../Components/Table/TablePagination";
+
+// Utils
+import { useTheme } from "@emotion/react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import {
+	getUptimeSummaryByTeamId,
+	getUptimeMonitorsByTeamId,
+} from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
+import { setRowsPerPage } from "../../../Features/UI/uiSlice";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { createToast } from "../../../Utils/toastUtils";
+import Breadcrumbs from "../../../Components/Breadcrumbs";
+import useDebounce from "../../../Utils/debounce";
 
 const BREADCRUMBS = [{ name: `Uptime`, path: "/uptime" }];
 
+const useWhyDidYouUpdate = (name, props) => {
+	const previousProps = useRef();
+
+	useEffect(() => {
+		if (previousProps.current) {
+			const allKeys = Object.keys({ ...previousProps.current, ...props });
+			const changesObj = {};
+
+			allKeys.forEach((key) => {
+				if (previousProps.current[key] !== props[key]) {
+					changesObj[key] = {
+						from: previousProps.current[key],
+						to: props[key],
+					};
+				}
+			});
+
+			if (Object.keys(changesObj).length) {
+				console.log("[why-did-you-update]", name, changesObj);
+			}
+		}
+
+		previousProps.current = props;
+	});
+};
+
 const UptimeMonitors = () => {
+	// Redux state
+	const { isLoading, monitorsSummary } = useSelector((state) => state.uptimeMonitors);
+	const authState = useSelector((state) => state.auth);
+	const { rowsPerPage } = useSelector((state) => state.ui.monitors);
+
+	// Local state
+	const [monitors, setMonitors] = useState([]);
+	const [sort, setSort] = useState({});
+	const [search, setSearch] = useState("");
+	const [page, setPage] = useState(0);
+	const [isSearching, setIsSearching] = useState(false);
+	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
+
+	// Utils
+	const debouncedFilter = useDebounce(search, 500);
+	const dispatch = useDispatch();
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const isAdmin = useIsAdmin();
-	const { isLoading, monitorsSummary } = useSelector((state) => state.uptimeMonitors);
-	const authState = useSelector((state) => state.auth);
-	const dispatch = useDispatch({});
-	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
 
-	const handlePause = () => {
+	const fetchParams = useMemo(
+		() => ({
+			authToken: authState.authToken,
+			teamId: authState.user.teamId,
+			sort: { field: sort.field, order: sort.order },
+			filter: debouncedFilter,
+			page,
+			rowsPerPage,
+		}),
+		[authState.authToken, authState.user.teamId, sort, debouncedFilter, page, rowsPerPage]
+	);
+
+	useWhyDidYouUpdate("UptimeMonitors", {
+		isLoading,
+		monitorsSummary,
+		authState,
+		rowsPerPage,
+		monitors,
+		sort,
+		search,
+		page,
+		isSearching,
+		monitorUpdateTrigger,
+		fetchParams,
+	});
+
+	const getMonitorWithPercentage = useCallback((monitor, theme) => {
+		let uptimePercentage = "";
+		let percentageColor = theme.palette.percentage.uptimeExcellent;
+
+		if (monitor.uptimePercentage !== undefined) {
+			uptimePercentage =
+				monitor.uptimePercentage === 0
+					? "0"
+					: (monitor.uptimePercentage * 100).toFixed(2);
+
+			percentageColor =
+				monitor.uptimePercentage < 0.25
+					? theme.palette.percentage.uptimePoor
+					: monitor.uptimePercentage < 0.5
+						? theme.palette.percentage.uptimeFair
+						: monitor.uptimePercentage < 0.75
+							? theme.palette.percentage.uptimeGood
+							: theme.palette.percentage.uptimeExcellent;
+		}
+
+		return {
+			id: monitor._id,
+			name: monitor.name,
+			url: monitor.url,
+			title: monitor.name,
+			percentage: uptimePercentage,
+			percentageColor,
+			monitor: monitor,
+		};
+	}, []);
+
+	const fetchMonitors = useCallback(async () => {
+		try {
+			const action = await dispatch(getUptimeMonitorsByTeamId(fetchParams));
+			if (action.payload.success) {
+				const { monitors } = action.payload.data;
+				const mappedMonitors = monitors.map((monitor) =>
+					getMonitorWithPercentage(monitor, theme)
+				);
+				setMonitors(mappedMonitors);
+			} else {
+				// TODO: Check for other errors?
+				throw new Error("Error fetching monitors");
+			}
+		} catch (error) {
+			createToast({
+				body: "Error fetching monitors",
+			});
+		} finally {
+			setIsSearching(false);
+		}
+	}, [fetchParams, dispatch, getMonitorWithPercentage, theme]);
+
+	useEffect(() => {
+		dispatch(getUptimeSummaryByTeamId(authState.authToken));
+		fetchMonitors();
+	}, [fetchMonitors, monitorUpdateTrigger, authState.authToken, dispatch]);
+
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (event) => {
+		dispatch(
+			setRowsPerPage({
+				value: parseInt(event.target.value, 10),
+				table: "monitors",
+			})
+		);
+		setPage(0);
+	};
+
+	const triggerUpdate = () => {
 		setMonitorUpdateTrigger((prev) => !prev);
 	};
 
-	useEffect(() => {
-		dispatch(getUptimeMonitorsByTeamId(authState.authToken));
-	}, [authState.authToken, dispatch, monitorUpdateTrigger]);
-
-	//TODO bring fetching to this component, like on pageSpeed
-
-	const loading = isLoading;
-
 	const totalMonitors = monitorsSummary?.monitorCounts?.total;
-
 	const hasMonitors = totalMonitors > 0;
-	const noMonitors = !hasMonitors;
 	const canAddMonitor = isAdmin && hasMonitors;
 
 	return (
@@ -72,11 +206,9 @@ const UptimeMonitors = () => {
 				</Stack>
 				<Greeting type="uptime" />
 			</Box>
-			{loading ? (
-				<SkeletonLayout />
-			) : (
+			{
 				<>
-					{noMonitors && <Fallback isAdmin={isAdmin} />}
+					{!isLoading && !hasMonitors && <Fallback isAdmin={isAdmin} />}
 					{hasMonitors && (
 						<>
 							<Stack
@@ -97,21 +229,31 @@ const UptimeMonitors = () => {
 									value={monitorsSummary?.monitorCounts?.paused ?? 0}
 								/>
 							</Stack>
-							<CurrentMonitoring
+							<UptimeDataTable
 								isAdmin={isAdmin}
-								monitors={monitorsSummary.monitors}
-								totalMonitors={totalMonitors}
-								handlePause={handlePause}
+								monitors={monitors}
+								monitorCount={totalMonitors}
+								sort={sort}
+								setSort={setSort}
+								search={search}
+								setSearch={setSearch}
+								isSearching={isSearching}
+								setIsSearching={setIsSearching}
+								triggerUpdate={triggerUpdate}
+							/>
+							<Pagination
+								monitorCount={totalMonitors}
+								page={page}
+								rowsPerPage={rowsPerPage}
+								handleChangePage={handleChangePage}
+								handleChangeRowsPerPage={handleChangeRowsPerPage}
 							/>
 						</>
 					)}
 				</>
-			)}
+			}
 		</Stack>
 	);
 };
 
-UptimeMonitors.propTypes = {
-	isAdmin: PropTypes.bool,
-};
 export default UptimeMonitors;
