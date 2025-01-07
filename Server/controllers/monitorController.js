@@ -5,8 +5,8 @@ import {
 	createMonitorBodyValidation,
 	getMonitorURLByQueryValidation,
 	editMonitorBodyValidation,
-	getMonitorsAndSummaryByTeamIdParamValidation,
-	getMonitorsAndSummaryByTeamIdQueryValidation,
+	getMonitorsSummaryByTeamIdParamValidation,
+	getMonitorsSummaryByTeamIdQueryValidation,
 	getMonitorsByTeamIdQueryValidation,
 	pauseMonitorParamValidation,
 	getMonitorStatsByIdParamValidation,
@@ -217,10 +217,10 @@ class MonitorController {
 	 * @returns {Object} The response object with a success status, a message, and the data containing the monitors and summary for the team.
 	 * @throws {Error} If there is an error during the process, especially if there is a validation error (422).
 	 */
-	getMonitorsAndSummaryByTeamId = async (req, res, next) => {
+	getMonitorsSummaryByTeamId = async (req, res, next) => {
 		try {
-			await getMonitorsAndSummaryByTeamIdParamValidation.validateAsync(req.params);
-			await getMonitorsAndSummaryByTeamIdQueryValidation.validateAsync(req.query);
+			await getMonitorsSummaryByTeamIdParamValidation.validateAsync(req.params);
+			await getMonitorsSummaryByTeamIdQueryValidation.validateAsync(req.query);
 		} catch (error) {
 			next(handleValidationError(error, SERVICE_NAME));
 			return;
@@ -229,7 +229,7 @@ class MonitorController {
 		try {
 			const { teamId } = req.params;
 			const { type } = req.query;
-			const monitorsSummary = await this.db.getMonitorsAndSummaryByTeamId(teamId, type);
+			const monitorsSummary = await this.db.getMonitorsSummaryByTeamId(teamId, type);
 			return res.status(200).json({
 				success: true,
 				msg: successMessages.MONITOR_GET_BY_USER_ID(teamId),

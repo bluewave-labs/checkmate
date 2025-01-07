@@ -136,11 +136,11 @@ const getMonitorByIdQueryValidation = joi.object({
 	normalize: joi.boolean(),
 });
 
-const getMonitorsAndSummaryByTeamIdParamValidation = joi.object({
+const getMonitorsSummaryByTeamIdParamValidation = joi.object({
 	teamId: joi.string().required(),
 });
 
-const getMonitorsAndSummaryByTeamIdQueryValidation = joi.object({
+const getMonitorsSummaryByTeamIdQueryValidation = joi.object({
 	type: joi
 		.alternatives()
 		.try(
@@ -467,8 +467,8 @@ export {
 	createMonitorBodyValidation,
 	getMonitorByIdParamValidation,
 	getMonitorByIdQueryValidation,
-	getMonitorsAndSummaryByTeamIdParamValidation,
-	getMonitorsAndSummaryByTeamIdQueryValidation,
+	getMonitorsSummaryByTeamIdParamValidation,
+	getMonitorsSummaryByTeamIdQueryValidation,
 	getMonitorsByTeamIdValidation,
 	getMonitorsByTeamIdQueryValidation,
 	getMonitorStatsByIdParamValidation,

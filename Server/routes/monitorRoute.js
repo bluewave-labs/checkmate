@@ -32,7 +32,7 @@ class MonitorRoutes {
 		this.router.get("/:monitorId", this.monitorController.getMonitorById);
 		this.router.get(
 			"/team/summary/:teamId",
-			this.monitorController.getMonitorsAndSummaryByTeamId
+			this.monitorController.getMonitorsSummaryByTeamId
 		);
 		this.router.get("/team/:teamId", this.monitorController.getMonitorsByTeamId);
 

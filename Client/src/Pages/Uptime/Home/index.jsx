@@ -20,7 +20,7 @@ const UptimeMonitors = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const isAdmin = useIsAdmin();
-	const uptimeMonitorsState = useSelector((state) => state.uptimeMonitors);
+	const { isLoading, monitorsSummary } = useSelector((state) => state.uptimeMonitors);
 	const authState = useSelector((state) => state.auth);
 	const dispatch = useDispatch({});
 	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
@@ -35,9 +35,9 @@ const UptimeMonitors = () => {
 
 	//TODO bring fetching to this component, like on pageSpeed
 
-	const loading = uptimeMonitorsState?.isLoading;
+	const loading = isLoading;
 
-	const totalMonitors = uptimeMonitorsState?.monitorsSummary?.monitorCounts?.total;
+	const totalMonitors = monitorsSummary?.monitorCounts?.total;
 
 	const hasMonitors = totalMonitors > 0;
 	const noMonitors = !hasMonitors;
@@ -86,20 +86,20 @@ const UptimeMonitors = () => {
 							>
 								<StatusBox
 									title="up"
-									value={uptimeMonitorsState?.monitorsSummary?.monitorCounts?.up ?? 0}
+									value={monitorsSummary?.monitorCounts?.up ?? 0}
 								/>
 								<StatusBox
 									title="down"
-									value={uptimeMonitorsState?.monitorsSummary?.monitorCounts?.down ?? 0}
+									value={monitorsSummary?.monitorCounts?.down ?? 0}
 								/>
 								<StatusBox
 									title="paused"
-									value={uptimeMonitorsState?.monitorsSummary?.monitorCounts?.paused ?? 0}
+									value={monitorsSummary?.monitorCounts?.paused ?? 0}
 								/>
 							</Stack>
 							<CurrentMonitoring
 								isAdmin={isAdmin}
-								monitors={uptimeMonitorsState.monitorsSummary.monitors}
+								monitors={monitorsSummary.monitors}
 								totalMonitors={totalMonitors}
 								handlePause={handlePause}
 							/>
