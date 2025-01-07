@@ -218,38 +218,38 @@ class NewJobQueue {
 			concurrency: 5,
 		});
 
-		worker.on("active", (job) => {
-			this.logger.info({
-				message: `Worker started processing job: ${job.id}`,
-				service: SERVICE_NAME,
-				method: "createWorker",
-			});
-		});
+		// worker.on("active", (job) => {
+		// 	this.logger.info({
+		// 		message: `Worker started processing job: ${job.id}`,
+		// 		service: SERVICE_NAME,
+		// 		method: "createWorker",
+		// 	});
+		// });
 
-		worker.on("completed", (job) => {
-			this.logger.info({
-				message: `Worker completed job: ${job.id}`,
-				service: SERVICE_NAME,
-				method: "createWorker",
-			});
-		});
+		// worker.on("completed", (job) => {
+		// 	this.logger.info({
+		// 		message: `Worker completed job: ${job.id}`,
+		// 		service: SERVICE_NAME,
+		// 		method: "createWorker",
+		// 	});
+		// });
 
-		worker.on("failed", (job, err) => {
-			this.logger.error({
-				message: `Worker failed job: ${job.id}`,
-				service: SERVICE_NAME,
-				method: "createWorker",
-				stack: err.stack,
-			});
-		});
+		// worker.on("failed", (job, err) => {
+		// 	this.logger.error({
+		// 		message: `Worker failed job: ${job.id}`,
+		// 		service: SERVICE_NAME,
+		// 		method: "createWorker",
+		// 		stack: err.stack,
+		// 	});
+		// });
 
-		worker.on("stalled", (jobId) => {
-			this.logger.warn({
-				message: `Worker stalled job: ${jobId}`,
-				service: SERVICE_NAME,
-				method: "createWorker",
-			});
-		});
+		// worker.on("stalled", (jobId) => {
+		// 	this.logger.warn({
+		// 		message: `Worker stalled job: ${jobId}`,
+		// 		service: SERVICE_NAME,
+		// 		method: "createWorker",
+		// 	});
+		// });
 		return worker;
 	}
 

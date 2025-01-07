@@ -43,13 +43,14 @@ import DotsVertical from "../../assets/icons/dots-vertical.svg?react";
 import ChangeLog from "../../assets/icons/changeLog.svg?react";
 import Docs from "../../assets/icons/docs.svg?react";
 import Folder from "../../assets/icons/folder.svg?react";
+import Groups from "../../assets/icons/groups.svg?react";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 
 import "./index.css";
 
 const menu = [
 	{ name: "Uptime", path: "uptime", icon: <Monitors /> },
-	{ name: "Distributed Uptime", path: "distributed-uptime", icon: <Monitors /> },
+	{ name: "Distributed Uptime", path: "distributed-uptime", icon: <Groups /> },
 	{ name: "Pagespeed", path: "pagespeed", icon: <PageSpeed /> },
 	{ name: "Infrastructure", path: "infrastructure", icon: <Integrations /> },
 	{ name: "Incidents", path: "incidents", icon: <Incidents /> },
@@ -209,14 +210,14 @@ function Sidebar() {
 							userSelect: "none",
 						}}
 					>
-						C
+						P
 					</Stack>
 					<Typography
 						component="span"
 						mt={theme.spacing(2)}
 						sx={{ opacity: 0.8, fontWeight: 500 }}
 					>
-						Checkmate
+						Prism
 					</Typography>
 				</Stack>
 				<IconButton
