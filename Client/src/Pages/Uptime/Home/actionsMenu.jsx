@@ -34,7 +34,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 		if (action.meta.requestStatus === "fulfilled") {
 			setIsOpen(false); // close modal
 			dispatch(getUptimeMonitorsByTeamId(authState.authToken));
-			updateCallback();
+			updateRowCallback();
 			createToast({ body: "Monitor deleted successfully." });
 		} else {
 			createToast({ body: "Failed to delete monitor." });
@@ -169,6 +169,8 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 				{isAdmin && (
 					<MenuItem
 						onClick={(e) => {
+							closeMenu(e);
+
 							e.stopPropagation();
 							handlePause(e);
 						}}
