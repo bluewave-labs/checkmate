@@ -513,24 +513,32 @@ const getMonitorById = async (monitorId) => {
  * @throws {Error}
  */
 
-const getMonitorsAndSummaryByTeamId = async (teamId, type) => {
+const getMonitorsSummaryByTeamId = async (teamId, type) => {
 	try {
-		const monitors = await Monitor.find({ teamId, type });
-		const monitorCounts = monitors.reduce(
-			(acc, monitor) => {
-				if (monitor.status === true) {
-					acc.up += 1;
-				} else if (monitor.status === false) {
-					acc.down += 1;
-				} else if (monitor.isActive === false) {
-					acc.paused += 1;
-				}
-				return acc;
+		const monitorCounts = await Monitor.aggregate([
+			{
+				$match: {
+					type: { $in: type },
+				},
 			},
-			{ up: 0, down: 0, paused: 0 }
-		);
-		monitorCounts.total = monitors.length;
-		return { monitors, monitorCounts };
+			{
+				$facet: {
+					total: [{ $count: "count" }],
+					up: [{ $match: { status: true } }, { $count: "count" }],
+					down: [{ $match: { status: false } }, { $count: "count" }],
+					paused: [{ $match: { isActive: false } }, { $count: "count" }],
+				},
+			},
+			{
+				$project: {
+					total: { $arrayElemAt: ["$total.count", 0] },
+					up: { $arrayElemAt: ["$up.count", 0] },
+					down: { $arrayElemAt: ["$down.count", 0] },
+					paused: { $arrayElemAt: ["$paused.count", 0] },
+				},
+			},
+		]);
+		return { monitorCounts: monitorCounts[0] };
 	} catch (error) {
 		error.service = SERVICE_NAME;
 		error.method = "getMonitorsAndSummaryByTeamId";
@@ -751,7 +759,7 @@ export {
 	getMonitorStatsById,
 	getMonitorById,
 	getUptimeDetailsById,
-	getMonitorsAndSummaryByTeamId,
+	getMonitorsSummaryByTeamId,
 	getMonitorsByTeamId,
 	createMonitor,
 	deleteMonitor,
