@@ -258,7 +258,7 @@ function Sidebar() {
 				}
 				sx={{
 					px: theme.spacing(6),
-					height: "30%",
+					height: "auto",
 				}}
 			>
 				{menu.map((item) =>
@@ -331,7 +331,7 @@ function Sidebar() {
 									<ListItemText>{item.name}</ListItemText>
 								</ListItemButton>
 							</Tooltip>
-							{/* <Menu
+							<Menu
 								className="sidebar-popup"
 								anchorEl={anchorEl}
 								open={Boolean(anchorEl) && popup === item.name}
@@ -397,7 +397,7 @@ function Sidebar() {
 										</MenuItem>
 									);
 								})}
-							</Menu> */}
+							</Menu>
 						</React.Fragment>
 					) : (
 						<React.Fragment key={item.name}>
@@ -499,8 +499,7 @@ function Sidebar() {
 				disablePadding
 				sx={{
 					px: theme.spacing(6),
-					pt: theme.spacing(60),
-					height: "100%",
+					pt: theme.spacing(35),
 					overflow: "hidden",
 				}}
 			>
@@ -574,7 +573,7 @@ function Sidebar() {
 									<ListItemText>{item.name}</ListItemText>
 								</ListItemButton>
 							</Tooltip>
-							{/* <Menu
+							<Menu
 								className="sidebar-popup"
 								anchorEl={anchorEl}
 								open={Boolean(anchorEl) && popup === item.name}
@@ -640,7 +639,7 @@ function Sidebar() {
 										</MenuItem>
 									);
 								})}
-							</Menu> */}
+							</Menu>
 						</React.Fragment>
 					) : (
 						<React.Fragment key={item.name}>
