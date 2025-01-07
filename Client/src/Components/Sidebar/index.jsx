@@ -55,27 +55,11 @@ const menu = [
 	// { name: "Status pages", path: "status", icon: <StatusPages /> },
 	{ name: "Maintenance", path: "maintenance", icon: <Maintenance /> },
 	// { name: "Integrations", path: "integrations", icon: <Integrations /> },
-	//{
-	//	name: "Account",
-	//	icon: <Account />,
-	//	nested: [
-	//		{ name: "Profile", path: "account/profile", icon: <UserSvg /> },
-	//		{ name: "Password", path: "account/password", icon: <LockSvg /> },
-	//		{ name: "Team", path: "account/team", icon: <TeamSvg /> },
-	//	],
-	//},
 	{
 		name: "Settings",
 		icon: <Settings />,
 		path: "settings",
 	},
-
-	// {
-	// 	name: "Other",
-	// 	icon: <Folder />,
-	// 	nested: [
-	// 	],
-	// },
 ];
 
 const subMenu = [
