@@ -127,7 +127,7 @@ class NetworkService {
 	 * @param {Array<string>} config.types - Array of monitor types
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 */
-	async getMonitorsAndSummaryByTeamId(config) {
+	async getMonitorsSummaryByTeamId(config) {
 		const params = new URLSearchParams();
 
 		if (config.types) {
