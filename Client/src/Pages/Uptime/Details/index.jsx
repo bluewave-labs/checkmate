@@ -410,7 +410,10 @@ const DetailsPage = () => {
 										</IconBox>
 										<Typography component="h2">Response Times</Typography>
 									</Stack>
-									<MonitorDetailsAreaChart checks={monitor?.stats?.groupChecks ?? []} />
+									<MonitorDetailsAreaChart
+										checks={monitor?.stats?.groupChecks ?? []}
+										dateRange={dateRange}
+									/>
 								</ChartBox>
 								<ChartBox
 									gap={theme.spacing(8)}
