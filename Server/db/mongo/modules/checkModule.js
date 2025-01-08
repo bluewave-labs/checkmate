@@ -175,6 +175,7 @@ const getTeamChecks = async (req) => {
 				case "all":
 					break;
 				case "down":
+					checksQuery.status = false;
 					break;
 				case "resolve":
 					checksQuery.statusCode = 5000;
