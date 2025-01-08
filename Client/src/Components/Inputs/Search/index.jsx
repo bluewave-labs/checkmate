@@ -132,6 +132,7 @@ const Search = ({
 				}
 				return filtered;
 			}}
+			getOptionKey={(option) => option.id}
 			renderOption={(props, option) => {
 				const { key, ...optionProps } = props;
 				return (

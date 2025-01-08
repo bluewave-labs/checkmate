@@ -134,9 +134,9 @@ const UptimeMonitors = () => {
 		setPage(0);
 	};
 
-	const triggerUpdate = () => {
+	const triggerUpdate = useCallback(() => {
 		setMonitorUpdateTrigger((prev) => !prev);
-	};
+	}, []);
 	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
 	const hasMonitors = monitorsSummary?.totalMonitors ?? 0;
 	const canAddMonitor = isAdmin && hasMonitors;
@@ -203,7 +203,7 @@ const UptimeMonitors = () => {
 									monitorCount={totalMonitors}
 									sort={sort}
 									setSort={setSort}
-									search={search}
+									debouncedSearch={debouncedFilter}
 									setSearch={setSearch}
 									isSearching={isSearching}
 									setIsSearching={setIsSearching}
