@@ -157,9 +157,6 @@ class NetworkService {
 	 * @param {string} config.teamId - The ID of the team whose monitors are to be retrieved.
 	 * @param {number} [config.limit] - The maximum number of checks to retrieve.  0 for all, -1 for none
 	 * @param {Array<string>} [config.types] - The types of monitors to retrieve.
-	 * @param {string} [config.status] - The status of the monitors to retrieve.
-	 * @param {string} [config.checkOrder] - The order in which to sort the retrieved monitors.
-	 * @param {boolean} [config.normalize] - Whether to normalize the retrieved monitors.
 	 * @param {number} [config.page] - The page number for pagination.
 	 * @param {number} [config.rowsPerPage] - The number of rows per page for pagination.
 	 * @param {string} [config.filter] - The filter to apply to the monitors.
@@ -167,21 +164,10 @@ class NetworkService {
 	 * @param {string} [config.order] - The order in which to sort the field.
 	 * @returns {Promise<AxiosResponse>} The response from the axios GET request.
 	 */
+
 	async getMonitorsByTeamId(config) {
-		const {
-			authToken,
-			teamId,
-			limit,
-			types,
-			status,
-			checkOrder,
-			normalize,
-			page,
-			rowsPerPage,
-			filter,
-			field,
-			order,
-		} = config;
+		const { authToken, teamId, limit, types, page, rowsPerPage, filter, field, order } =
+			config;
 
 		const params = new URLSearchParams();
 
@@ -191,9 +177,6 @@ class NetworkService {
 				params.append("type", type);
 			});
 		}
-		if (status) params.append("status", status);
-		if (checkOrder) params.append("checkOrder", checkOrder);
-		if (normalize) params.append("normalize", normalize);
 		if (page) params.append("page", page);
 		if (rowsPerPage) params.append("rowsPerPage", rowsPerPage);
 		if (filter) params.append("filter", filter);
