@@ -1,8 +1,7 @@
 import { Box, Button, Grid, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import { useDispatch, useSelector } from "react-redux";
-import { getPageSpeedByTeamId } from "../../Features/PageSpeedMonitor/pageSpeedMonitorSlice";
+import { useSelector } from "react-redux";
 import Fallback from "../../Components/Fallback";
 import "./index.css";
 import { useNavigate } from "react-router";
@@ -15,16 +14,12 @@ import { Heading } from "../../Components/Heading";
 import { useIsAdmin } from "../../Hooks/useIsAdmin";
 const PageSpeed = () => {
 	const theme = useTheme();
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const isAdmin = useIsAdmin();
 	const { user, authToken } = useSelector((state) => state.auth);
 	const [isLoading, setIsLoading] = useState(true);
 	const [monitors, setMonitors] = useState([]);
 	const [monitorCount, setMonitorCount] = useState(0);
-	useEffect(() => {
-		dispatch(getPageSpeedByTeamId(authToken));
-	}, [authToken, dispatch]);
 
 	useEffect(() => {
 		const fetchMonitors = async () => {
