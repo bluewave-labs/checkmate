@@ -19,7 +19,7 @@ const Empty = ({ styles }) => {
 				<Typography variant="h2">Your infrastructure dashboard will show here</Typography>
 				<Typography
 					textAlign="center"
-					color={theme.palette.text.secondary}
+					color={theme.palette.primary.contrastText.secondary}
 				>
 					Hang tight! Data is loading
 				</Typography>

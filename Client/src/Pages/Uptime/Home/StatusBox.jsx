@@ -73,7 +73,7 @@ const StatusBox = ({ title, value }) => {
 				textTransform="uppercase"
 				fontSize={15}
 				letterSpacing={0.5}
-				color={theme.palette.text.secondary}
+				color={theme.palette.primary.contrastText.secondary}
 				mb={theme.spacing(8)}
 				sx={{ opacity: 0.6 }}
 			>
@@ -93,7 +93,7 @@ const StatusBox = ({ title, value }) => {
 					component="span"
 					fontSize={20}
 					fontWeight={300}
-					color={theme.palette.text.secondary}
+					color={theme.palette.primary.contrastText.secondary}
 					sx={{ opacity: 0.3 }}
 				>
 					#

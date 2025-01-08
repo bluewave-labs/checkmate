@@ -98,9 +98,9 @@ function Pagination({
 					},
 				}}
 				sx={{
-					color: theme.palette.text.secondary,
+					color: theme.palette.primary.contrastText.secondary,
 					"& svg path": {
-						stroke: theme.palette.text.tertiary,
+						stroke: theme.palette.primary.contrastText.tertiary,
 						strokeWidth: 1.3,
 					},
 					"& .MuiSelect-select": {

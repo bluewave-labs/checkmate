@@ -27,7 +27,7 @@ const SearchAdornment = () => {
 					width: 16,
 					height: 16,
 					"& path": {
-						stroke: theme.palette.text.tertiary,
+						stroke: theme.palette.primary.contrastText.tertiary,
 						strokeWidth: 1.2,
 					},
 				},
@@ -80,7 +80,7 @@ const Search = ({
 					<Typography
 						component="h3"
 						fontSize={"var(--env-var-font-size-medium)"}
-						color={theme.palette.text.secondary}
+						color={theme.palette.primary.contrastText.secondary}
 						fontWeight={500}
 					>
 						{label}
@@ -157,7 +157,7 @@ const Search = ({
 					sx: {
 						"& ul": { p: 2 },
 						"& li.MuiAutocomplete-option": {
-							color: theme.palette.text.secondary,
+							color: theme.palette.primary.contrastText.secondary,
 							px: 4,
 							borderRadius: theme.shape.borderRadius,
 						},

@@ -173,10 +173,10 @@ function Sidebar() {
 					backgroundColor: theme.palette.background.accent,
 				},
 				"& .MuiList-root svg path": {
-					stroke: theme.palette.text.tertiary,
+					stroke: theme.palette.primary.contrastText.tertiary,
 				},
 				"& p, & span, & .MuiListSubheader-root": {
-					color: theme.palette.text.secondary,
+					color: theme.palette.primary.contrastText.secondary,
 				},
 			}}
 		>
@@ -231,7 +231,7 @@ function Sidebar() {
 							width: theme.spacing(8),
 							height: theme.spacing(8),
 							"& path": {
-								stroke: theme.palette.text.secondary,
+								stroke: theme.palette.primary.contrastText.secondary,
 							},
 						},
 						"&:focus": { outline: "none" },
@@ -490,7 +490,7 @@ function Sidebar() {
 														backgroundColor: theme.palette.other.line,
 													},
 													"&.selected-path::after": {
-														backgroundColor: theme.palette.text.tertiary,
+														backgroundColor: theme.palette.primary.contrastText.tertiary,
 														transform: "scale(1.2)",
 													},
 												}}
@@ -573,7 +573,7 @@ function Sidebar() {
 										mr: "-8px",
 										"&:focus": { outline: "none" },
 										alignSelf: "center",
-										padding: '10px',
+										padding: "10px",
 
 										"& svg": {
 											width: "22px",

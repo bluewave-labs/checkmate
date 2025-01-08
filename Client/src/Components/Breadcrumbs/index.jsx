@@ -52,7 +52,7 @@ const Breadcrumbs = ({ list }) => {
 							opacity: 0.8,
 							textTransform: "capitalize",
 							"&, &:hover": {
-								color: theme.palette.text.tertiary,
+								color: theme.palette.primary.contrastText.tertiary,
 							},
 						}}
 					>

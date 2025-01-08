@@ -253,4 +253,131 @@ const semanticColors = {
 		},
 	},
 };
-export { typographyLevels, semanticColors as colors };
+
+const newColors = {
+	offWhite: "#FEFEFE",
+	offBlack: "#131315",
+	gray300: "#E3E3E3",
+	gray600: "#A2A3A3",
+	blueGray50: "#E8F0FE",
+	blueGray500: "#475467",
+	blueGray600: "#344054",
+	blueGray800: "#1C2130",
+	gray200: "#E3E3E3",
+	gray500: "#A2A3A3",
+	blueBlueWave: "#1570EF",
+	green100: "#8CFFCB",
+	green200: "#4B9B77",
+	green400: "#079455",
+	green700: "#19543A",
+	orange100: "#FFE5CC",
+	orange400: "#FD8F22",
+	orange600: "#9B734B",
+	orange700: "#694016",
+	red100: "#F9C2C2",
+	red400: "#D92020",
+	red600: "#9B4B4B",
+	red700: "#791515",
+};
+
+const newSemanticColors = {
+	accent: {
+		main: {
+			light: newColors.blueBlueWave,
+			dark: newColors.blueBlueWave,
+		},
+		contrastText: {
+			light: newColors.offWhite,
+			dark: newColors.offWhite,
+		},
+	},
+	primary: {
+		main: {
+			light: newColors.offWhite,
+			dark: newColors.offBlack,
+		},
+		contrastText: {
+			main: {
+				light: newColors.blueGray800,
+				dark: newColors.blueGray50,
+			},
+			secondary: {
+				light: newColors.blueGray600,
+				dark: newColors.gray300,
+			},
+			tertiary: {
+				light: newColors.blueGray500,
+				dark: newColors.gray500,
+			},
+		},
+	},
+	/* For success, warning and error, contrastText works wll with main, and with the theme primary main color. Accent is to be used in graphs */
+	success: {
+		main: {
+			light: newColors.green700,
+			dark: newColors.green100,
+		},
+		contrastText: {
+			light: newColors.green100,
+			dark: newColors.green700,
+		},
+		accent: {
+			light: newColors.green400,
+			dark: newColors.green200,
+		},
+	},
+	error: {
+		main: {
+			light: newColors.red700,
+			dark: newColors.red100,
+		},
+		contrastText: {
+			light: newColors.red100,
+			dark: newColors.red700,
+		},
+		accent: {
+			light: newColors.red400,
+			dark: newColors.red600,
+		},
+	},
+	warning: {
+		main: {
+			light: newColors.orange700,
+			dark: newColors.orange100,
+		},
+		contrastText: {
+			light: newColors.orange100,
+			dark: newColors.orange700,
+		},
+		accent: {
+			light: newColors.orange400,
+			dark: newColors.orange600,
+		},
+	},
+	gradient: {
+		color1: {
+			light: paletteColors.gray90,
+			dark: paletteColors.gray890,
+		},
+		color2: {
+			light: paletteColors.gray80,
+			dark: paletteColors.gray880,
+		},
+		color3: {
+			light: paletteColors.gray70,
+			dark: paletteColors.gray870,
+		},
+		color4: {
+			light: paletteColors.gray60,
+			dark: paletteColors.gray860,
+		},
+		color5: {
+			light: paletteColors.gray50,
+			dark: paletteColors.gray850,
+		},
+	},
+};
+
+/* TODO proximo passo: quebrar o projeto */
+
+export { typographyLevels, semanticColors as colors, newSemanticColors };

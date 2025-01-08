@@ -84,7 +84,7 @@ const Incidents = () => {
 						<Typography
 							display="inline-block"
 							component="h1"
-							color={theme.palette.text.secondary}
+							color={theme.palette.primary.contrastText.secondary}
 						>
 							Incidents for
 						</Typography>

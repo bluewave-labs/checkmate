@@ -174,7 +174,7 @@ const DetailsPage = () => {
 												width: 4,
 												height: 4,
 												borderRadius: "50%",
-												backgroundColor: theme.palette.text.tertiary,
+												backgroundColor: theme.palette.primary.contrastText.tertiary,
 												opacity: 0.8,
 												left: -9,
 												top: "50%",
@@ -204,7 +204,7 @@ const DetailsPage = () => {
 											"& svg": {
 												mr: theme.spacing(3),
 												"& path": {
-													stroke: theme.palette.text.tertiary,
+													stroke: theme.palette.primary.contrastText.tertiary,
 												},
 											},
 										}}
@@ -242,7 +242,7 @@ const DetailsPage = () => {
 									<Typography
 										component="span"
 										fontSize={13}
-										color={theme.palette.text.primary}
+										color={theme.palette.primary.contrastText.main}
 									>
 										{certificateExpiry}
 									</Typography>
@@ -316,7 +316,7 @@ const DetailsPage = () => {
 													position="absolute"
 													top="100%"
 													fontSize={11}
-													color={theme.palette.text.tertiary}
+													color={theme.palette.primary.contrastText.tertiary}
 												>
 													{formatDateWithTz(
 														hoveredUptimeData._id,
@@ -373,7 +373,7 @@ const DetailsPage = () => {
 													position="absolute"
 													top="100%"
 													fontSize={11}
-													color={theme.palette.text.tertiary}
+													color={theme.palette.primary.contrastText.tertiary}
 												>
 													{formatDateWithTz(
 														hoveredIncidentsData._id,
@@ -426,7 +426,7 @@ const DetailsPage = () => {
 										</IconBox>
 										<Typography
 											component="h2"
-											color={theme.palette.text.secondary}
+											color={theme.palette.primary.contrastText.secondary}
 										>
 											History
 										</Typography>

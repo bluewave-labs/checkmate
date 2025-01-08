@@ -124,12 +124,12 @@ const BarChart = ({ checks = [] }) => {
 									},
 									"& .MuiTooltip-tooltip p": {
 										fontSize: 12,
-										color: theme.palette.text.tertiary,
+										color: theme.palette.primary.contrastText.tertiary,
 										fontWeight: 500,
 									},
 									"& .MuiTooltip-tooltip span": {
 										fontSize: 11,
-										color: theme.palette.text.tertiary,
+										color: theme.palette.primary.contrastText.tertiary,
 										fontWeight: 600,
 									},
 								},

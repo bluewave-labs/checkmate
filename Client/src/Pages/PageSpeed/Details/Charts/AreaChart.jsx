@@ -64,7 +64,7 @@ const CustomToolTip = ({ active, payload, label, config }) => {
 			>
 				<Typography
 					sx={{
-						color: theme.palette.text.tertiary,
+						color: theme.palette.primary.contrastText.tertiary,
 						fontSize: 12,
 						fontWeight: 500,
 					}}
@@ -86,7 +86,7 @@ const CustomToolTip = ({ active, payload, label, config }) => {
 								mt={theme.spacing(1)}
 								sx={{
 									"& span": {
-										color: theme.palette.text.tertiary,
+										color: theme.palette.primary.contrastText.tertiary,
 										fontSize: 11,
 										fontWeight: 500,
 									},
@@ -186,7 +186,7 @@ const CustomTick = ({ x, y, payload, index }) => {
 			x={x}
 			y={y + 8}
 			textAnchor="middle"
-			fill={theme.palette.text.tertiary}
+			fill={theme.palette.primary.contrastText.tertiary}
 			fontSize={11}
 			fontWeight={400}
 		>

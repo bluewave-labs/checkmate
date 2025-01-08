@@ -249,7 +249,7 @@ const PageSpeedConfigure = () => {
 												width: 4,
 												height: 4,
 												borderRadius: "50%",
-												backgroundColor: theme.palette.text.tertiary,
+												backgroundColor: theme.palette.primary.contrastText.tertiary,
 												opacity: 0.8,
 												left: -10,
 												top: "50%",

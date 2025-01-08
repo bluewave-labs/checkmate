@@ -49,7 +49,10 @@ const Check = ({ text, noHighlightText, variant = "info", outlined = false }) =>
 			<Typography
 				component="span"
 				sx={{
-					color: variant === "info" ? theme.palette.text.tertiary : colors[variant],
+					color:
+						variant === "info"
+							? theme.palette.primary.contrastText.tertiary
+							: colors[variant],
 					opacity: 0.8,
 				}}
 			>

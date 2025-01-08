@@ -54,7 +54,7 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 				<Typography
 					component="h1"
 					marginY={theme.spacing(4)}
-					color={theme.palette.text.tertiary}
+					color={theme.palette.primary.contrastText.tertiary}
 				>
 					{vowelStart ? "An" : "A"} {title} is used to:
 				</Typography>

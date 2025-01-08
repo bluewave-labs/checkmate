@@ -94,7 +94,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 							</IconButton>
 							<Typography
 								component="h2"
-								color={theme.palette.text.tertiary}
+								color={theme.palette.primary.contrastText.tertiary}
 							>
 								<Typography
 									component="span"
@@ -108,7 +108,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 							</Typography>
 							<Typography
 								component="p"
-								color={theme.palette.text.tertiary}
+								color={theme.palette.primary.contrastText.tertiary}
 								sx={{ opacity: 0.6 }}
 							>
 								(maximum size: 3MB)
@@ -117,7 +117,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 					</Box>
 					<Typography
 						component="p"
-						color={theme.palette.text.tertiary}
+						color={theme.palette.primary.contrastText.tertiary}
 						sx={{ opacity: 0.6 }}
 					>
 						Supported formats: JPG, PNG

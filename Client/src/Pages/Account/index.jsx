@@ -84,7 +84,7 @@ const Account = ({ open = "profile" }) => {
 								tabIndex={index}
 								sx={{
 									fontSize: 13,
-									color: theme.palette.text.tertiary,
+									color: theme.palette.primary.contrastText.tertiary,
 									textTransform: "none",
 									minWidth: "fit-content",
 									minHeight: 0,

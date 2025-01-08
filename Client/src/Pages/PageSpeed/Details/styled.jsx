@@ -12,11 +12,11 @@ export const ChartBox = styled(Stack)(({ theme }) => ({
 	borderBottomRightRadius: 16,
 	backgroundColor: theme.palette.background.main,
 	"& h2": {
-		color: theme.palette.text.secondary,
+		color: theme.palette.primary.contrastText.secondary,
 		fontSize: 15,
 		fontWeight: 500,
 	},
-	"& p": { color: theme.palette.text.tertiary },
+	"& p": { color: theme.palette.primary.contrastText.tertiary },
 	"& > :nth-of-type(1)": {
 		gridColumn: 1,
 		gridRow: 1,

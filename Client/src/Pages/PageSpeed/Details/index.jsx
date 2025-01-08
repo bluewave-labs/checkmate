@@ -151,7 +151,7 @@ const PageSpeedDetails = () => {
 											width: 4,
 											height: 4,
 											borderRadius: "50%",
-											backgroundColor: theme.palette.text.tertiary,
+											backgroundColor: theme.palette.primary.contrastText.tertiary,
 											opacity: 0.8,
 											left: -9,
 											top: "50%",
@@ -410,7 +410,7 @@ const PageSpeedDetails = () => {
 													component="span"
 													fontSize={14}
 													fontWeight={500}
-													color={theme.palette.text.primary}
+													color={theme.palette.primary.contrastText.main}
 												>
 													{value}
 													<Typography

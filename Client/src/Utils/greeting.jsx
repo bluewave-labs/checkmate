@@ -170,7 +170,7 @@ const Greeting = ({ type = "" }) => {
 					component="span"
 					fontSize="inherit"
 					fontWeight="inherit"
-					color={theme.palette.text.secondary}
+					color={theme.palette.primary.contrastText.secondary}
 				>
 					{firstName} {emoji}
 				</Typography>

@@ -13,22 +13,22 @@ const baseTheme = (palette) => ({
 		fontSize: 14,
 		h1: {
 			fontSize: typographyLevels.xl,
-			color: palette.text.primary,
+			color: palette.primary.contrastText.main,
 			fontWeight: 500,
 		},
 		h2: {
 			fontSize: typographyLevels.l,
-			color: palette.text.secondary,
+			color: palette.primary.contrastText.secondary,
 			fontWeight: 400,
 		},
 		body1: {
 			fontSize: typographyLevels.m,
-			color: palette.text.tertiary,
+			color: palette.primary.contrastText.tertiary,
 			fontWeight: 400,
 		},
 		body2: {
 			fontSize: typographyLevels.s,
-			color: palette.text.tertiary,
+			color: palette.primary.contrastText.tertiary,
 			fontWeight: 400,
 		},
 	},
@@ -97,7 +97,7 @@ const baseTheme = (palette) => ({
 					"&.MuiLoadingButton-root": {
 						"&:disabled": {
 							backgroundColor: theme.palette.secondary.main,
-							color: theme.palette.text.primary,
+							color: theme.palette.primary.contrastText.main,
 						},
 					},
 					"&.MuiLoadingButton-loading": {
@@ -160,7 +160,7 @@ const baseTheme = (palette) => ({
 					borderRadius: 4,
 					backgroundColor: "inherit",
 					padding: "4px 6px",
-					color: theme.palette.text.secondary,
+					color: theme.palette.primary.contrastText.secondary,
 					fontSize: 13,
 					margin: 2,
 					minWidth: 100,
@@ -193,7 +193,7 @@ const baseTheme = (palette) => ({
 					borderStyle: "solid",
 					borderColor: theme.palette.border.light,
 					"& button": {
-						color: theme.palette.text.tertiary,
+						color: theme.palette.primary.contrastText.tertiary,
 						borderRadius: 4,
 					},
 					"& li:first-of-type button, & li:last-of-type button": {
@@ -232,7 +232,7 @@ const baseTheme = (palette) => ({
 						minHeight: "var(--env-var-height-2)",
 						fontSize: "var(--env-var-font-size-medium)",
 						fontWeight: 400,
-						color: palette.text.secondary,
+						color: palette.primary.contrastText.secondary,
 						"&.Mui-disabled": {
 							opacity: 0.3,
 							WebkitTextFillColor: "unset",
@@ -241,7 +241,7 @@ const baseTheme = (palette) => ({
 					"& .MuiInputBase-input:-webkit-autofill": {
 						transition: "background-color 5000s ease-in-out 0s",
 						WebkitBoxShadow: `0 0 0px 1000px ${theme.palette.background.main} inset`,
-						WebkitTextFillColor: theme.palette.text.primary,
+						WebkitTextFillColor: theme.palette.primary.contrastText.main,
 					},
 					"& .MuiInputBase-input.MuiOutlinedInput-input": {
 						padding: "0 var(--env-var-spacing-1-minus) !important",

@@ -35,12 +35,12 @@ const SunAndMoonIcon = () => {
 				cx="12"
 				cy="12"
 				r="6"
-				fill={theme.palette.text.secondary}
+				fill={theme.palette.primary.contrastText.secondary}
 				mask="url(#moon-mask)"
 			/>
 			<g
 				className="sun-beams"
-				stroke={theme.palette.text.secondary}
+				stroke={theme.palette.primary.contrastText.secondary}
 			>
 				<line
 					x1="12"

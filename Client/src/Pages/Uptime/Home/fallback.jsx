@@ -21,7 +21,7 @@ const Fallback = ({ isAdmin }) => {
 			border={1}
 			borderRadius={theme.shape.borderRadius}
 			borderColor={theme.palette.border.light}
-			color={theme.palette.text.secondary}
+			color={theme.palette.primary.contrastText.secondary}
 		>
 			<Box pb={theme.spacing(20)}>
 				{mode === "light" ? <PlaceholderLight /> : <PlaceholderDark />}

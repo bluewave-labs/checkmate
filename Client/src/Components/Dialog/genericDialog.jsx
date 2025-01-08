@@ -37,7 +37,7 @@ const GenericDialog = ({ title, description, open, onClose, theme, children }) =
 					id={titleId}
 					component="h2"
 					fontSize={16}
-					color={theme.palette.text.primary}
+					color={theme.palette.primary.contrastText.main}
 					fontWeight={600}
 				>
 					{title}
@@ -45,7 +45,7 @@ const GenericDialog = ({ title, description, open, onClose, theme, children }) =
 				{description && (
 					<Typography
 						id={descriptionId}
-						color={theme.palette.text.tertiary}
+						color={theme.palette.primary.contrastText.tertiary}
 					>
 						{description}
 					</Typography>

@@ -101,7 +101,7 @@ const TextInput = forwardRef(
 				<Typography
 					component="h3"
 					fontSize={"var(--env-var-font-size-medium)"}
-					color={theme.palette.text.secondary}
+					color={theme.palette.primary.contrastText.secondary}
 					fontWeight={500}
 				>
 					{label}

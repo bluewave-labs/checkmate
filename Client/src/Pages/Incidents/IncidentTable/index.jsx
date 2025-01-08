@@ -159,7 +159,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 					</Box>
 					<Typography
 						textAlign="center"
-						color={theme.palette.text.secondary}
+						color={theme.palette.primary.contrastText.secondary}
 					>
 						The monitor you have selected has no recorded incidents yet.
 					</Typography>
@@ -185,7 +185,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 										"YYYY-MM-DD HH:mm:ss A",
 										uiTimezone
 									);
-					
+
 									return (
 										<TableRow key={check._id}>
 											<TableCell>{monitors[check.monitorId]?.name}</TableCell>

@@ -29,7 +29,7 @@ import Dialog from "../../Dialog";
 const ProfilePanel = () => {
 	const theme = useTheme();
 	const dispatch = useDispatch();
-	
+
 	const SPACING_GAP = theme.spacing(12);
 
 	//redux state
@@ -216,7 +216,7 @@ const ProfilePanel = () => {
 			value="profile"
 			sx={{
 				"& h1, & p, & input": {
-					color: theme.palette.text.tertiary,
+					color: theme.palette.primary.contrastText.tertiary,
 				},
 			}}
 		>
@@ -225,9 +225,12 @@ const ProfilePanel = () => {
 				className="edit-profile-form"
 				noValidate
 				spellCheck="false"
-				gap={SPACING_GAP} 
+				gap={SPACING_GAP}
 			>
-				<Stack direction="row" gap={SPACING_GAP}>
+				<Stack
+					direction="row"
+					gap={SPACING_GAP}
+				>
 					<Box flex={0.9}>
 						<Typography component="h1">First name</Typography>
 					</Box>
@@ -242,7 +245,10 @@ const ProfilePanel = () => {
 						flex={1}
 					/>
 				</Stack>
-				<Stack direction="row" gap={SPACING_GAP}>
+				<Stack
+					direction="row"
+					gap={SPACING_GAP}
+				>
 					<Box flex={0.9}>
 						<Typography component="h1">Last name</Typography>
 					</Box>
@@ -257,7 +263,10 @@ const ProfilePanel = () => {
 						flex={1}
 					/>
 				</Stack>
-				<Stack direction="row" gap={SPACING_GAP}>
+				<Stack
+					direction="row"
+					gap={SPACING_GAP}
+				>
 					<Stack flex={0.9}>
 						<Typography component="h1">Email</Typography>
 						<Typography
@@ -277,7 +286,10 @@ const ProfilePanel = () => {
 						flex={1}
 					/>
 				</Stack>
-				<Stack direction="row" gap={SPACING_GAP}>
+				<Stack
+					direction="row"
+					gap={SPACING_GAP}
+				>
 					<Stack flex={0.9}>
 						<Typography component="h1">Your photo</Typography>
 						<Typography

@@ -59,7 +59,7 @@ const IconBox = styled(Box)(
 			width: svgWidth,
 			height: svgHeight,
 			"& path": {
-				stroke: theme.palette.text.tertiary,
+				stroke: theme.palette.primary.contrastText.tertiary,
 			},
 		},
 	})

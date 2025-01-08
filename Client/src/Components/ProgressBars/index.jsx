@@ -90,7 +90,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 						{error}
 					</Typography>
 				) : (
-					<Box color={theme.palette.text.tertiary}>
+					<Box color={theme.palette.primary.contrastText.tertiary}>
 						<Typography
 							component="h2"
 							mb={theme.spacing(1.5)}

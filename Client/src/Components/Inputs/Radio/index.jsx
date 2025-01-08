@@ -43,7 +43,7 @@ const Radio = (props) => {
 						height: 16,
 						boxShadow: `inset 0 0 0 1px ${theme.palette.secondary.main}`,
 						"&:not(.Mui-checked)": {
-							boxShadow: `inset 0 0 0 1px ${theme.palette.text.primary}70`, // Use theme text color for the outline
+							boxShadow: `inset 0 0 0 1px ${theme.palette.primary.contrastText.main}70`, // Use theme text color for the outline
 						},
 						mt: theme.spacing(0.5),
 					}}
@@ -56,7 +56,7 @@ const Radio = (props) => {
 					<Typography
 						component="h6"
 						mt={theme.spacing(1)}
-						color={theme.palette.text.secondary}
+						color={theme.palette.primary.contrastText.secondary}
 					>
 						{props.desc}
 					</Typography>

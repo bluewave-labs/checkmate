@@ -77,7 +77,7 @@ const LandingPage = ({ isSuperAdmin, onSignup }) => {
 							}}
 							sx={{
 								"&:hover": {
-									color: theme.palette.text.tertiary,
+									color: theme.palette.primary.contrastText.tertiary,
 								},
 							}}
 						>
@@ -95,7 +95,7 @@ const LandingPage = ({ isSuperAdmin, onSignup }) => {
 							}}
 							sx={{
 								"&:hover": {
-									color: theme.palette.text.tertiary,
+									color: theme.palette.primary.contrastText.tertiary,
 								},
 							}}
 						>

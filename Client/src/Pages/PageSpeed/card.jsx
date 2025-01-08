@@ -33,7 +33,7 @@ const CustomToolTip = ({ payload }) => {
 		>
 			<Typography
 				sx={{
-					color: theme.palette.text.tertiary,
+					color: theme.palette.primary.contrastText.tertiary,
 					fontSize: 12,
 					fontWeight: 500,
 				}}
@@ -52,7 +52,7 @@ const CustomToolTip = ({ payload }) => {
 				mt={theme.spacing(1)}
 				sx={{
 					"& span": {
-						color: theme.palette.text.tertiary,
+						color: theme.palette.primary.contrastText.tertiary,
 						fontSize: 11,
 						fontWeight: 500,
 					},
@@ -299,7 +299,7 @@ const Card = ({ monitor }) => {
 									<Typography
 										component="span"
 										fontSize={12}
-										color={theme.palette.text.primary}
+										color={theme.palette.primary.contrastText.main}
 									>
 										{time}{" "}
 									</Typography>
