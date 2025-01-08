@@ -523,13 +523,6 @@ const getMonitorsByTeamId = async (req) => {
 
 	const sort = { [field]: order === "asc" ? 1 : -1 };
 
-	if (filter !== undefined) {
-		matchStage.$or = [
-			{ name: { $regex: filter, $options: "i" } },
-			{ url: { $regex: filter, $options: "i" } },
-		];
-	}
-
 	const results = await Monitor.aggregate([
 		{ $match: matchStage },
 		{
@@ -563,6 +556,18 @@ const getMonitorsByTeamId = async (req) => {
 					},
 				],
 				monitors: [
+					...(filter !== undefined
+						? [
+								{
+									$match: {
+										$or: [
+											{ name: { $regex: filter, $options: "i" } },
+											{ url: { $regex: filter, $options: "i" } },
+										],
+									},
+								},
+							]
+						: []),
 					{ $sort: sort },
 					{ $skip: skip },
 					...(rowsPerPage ? [{ $limit: rowsPerPage }] : []),
