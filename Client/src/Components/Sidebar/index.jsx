@@ -421,74 +421,7 @@ function Sidebar() {
 							<Collapse
 								in={open[`${item.name}`]}
 								timeout="auto"
-							>
-								{/* <List
-									component="div"
-									disablePadding
-									sx={{ pl: theme.spacing(12) }}
-								>
-									{item.nested.map((child) => {
-										if (
-											child.name === "Team" &&
-											authState.user?.role &&
-											!authState.user.role.includes("superadmin")
-										) {
-											return null;
-										}
-
-										return (
-											<ListItemButton
-												className={
-													location.pathname.includes(child.path) ? "selected-path" : ""
-												}
-												key={child.path}
-												onClick={() => {
-													const url = URL_MAP[child.path];
-													if (url) {
-														window.open(url, "_blank", "noreferrer");
-													} else {
-														navigate(`/${child.path}`);
-													}
-												}}
-												sx={{
-													gap: theme.spacing(4),
-													borderRadius: theme.shape.borderRadius,
-													pl: theme.spacing(4),
-													"&::before": {
-														content: `""`,
-														position: "absolute",
-														top: 0,
-														left: "-7px",
-														height: "100%",
-														borderLeft: 1,
-														borderLeftColor: theme.palette.other.line,
-													},
-													"&:last-child::before": {
-														height: "50%",
-													},
-													"&::after": {
-														content: `""`,
-														position: "absolute",
-														top: "45%",
-														left: "-8px",
-														height: "3px",
-														width: "3px",
-														borderRadius: "50%",
-														backgroundColor: theme.palette.other.line,
-													},
-													"&.selected-path::after": {
-														backgroundColor: theme.palette.text.tertiary,
-														transform: "scale(1.2)",
-													},
-												}}
-											>
-												<ListItemIcon sx={{ minWidth: 0 }}>{child.icon}</ListItemIcon>
-												<ListItemText>{child.name}</ListItemText>
-											</ListItemButton>
-										);
-									})}
-								</List> */}
-							</Collapse>
+							></Collapse>
 						</React.Fragment>
 					)
 				)}
