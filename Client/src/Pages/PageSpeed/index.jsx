@@ -19,7 +19,7 @@ const PageSpeed = () => {
 	const { user, authToken } = useSelector((state) => state.auth);
 	const [isLoading, setIsLoading] = useState(true);
 	const [monitors, setMonitors] = useState([]);
-	const [monitorCount, setMonitorCount] = useState(0);
+	const [summary, setSummary] = useState({});
 
 	useEffect(() => {
 		const fetchMonitors = async () => {
@@ -30,9 +30,6 @@ const PageSpeed = () => {
 					teamId: user.teamId,
 					limit: 10,
 					types: ["pagespeed"],
-					status: null,
-					checkOrder: "desc",
-					normalize: true,
 					page: null,
 					rowsPerPage: null,
 					filter: null,
@@ -41,7 +38,7 @@ const PageSpeed = () => {
 				});
 				if (res?.data?.data?.monitors) {
 					setMonitors(res.data.data.monitors);
-					setMonitorCount(res.data.data.monitorCount);
+					setSummary(res.data.data.summary);
 				}
 			} catch (error) {
 				console.log(error);
@@ -113,7 +110,7 @@ const PageSpeed = () => {
 							borderColor={theme.palette.border.light}
 							backgroundColor={theme.palette.background.accent}
 						>
-							{monitorCount}
+							{summary?.totalMonitors ?? 0}
 						</Box>
 					</Stack>
 					<Grid
