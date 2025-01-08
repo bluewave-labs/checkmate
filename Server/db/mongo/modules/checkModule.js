@@ -178,7 +178,7 @@ const getTeamChecks = async (req) => {
 					checksQuery.status = false;
 					break;
 				case "resolve":
-					checksQuery.status = true;
+					checksQuery.statusCode = 5000;
 					break;
 				default:
 					logger.warn({
