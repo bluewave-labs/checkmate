@@ -12,6 +12,7 @@ import {
 	buildUptimeDetailsPipeline,
 	buildHardwareDetailsPipeline,
 } from "./monitorModuleQueries.js";
+import { ObjectId } from "mongodb";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -570,6 +571,7 @@ const getMonitorsByTeamId = async (req, res) => {
 		} = req.query;
 
 		const monitorQuery = { teamId: req.params.teamId };
+		const monitorCount = await Monitor.countDocuments(monitorQuery);
 
 		if (type !== undefined) {
 			monitorQuery.type = Array.isArray(type) ? { $in: type } : type;
@@ -582,46 +584,118 @@ const getMonitorsByTeamId = async (req, res) => {
 				{ url: { $regex: filter, $options: "i" } },
 			];
 		}
-		const monitorCount = await Monitor.countDocuments(monitorQuery);
 
 		// Pagination
 		const skip = page && rowsPerPage ? page * rowsPerPage : 0;
 
 		// Build Sort option
-		const sort = field ? { [field]: order === "asc" ? 1 : -1 } : {};
+		const sort = { [field]: order === "asc" ? 1 : -1 };
 
-		const monitors = await Monitor.find(monitorQuery)
-			.skip(skip)
-			.limit(rowsPerPage)
-			.sort(sort);
-
-		// Early return if limit is set to -1, indicating we don't want any checks
-		if (limit === "-1") {
-			return { monitors, monitorCount };
+		const matchStage = { teamId: new ObjectId(req.params.teamId) };
+		if (type !== undefined) {
+			matchStage.type = Array.isArray(type) ? { $in: type } : type;
 		}
-		// Map each monitor to include its associated checks
-		const monitorsWithChecks = await Promise.all(
-			monitors.map(async (monitor) => {
-				let model = CHECK_MODEL_LOOKUP[monitor.type];
+		if (filter !== undefined) {
+			matchStage.$or = [
+				{ name: { $regex: filter, $options: "i" } },
+				{ url: { $regex: filter, $options: "i" } },
+			];
+		}
 
-				// Checks are order newest -> oldest
-				let checks = await model
-					.find({
-						monitorId: monitor._id,
-						...(status && { status }),
-					})
-					.sort({ createdAt: checkOrder === "asc" ? 1 : -1 })
-
-					.limit(limit || 0);
-
-				//Normalize checks if requested
-				if (normalize !== undefined) {
-					checks = NormalizeData(checks, 10, 100);
-				}
-				return { ...monitor.toObject(), checks };
-			})
-		);
-		return { monitors: monitorsWithChecks, monitorCount };
+		let result = await Monitor.aggregate([
+			{ $match: matchStage },
+			{ $skip: parseInt(skip) },
+			...(rowsPerPage ? [{ $limit: parseInt(rowsPerPage) }] : []),
+			{ $sort: sort },
+			{
+				$lookup: {
+					from: "checks",
+					let: { monitorId: "$_id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: { $eq: ["$monitorId", "$$monitorId"] },
+								...(status && { status }),
+							},
+						},
+						{ $sort: { createdAt: checkOrder === "asc" ? 1 : -1 } },
+						{ $limit: parseInt(limit) || 0 },
+					],
+					as: "standardchecks",
+				},
+			},
+			{
+				$lookup: {
+					from: "pagespeedchecks",
+					let: { monitorId: "$_id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: { $eq: ["$monitorId", "$$monitorId"] },
+								...(status && { status }),
+							},
+						},
+						{ $sort: { createdAt: checkOrder === "asc" ? 1 : -1 } },
+						{ $limit: parseInt(limit) || 0 },
+					],
+					as: "pagespeedchecks",
+				},
+			},
+			{
+				$lookup: {
+					from: "hardwarechecks",
+					let: { monitorId: "$_id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: { $eq: ["$monitorId", "$$monitorId"] },
+								...(status && { status }),
+							},
+						},
+						{ $sort: { createdAt: checkOrder === "asc" ? 1 : -1 } },
+						{ $limit: parseInt(limit) || 0 },
+					],
+					as: "hardwarechecks",
+				},
+			},
+			{
+				$addFields: {
+					checks: {
+						$switch: {
+							branches: [
+								{
+									case: { $in: ["$type", ["http", "ping", "docker", "port"]] },
+									then: "$standardchecks",
+								},
+								{
+									case: { $eq: ["$type", "pagespeed"] },
+									then: "$pagespeedchecks",
+								},
+								{
+									case: { $eq: ["$type", "hardware"] },
+									then: "$hardwarechecks",
+								},
+							],
+							default: [],
+						},
+					},
+				},
+			},
+			{
+				$project: {
+					standardchecks: 0,
+					pagespeedchecks: 0,
+					hardwarechecks: 0,
+				},
+			},
+		]);
+		if (normalize) {
+			result = result.map((monitor) => {
+				monitor.checks = NormalizeData(monitor.checks, 10, 100);
+				return monitor;
+			});
+		}
+		return { monitors: result, monitorCount };
 	} catch (error) {
 		error.service = SERVICE_NAME;
 		error.method = "getMonitorsByTeamId";

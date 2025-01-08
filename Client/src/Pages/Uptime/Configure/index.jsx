@@ -11,7 +11,6 @@ import {
 	updateUptimeMonitor,
 	pauseUptimeMonitor,
 	getUptimeMonitorById,
-	getUptimeSummaryByTeamId,
 	deleteUptimeMonitor,
 } from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
 import TextInput from "../../../Components/Inputs/TextInput";
@@ -157,7 +156,6 @@ const Configure = () => {
 		const action = await dispatch(updateUptimeMonitor({ authToken, monitor: monitor }));
 		if (action.meta.requestStatus === "fulfilled") {
 			createToast({ body: "Monitor updated successfully!" });
-			dispatch(getUptimeSummaryByTeamId(authToken));
 		} else {
 			createToast({ body: "Failed to update monitor." });
 		}
