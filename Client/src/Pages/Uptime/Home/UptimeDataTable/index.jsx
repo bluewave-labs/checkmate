@@ -17,7 +17,6 @@ import { useState, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import PropTypes from "prop-types";
-import { useTraceUpdate } from "../../../../Hooks/useTraceUpdate";
 
 const SearchComponent = memo(
 	({ monitors, debouncedSearch, onSearchChange, setIsSearching }) => {
