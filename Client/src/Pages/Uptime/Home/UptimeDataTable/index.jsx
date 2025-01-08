@@ -12,13 +12,42 @@ import ActionsMenu from "../actionsMenu";
 
 // Utils
 import { useTheme } from "@emotion/react";
-import useDebounce from "../../../../Utils/debounce";
-import { useState } from "react";
 import useUtils from "../../utils";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
+import PropTypes from "prop-types";
 
+/**
+ * UptimeDataTable displays a table of uptime monitors with sorting, searching, and action capabilities
+ * @param {Object} props - Component props
+ * @param {boolean} props.isAdmin - Whether the current user has admin privileges
+ * @param {boolean} props.isLoading - Loading state of the table
+ * @param {Array<{
+ *   _id: string,
+ *   url: string,
+ *   title: string,
+ *   percentage: number,
+ *   percentageColor: string,
+ *   monitor: {
+ *     _id: string,
+ *     type: string,
+ *     checks: Array
+ *   }
+ * }>} props.monitors - Array of monitor objects to display
+ * @param {number} props.monitorCount - Total count of monitors
+ * @param {Object} props.sort - Current sort configuration
+ * @param {string} props.sort.field - Field to sort by
+ * @param {'asc'|'desc'} props.sort.order - Sort direction
+ * @param {Function} props.setSort - Callback to update sort configuration
+ * @param {string} props.search - Current search query
+ * @param {Function} props.setSearch - Callback to update search query
+ * @param {boolean} props.isSearching - Whether a search is in progress
+ * @param {Function} props.setIsSearching - Callback to update search state
+ * @param {Function} props.setIsLoading - Callback to update loading state
+ * @param {Function} props.triggerUpdate - Callback to trigger a data refresh
+ * @returns {JSX.Element} Rendered component
+ */
 const UptimeDataTable = ({
 	isAdmin,
 	isLoading,
@@ -30,6 +59,7 @@ const UptimeDataTable = ({
 	setSearch,
 	isSearching,
 	setIsSearching,
+	setIsLoading,
 	triggerUpdate,
 }) => {
 	const { determineState } = useUtils();
@@ -37,8 +67,6 @@ const UptimeDataTable = ({
 	const theme = useTheme();
 	const navigate = useNavigate();
 
-	//Utils
-	const debouncedFilter = useDebounce(search, 500);
 	const handleSearch = (value) => {
 		setIsSearching(true);
 		setSearch(value);
@@ -146,6 +174,7 @@ const UptimeDataTable = ({
 					monitor={row.monitor}
 					isAdmin={isAdmin}
 					updateRowCallback={triggerUpdate}
+					setIsLoading={setIsLoading}
 					pauseCallback={triggerUpdate}
 				/>
 			),
@@ -187,7 +216,7 @@ const UptimeDataTable = ({
 				</Box>
 			</Stack>
 			<Box position="relative">
-				{isSearching && (
+				{(isSearching || isLoading) && (
 					<>
 						<Box
 							width="100%"
@@ -240,3 +269,21 @@ const UptimeDataTable = ({
 
 const MemoizedUptimeDataTable = memo(UptimeDataTable);
 export default MemoizedUptimeDataTable;
+
+UptimeDataTable.propTypes = {
+	isAdmin: PropTypes.bool,
+	isLoading: PropTypes.bool,
+	monitors: PropTypes.array,
+	monitorCount: PropTypes.number,
+	sort: PropTypes.shape({
+		field: PropTypes.string,
+		order: PropTypes.oneOf(["asc", "desc"]),
+	}),
+	setSort: PropTypes.func,
+	search: PropTypes.string,
+	setSearch: PropTypes.func,
+	isSearching: PropTypes.bool,
+	setIsSearching: PropTypes.func,
+	setIsLoading: PropTypes.func,
+	triggerUpdate: PropTypes.func,
+};

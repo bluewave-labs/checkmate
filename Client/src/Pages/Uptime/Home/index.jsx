@@ -9,11 +9,7 @@ import { Pagination } from "../../../Components/Table/TablePagination";
 
 // Utils
 import { useTheme } from "@emotion/react";
-import { useEffect, useState, useCallback, useMemo, useRef } from "react";
-import {
-	getUptimeSummaryByTeamId,
-	getUptimeMonitorsByTeamId,
-} from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { setRowsPerPage } from "../../../Features/UI/uiSlice";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { createToast } from "../../../Utils/toastUtils";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import useDebounce from "../../../Utils/debounce";
+import { networkService } from "../../../main";
 
 const BREADCRUMBS = [{ name: `Uptime`, path: "/uptime" }];
 
@@ -33,7 +30,9 @@ const UptimeMonitors = () => {
 	const [search, setSearch] = useState("");
 	const [page, setPage] = useState(0);
 	const [isSearching, setIsSearching] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
+	const [monitorsSummary, setMonitorsSummary] = useState({});
 
 	// Utils
 	const debouncedFilter = useDebounce(search, 500);
@@ -41,7 +40,6 @@ const UptimeMonitors = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const isAdmin = useIsAdmin();
-	const { isLoading, monitorsSummary } = useSelector((state) => state.uptimeMonitors);
 	const authState = useSelector((state) => state.auth);
 
 	const fetchParams = useMemo(
@@ -89,30 +87,38 @@ const UptimeMonitors = () => {
 
 	const fetchMonitors = useCallback(async () => {
 		try {
-			const action = await dispatch(getUptimeMonitorsByTeamId(fetchParams));
-			if (action.payload.success) {
-				const { monitors } = action.payload.data;
-				const mappedMonitors = monitors.map((monitor) =>
-					getMonitorWithPercentage(monitor, theme)
-				);
-				setMonitors(mappedMonitors);
-			} else {
-				// TODO: Check for other errors?
-				throw new Error("Error fetching monitors");
-			}
+			setIsLoading(true);
+			const config = fetchParams;
+			const res = await networkService.getMonitorsByTeamId({
+				authToken: config.authToken,
+				teamId: config.teamId,
+				limit: 25,
+				types: ["http", "ping", "docker", "port"],
+				page: config.page,
+				rowsPerPage: config.rowsPerPage,
+				filter: config.filter,
+				field: config.sort.field,
+				order: config.sort.order,
+			});
+			const { monitors, summary } = res.data.data;
+			const mappedMonitors = monitors.map((monitor) =>
+				getMonitorWithPercentage(monitor, theme)
+			);
+			setMonitors(mappedMonitors);
+			setMonitorsSummary(summary);
 		} catch (error) {
 			createToast({
 				body: "Error fetching monitors",
 			});
 		} finally {
+			setIsLoading(false);
 			setIsSearching(false);
 		}
-	}, [fetchParams, dispatch, getMonitorWithPercentage, theme]);
+	}, [fetchParams, getMonitorWithPercentage, theme]);
 
 	useEffect(() => {
-		dispatch(getUptimeSummaryByTeamId(authState.authToken));
 		fetchMonitors();
-	}, [fetchMonitors, monitorUpdateTrigger, authState.authToken, dispatch]);
+	}, [fetchMonitors, monitorUpdateTrigger]);
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -131,7 +137,7 @@ const UptimeMonitors = () => {
 	const triggerUpdate = () => {
 		setMonitorUpdateTrigger((prev) => !prev);
 	};
-	const totalMonitors = monitorsSummary?.monitorCounts?.total;
+	const totalMonitors = monitorsSummary.totalMonitors;
 	const hasMonitors = totalMonitors > 0;
 	const canAddMonitor = isAdmin && hasMonitors;
 
@@ -176,19 +182,20 @@ const UptimeMonitors = () => {
 							>
 								<StatusBox
 									title="up"
-									value={monitorsSummary?.monitorCounts?.up ?? 0}
+									value={monitorsSummary?.upMonitors ?? 0}
 								/>
 								<StatusBox
 									title="down"
-									value={monitorsSummary?.monitorCounts?.down ?? 0}
+									value={monitorsSummary?.downMonitors ?? 0}
 								/>
 								<StatusBox
 									title="paused"
-									value={monitorsSummary?.monitorCounts?.paused ?? 0}
+									value={monitorsSummary?.pausedMonitors ?? 0}
 								/>
 							</Stack>
 							<UptimeDataTable
 								isAdmin={isAdmin}
+								isLoading={isLoading}
 								monitors={monitors}
 								monitorCount={totalMonitors}
 								sort={sort}
@@ -197,6 +204,7 @@ const UptimeMonitors = () => {
 								setSearch={setSearch}
 								isSearching={isSearching}
 								setIsSearching={setIsSearching}
+								setIsLoading={setIsLoading}
 								triggerUpdate={triggerUpdate}
 							/>
 							<Pagination

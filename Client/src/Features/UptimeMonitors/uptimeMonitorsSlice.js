@@ -78,62 +78,6 @@ export const getUptimeMonitorById = createAsyncThunk(
 	}
 );
 
-export const getUptimeSummaryByTeamId = createAsyncThunk(
-	"monitors/getSummaryByTeamId",
-	async (token, thunkApi) => {
-		const user = jwtDecode(token);
-		try {
-			const res = await networkService.getMonitorsSummaryByTeamId({
-				authToken: token,
-				teamId: user.teamId,
-				types: ["http", "ping", "docker", "port"],
-			});
-			return res.data;
-		} catch (error) {
-			if (error.response && error.response.data) {
-				return thunkApi.rejectWithValue(error.response.data);
-			}
-			const payload = {
-				status: false,
-				msg: error.message ? error.message : "Unknown error",
-			};
-			return thunkApi.rejectWithValue(payload);
-		}
-	}
-);
-
-export const getUptimeMonitorsByTeamId = createAsyncThunk(
-	"monitors/getMonitorsByTeamId",
-	async (config, thunkApi) => {
-		try {
-			const res = await networkService.getMonitorsByTeamId({
-				authToken: config.authToken,
-				teamId: config.teamId,
-				limit: 25,
-				types: ["http", "ping", "docker", "port"],
-				status: null,
-				checkOrder: "desc",
-				normalize: true,
-				page: config.page,
-				rowsPerPage: config.rowsPerPage,
-				filter: config.filter,
-				field: config.sort.field,
-				order: config.sort.order,
-			});
-			return res.data;
-		} catch (error) {
-			if (error.response && error.response.data) {
-				return thunkApi.rejectWithValue(error.response.data);
-			}
-			const payload = {
-				status: false,
-				msg: error.message ? error.message : "Unknown error",
-			};
-			return thunkApi.rejectWithValue(payload);
-		}
-	}
-);
-
 export const updateUptimeMonitor = createAsyncThunk(
 	"monitors/updateMonitor",
 	async (data, thunkApi) => {
@@ -289,42 +233,6 @@ const uptimeMonitorsSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			// *****************************************************
-			// Summary by teamId
-			// *****************************************************
-
-			.addCase(getUptimeSummaryByTeamId.pending, (state) => {
-				state.isLoading = true;
-			})
-			.addCase(getUptimeSummaryByTeamId.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.success = action.payload.msg;
-				state.monitorsSummary = action.payload.data;
-			})
-			.addCase(getUptimeSummaryByTeamId.rejected, (state, action) => {
-				state.isLoading = false;
-				state.success = false;
-				state.msg = action.payload ? action.payload.msg : "Getting uptime summary failed";
-			})
-
-			// *****************************************************
-			// Monitors by teamId
-			// *****************************************************
-			.addCase(getUptimeMonitorsByTeamId.pending, (state) => {
-				state.isLoading = true;
-			})
-			.addCase(getUptimeMonitorsByTeamId.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.success = action.payload.success;
-				state.msg = action.payload.msg;
-			})
-			.addCase(getUptimeMonitorsByTeamId.rejected, (state, action) => {
-				state.isLoading = false;
-				state.success = false;
-				state.msg = action.payload
-					? action.payload.msg
-					: "Getting uptime monitors failed";
-			})
 			// *****************************************************
 			// Create Monitor
 			// *****************************************************
