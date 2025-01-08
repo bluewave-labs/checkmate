@@ -26,6 +26,7 @@ const NormalizeData = (checks, rangeMin, rangeMax) => {
 		const min = calculatePercentile(checks, 0);
 		const max = calculatePercentile(checks, 95);
 		const normalizedChecks = checks.map((check) => {
+			console.log(check);
 			const originalResponseTime = check.responseTime;
 			// Normalize the response time between 1 and 100
 			let normalizedResponseTime =
@@ -38,7 +39,7 @@ const NormalizeData = (checks, rangeMin, rangeMax) => {
 				Math.min(rangeMax, normalizedResponseTime)
 			);
 			return {
-				...check._doc,
+				...check,
 				responseTime: normalizedResponseTime,
 				originalResponseTime: originalResponseTime,
 			};
