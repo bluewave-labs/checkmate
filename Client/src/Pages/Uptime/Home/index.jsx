@@ -173,48 +173,52 @@ const UptimeMonitors = () => {
 			{
 				<>
 					{!isLoading && !hasMonitors && <Fallback isAdmin={isAdmin} />}
-					{hasMonitors && (
-						<>
-							<Stack
-								gap={theme.spacing(8)}
-								direction="row"
-								justifyContent="space-between"
-							>
-								<StatusBox
-									title="up"
-									value={monitorsSummary?.upMonitors ?? 0}
+					{isLoading ? (
+						<SkeletonLayout />
+					) : (
+						hasMonitors && (
+							<>
+								<Stack
+									gap={theme.spacing(8)}
+									direction="row"
+									justifyContent="space-between"
+								>
+									<StatusBox
+										title="up"
+										value={monitorsSummary?.upMonitors ?? 0}
+									/>
+									<StatusBox
+										title="down"
+										value={monitorsSummary?.downMonitors ?? 0}
+									/>
+									<StatusBox
+										title="paused"
+										value={monitorsSummary?.pausedMonitors ?? 0}
+									/>
+								</Stack>
+								<UptimeDataTable
+									isAdmin={isAdmin}
+									isLoading={isLoading}
+									monitors={monitors}
+									monitorCount={totalMonitors}
+									sort={sort}
+									setSort={setSort}
+									search={search}
+									setSearch={setSearch}
+									isSearching={isSearching}
+									setIsSearching={setIsSearching}
+									setIsLoading={setIsLoading}
+									triggerUpdate={triggerUpdate}
 								/>
-								<StatusBox
-									title="down"
-									value={monitorsSummary?.downMonitors ?? 0}
+								<Pagination
+									monitorCount={totalMonitors}
+									page={page}
+									rowsPerPage={rowsPerPage}
+									handleChangePage={handleChangePage}
+									handleChangeRowsPerPage={handleChangeRowsPerPage}
 								/>
-								<StatusBox
-									title="paused"
-									value={monitorsSummary?.pausedMonitors ?? 0}
-								/>
-							</Stack>
-							<UptimeDataTable
-								isAdmin={isAdmin}
-								isLoading={isLoading}
-								monitors={monitors}
-								monitorCount={totalMonitors}
-								sort={sort}
-								setSort={setSort}
-								search={search}
-								setSearch={setSearch}
-								isSearching={isSearching}
-								setIsSearching={setIsSearching}
-								setIsLoading={setIsLoading}
-								triggerUpdate={triggerUpdate}
-							/>
-							<Pagination
-								monitorCount={totalMonitors}
-								page={page}
-								rowsPerPage={rowsPerPage}
-								handleChangePage={handleChangePage}
-								handleChangeRowsPerPage={handleChangeRowsPerPage}
-							/>
-						</>
+							</>
+						)
 					)}
 				</>
 			}
