@@ -689,10 +689,12 @@ const getMonitorsByTeamId = async (req, res) => {
 				},
 			},
 		]);
-		result = result.map((monitor) => {
-			monitor.checks = NormalizeData(monitor.checks, 10, 100);
-			return monitor;
-		});
+		if (normalize) {
+			result = result.map((monitor) => {
+				monitor.checks = NormalizeData(monitor.checks, 10, 100);
+				return monitor;
+			});
+		}
 
 		return { monitors: result, monitorCount };
 	} catch (error) {
