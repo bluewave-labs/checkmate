@@ -695,7 +695,6 @@ const getMonitorsByTeamId = async (req, res) => {
 				return monitor;
 			});
 		}
-
 		return { monitors: result, monitorCount };
 	} catch (error) {
 		error.service = SERVICE_NAME;
