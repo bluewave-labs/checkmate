@@ -1,13 +1,11 @@
 import {
 	getMonitorByIdParamValidation,
 	getMonitorByIdQueryValidation,
-	getMonitorsByTeamIdValidation,
+	getMonitorsByTeamIdParamValidation,
+	getMonitorsByTeamIdQueryValidation,
 	createMonitorBodyValidation,
 	getMonitorURLByQueryValidation,
 	editMonitorBodyValidation,
-	getMonitorsSummaryByTeamIdParamValidation,
-	getMonitorsSummaryByTeamIdQueryValidation,
-	getMonitorsByTeamIdQueryValidation,
 	pauseMonitorParamValidation,
 	getMonitorStatsByIdParamValidation,
 	getMonitorStatsByIdQueryValidation,
@@ -201,77 +199,6 @@ class MonitorController {
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "getMonitorById"));
-		}
-	};
-
-	/**
-	 * Retrieves all monitors and a summary for a team based on the team ID.
-	 * @async
-	 * @param {Object} req - The Express request object.
-	 * @property {Object} req.params - The parameters of the request.
-	 * @property {string} req.params.teamId - The ID of the team.
-	 * @property {Object} req.query - The query parameters of the request.
-	 * @property {string} req.query.type - The type of the request.
-	 * @param {Object} res - The Express response object.
-	 * @param {function} next - The next middleware function.
-	 * @returns {Object} The response object with a success status, a message, and the data containing the monitors and summary for the team.
-	 * @throws {Error} If there is an error during the process, especially if there is a validation error (422).
-	 */
-	getMonitorsSummaryByTeamId = async (req, res, next) => {
-		try {
-			await getMonitorsSummaryByTeamIdParamValidation.validateAsync(req.params);
-			await getMonitorsSummaryByTeamIdQueryValidation.validateAsync(req.query);
-		} catch (error) {
-			next(handleValidationError(error, SERVICE_NAME));
-			return;
-		}
-
-		try {
-			const { teamId } = req.params;
-			const { type } = req.query;
-			const monitorsSummary = await this.db.getMonitorsSummaryByTeamId(teamId, type);
-			return res.status(200).json({
-				success: true,
-				msg: successMessages.MONITOR_GET_BY_USER_ID(teamId),
-				data: monitorsSummary,
-			});
-		} catch (error) {
-			next(handleError(error, SERVICE_NAME, "getMonitorsAndSummaryByTeamId"));
-		}
-	};
-
-	/**
-	 * Retrieves all monitors associated with a team by the team's ID.
-	 * @async
-	 * @param {Object} req - The Express request object.
-	 * @property {Object} req.params - The parameters of the request.
-	 * @property {string} req.params.teamId - The ID of the team.
-	 * @property {Object} req.query - The query parameters of the request.
-	 * @param {Object} res - The Express response object.
-	 * @param {function} next - The next middleware function.
-	 * @returns {Object} The response object with a success status, a message, and the data containing the monitors for the team.
-	 * @throws {Error} If there is an error during the process, especially if there is a validation error (422).
-	 */
-	getMonitorsByTeamId = async (req, res, next) => {
-		try {
-			await getMonitorsByTeamIdValidation.validateAsync(req.params);
-			await getMonitorsByTeamIdQueryValidation.validateAsync(req.query);
-		} catch (error) {
-			next(handleValidationError(error, SERVICE_NAME));
-			return;
-		}
-
-		try {
-			const teamId = req.params.teamId;
-			const monitors = await this.db.getMonitorsByTeamId(req, res);
-			return res.status(200).json({
-				success: true,
-				msg: successMessages.MONITOR_GET_BY_USER_ID(teamId),
-				data: monitors,
-			});
-		} catch (error) {
-			next(handleError(error, SERVICE_NAME, "getMonitorsByTeamId"));
-			next(error);
 		}
 	};
 
@@ -562,6 +489,26 @@ class MonitorController {
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "addDemoMonitors"));
+		}
+	};
+
+	getMonitorsByTeamId = async (req, res, next) => {
+		try {
+			await getMonitorsByTeamIdParamValidation.validateAsync(req.params);
+			await getMonitorsByTeamIdQueryValidation.validateAsync(req.query);
+		} catch (error) {
+			next(handleValidationError(error, SERVICE_NAME));
+		}
+
+		try {
+			const monitors = await this.db.getMonitorsByTeamId(req);
+			return res.status(200).json({
+				success: true,
+				msg: "good",
+				data: monitors,
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "getMonitorsForDisplay"));
 		}
 	};
 }
