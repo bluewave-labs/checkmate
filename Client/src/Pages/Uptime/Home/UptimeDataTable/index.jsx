@@ -13,10 +13,47 @@ import ActionsMenu from "../actionsMenu";
 // Utils
 import { useTheme } from "@emotion/react";
 import useUtils from "../../utils";
-import { memo } from "react";
+import { useState, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import PropTypes from "prop-types";
+import { useTraceUpdate } from "../../../../Hooks/useTraceUpdate";
+
+const SearchComponent = memo(
+	({ monitors, debouncedSearch, onSearchChange, setIsSearching }) => {
+		const [localSearch, setLocalSearch] = useState(debouncedSearch);
+		const handleSearch = useCallback(
+			(value) => {
+				setIsSearching(true);
+				setLocalSearch(value);
+				onSearchChange(value);
+			},
+			[onSearchChange, setIsSearching]
+		);
+
+		return (
+			<Box
+				width="25%"
+				minWidth={150}
+				ml="auto"
+			>
+				<Search
+					options={monitors}
+					filteredBy="name"
+					inputValue={localSearch}
+					handleInputChange={handleSearch}
+				/>
+			</Box>
+		);
+	}
+);
+SearchComponent.displayName = "SearchComponent";
+SearchComponent.propTypes = {
+	monitors: PropTypes.array,
+	debouncedSearch: PropTypes.string,
+	onSearchChange: PropTypes.func,
+	setIsSearching: PropTypes.func,
+};
 
 /**
  * UptimeDataTable displays a table of uptime monitors with sorting, searching, and action capabilities
@@ -55,7 +92,7 @@ const UptimeDataTable = ({
 	monitorCount,
 	sort,
 	setSort,
-	search,
+	debouncedSearch,
 	setSearch,
 	isSearching,
 	setIsSearching,
@@ -66,11 +103,6 @@ const UptimeDataTable = ({
 
 	const theme = useTheme();
 	const navigate = useNavigate();
-
-	const handleSearch = (value) => {
-		setIsSearching(true);
-		setSearch(value);
-	};
 
 	const handleSort = (field) => {
 		let order = "";
@@ -202,18 +234,13 @@ const UptimeDataTable = ({
 				>
 					{monitorCount}
 				</Box>
-				<Box
-					width="25%"
-					minWidth={150}
-					ml="auto"
-				>
-					<Search
-						options={monitors}
-						filteredBy="name"
-						inputValue={search}
-						handleInputChange={handleSearch}
-					/>
-				</Box>
+
+				<SearchComponent
+					monitors={monitors}
+					debouncedSearch={debouncedSearch}
+					onSearchChange={setSearch}
+					setIsSearching={setIsSearching}
+				/>
 			</Stack>
 			<Box position="relative">
 				{(isSearching || isLoading) && (
@@ -280,7 +307,7 @@ UptimeDataTable.propTypes = {
 		order: PropTypes.oneOf(["asc", "desc"]),
 	}),
 	setSort: PropTypes.func,
-	search: PropTypes.string,
+	debouncedSearch: PropTypes.string,
 	setSearch: PropTypes.func,
 	isSearching: PropTypes.bool,
 	setIsSearching: PropTypes.func,
