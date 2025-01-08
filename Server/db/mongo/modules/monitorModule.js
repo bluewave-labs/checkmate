@@ -30,15 +30,6 @@ const CHECK_MODEL_LOOKUP = {
 	hardware: HardwareCheck,
 };
 
-const MODEL_TYPE_MAPPING = {
-	http: "checks",
-	ping: "checks",
-	docker: "checks",
-	port: "checks",
-	pagespeed: "pagespeedchecks",
-	hardware: "hardwarechecks",
-};
-
 /**
  * Get all monitors
  * @async
