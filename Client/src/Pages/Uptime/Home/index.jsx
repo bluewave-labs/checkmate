@@ -14,6 +14,7 @@ import {
 	getUptimeSummaryByTeamId,
 	getUptimeMonitorsByTeamId,
 } from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
+import { setRowsPerPage } from "../../../Features/UI/uiSlice";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -25,13 +26,12 @@ const BREADCRUMBS = [{ name: `Uptime`, path: "/uptime" }];
 
 const UptimeMonitors = () => {
 	// Redux state
-
+	const rowsPerPage = useSelector((state) => state.ui.monitors.rowsPerPage);
 	// Local state
 	const [monitors, setMonitors] = useState([]);
 	const [sort, setSort] = useState({});
 	const [search, setSearch] = useState("");
 	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [isSearching, setIsSearching] = useState(false);
 	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
 
