@@ -44,6 +44,11 @@ const UptimeMonitors = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const isAdmin = useIsAdmin();
+	const { isLoading, monitorsSummary } = useSelector((state) => state.uptimeMonitors);
+	const authState = useSelector((state) => state.auth);
+	const dispatch = useDispatch({});
+	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
+
 
 	const fetchParams = useMemo(
 		() => ({
@@ -132,7 +137,6 @@ const UptimeMonitors = () => {
 	const triggerUpdate = () => {
 		setMonitorUpdateTrigger((prev) => !prev);
 	};
-
 	const totalMonitors = monitorsSummary?.monitorCounts?.total;
 	const hasMonitors = totalMonitors > 0;
 	const canAddMonitor = isAdmin && hasMonitors;
