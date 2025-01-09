@@ -64,7 +64,14 @@ const UptimeMonitors = () => {
 							onClick={() => {
 								navigate("/uptime/create");
 							}}
-							sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
+							sx={{
+								fontWeight: 500,
+								whiteSpace: "nowrap",
+								/* 
+								TODO Problem, could not make button mui work
+								backgroundColor: theme.palette.accent.main,
+								color: theme.palette.accent.contrastText, */
+							}}
 						>
 							Create new
 						</Button>

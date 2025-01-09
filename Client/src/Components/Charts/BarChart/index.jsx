@@ -39,6 +39,7 @@ const BarChart = ({ checks = [] }) => {
 		>
 			{checks.map((check, index) =>
 				check === "placeholder" ? (
+					/* TODO what is the purpose of this box? */
 					<Box
 						key={`${check}-${index}`}
 						position="relative"
@@ -67,8 +68,8 @@ const BarChart = ({ checks = [] }) => {
 										height={theme.spacing(4)}
 										backgroundColor={
 											check.status
-												? theme.palette.success.main
-												: theme.palette.error.contrastText
+												? theme.palette.success.accent
+												: theme.palette.error.accent
 										}
 										sx={{ borderRadius: "50%" }}
 									/>
@@ -120,16 +121,18 @@ const BarChart = ({ checks = [] }) => {
 										borderRadius: theme.shape.borderRadius,
 										boxShadow: theme.shape.boxShadow,
 										px: theme.spacing(4),
-										py: theme.spacing(2),
+										py: theme.spacing(3),
 									},
 									"& .MuiTooltip-tooltip p": {
+										/* TODO Font size should point to theme */
 										fontSize: 12,
-										color: theme.palette.primary.contrastText.tertiary,
+										color: theme.palette.secondary.contrastText,
 										fontWeight: 500,
 									},
 									"& .MuiTooltip-tooltip span": {
+										/* TODO Font size should point to theme */
 										fontSize: 11,
-										color: theme.palette.primary.contrastText.tertiary,
+										color: theme.palette.secondary.contrastText,
 										fontWeight: 600,
 									},
 								},
@@ -143,13 +146,15 @@ const BarChart = ({ checks = [] }) => {
 							backgroundColor={
 								check.status
 									? theme.palette.success.contrastText
-									: theme.palette.error.dark
+									: theme.palette.error.contrastText
 							}
 							sx={{
 								borderRadius: theme.spacing(1.5),
+								/* 
+								TODO this doesn't seem to be used
 								"&:hover > .MuiBox-root": {
 									filter: "brightness(0.8)",
-								},
+								}, */
 							}}
 						>
 							<Box
@@ -158,7 +163,7 @@ const BarChart = ({ checks = [] }) => {
 								width="100%"
 								height={`${animate ? check.responseTime : 0}%`}
 								backgroundColor={
-									check.status ? theme.palette.success.main : theme.palette.error.main
+									check.status ? theme.palette.success.accent : theme.palette.error.accent
 								}
 								sx={{
 									borderRadius: theme.spacing(1.5),

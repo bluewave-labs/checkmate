@@ -41,6 +41,7 @@ const baseTheme = (palette) => ({
 			defaultProps: {
 				disableRipple: true,
 			},
+
 			styleOverrides: {
 				root: ({ theme }) => ({
 					variants: [
@@ -61,6 +62,13 @@ const baseTheme = (palette) => ({
 								backgroundColor: theme.palette.secondary.main,
 							},
 						},
+						/* {
+							props: (props) => props.variant === "contained",
+							style: {
+								backgroundColor: `${theme.palette.accent.main} !important`,
+							},
+						}, */
+
 						{
 							props: (props) =>
 								props.variant === "contained" && props.color === "secondary",

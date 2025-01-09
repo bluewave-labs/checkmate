@@ -178,7 +178,14 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 				</>
 			)}
 			<TableContainer component={Paper}>
-				<Table>
+				<Table
+					sx={{
+						backgroundColor: theme.palette.primary.main,
+						"& :is(th, td)": {
+							color: theme.palette.primary.contrastText.main,
+						},
+					}}
+				>
 					<TableHead>
 						<TableRow>
 							<TableCell
@@ -241,13 +248,14 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 											: (monitor.uptimePercentage * 100).toFixed(2);
 
 									percentageColor =
+										/* TODO colors update */
 										monitor.uptimePercentage < 0.25
 											? theme.palette.percentage.uptimePoor
 											: monitor.uptimePercentage < 0.5
 												? theme.palette.percentage.uptimeFair
 												: monitor.uptimePercentage < 0.75
 													? theme.palette.percentage.uptimeGood
-													: theme.palette.success.accent;
+													: theme.palette.success.main;
 								}
 
 								const params = {
