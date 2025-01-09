@@ -54,10 +54,10 @@ const GeneralSettingsPanel = () => {
 
 	const handleChange = (event) => {
 		event.preventDefault();
-		const { value, id } = event.target;
+		const { value, id, name } = event.target;
 		setForm((prev) => ({
 			...prev,
-			[id]: value,
+			[id ?? name]: value,
 		}));
 	};
 
@@ -203,6 +203,7 @@ const GeneralSettingsPanel = () => {
 					<Stack gap={theme.spacing(6)}>
 						<Select
 							id="timezone"
+							name="timezone"
 							label="Display timezone"
 							value={form.timezone}
 							onChange={handleChange}
@@ -216,6 +217,7 @@ const GeneralSettingsPanel = () => {
 							loading={progress.isLoading && progress.value !== 100}
 							onChange={handleLogo}
 							isRound={false}
+							maxSize="640KB"
 						/>
 						{progress.isLoading || progress.value !== 0 || errors["logo"] ? (
 							<ProgressUpload

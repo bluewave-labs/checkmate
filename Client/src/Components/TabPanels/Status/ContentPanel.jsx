@@ -30,7 +30,7 @@ const ContentPanel = () => {
 				const response = await networkService.getMonitorsByTeamId({
 					authToken: authToken,
 					teamId: user.teamId,
-					limit: -1,
+					limit: 50,
 					types: ["http", "ping", "pagespeed", "hardware"],
 				});
 				if(response.data.data.monitors.length==0){
