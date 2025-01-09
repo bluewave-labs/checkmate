@@ -136,6 +136,7 @@ const DetailsPage = () => {
 									height="fit-content"
 									gap={theme.spacing(2)}
 								>
+									{/* TODO there is  a tooltip at BarChart component. Wrap the Tooltip on our own component */}
 									<Tooltip
 										title={statusMsg[determineState(monitor)]}
 										disableInteractive
@@ -149,6 +150,21 @@ const DetailsPage = () => {
 														},
 													},
 												],
+												sx: {
+													"& .MuiTooltip-tooltip": {
+														backgroundColor: theme.palette.secondary.main,
+														color: theme.palette.secondary.contrastText,
+														px: theme.spacing(4),
+														py: theme.spacing(3),
+														border: 1,
+														borderColor: theme.palette.primary.lowContrast,
+														borderRadius: theme.shape.borderRadius,
+														boxShadow: theme.shape.boxShadow,
+														/* TODO Font size should point to theme */
+														fontSize: 12,
+														fontWeight: 500,
+													},
+												},
 											},
 										}}
 									>
@@ -204,7 +220,8 @@ const DetailsPage = () => {
 											"& svg": {
 												mr: theme.spacing(3),
 												"& path": {
-													stroke: theme.palette.primary.contrastText.tertiary,
+													/* Should always be contrastText for the button color */
+													stroke: theme.palette.secondary.contrastText,
 												},
 											},
 										}}

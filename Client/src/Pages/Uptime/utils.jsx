@@ -11,10 +11,10 @@ const useUtils = () => {
 	const theme = useTheme();
 
 	const statusColor = {
-		up: theme.palette.success.main,
-		down: theme.palette.error.main,
-		paused: theme.palette.warning.main,
-		pending: theme.palette.warning.main,
+		up: theme.palette.success.accent,
+		down: theme.palette.error.accent,
+		paused: theme.palette.warning.accent,
+		pending: theme.palette.warning.accent,
 	};
 
 	const statusMsg = {
@@ -30,11 +30,12 @@ const useUtils = () => {
 	};
 	const statusStyles = {
 		up: {
-			backgroundColor: theme.palette.success.dark,
-			background: `linear-gradient(340deg, ${theme.palette.success.dark} -60%, ${theme.palette.success.light} 35%)`,
+			backgroundColor: theme.palette.success.accent /* dark */,
+			background: `linear-gradient(340deg, ${theme.palette.success.accent} -60%, ${theme.palette.success.contrastText} 35%)`,
 			borderColor: theme.palette.success.light,
 			"& h2": { color: theme.palette.success.main },
 		},
+		/* TODO solve remaining gradients */
 		down: {
 			backgroundColor: theme.palette.error.dark,
 			background: `linear-gradient(340deg, ${theme.palette.error.light} -60%, ${theme.palette.error.dark} 35%)`,

@@ -32,6 +32,7 @@ const StatBox = ({ heading, subHeading, sx }) => {
 		<Box
 			sx={{
 				padding: `${theme.spacing(4)} ${theme.spacing(8)}`,
+				/* TODO why are we using width and min width here? */
 				minWidth: 200,
 				width: 225,
 				border: 1,
@@ -39,7 +40,7 @@ const StatBox = ({ heading, subHeading, sx }) => {
 				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: 4,
 				backgroundColor: theme.palette.background.main,
-				background: `linear-gradient(340deg, ${theme.palette.background.accent} 20%, ${theme.palette.background.main} 45%)`,
+				/* background: `linear-gradient(340deg, ${theme.palette.background.accent} 20%, ${theme.palette.background.main} 45%)`, */
 				"& h2": {
 					fontSize: 13,
 					fontWeight: 500,
