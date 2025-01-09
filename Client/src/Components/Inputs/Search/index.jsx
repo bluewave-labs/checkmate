@@ -155,16 +155,21 @@ const Search = ({
 				popper: {
 					keepMounted: true,
 					sx: {
-						"& ul": { p: 2 },
+						"& ul": { p: 2, backgroundColor: theme.palette.primary.main },
 						"& li.MuiAutocomplete-option": {
 							color: theme.palette.primary.contrastText.secondary,
 							px: 4,
 							borderRadius: theme.shape.borderRadius,
 						},
+
 						"& .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true'], & .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true'].Mui-focused, & .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true']:hover":
 							{
 								backgroundColor: theme.palette.primary.lowContrast,
 							},
+						"& li.MuiAutocomplete-option:hover:not([aria-selected='true'])": {
+							color: theme.palette.primary.main,
+							backgroundColor: theme.palette.primary.contrastText.secondary,
+						},
 						"& .MuiAutocomplete-noOptions": {
 							px: theme.spacing(6),
 							py: theme.spacing(5),
