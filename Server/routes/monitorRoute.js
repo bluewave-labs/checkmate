@@ -17,6 +17,7 @@ class MonitorRoutes {
 			"/hardware/details/:monitorId",
 			this.monitorController.getHardwareDetailsById
 		);
+
 		this.router.get(
 			"/uptime/details/:monitorId",
 			this.monitorController.getUptimeDetailsById
@@ -30,10 +31,7 @@ class MonitorRoutes {
 			);
 		});
 		this.router.get("/:monitorId", this.monitorController.getMonitorById);
-		this.router.get(
-			"/team/summary/:teamId",
-			this.monitorController.getMonitorsAndSummaryByTeamId
-		);
+
 		this.router.get("/team/:teamId", this.monitorController.getMonitorsByTeamId);
 
 		this.router.get(

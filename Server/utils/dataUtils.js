@@ -38,7 +38,7 @@ const NormalizeData = (checks, rangeMin, rangeMax) => {
 				Math.min(rangeMax, normalizedResponseTime)
 			);
 			return {
-				...check._doc,
+				...check,
 				responseTime: normalizedResponseTime,
 				originalResponseTime: originalResponseTime,
 			};
@@ -47,7 +47,7 @@ const NormalizeData = (checks, rangeMin, rangeMax) => {
 		return normalizedChecks;
 	} else {
 		return checks.map((check) => {
-			return { ...check._doc, originalResponseTime: check.responseTime };
+			return { ...check, originalResponseTime: check.responseTime };
 		});
 	}
 };

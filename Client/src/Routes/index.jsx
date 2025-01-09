@@ -49,6 +49,7 @@ const Routes = () => {
 					path="/uptime"
 					element={<Monitors />}
 				/>
+
 				<Route
 					path="/uptime/create/:monitorId?"
 					element={<CreateMonitor />}
