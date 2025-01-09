@@ -336,7 +336,7 @@ const MaintenanceTable = ({
 						},
 						"& .MuiSelect-select": {
 							border: 1,
-							borderColor: theme.palette.border.light,
+							borderColor: theme.palette.primary.lowContrast,
 							borderRadius: theme.shape.borderRadius,
 						},
 					}}

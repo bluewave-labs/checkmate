@@ -156,7 +156,7 @@ function Infrastructure() {
 					? theme.palette.percentage.uptimeFair
 					: monitor.uptimePercentage < 0.75
 						? theme.palette.percentage.uptimeGood
-						: theme.palette.percentage.uptimeExcellent;
+						: theme.palette.success.accent;
 		return {
 			id: monitor._id,
 			name: monitor.name,
@@ -179,7 +179,7 @@ function Infrastructure() {
 				':has(> [class*="fallback__"])': {
 					position: "relative",
 					border: 1,
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					borderStyle: "dashed",
 					backgroundColor: theme.palette.background.main,
@@ -231,7 +231,7 @@ function Infrastructure() {
 								className="current-monitors-counter"
 								color={theme.palette.primary.contrastText.main}
 								border={1}
-								borderColor={theme.palette.border.light}
+								borderColor={theme.palette.primary.lowContrast}
 								backgroundColor={theme.palette.background.accent}
 							>
 								{totalMonitors}
@@ -313,7 +313,7 @@ function Infrastructure() {
 													<IconButton
 														sx={{
 															"& svg path": {
-																stroke: theme.palette.other.icon,
+																stroke: theme.palette.primary.contrastText.tertiary,
 															},
 														}}
 													>

@@ -360,7 +360,7 @@ const ProfilePanel = () => {
 				aria-hidden="true"
 				sx={{
 					marginY: theme.spacing(20),
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 				}}
 			/>
 			{!user.role.includes("demo") && (

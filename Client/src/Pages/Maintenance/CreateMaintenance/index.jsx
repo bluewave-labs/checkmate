@@ -379,12 +379,12 @@ const CreateMaintenance = () => {
 													pr: theme.spacing(5),
 												},
 												"& fieldset": {
-													borderColor: theme.palette.border.dark,
+													borderColor: theme.palette.primary.lowContrast,
 													borderRadius: theme.shape.borderRadius,
 												},
 												"&:not(:has(.Mui-disabled)):not(:has(.Mui-error)) .MuiOutlinedInput-root:not(:has(input:focus)):hover fieldset":
 													{
-														borderColor: theme.palette.border.dark,
+														borderColor: theme.palette.primary.lowContrast,
 													},
 											},
 										},
@@ -394,7 +394,7 @@ const CreateMaintenance = () => {
 												py: 0,
 												mr: 0,
 												"& path": {
-													stroke: theme.palette.other.icon,
+													stroke: theme.palette.primary.contrastText.tertiary,
 													strokeWidth: 1.1,
 												},
 												"&:hover": { backgroundColor: "transparent" },
@@ -444,12 +444,12 @@ const CreateMaintenance = () => {
 												pl: theme.spacing(5),
 											},
 											"& fieldset": {
-												borderColor: theme.palette.border.dark,
+												borderColor: theme.palette.primary.lowContrast,
 												borderRadius: theme.shape.borderRadius,
 											},
 											"&:not(:has(.Mui-disabled)):not(:has(.Mui-error)) .MuiOutlinedInput-root:not(:has(input:focus)):hover fieldset":
 												{
-													borderColor: theme.palette.border.dark,
+													borderColor: theme.palette.primary.lowContrast,
 												},
 										},
 									},

@@ -148,7 +148,7 @@ const PieChart = ({ audits }) => {
 			stroke: theme.palette.unresolved.main,
 			strokeBg: theme.palette.unresolved.light,
 			text: theme.palette.unresolved.main,
-			bg: theme.palette.unresolved.bg,
+			bg: theme.palette.primary.lowContrast,
 		};
 	};
 

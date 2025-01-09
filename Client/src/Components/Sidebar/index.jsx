@@ -166,7 +166,7 @@ function Sidebar() {
 			gap={theme.spacing(6)}
 			sx={{
 				border: 1,
-				borderColor: theme.palette.border.light,
+				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: theme.shape.borderRadius,
 				backgroundColor: theme.palette.background.main,
 				"& .selected-path, & .MuiListItemButton-root:hover": {
@@ -223,9 +223,9 @@ function Sidebar() {
 						top: 60,
 						right: 0,
 						transform: `translate(50%, 0)`,
-						backgroundColor: theme.palette.background.fill,
+						backgroundColor: theme.palette.primary.lowContrast,
 						border: 1,
-						borderColor: theme.palette.border.light,
+						borderColor: theme.palette.primary.lowContrast,
 						p: theme.spacing(2.5),
 						"& svg": {
 							width: theme.spacing(8),
@@ -236,8 +236,8 @@ function Sidebar() {
 						},
 						"&:focus": { outline: "none" },
 						"&:hover": {
-							backgroundColor: theme.palette.border.light,
-							borderColor: theme.palette.border.light,
+							backgroundColor: theme.palette.primary.lowContrast,
+							borderColor: theme.palette.primary.lowContrast,
 						},
 					}}
 					onClick={() => {
@@ -399,7 +399,7 @@ function Sidebar() {
 												opacity: 0.9,
 												"& svg": {
 													"& path": {
-														stroke: theme.palette.other.icon,
+														stroke: theme.palette.primary.contrastText.tertiary,
 														strokeWidth: 1.1,
 													},
 												},
@@ -474,7 +474,7 @@ function Sidebar() {
 														left: "-7px",
 														height: "100%",
 														borderLeft: 1,
-														borderLeftColor: theme.palette.other.line,
+														borderLeftColor: theme.palette.primary.lowContrast,
 													},
 													"&:last-child::before": {
 														height: "50%",
@@ -487,7 +487,7 @@ function Sidebar() {
 														height: "3px",
 														width: "3px",
 														borderRadius: "50%",
-														backgroundColor: theme.palette.other.line,
+														backgroundColor: theme.palette.primary.lowContrast,
 													},
 													"&.selected-path::after": {
 														backgroundColor: theme.palette.primary.contrastText.tertiary,
@@ -580,7 +580,7 @@ function Sidebar() {
 											height: "22px",
 										},
 										"& svg path": {
-											stroke: theme.palette.other.icon,
+											stroke: theme.palette.primary.contrastText.tertiary,
 										},
 									}}
 									onClick={(event) => openPopup(event, "logout")}
@@ -647,7 +647,7 @@ function Sidebar() {
 							borderRadius: theme.shape.borderRadius,
 							pl: theme.spacing(4),
 							"& svg path": {
-								stroke: theme.palette.other.icon,
+								stroke: theme.palette.primary.contrastText.tertiary,
 							},
 						}}
 					>

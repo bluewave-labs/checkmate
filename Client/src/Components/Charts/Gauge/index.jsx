@@ -84,7 +84,7 @@ function Gauge({ progressValue, width = DEFAULT_WIDTH }) {
 							? theme.palette.primary.main
 							: theme.palette.percentage.uptimePoor
 					}
-					background={{ fill: theme.palette.background.fill }}
+					background={{ fill: theme.palette.primary.lowContrast }}
 					label={{
 						position: "center",
 						content: () => (

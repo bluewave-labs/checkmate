@@ -95,7 +95,7 @@ const ActionsMenu = ({ /* isAdmin, */ maintenanceWindow, updateCallback }) => {
 						outline: "none",
 					},
 					"& svg path": {
-						stroke: theme.palette.other.icon,
+						stroke: theme.palette.primary.contrastText.tertiary,
 					},
 				}}
 			>

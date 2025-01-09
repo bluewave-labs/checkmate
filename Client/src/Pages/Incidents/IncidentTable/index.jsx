@@ -130,7 +130,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 
 	let sharedStyles = {
 		border: 1,
-		borderColor: theme.palette.border.light,
+		borderColor: theme.palette.primary.lowContrast,
 		borderRadius: theme.shape.borderRadius,
 		backgroundColor: theme.palette.background.main,
 		p: theme.spacing(30),

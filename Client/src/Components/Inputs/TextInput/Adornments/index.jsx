@@ -12,7 +12,7 @@ export const HttpAdornment = ({ https }) => {
 			alignItems="center"
 			height="100%"
 			sx={{
-				borderRight: `solid 1px ${theme.palette.border.dark}`,
+				borderRight: `solid 1px ${theme.palette.primary.lowContrast}`,
 				backgroundColor: theme.palette.background.accent,
 				pl: theme.spacing(6),
 			}}
@@ -41,7 +41,7 @@ export const PasswordEndAdornment = ({ fieldType, setFieldType }) => {
 				aria-label="toggle password visibility"
 				onClick={() => setFieldType(fieldType === "password" ? "text" : "password")}
 				sx={{
-					color: theme.palette.border.dark,
+					color: theme.palette.primary.lowContrast,
 					padding: theme.spacing(1),
 					"&:focus-visible": {
 						outline: `2px solid ${theme.palette.primary.main}`,

@@ -68,7 +68,7 @@ const PageSpeed = () => {
 				':has(> [class*="fallback__"])': {
 					position: "relative",
 					border: 1,
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					borderStyle: "dashed",
 					backgroundColor: theme.palette.background.main,
@@ -115,7 +115,7 @@ const PageSpeed = () => {
 							className="current-monitors-counter"
 							color={theme.palette.primary.contrastText.main}
 							border={1}
-							borderColor={theme.palette.border.light}
+							borderColor={theme.palette.primary.lowContrast}
 							backgroundColor={theme.palette.background.accent}
 						>
 							{monitorCount}

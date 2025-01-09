@@ -83,7 +83,7 @@ const InfrastructureMenu = ({ monitor, isAdmin, updateCallback }) => {
 						outline: "none",
 					},
 					"& svg path": {
-						stroke: theme.palette.other.icon,
+						stroke: theme.palette.primary.contrastText.tertiary,
 					},
 				}}
 				ref={anchor}

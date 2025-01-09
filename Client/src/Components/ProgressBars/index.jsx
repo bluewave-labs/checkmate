@@ -30,8 +30,8 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 				height: "fit-content",
 				borderRadius: theme.shape.borderRadius,
 				border: 1,
-				borderColor: theme.palette.border.light,
-				backgroundColor: theme.palette.background.fill,
+				borderColor: theme.palette.primary.lowContrast,
+				backgroundColor: theme.palette.primary.lowContrast,
 				"&:has(.input-error)": {
 					borderColor: theme.palette.error.main,
 					backgroundColor: theme.palette.error.dark,
@@ -60,7 +60,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 							height: 30,
 							minWidth: 30,
 							border: 1,
-							borderColor: theme.palette.border.dark,
+							borderColor: theme.palette.primary.lowContrast,
 							borderRadius: 2,
 							backgroundColor: theme.palette.background.main,
 							"& svg": {
@@ -71,7 +71,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 								width: 23,
 								height: 23,
 								"& path": {
-									fill: theme.palette.other.icon,
+									fill: theme.palette.primary.contrastText.tertiary,
 								},
 							},
 						}}
@@ -148,7 +148,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 								height: "10px",
 								borderRadius: theme.shape.borderRadius,
 								maxWidth: "500px",
-								backgroundColor: theme.palette.border.light,
+								backgroundColor: theme.palette.primary.lowContrast,
 							}}
 						/>
 					</Box>

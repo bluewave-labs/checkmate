@@ -56,7 +56,7 @@ const CustomToolTip = ({ active, payload, label, config }) => {
 				sx={{
 					backgroundColor: theme.palette.background.main,
 					border: 1,
-					borderColor: theme.palette.border.dark,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					py: theme.spacing(2),
 					px: theme.spacing(4),
@@ -238,14 +238,14 @@ const PagespeedDetailsAreaChart = ({ data, interval, metrics }) => {
 				onMouseLeave={() => setIsHovered(false)}
 			>
 				<CartesianGrid
-					stroke={theme.palette.border.light}
+					stroke={theme.palette.primary.lowContrast}
 					strokeWidth={1}
 					strokeOpacity={1}
 					fill="transparent"
 					vertical={false}
 				/>
 				<XAxis
-					stroke={theme.palette.border.dark}
+					stroke={theme.palette.primary.lowContrast}
 					dataKey="createdAt"
 					tick={<CustomTick />}
 					axisLine={false}
@@ -255,7 +255,7 @@ const PagespeedDetailsAreaChart = ({ data, interval, metrics }) => {
 					interval="equidistantPreserveStart"
 				/>
 				<Tooltip
-					cursor={{ stroke: theme.palette.border.light }}
+					cursor={{ stroke: theme.palette.primary.lowContrast }}
 					content={<CustomToolTip config={filteredConfig} />}
 				/>
 				<defs>

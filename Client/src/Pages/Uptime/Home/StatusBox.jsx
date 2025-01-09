@@ -12,7 +12,7 @@ const StatusBox = ({ title, value }) => {
 		position: "absolute",
 		right: 8,
 		opacity: 0.5,
-		"& svg path": { stroke: theme.palette.other.icon },
+		"& svg path": { stroke: theme.palette.primary.contrastText.tertiary },
 	};
 
 	let color;
@@ -45,7 +45,7 @@ const StatusBox = ({ title, value }) => {
 			position="relative"
 			flex={1}
 			border={1}
-			borderColor={theme.palette.border.light}
+			borderColor={theme.palette.primary.lowContrast}
 			borderRadius={theme.shape.borderRadius}
 			backgroundColor={theme.palette.background.main}
 			p={theme.spacing(8)}

@@ -134,13 +134,13 @@ Next step: check if all keys here are being used in the codebase. e.g.: Search c
 // 	},
 // 	border: {
 // 		light: border.light.light,
-// 		dark: border.dark.light,
+// 		dark: primary.lowContrast.light,
 // 	},
 // 	info: {
 // 		text: text.primary.light,
 // 		main: text.tertiary.light,
 // 		bg: background.main.light,
 // 		light: background.main.light,
-// 		border: border.dark.light,
+// 		border: primary.lowContrast.light,
 // 	},
 // };

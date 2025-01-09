@@ -120,7 +120,7 @@ export const InfrastructureTooltip = ({
 				sx={{
 					backgroundColor: theme.palette.background.main,
 					border: 1,
-					borderColor: theme.palette.border.dark,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					py: theme.spacing(2),
 					px: theme.spacing(4),
@@ -200,7 +200,7 @@ export const TemperatureTooltip = ({ active, payload, label, keys, dotColor }) =
 				sx={{
 					backgroundColor: theme.palette.background.main,
 					border: 1,
-					borderColor: theme.palette.border.dark,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					py: theme.spacing(2),
 					px: theme.spacing(4),

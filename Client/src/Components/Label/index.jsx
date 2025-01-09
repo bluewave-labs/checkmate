@@ -87,7 +87,7 @@ const ColoredLabel = ({ label, color }) => {
 	const theme = useTheme();
 	// If an invalid color is passed, default to the labelGray color
 	if (typeof color !== "string" || !/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(color)) {
-		color = theme.palette.border.light;
+		color = theme.palette.primary.lowContrast;
 	}
 
 	// Calculate lighter shades for border and bg
@@ -143,11 +143,11 @@ const StatusLabel = ({ status, text, customStyles }) => {
 		pending: {
 			dotColor: theme.palette.primary.contrastText.secondary,
 			bgColor: theme.palette.background.main,
-			borderColor: theme.palette.border.dark,
+			borderColor: theme.palette.primary.lowContrast,
 		},
 		"cannot resolve": {
 			dotColor: theme.palette.unresolved.main,
-			bgColor: theme.palette.unresolved.bg,
+			bgColor: theme.palette.primary.lowContrast,
 			borderColor: theme.palette.unresolved.light,
 		},
 	};

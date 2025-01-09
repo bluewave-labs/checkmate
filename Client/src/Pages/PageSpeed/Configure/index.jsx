@@ -276,7 +276,7 @@ const PageSpeedConfigure = () => {
 										"& svg": {
 											mr: theme.spacing(2),
 											"& path": {
-												stroke: theme.palette.other.icon,
+												stroke: theme.palette.primary.contrastText.tertiary,
 												strokeWidth: 0.1,
 											},
 										},

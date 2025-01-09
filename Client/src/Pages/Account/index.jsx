@@ -58,7 +58,7 @@ const Account = ({ open = "profile" }) => {
 			px={theme.spacing(20)}
 			py={theme.spacing(12)}
 			border={1}
-			borderColor={theme.palette.border.light}
+			borderColor={theme.palette.primary.lowContrast}
 			borderRadius={theme.shape.borderRadius}
 			backgroundColor={theme.palette.background.main}
 		>
@@ -66,7 +66,7 @@ const Account = ({ open = "profile" }) => {
 				<Box
 					sx={{
 						borderBottom: 1,
-						borderColor: theme.palette.border.light,
+						borderColor: theme.palette.primary.lowContrast,
 						"& .MuiTabs-root": { height: "fit-content", minHeight: "0" },
 					}}
 				>
@@ -94,11 +94,11 @@ const Account = ({ open = "profile" }) => {
 									marginRight: theme.spacing(8),
 									borderBottom: "2px solid transparent",
 									"&:focus": {
-										borderBottom: `2px solid ${theme.palette.border.light}`,
+										borderBottom: `2px solid ${theme.palette.primary.lowContrast}`,
 									},
 
 									"&:hover": {
-										borderBottom: `2px solid ${theme.palette.border.light}`,
+										borderBottom: `2px solid ${theme.palette.primary.lowContrast}`,
 									},
 								}}
 							/>

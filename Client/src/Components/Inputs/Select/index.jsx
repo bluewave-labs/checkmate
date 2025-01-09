@@ -89,13 +89,13 @@ const Select = ({
 					minWidth: "125px",
 					"& fieldset": {
 						borderRadius: theme.shape.borderRadius,
-						borderColor: theme.palette.border.dark,
+						borderColor: theme.palette.primary.lowContrast,
 					},
 					"&:not(.Mui-focused):hover fieldset": {
-						borderColor: theme.palette.border.dark,
+						borderColor: theme.palette.primary.lowContrast,
 					},
 					"& svg path": {
-						fill: theme.palette.other.icon,
+						fill: theme.palette.primary.contrastText.tertiary,
 					},
 					...sx,
 				}}

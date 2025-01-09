@@ -39,7 +39,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 							borderRadius: theme.shape.borderRadius,
 							borderColor: isDragging
 								? theme.palette.primary.main
-								: theme.palette.border.light,
+								: theme.palette.primary.lowContrast,
 							borderWidth: "2px",
 							transition: "0.2s",
 							"&:hover": {
@@ -86,7 +86,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 								sx={{
 									pointerEvents: "none",
 									borderRadius: theme.shape.borderRadius,
-									border: `solid ${theme.shape.borderThick}px ${theme.palette.border.light}`,
+									border: `solid ${theme.shape.borderThick}px ${theme.palette.primary.lowContrast}`,
 									boxShadow: theme.shape.boxShadow,
 								}}
 							>

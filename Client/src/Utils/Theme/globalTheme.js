@@ -48,11 +48,11 @@ const baseTheme = (palette) => ({
 							props: (props) => props.variant === "group",
 							style: {
 								/* color: theme.palette.secondary.contrastText, */
-								color: theme.palette.neutral.contrastText,
-								backgroundColor: theme.palette.background.main,
+								color: theme.palette.primary.contrastText.main,
+								backgroundColor: theme.palette.primary.main,
 								border: 1,
 								borderStyle: "solid",
-								borderColor: theme.palette.border.light,
+								borderColor: theme.palette.primary.lowContrast,
 							},
 						},
 						{
@@ -67,7 +67,7 @@ const baseTheme = (palette) => ({
 							style: {
 								border: 1,
 								borderStyle: "solid",
-								borderColor: theme.palette.border.light,
+								borderColor: theme.palette.primary.lowContrast,
 							},
 						},
 						{
@@ -118,7 +118,7 @@ const baseTheme = (palette) => ({
 					padding: 4,
 					transition: "none",
 					"&:hover": {
-						backgroundColor: theme.palette.background.fill,
+						backgroundColor: theme.palette.primary.lowContrast,
 					},
 				}),
 			},
@@ -131,7 +131,7 @@ const baseTheme = (palette) => ({
 						padding: 0,
 						border: 1,
 						borderStyle: "solid",
-						borderColor: theme.palette.border.light,
+						borderColor: theme.palette.primary.lowContrast,
 						borderRadius: 4,
 						boxShadow: shadow,
 						backgroundColor: theme.palette.background.main,
@@ -166,7 +166,7 @@ const baseTheme = (palette) => ({
 					minWidth: 100,
 					"&:hover, &.Mui-selected, &.Mui-selected:hover, &.Mui-selected.Mui-focusVisible":
 						{
-							backgroundColor: theme.palette.background.fill,
+							backgroundColor: theme.palette.primary.lowContrast,
 						},
 				}),
 			},
@@ -174,7 +174,7 @@ const baseTheme = (palette) => ({
 		MuiTableCell: {
 			styleOverrides: {
 				root: ({ theme }) => ({
-					borderBottomColor: theme.palette.border.light,
+					borderBottomColor: theme.palette.primary.lowContrast,
 				}),
 			},
 		},
@@ -191,7 +191,7 @@ const baseTheme = (palette) => ({
 					backgroundColor: theme.palette.background.main,
 					border: 1,
 					borderStyle: "solid",
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 					"& button": {
 						color: theme.palette.primary.contrastText.tertiary,
 						borderRadius: 4,
@@ -199,7 +199,7 @@ const baseTheme = (palette) => ({
 					"& li:first-of-type button, & li:last-of-type button": {
 						border: 1,
 						borderStyle: "solid",
-						borderColor: theme.palette.border.light,
+						borderColor: theme.palette.primary.lowContrast,
 					},
 				}),
 			},
@@ -208,7 +208,7 @@ const baseTheme = (palette) => ({
 			styleOverrides: {
 				root: ({ theme }) => ({
 					"&:not(.MuiPaginationItem-ellipsis):hover, &.Mui-selected": {
-						backgroundColor: theme.palette.background.fill,
+						backgroundColor: theme.palette.primary.lowContrast,
 					},
 				}),
 			},
@@ -216,7 +216,7 @@ const baseTheme = (palette) => ({
 		MuiSkeleton: {
 			styleOverrides: {
 				root: ({ theme }) => ({
-					backgroundColor: theme.palette.unresolved.bg,
+					backgroundColor: theme.palette.primary.lowContrast,
 				}),
 			},
 		},
@@ -224,7 +224,7 @@ const baseTheme = (palette) => ({
 			styleOverrides: {
 				root: ({ theme }) => ({
 					"& fieldset": {
-						borderColor: theme.palette.border.dark,
+						borderColor: theme.palette.primary.lowContrast,
 						borderRadius: theme.shape.borderRadius,
 					},
 					"& .MuiInputBase-input": {

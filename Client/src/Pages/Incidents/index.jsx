@@ -102,7 +102,7 @@ const Incidents = () => {
 							sx={{
 								ml: "auto",
 								"& .MuiButtonBase-root, & .MuiButtonBase-root:hover": {
-									borderColor: theme.palette.border.light,
+									borderColor: theme.palette.primary.lowContrast,
 								},
 							}}
 						>

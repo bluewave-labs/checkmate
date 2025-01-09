@@ -33,7 +33,7 @@ const Link = ({ level, label, url }) => {
 				":hover": {
 					color: theme.palette.primary.contrastText.tertiary,
 					textDecorationColor: theme.palette.primary.main,
-					backgroundColor: theme.palette.background.fill,
+					backgroundColor: theme.palette.primary.lowContrast,
 				},
 			},
 		},

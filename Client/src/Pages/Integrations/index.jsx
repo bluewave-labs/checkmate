@@ -33,7 +33,7 @@ const IntegrationsComponent = ({ icon, header, info, onClick }) => {
 				pl={theme.spacing(12)}
 				height="100%"
 				border={1}
-				borderColor={theme.palette.border.light}
+				borderColor={theme.palette.primary.lowContrast}
 				borderRadius={theme.shape.borderRadius}
 				backgroundColor={theme.palette.background.main}
 			>

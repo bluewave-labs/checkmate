@@ -90,7 +90,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 						outline: "none",
 					},
 					"& svg path": {
-						stroke: theme.palette.other.icon,
+						stroke: theme.palette.primary.contrastText.tertiary,
 					},
 				}}
 			>

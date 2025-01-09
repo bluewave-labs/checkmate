@@ -28,7 +28,7 @@ const CustomToolTip = ({ active, payload, label }) => {
 				sx={{
 					backgroundColor: theme.palette.background.main,
 					border: 1,
-					borderColor: theme.palette.border.dark,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					py: theme.spacing(2),
 					px: theme.spacing(4),
@@ -155,7 +155,7 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 				onMouseLeave={() => setIsHovered(false)}
 			>
 				<CartesianGrid
-					stroke={theme.palette.border.light}
+					stroke={theme.palette.primary.lowContrast}
 					strokeWidth={1}
 					strokeOpacity={1}
 					fill="transparent"
@@ -182,7 +182,7 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 					</linearGradient>
 				</defs>
 				<XAxis
-					stroke={theme.palette.border.dark}
+					stroke={theme.palette.primary.lowContrast}
 					dataKey="_id"
 					tick={<CustomTick />}
 					minTickGap={0}
@@ -192,7 +192,7 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 					interval="equidistantPreserveStart"
 				/>
 				<Tooltip
-					cursor={{ stroke: theme.palette.border.light }}
+					cursor={{ stroke: theme.palette.primary.lowContrast }}
 					content={<CustomToolTip />}
 					wrapperStyle={{ pointerEvents: "none" }}
 				/>

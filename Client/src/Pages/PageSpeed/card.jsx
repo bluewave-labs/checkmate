@@ -25,7 +25,7 @@ const CustomToolTip = ({ payload }) => {
 			sx={{
 				backgroundColor: theme.palette.background.main,
 				border: 1,
-				borderColor: theme.palette.border.dark,
+				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: theme.shape.borderRadius,
 				py: theme.spacing(2),
 				px: theme.spacing(4),
@@ -134,14 +134,14 @@ const PagespeedAreaChart = ({ data, status }) => {
 				onMouseLeave={() => setIsHovered(false)}
 			>
 				<CartesianGrid
-					stroke={theme.palette.border.light}
+					stroke={theme.palette.primary.lowContrast}
 					strokeWidth={1}
 					strokeOpacity={1}
 					fill="transparent"
 					vertical={false}
 				/>
 				<Tooltip
-					cursor={{ stroke: theme.palette.border.light }}
+					cursor={{ stroke: theme.palette.primary.lowContrast }}
 					content={<CustomToolTip />}
 				/>
 				<defs>
@@ -215,7 +215,7 @@ const Card = ({ monitor }) => {
 				p={theme.spacing(8)}
 				onClick={() => navigate(`/pagespeed/${monitor._id}`)}
 				border={1}
-				borderColor={theme.palette.border.light}
+				borderColor={theme.palette.primary.lowContrast}
 				borderRadius={theme.shape.borderRadius}
 				backgroundColor={theme.palette.background.main}
 				sx={{
@@ -278,7 +278,7 @@ const Card = ({ monitor }) => {
 					px={theme.spacing(4)}
 					borderTop={1}
 					borderRight={1}
-					borderColor={theme.palette.border.light}
+					borderColor={theme.palette.primary.lowContrast}
 					backgroundColor={theme.palette.background.accent}
 					sx={{
 						pointerEvents: "none",

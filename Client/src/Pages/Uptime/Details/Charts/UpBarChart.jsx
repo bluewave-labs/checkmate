@@ -38,7 +38,7 @@ const UpBarChart = memo(({ stats, type, onBarHover }) => {
 				}}
 			>
 				<XAxis
-					stroke={theme.palette.border.dark}
+					stroke={theme.palette.primary.lowContrast}
 					height={15}
 					tick={false}
 					label={

@@ -41,7 +41,7 @@ const HttpStatusLabel = ({ status, customStyles }) => {
 		},
 		default: {
 			dotColor: theme.palette.unresolved.main,
-			bgColor: theme.palette.unresolved.bg,
+			bgColor: theme.palette.primary.lowContrast,
 			borderColor: theme.palette.unresolved.light,
 		},
 	};

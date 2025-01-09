@@ -1,3 +1,5 @@
+import { light } from "@mui/material/styles/createPalette";
+
 const typographyBase = 14;
 
 /* TODO
@@ -257,14 +259,12 @@ const semanticColors = {
 const newColors = {
 	offWhite: "#FEFEFE",
 	offBlack: "#131315",
-	gray300: "#E3E3E3",
-	gray600: "#A2A3A3",
+	gray200: "#E3E3E3",
+	gray500: "#A2A3A3",
 	blueGray50: "#E8F0FE",
 	blueGray500: "#475467",
 	blueGray600: "#344054",
 	blueGray800: "#1C2130",
-	gray200: "#E3E3E3",
-	gray500: "#A2A3A3",
 	blueBlueWave: "#1570EF",
 	green100: "#8CFFCB",
 	green200: "#4B9B77",
@@ -303,12 +303,16 @@ const newSemanticColors = {
 			},
 			secondary: {
 				light: newColors.blueGray600,
-				dark: newColors.gray300,
+				dark: newColors.gray200,
 			},
 			tertiary: {
 				light: newColors.blueGray500,
 				dark: newColors.gray500,
 			},
+		},
+		lowContrast: {
+			light: newColors.gray200,
+			dark: newColors.blueGray600,
 		},
 	},
 	/* For success, warning and error, contrastText works wll with main, and with the theme primary main color. Accent is to be used in graphs */
@@ -374,6 +378,18 @@ const newSemanticColors = {
 		color5: {
 			light: paletteColors.gray50,
 			dark: paletteColors.gray850,
+		},
+	},
+	other: {
+		grid: {
+			light: paletteColors.gray300,
+			dark: paletteColors.gray600,
+		},
+	},
+	unresolved: {
+		main: {
+			light: paletteColors.blue700,
+			dark: paletteColors.purple300,
 		},
 	},
 };

@@ -40,7 +40,7 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 				className="background-pattern-svg"
 				sx={{
 					"& svg g g:last-of-type path": {
-						stroke: theme.palette.border.light,
+						stroke: theme.palette.primary.lowContrast,
 					},
 				}}
 			>

@@ -312,7 +312,7 @@ const BasicTable = ({ data, paginated, reversed, table, emptyMessage = "No data"
 							},
 							"& .MuiSelect-select": {
 								border: 1,
-								borderColor: theme.palette.border.light,
+								borderColor: theme.palette.primary.lowContrast,
 								borderRadius: theme.shape.borderRadius,
 							},
 						}}

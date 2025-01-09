@@ -57,7 +57,7 @@ export default darkTheme;
 
 // const palette = {
 // 	action: {
-// 		disabled: border.dark.disabled,
+// 		disabled: primary.lowContrast.disabled,
 // 	},
 // 	primary: { main: primary.main.dark },
 // 	secondary: {
@@ -128,7 +128,7 @@ export default darkTheme;
 // 	},
 // 	border: {
 // 		light: border.light.dark,
-// 		dark: border.dark.dark,
+// 		dark: primary.lowContrast.dark,
 // 	},
 // 	info: {
 // 		text: text.primary.dark,

@@ -95,12 +95,12 @@ const Search = ({
 						}}
 						sx={{
 							"& fieldset": {
-								borderColor: theme.palette.border.light,
+								borderColor: theme.palette.primary.lowContrast,
 								borderRadius: theme.shape.borderRadius,
 							},
 							"& .MuiOutlinedInput-root:hover:not(:has(input:focus)):not(:has(textarea:focus)) fieldset":
 								{
-									borderColor: theme.palette.border.light,
+									borderColor: theme.palette.primary.lowContrast,
 								},
 							"& .MuiOutlinedInput-root": {
 								paddingY: 0,
@@ -163,7 +163,7 @@ const Search = ({
 						},
 						"& .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true'], & .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true'].Mui-focused, & .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true']:hover":
 							{
-								backgroundColor: theme.palette.background.fill,
+								backgroundColor: theme.palette.primary.lowContrast,
 							},
 						"& .MuiAutocomplete-noOptions": {
 							px: theme.spacing(6),

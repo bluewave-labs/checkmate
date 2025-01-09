@@ -28,12 +28,12 @@ const Breadcrumbs = ({ list }) => {
 			px={theme.spacing(2)}
 			py={theme.spacing(3.5)}
 			width="fit-content"
-			backgroundColor={theme.palette.background.fill}
+			backgroundColor={theme.palette.primary.lowContrast}
 			borderRadius={theme.shape.borderRadius}
 			lineHeight="18px"
 			sx={{
 				"& .MuiBreadcrumbs-li:not(:last-of-type):hover a": {
-					backgroundColor: theme.palette.other.fill,
+					backgroundColor: theme.palette.primary.lowContrast,
 					opacity: 1,
 				},
 			}}

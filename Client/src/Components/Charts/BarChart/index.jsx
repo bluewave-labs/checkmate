@@ -44,7 +44,7 @@ const BarChart = ({ checks = [] }) => {
 						position="relative"
 						width={theme.spacing(4.5)}
 						height="100%"
-						backgroundColor={theme.palette.border.light}
+						backgroundColor={theme.palette.primary.lowContrast}
 						sx={{
 							borderRadius: theme.spacing(1.5),
 						}}
@@ -116,7 +116,7 @@ const BarChart = ({ checks = [] }) => {
 									"& .MuiTooltip-tooltip": {
 										backgroundColor: theme.palette.secondary.main,
 										border: 1,
-										borderColor: theme.palette.border.dark,
+										borderColor: theme.palette.primary.lowContrast,
 										borderRadius: theme.shape.borderRadius,
 										boxShadow: theme.shape.boxShadow,
 										px: theme.spacing(4),

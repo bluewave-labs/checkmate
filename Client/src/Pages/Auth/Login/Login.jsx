@@ -153,7 +153,7 @@ const Login = () => {
 				className="background-pattern-svg"
 				sx={{
 					"& svg g g:last-of-type path": {
-						stroke: theme.palette.border.light,
+						stroke: theme.palette.primary.lowContrast,
 					},
 				}}
 			>
@@ -181,7 +181,7 @@ const Login = () => {
 					"& > .MuiStack-root": {
 						border: 1,
 						borderRadius: theme.spacing(5),
-						borderColor: theme.palette.border.light,
+						borderColor: theme.palette.primary.lowContrast,
 						backgroundColor: theme.palette.background.main,
 						padding: {
 							xs: theme.spacing(12),

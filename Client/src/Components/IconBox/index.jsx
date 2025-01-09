@@ -48,7 +48,7 @@ const IconBox = styled(Box)(
 		position: "relative",
 		border: 1,
 		borderStyle: "solid",
-		borderColor: theme.palette.border.dark,
+		borderColor: theme.palette.primary.lowContrast,
 		borderRadius: borderRadius,
 		backgroundColor: theme.palette.background.accent,
 		"& svg": {

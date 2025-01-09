@@ -112,7 +112,7 @@ const BaseBox = ({ children, sx = {} }) => {
 				backgroundColor: theme.palette.background.main,
 				border: 1,
 				borderStyle: "solid",
-				borderColor: theme.palette.border.light,
+				borderColor: theme.palette.primary.lowContrast,
 				...sx,
 			}}
 		>
@@ -156,7 +156,7 @@ const GaugeBox = ({ value, heading, metricOne, valueOne, metricTwo, valueTwo }) 
 				<Box
 					sx={{
 						width: "100%",
-						borderTop: `1px solid ${theme.palette.border.light}`,
+						borderTop: `1px solid ${theme.palette.primary.lowContrast}`,
 					}}
 				>
 					<Stack
@@ -665,7 +665,7 @@ const InfrastructureDetails = () => {
 				<Empty
 					styles={{
 						border: 1,
-						borderColor: theme.palette.border.light,
+						borderColor: theme.palette.primary.lowContrast,
 						borderRadius: theme.shape.borderRadius,
 						backgroundColor: theme.palette.background.main,
 						p: theme.spacing(30),

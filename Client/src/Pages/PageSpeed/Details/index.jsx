@@ -175,7 +175,7 @@ const PageSpeedDetails = () => {
 									"& svg": {
 										mr: theme.spacing(3),
 										"& path": {
-											stroke: theme.palette.other.icon,
+											stroke: theme.palette.primary.contrastText.tertiary,
 										},
 									},
 								}}
@@ -393,7 +393,7 @@ const PageSpeedDetails = () => {
 											gap={theme.spacing(4)}
 											p={theme.spacing(3)}
 											border={1}
-											borderColor={theme.palette.border.light}
+											borderColor={theme.palette.primary.lowContrast}
 											borderRadius={4}
 										>
 											<Box>

@@ -24,7 +24,7 @@ const GenericDialog = ({ title, description, open, onClose, theme, children }) =
 					width: 400,
 					bgcolor: theme.palette.background.main,
 					border: 1,
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					boxShadow: 24,
 					p: theme.spacing(15),
