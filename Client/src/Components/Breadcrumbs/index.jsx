@@ -28,7 +28,9 @@ const Breadcrumbs = ({ list }) => {
 			px={theme.spacing(2)}
 			py={theme.spacing(3.5)}
 			width="fit-content"
-			backgroundColor={theme.palette.primary.lowContrast}
+			backgroundColor={
+				theme.palette.secondary.main /* theme.palette.primary.lowContrast */
+			}
 			borderRadius={theme.shape.borderRadius}
 			lineHeight="18px"
 			sx={{
@@ -52,7 +54,7 @@ const Breadcrumbs = ({ list }) => {
 							opacity: 0.8,
 							textTransform: "capitalize",
 							"&, &:hover": {
-								color: theme.palette.primary.contrastText.tertiary,
+								color: theme.palette.secondary.contrastText,
 							},
 						}}
 					>

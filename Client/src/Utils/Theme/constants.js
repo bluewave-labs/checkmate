@@ -1,4 +1,4 @@
-import { light } from "@mui/material/styles/createPalette";
+/* import { light } from "@mui/material/styles/createPalette"; */
 
 const typographyBase = 14;
 
@@ -259,6 +259,7 @@ const semanticColors = {
 const newColors = {
 	offWhite: "#FEFEFE",
 	offBlack: "#131315",
+	gray100: "#EFEFEF",
 	gray200: "#E3E3E3",
 	gray500: "#A2A3A3",
 	blueGray50: "#E8F0FE",
@@ -315,6 +316,16 @@ const newSemanticColors = {
 			dark: newColors.blueGray600,
 		},
 	},
+	secondary: {
+		main: {
+			light: newColors.gray100,
+			dark: newColors.gray100,
+		},
+		contrastText: {
+			light: newColors.blueGray600,
+			dark: newColors.gray200,
+		},
+	},
 	/* For success, warning and error, contrastText works wll with main, and with the theme primary main color. Accent is to be used in graphs */
 	success: {
 		main: {
@@ -358,6 +369,7 @@ const newSemanticColors = {
 			dark: newColors.orange600,
 		},
 	},
+	/* These are temporary, just for everything not to break */
 	gradient: {
 		color1: {
 			light: paletteColors.gray90,
@@ -393,7 +405,5 @@ const newSemanticColors = {
 		},
 	},
 };
-
-/* TODO proximo passo: quebrar o projeto */
 
 export { typographyLevels, semanticColors as colors, newSemanticColors };

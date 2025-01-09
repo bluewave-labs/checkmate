@@ -18,21 +18,21 @@ const StatusBox = ({ title, value }) => {
 	let color;
 	let icon;
 	if (title === "up") {
-		color = theme.palette.success.main;
+		color = theme.palette.success.accent;
 		icon = (
 			<Box sx={{ ...sharedStyles, top: 8 }}>
 				<Arrow />
 			</Box>
 		);
 	} else if (title === "down") {
-		color = theme.palette.error.main;
+		color = theme.palette.error.accent;
 		icon = (
 			<Box sx={{ ...sharedStyles, transform: "rotate(180deg)", top: 5 }}>
 				<Arrow />
 			</Box>
 		);
 	} else if (title === "paused") {
-		color = theme.palette.warning.main;
+		color = theme.palette.warning.accent;
 		icon = (
 			<Box sx={{ ...sharedStyles, top: 12, right: 12 }}>
 				<ClockSnooze />
@@ -50,11 +50,6 @@ const StatusBox = ({ title, value }) => {
 			backgroundColor={theme.palette.background.main}
 			p={theme.spacing(8)}
 			overflow="hidden"
-			sx={{
-				"&:hover": {
-					backgroundColor: theme.palette.background.accent,
-				},
-			}}
 		>
 			<Box
 				sx={{

@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material";
 import { baseTheme } from "./globalTheme";
-import { colors, newSemanticColors } from "./constants";
+import { /* colors, */ newSemanticColors } from "./constants";
 
 function extractThemeColors(themeType, colorObject) {
 	if (!["light", "dark"].includes(themeType)) {
