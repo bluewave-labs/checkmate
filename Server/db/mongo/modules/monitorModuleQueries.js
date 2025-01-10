@@ -31,22 +31,43 @@ const buildUptimeDetailsPipeline = (monitor, dates, dateString) => {
 						},
 					},
 				],
-				uptimeDuration: [
-					{
-						$match: {
-							status: false,
-						},
-					},
+				uptimeStreak: [
 					{
 						$sort: {
-							createdAt: 1,
+							createdAt: -1,
 						},
 					},
 					{
 						$group: {
 							_id: null,
-							lastFalseCheck: {
-								$last: "$$ROOT",
+							checks: { $push: "$$ROOT" },
+						},
+					},
+					{
+						$project: {
+							streak: {
+								$reduce: {
+									input: "$checks",
+									initialValue: { checks: [], foundFalse: false },
+									in: {
+										$cond: [
+											{
+												$and: [
+													{ $not: "$$value.foundFalse" }, // Haven't found a false yet
+													{ $eq: ["$$this.status", true] }, // Current check is true
+												],
+											},
+											{
+												checks: { $concatArrays: ["$$value.checks", ["$$this"]] },
+												foundFalse: false,
+											},
+											{
+												checks: "$$value.checks",
+												foundFalse: true, // Mark that we found a false
+											},
+										],
+									},
+								},
 							},
 						},
 					},
@@ -188,6 +209,20 @@ const buildUptimeDetailsPipeline = (monitor, dates, dateString) => {
 		},
 		{
 			$project: {
+				uptimeStreak: {
+					$cond: [
+						{ $eq: [{ $size: { $first: "$uptimeStreak.streak.checks" } }, 0] },
+						0,
+						{
+							$subtract: [
+								new Date(),
+								{
+									$last: { $first: "$uptimeStreak.streak.checks.createdAt" },
+								},
+							],
+						},
+					],
+				},
 				avgResponseTime: {
 					$arrayElemAt: ["$aggregateData.avgResponseTime", 0],
 				},

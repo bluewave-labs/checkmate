@@ -353,6 +353,7 @@ const getUptimeDetailsById = async (req) => {
 		const monitorStats = {
 			...monitor.toObject(),
 			stats: {
+				uptimeStreak: monitorData[0].uptimeStreak,
 				avgResponseTime: monitorData[0].avgResponseTime,
 				totalChecks: monitorData[0].totalChecks,
 				timeSinceLastCheck: monitorData[0].timeSinceLastCheck,
