@@ -340,31 +340,21 @@ const getUptimeDetailsById = async (req) => {
 		};
 
 		const dateString = formatLookup[dateRange];
-		const monitorData = await Check.aggregate(
+		const results = await Check.aggregate(
 			buildUptimeDetailsPipeline(monitor, dates, dateString)
 		);
 
+		const monitorData = results[0];
 		const normalizedGroupChecks = NormalizeDataUptimeDetails(
-			monitorData[0].groupChecks,
+			monitorData.groupedChecks,
 			10,
 			100
 		);
 
 		const monitorStats = {
 			...monitor.toObject(),
-			stats: {
-				avgResponseTime: monitorData[0].avgResponseTime,
-				totalChecks: monitorData[0].totalChecks,
-				timeSinceLastCheck: monitorData[0].timeSinceLastCheck,
-				timeSinceLastFalseCheck: monitorData[0].timeSinceLastFalseCheck,
-				latestResponseTime: monitorData[0].latestResponseTime,
-				groupChecks: normalizedGroupChecks,
-				groupAggregate: monitorData[0].groupAggregate,
-				upChecksAggregate: monitorData[0].upChecksAggregate,
-				upChecks: monitorData[0].upChecks,
-				downChecksAggregate: monitorData[0].downChecksAggregate,
-				downChecks: monitorData[0].downChecks,
-			},
+			...monitorData,
+			groupedChecks: normalizedGroupChecks,
 		};
 
 		return monitorStats;

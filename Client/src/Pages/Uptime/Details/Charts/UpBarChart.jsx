@@ -4,7 +4,7 @@ import { ResponsiveContainer, BarChart, XAxis, Bar, Cell } from "recharts";
 import PropTypes from "prop-types";
 import CustomLabels from "./CustomLabels";
 
-const UpBarChart = memo(({ stats, type, onBarHover }) => {
+const UpBarChart = memo(({ monitor, type, onBarHover }) => {
 	const theme = useTheme();
 	const [chartHovered, setChartHovered] = useState(false);
 	const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
@@ -26,7 +26,7 @@ const UpBarChart = memo(({ stats, type, onBarHover }) => {
 			<BarChart
 				width="100%"
 				height="100%"
-				data={stats.upChecks}
+				data={monitor.groupedUpChecks}
 				onMouseEnter={() => {
 					setChartHovered(true);
 					onBarHover({ time: null, totalChecks: 0, avgResponseTime: 0 });
@@ -47,8 +47,8 @@ const UpBarChart = memo(({ stats, type, onBarHover }) => {
 							y={0}
 							width="100%"
 							height="100%"
-							firstDataPoint={stats.upChecks[0]}
-							lastDataPoint={stats.upChecks[stats.upChecks.length - 1]}
+							firstDataPoint={monitor.groupedUpChecks[0]}
+							lastDataPoint={monitor.groupedUpChecks[monitor.groupedUpChecks.length - 1]}
 							type={type}
 						/>
 					}
@@ -58,7 +58,7 @@ const UpBarChart = memo(({ stats, type, onBarHover }) => {
 					maxBarSize={7}
 					background={{ fill: "transparent" }}
 				>
-					{stats.upChecks.map((entry, index) => {
+					{monitor.groupedUpChecks.map((entry, index) => {
 						let { main, light } = getColorRange(entry.avgResponseTime);
 						return (
 							<Cell
@@ -90,9 +90,8 @@ UpBarChart.displayName = "UpBarChart";
 
 // Validate props using PropTypes
 UpBarChart.propTypes = {
-	stats: PropTypes.shape({
-		upChecks: PropTypes.array,
-		upChecksAggregate: PropTypes.object,
+	monitor: PropTypes.shape({
+		groupedUpChecks: PropTypes.array,
 	}),
 	type: PropTypes.string,
 	onBarHover: PropTypes.func,
