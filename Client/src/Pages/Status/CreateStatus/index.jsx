@@ -31,12 +31,13 @@ import { networkService } from "../../../main";
 		];
 		const tabList = ["General settings", "Contents"];
 		const hasInitForm = initForm && Object.keys(initForm).length > 0;
+		const STATUS_PAGE = import.meta.env.VITE_STATU_PAGE_URL?? "status-page";				
 		const [form, setForm] = useState(
 			hasInitForm
 				? initForm
 				: {
 						companyName: "",
-						url: "",
+						url: STATUS_PAGE,
 						timezone: "America/Toronto",
 						color: "#4169E1",
 						//which fields matching below?
@@ -77,7 +78,7 @@ import { networkService } from "../../../main";
 				theme: mode,
 				logo: { type: form.logo?.type ?? "", size: form.logo?.size ?? "" },
 			};
-			//delete localData.logo
+			delete localData.logo
 			if (
 				hasValidationErrors(localData, publicPageGeneralSettingsValidation, setErrors)
 			) {
@@ -85,8 +86,9 @@ import { networkService } from "../../../main";
 				return;
 			}
 
-			//form.logo = { ...logo, size: formatBytes(logo?.size) };
-			let config = { authToken: authToken, url: "status-page", data: localData };
+			//localData.logo = form.logo
+			localData.url = STATUS_PAGE
+			let config = { authToken: authToken, url: STATUS_PAGE, data: localData };
 			try {
 				const res = await networkService.createStatusPage(config);
 				if (!res.status === 200) {

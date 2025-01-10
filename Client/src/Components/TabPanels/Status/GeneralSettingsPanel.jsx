@@ -17,6 +17,7 @@ import ProgressUpload from "../../ProgressBars";
 import ImageIcon from "@mui/icons-material/Image";
 import { HttpAdornment } from "../../Inputs/TextInput/Adornments";
 import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
+import ColorPicker from "../../Inputs/ColorPicker";
 
 /**
  * General settings panel is ued to compose part of the public static page
@@ -52,6 +53,13 @@ const GeneralSettingsPanel = () => {
 		clearInterval(intervalRef.current);
 		setProgress({ value: 0, isLoading: false });
 	};
+
+	const handleColorChange = (newValue) => {
+		setForm((prev) => ({
+			...prev,
+			color: newValue,
+		}));
+	}
 
 	const handleChange = (event) => {
 		event.preventDefault();
@@ -114,9 +122,7 @@ const GeneralSettingsPanel = () => {
 	};
 
 	return (
-		<TabPanel
-			value="General settings"
-		>
+		<TabPanel value="General settings">
 			<Stack
 				component="form"
 				className="status-general-settings-form"
@@ -170,13 +176,13 @@ const GeneralSettingsPanel = () => {
 							type="url"
 							label="Your status page address"
 							disabled
-							value={SUBDOAMIN_PREFIX+ STATUS_PAGE}
-							// startAdornment={
-							// 	<HttpAdornment
-							// 		prefix={SUBDOAMIN_PREFIX}
-							// 		https={false}
-							// 	/>
-							// }
+							value={form.url ?? STATUS_PAGE}
+							startAdornment={
+								<HttpAdornment
+									prefix={SUBDOAMIN_PREFIX}
+									https={false}
+								/>
+							}
 							onChange={handleChange}
 							onBlur={handleBlur}
 							helperText={errors["url"]}
@@ -227,8 +233,8 @@ const GeneralSettingsPanel = () => {
 								onClick={removeLogo}
 								sx={{
 									width: "100%",
-									maxWidth:"200px",
-									alignSelf: "center"
+									maxWidth: "200px",
+									alignSelf: "center",
 								}}
 							>
 								Remove Logo
@@ -236,14 +242,14 @@ const GeneralSettingsPanel = () => {
 						) : (
 							""
 						)}
-						<TextInput
+						<ColorPicker
 							id="color"
 							label="Color"
 							value={form.color}
 							error={errors["color"]}
-							onChange={handleChange}
+							onChange={handleColorChange}
 							onBlur={handleBlur}
-						/>
+						></ColorPicker>
 					</Stack>
 				</ConfigBox>
 			</Stack>

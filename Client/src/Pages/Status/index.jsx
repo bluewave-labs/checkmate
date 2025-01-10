@@ -17,11 +17,11 @@ const Status = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();	
 	const {authToken} = useSelector((state) => state.auth);
-	const {apiBaseUrl} = useSelector((state) => state.settings);	
 	const [initForm, setInitForm] = useState({});
+	const STATUS_PAGE = import.meta.env.VITE_STATU_PAGE_URL?? "status-page";					
 	useEffect(() => {
 		const getStatusPage = async () => {
-			let config = { authToken: authToken, url: "status-page" };
+			let config = { authToken: authToken, url: STATUS_PAGE };
 			try {
 				let res = await networkService.getStatusPageByUrl(config);			
 				if(res && res.data)
