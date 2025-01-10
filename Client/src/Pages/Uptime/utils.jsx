@@ -33,25 +33,21 @@ const useUtils = () => {
 			backgroundColor: theme.palette.success.dark,
 			background: `linear-gradient(340deg, ${theme.palette.success.dark} -60%, ${theme.palette.success.light} 35%)`,
 			borderColor: theme.palette.success.light,
-			"& h2": { color: theme.palette.success.main },
 		},
 		down: {
 			backgroundColor: theme.palette.error.dark,
 			background: `linear-gradient(340deg, ${theme.palette.error.light} -60%, ${theme.palette.error.dark} 35%)`,
 			borderColor: theme.palette.error.light,
-			"& h2": { color: theme.palette.error.main },
 		},
 		paused: {
 			backgroundColor: theme.palette.warning.dark,
 			background: `linear-gradient(340deg, ${theme.palette.warning.light} -60%, ${theme.palette.warning.dark} 35%)`,
 			borderColor: theme.palette.warning.light,
-			"& h2": { color: theme.palette.warning.main },
 		},
 		pending: {
 			backgroundColor: theme.palette.warning.light,
 			background: `linear-gradient(340deg, ${theme.palette.warning.dark} -60%, ${theme.palette.warning.light} 35%)`,
 			borderColor: theme.palette.warning.dark,
-			"& h2": { color: theme.palette.warning.main },
 		},
 	};
 	const pagespeedStyles = {
