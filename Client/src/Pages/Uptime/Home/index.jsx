@@ -25,13 +25,14 @@ const UptimeMonitors = () => {
 	// Redux state
 	const rowsPerPage = useSelector((state) => state.ui.monitors.rowsPerPage);
 	// Local state
-	const [monitors, setMonitors] = useState([]);
 	const [sort, setSort] = useState({});
 	const [search, setSearch] = useState("");
 	const [page, setPage] = useState(0);
 	const [isSearching, setIsSearching] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
+	const [monitors, setMonitors] = useState([]);
+	const [filteredMonitors, setFilteredMonitors] = useState([]);
 	const [monitorsSummary, setMonitorsSummary] = useState({});
 
 	// Utils
@@ -100,11 +101,12 @@ const UptimeMonitors = () => {
 				field: config.sort.field,
 				order: config.sort.order,
 			});
-			const { monitors, summary } = res.data.data;
-			const mappedMonitors = monitors.map((monitor) =>
+			const { monitors, filteredMonitors, summary } = res.data.data;
+			const mappedMonitors = filteredMonitors.map((monitor) =>
 				getMonitorWithPercentage(monitor, theme)
 			);
-			setMonitors(mappedMonitors);
+			setMonitors(monitors);
+			setFilteredMonitors(mappedMonitors);
 			setMonitorsSummary(summary);
 		} catch (error) {
 			createToast({
@@ -199,6 +201,7 @@ const UptimeMonitors = () => {
 								<UptimeDataTable
 									isAdmin={isAdmin}
 									isLoading={isLoading}
+									filteredMonitors={filteredMonitors}
 									monitors={monitors}
 									monitorCount={totalMonitors}
 									sort={sort}

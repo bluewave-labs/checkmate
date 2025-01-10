@@ -545,6 +545,15 @@ const getMonitorsByTeamId = async (req) => {
 					},
 				],
 				monitors: [
+					{ $sort: sort },
+					{
+						$project: {
+							_id: 1,
+							name: 1,
+						},
+					},
+				],
+				filteredMonitors: [
 					...(filter !== undefined
 						? [
 								{
@@ -657,20 +666,21 @@ const getMonitorsByTeamId = async (req) => {
 		{
 			$project: {
 				summary: { $arrayElemAt: ["$summary", 0] },
+				filteredMonitors: 1,
 				monitors: 1,
 			},
 		},
 	]);
 
-	let { monitors, summary } = results[0];
-	monitors = monitors.map((monitor) => {
+	let { monitors, filteredMonitors, summary } = results[0];
+	filteredMonitors = filteredMonitors.map((monitor) => {
 		if (!monitor.checks) {
 			return monitor;
 		}
 		monitor.checks = NormalizeData(monitor.checks, 10, 100);
 		return monitor;
 	});
-	return { monitors, summary };
+	return { monitors, filteredMonitors, summary };
 };
 
 /**

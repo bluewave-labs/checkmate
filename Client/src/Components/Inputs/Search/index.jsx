@@ -56,7 +56,6 @@ const Search = ({
 	disabled,
 }) => {
 	const theme = useTheme();
-
 	return (
 		<Autocomplete
 			multiple={multiple}
