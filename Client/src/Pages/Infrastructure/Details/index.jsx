@@ -13,9 +13,8 @@ import { useNavigate } from "react-router-dom";
 import Empty from "./empty";
 import { logger } from "../../../Utils/Logger";
 import { formatDurationRounded, formatDurationSplit } from "../../../Utils/timeUtils";
+import { TzTick, PercentTick } from "../../../Components/Charts/Utils/chartUtils";
 import {
-	TzTick,
-	PercentTick,
 	InfrastructureTooltip,
 	TemperatureTooltip,
 } from "../../../Components/Charts/Utils/chartUtils";
@@ -442,12 +441,13 @@ const InfrastructureDetails = () => {
 				yLabel: "Memory usage",
 				yDomain: [0, 1],
 				yTick: <PercentTick />,
-				xTick: <TzTick />,
+				xTick: <TzTick dateRange={dateRange} />,
 				toolTip: (
 					<InfrastructureTooltip
 						dotColor={theme.palette.primary.main}
 						yKey={"avgMemoryUsage"}
 						yLabel={"Memory usage"}
+						dateRange={dateRange}
 					/>
 				),
 			},
@@ -461,12 +461,13 @@ const InfrastructureDetails = () => {
 				yLabel: "CPU usage",
 				yDomain: [0, 1],
 				yTick: <PercentTick />,
-				xTick: <TzTick />,
+				xTick: <TzTick dateRange={dateRange} />,
 				toolTip: (
 					<InfrastructureTooltip
 						dotColor={theme.palette.success.main}
 						yKey={"avgCpuUsage"}
 						yLabel={"CPU usage"}
+						dateRange={dateRange}
 					/>
 				),
 			},
@@ -478,7 +479,7 @@ const InfrastructureDetails = () => {
 				gradientStartColor: theme.palette.error.main,
 				heading: "CPU Temperature",
 				yLabel: "Temperature",
-				xTick: <TzTick />,
+				xTick: <TzTick dateRange={dateRange} />,
 				yDomain: [
 					0,
 					Math.max(
@@ -490,6 +491,7 @@ const InfrastructureDetails = () => {
 					<TemperatureTooltip
 						keys={tempKeys}
 						dotColor={theme.palette.error.main}
+						dateRange={dateRange}
 					/>
 				),
 			},
@@ -504,13 +506,14 @@ const InfrastructureDetails = () => {
 				yLabel: "Disk Usage",
 				yDomain: [0, 1],
 				yTick: <PercentTick />,
-				xTick: <TzTick />,
+				xTick: <TzTick dateRange={dateRange} />,
 				toolTip: (
 					<InfrastructureTooltip
 						dotColor={theme.palette.warning.main}
 						yKey={`disks.usagePercent`}
 						yLabel={"Disc usage"}
 						yIdx={idx}
+						dateRange={dateRange}
 					/>
 				),
 			})) || []),

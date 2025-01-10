@@ -2,7 +2,7 @@ const SERVICE_NAME = "SettingsService";
 import dotenv from "dotenv";
 dotenv.config();
 const envConfig = {
-	logLevel: undefined,
+	logLevel: process.env.LOG_LEVEL,
 	apiBaseUrl: undefined,
 	clientHost: process.env.CLIENT_HOST,
 	jwtSecret: process.env.JWT_SECRET,

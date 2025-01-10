@@ -217,14 +217,51 @@ class NewJobQueue {
 			connection: this.connection,
 			concurrency: 5,
 		});
-		worker.on("failed", (job, err) => {
-			this.logger.error({
-				message: `Worker failed job: ${job.id}`,
-				service: SERVICE_NAME,
-				method: "createWorker",
-				stack: err.stack,
-			});
-		});
+
+		// worker.on("active", (job) => {
+		// 	this.logger.info({
+		// 		message: `Worker started processing job: ${job.id}`,
+		// 		service: SERVICE_NAME,
+		// 		method: "createWorker",
+		// 	});
+		// });
+
+		// worker.on("completed", (job) => {
+		// 	this.logger.info({
+		// 		message: `Worker completed job: ${job.id}`,
+		// 		service: SERVICE_NAME,
+		// 		method: "createWorker",
+		// 	});
+		// });
+
+		// // Log job progress updates
+		// worker.on("progress", (job, progress) => {
+		// 	this.logger.info({
+		// 		message: `Job progress: ${job.id}`,
+		// 		service: SERVICE_NAME,
+		// 		method: "createWorker",
+		// 		details: `Progress: ${progress}%`,
+		// 	});
+		// });
+
+		// // Log when a job fails
+		// worker.on("failed", (job, err) => {
+		// 	this.logger.error({
+		// 		message: `Worker failed job: ${job.id}`,
+		// 		service: SERVICE_NAME,
+		// 		method: "createWorker",
+		// 		details: `Error: ${err.message}`,
+		// 		stack: err.stack,
+		// 	});
+		// });
+
+		// worker.on("stalled", (jobId) => {
+		// 	this.logger.warn({
+		// 		message: `Worker stalled job: ${jobId}`,
+		// 		service: SERVICE_NAME,
+		// 		method: "createWorker",
+		// 	});
+		// });
 		return worker;
 	}
 
@@ -353,8 +390,9 @@ class NewJobQueue {
 					const jobs = await queue.getJobs();
 					const ret = await Promise.all(
 						jobs.map(async (job) => {
+							console.log(job);
 							const state = await job.getState();
-							return { url: job.data.url, state };
+							return { url: job.data.url, state, progress: job.progress };
 						})
 					);
 					stats[name] = { jobs: ret, workers: this.workers[name].length };
