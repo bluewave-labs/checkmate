@@ -508,7 +508,7 @@ class MonitorController {
 				data: monitors,
 			});
 		} catch (error) {
-			next(handleError(error, SERVICE_NAME, "getMonitorsForDisplay"));
+			next(handleError(error, SERVICE_NAME, "getMonitorsByTeamId"));
 		}
 	};
 }
