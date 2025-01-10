@@ -463,8 +463,6 @@ class NewJobQueue {
 				jobTemplate
 			);
 
-			await queue.upsert;
-
 			const workerStats = await this.getWorkerStats(queue);
 			await this.scaleWorkers(workerStats, queue);
 		} catch (error) {
