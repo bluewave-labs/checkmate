@@ -101,7 +101,7 @@ const palette = {
 		accent: background.accent.light,
 		stroke: background.stroke.light,
 		gauge: background.gauge.light,
-		textCard:background.textcard.light
+		textCard:background.textCard.light
 	},
 	border: {
 		light: border.light.light,

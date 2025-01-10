@@ -105,5 +105,7 @@ PageSpeedCheck.pre("save", async function (next) {
 });
 
 PageSpeedCheck.index({ createdAt: 1 });
+PageSpeedCheck.index({ monitorId: 1, createdAt: 1 });
+PageSpeedCheck.index({ monitorId: 1, createdAt: -1 });
 
 export default mongoose.model("PageSpeedCheck", PageSpeedCheck);

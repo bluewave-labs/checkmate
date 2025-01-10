@@ -4,11 +4,15 @@ import PageSpeedCheck from "../../models/PageSpeedCheck.js";
 import HardwareCheck from "../../models/HardwareCheck.js";
 import { errorMessages } from "../../../utils/messages.js";
 import Notification from "../../models/Notification.js";
-import { NormalizeData } from "../../../utils/dataUtils.js";
+import { NormalizeData, NormalizeDataUptimeDetails } from "../../../utils/dataUtils.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-
+import {
+	buildUptimeDetailsPipeline,
+	buildHardwareDetailsPipeline,
+} from "./monitorModuleQueries.js";
+import { ObjectId } from "mongodb";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -21,6 +25,7 @@ const CHECK_MODEL_LOOKUP = {
 	http: Check,
 	ping: Check,
 	docker: Check,
+	port: Check,
 	pagespeed: PageSpeedCheck,
 	hardware: HardwareCheck,
 };
@@ -223,15 +228,22 @@ const getDateRange = (dateRange) => {
  * @returns {Promise<Object>} All checks and date-ranged checks
  */
 const getMonitorChecks = async (monitorId, model, dateRange, sortOrder) => {
+	const indexSpec = {
+		monitorId: 1,
+		createdAt: sortOrder, // This will be 1 or -1
+	};
+
 	const [checksAll, checksForDateRange] = await Promise.all([
-		model.find({ monitorId }).sort({ createdAt: sortOrder }),
+		model.find({ monitorId }).sort({ createdAt: sortOrder }).hint(indexSpec).lean(),
 		model
 			.find({
 				monitorId,
 				createdAt: { $gte: dateRange.start, $lte: dateRange.end },
 			})
-			.sort({ createdAt: sortOrder }),
+			.hint(indexSpec)
+			.lean(),
 	]);
+
 	return { checksAll, checksForDateRange };
 };
 
@@ -304,6 +316,66 @@ const calculateGroupStats = (group) => {
 };
 
 /**
+ * Get uptime details by monitor ID
+ * @async
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Monitor>}
+ * @throws {Error}
+ */
+const getUptimeDetailsById = async (req) => {
+	try {
+		const { monitorId } = req.params;
+		const monitor = await Monitor.findById(monitorId);
+		if (monitor === null || monitor === undefined) {
+			throw new Error(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId));
+		}
+
+		const { dateRange, normalize } = req.query;
+		const dates = getDateRange(dateRange);
+		const formatLookup = {
+			day: "%Y-%m-%dT%H:00:00Z",
+			week: "%Y-%m-%dT%H:00:00Z",
+			month: "%Y-%m-%dT00:00:00Z",
+		};
+
+		const dateString = formatLookup[dateRange];
+		const monitorData = await Check.aggregate(
+			buildUptimeDetailsPipeline(monitor, dates, dateString)
+		);
+
+		const normalizedGroupChecks = NormalizeDataUptimeDetails(
+			monitorData[0].groupChecks,
+			10,
+			100
+		);
+
+		const monitorStats = {
+			...monitor.toObject(),
+			stats: {
+				avgResponseTime: monitorData[0].avgResponseTime,
+				totalChecks: monitorData[0].totalChecks,
+				timeSinceLastCheck: monitorData[0].timeSinceLastCheck,
+				timeSinceLastFalseCheck: monitorData[0].timeSinceLastFalseCheck,
+				latestResponseTime: monitorData[0].latestResponseTime,
+				groupChecks: normalizedGroupChecks,
+				groupAggregate: monitorData[0].groupAggregate,
+				upChecksAggregate: monitorData[0].upChecksAggregate,
+				upChecks: monitorData[0].upChecks,
+				downChecksAggregate: monitorData[0].downChecksAggregate,
+				downChecks: monitorData[0].downChecks,
+			},
+		};
+
+		return monitorStats;
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "getUptimeDetailsById";
+		throw error;
+	}
+};
+
+/**
  * Get stats by monitor ID
  * @async
  * @param {Express.Request} req
@@ -351,7 +423,12 @@ const getMonitorStatsById = async (req) => {
 			),
 		};
 
-		if (monitor.type === "http" || monitor.type === "ping" || monitor.type === "docker") {
+		if (
+			monitor.type === "http" ||
+			monitor.type === "ping" ||
+			monitor.type === "docker" ||
+			monitor.type === "port"
+		) {
 			// HTTP/PING Specific stats
 			monitorStats.periodAvgResponseTime = getAverageResponseTime(checksForDateRange);
 			monitorStats.periodUptime = getUptimePercentage(checksForDateRange);
@@ -363,6 +440,34 @@ const getMonitorStatsById = async (req) => {
 	} catch (error) {
 		error.service = SERVICE_NAME;
 		error.method = "getMonitorStatsById";
+		throw error;
+	}
+};
+
+const getHardwareDetailsById = async (req) => {
+	try {
+		const { monitorId } = req.params;
+		const { dateRange } = req.query;
+		const monitor = await Monitor.findById(monitorId);
+		const dates = getDateRange(dateRange);
+		const formatLookup = {
+			day: "%Y-%m-%dT%H:00:00Z",
+			week: "%Y-%m-%dT%H:00:00Z",
+			month: "%Y-%m-%dT00:00:00Z",
+		};
+		const dateString = formatLookup[dateRange];
+		const hardwareStats = await HardwareCheck.aggregate(
+			buildHardwareDetailsPipeline(monitor, dates, dateString)
+		);
+
+		const monitorStats = {
+			...monitor.toObject(),
+			stats: hardwareStats[0],
+		};
+		return monitorStats;
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "getHardwareDetailsById";
 		throw error;
 	}
 };
@@ -400,121 +505,182 @@ const getMonitorById = async (monitorId) => {
 	}
 };
 
-/**
- * Get monitors and Summary by TeamID
- * @async
- * @param {Express.Request} req
- * @param {Express.Response} res
- * @returns {Promise<Array<Monitor>>}
- * @throws {Error}
- */
+const getMonitorsByTeamId = async (req) => {
+	let { limit, type, page, rowsPerPage, filter, field, order } = req.query;
 
-const getMonitorsAndSummaryByTeamId = async (teamId, type) => {
-	try {
-		const monitors = await Monitor.find({ teamId, type });
-		const monitorCounts = monitors.reduce(
-			(acc, monitor) => {
-				if (monitor.status === true) {
-					acc.up += 1;
-				} else if (monitor.status === false) {
-					acc.down += 1;
-				} else if (monitor.isActive === false) {
-					acc.paused += 1;
-				}
-				return acc;
+	limit = parseInt(limit);
+	page = parseInt(page);
+	rowsPerPage = parseInt(rowsPerPage);
+
+	// Build the match stage
+	const matchStage = { teamId: ObjectId.createFromHexString(req.params.teamId) };
+	if (type !== undefined) {
+		matchStage.type = Array.isArray(type) ? { $in: type } : type;
+	}
+
+	const skip = page && rowsPerPage ? page * rowsPerPage : 0;
+
+	const sort = { [field]: order === "asc" ? 1 : -1 };
+
+	const results = await Monitor.aggregate([
+		{ $match: matchStage },
+		{
+			$facet: {
+				summary: [
+					{
+						$group: {
+							_id: null,
+							totalMonitors: { $sum: 1 },
+							upMonitors: {
+								$sum: {
+									$cond: [{ $eq: ["$status", true] }, 1, 0],
+								},
+							},
+							downMonitors: {
+								$sum: {
+									$cond: [{ $eq: ["$status", false] }, 1, 0],
+								},
+							},
+							pausedMonitors: {
+								$sum: {
+									$cond: [{ $eq: ["$isActive", false] }, 1, 0],
+								},
+							},
+						},
+					},
+					{
+						$project: {
+							_id: 0,
+						},
+					},
+				],
+				monitors: [
+					...(filter !== undefined
+						? [
+								{
+									$match: {
+										$or: [
+											{ name: { $regex: filter, $options: "i" } },
+											{ url: { $regex: filter, $options: "i" } },
+										],
+									},
+								},
+							]
+						: []),
+					{ $sort: sort },
+					{ $skip: skip },
+					...(rowsPerPage ? [{ $limit: rowsPerPage }] : []),
+					...(limit
+						? [
+								{
+									$lookup: {
+										from: "checks",
+										let: { monitorId: "$_id" },
+										pipeline: [
+											{
+												$match: {
+													$expr: { $eq: ["$monitorId", "$$monitorId"] },
+												},
+											},
+											{ $sort: { createdAt: -1 } },
+											...(limit ? [{ $limit: limit }] : []),
+										],
+										as: "standardchecks",
+									},
+								},
+							]
+						: []),
+					...(limit
+						? [
+								{
+									$lookup: {
+										from: "pagespeedchecks",
+										let: { monitorId: "$_id" },
+										pipeline: [
+											{
+												$match: {
+													$expr: { $eq: ["$monitorId", "$$monitorId"] },
+												},
+											},
+											{ $sort: { createdAt: -1 } },
+											...(limit ? [{ $limit: limit }] : []),
+										],
+										as: "pagespeedchecks",
+									},
+								},
+							]
+						: []),
+					...(limit
+						? [
+								{
+									$lookup: {
+										from: "hardwarechecks",
+										let: { monitorId: "$_id" },
+										pipeline: [
+											{
+												$match: {
+													$expr: { $eq: ["$monitorId", "$$monitorId"] },
+												},
+											},
+											{ $sort: { createdAt: -1 } },
+											...(limit ? [{ $limit: limit }] : []),
+										],
+										as: "hardwarechecks",
+									},
+								},
+							]
+						: []),
+
+					{
+						$addFields: {
+							checks: {
+								$switch: {
+									branches: [
+										{
+											case: { $in: ["$type", ["http", "ping", "docker", "port"]] },
+											then: "$standardchecks",
+										},
+										{
+											case: { $eq: ["$type", "pagespeed"] },
+											then: "$pagespeedchecks",
+										},
+										{
+											case: { $eq: ["$type", "hardware"] },
+											then: "$hardwarechecks",
+										},
+									],
+									default: [],
+								},
+							},
+						},
+					},
+					{
+						$project: {
+							standardchecks: 0,
+							pagespeedchecks: 0,
+							hardwarechecks: 0,
+						},
+					},
+				],
 			},
-			{ up: 0, down: 0, paused: 0 }
-		);
-		monitorCounts.total = monitors.length;
-		return { monitors, monitorCounts };
-	} catch (error) {
-		error.service = SERVICE_NAME;
-		error.method = "getMonitorsAndSummaryByTeamId";
-		throw error;
-	}
-};
+		},
+		{
+			$project: {
+				summary: { $arrayElemAt: ["$summary", 0] },
+				monitors: 1,
+			},
+		},
+	]);
 
-/**
- * Get monitors by TeamID
- * @async
- * @param {Express.Request} req
- * @param {Express.Response} res
- * @returns {Promise<Array<Monitor>>}
- * @throws {Error}
- */
-const getMonitorsByTeamId = async (req, res) => {
-	try {
-		let {
-			limit,
-			type,
-			status,
-			checkOrder,
-			normalize,
-			page,
-			rowsPerPage,
-			filter,
-			field,
-			order,
-		} = req.query;
-
-		const monitorQuery = { teamId: req.params.teamId };
-
-		if (type !== undefined) {
-			monitorQuery.type = Array.isArray(type) ? { $in: type } : type;
+	let { monitors, summary } = results[0];
+	monitors = monitors.map((monitor) => {
+		if (!monitor.checks) {
+			return monitor;
 		}
-		// Add filter if provided
-		// $options: "i" makes the search case-insensitive
-		if (filter !== undefined) {
-			monitorQuery.$or = [
-				{ name: { $regex: filter, $options: "i" } },
-				{ url: { $regex: filter, $options: "i" } },
-			];
-		}
-		const monitorCount = await Monitor.countDocuments(monitorQuery);
-
-		// Pagination
-		const skip = page && rowsPerPage ? page * rowsPerPage : 0;
-
-		// Build Sort option
-		const sort = field ? { [field]: order === "asc" ? 1 : -1 } : {};
-
-		const monitors = await Monitor.find(monitorQuery)
-			.skip(skip)
-			.limit(rowsPerPage)
-			.sort(sort);
-
-		// Early return if limit is set to -1, indicating we don't want any checks
-		if (limit === "-1") {
-			return { monitors, monitorCount };
-		}
-		// Map each monitor to include its associated checks
-		const monitorsWithChecks = await Promise.all(
-			monitors.map(async (monitor) => {
-				let model = CHECK_MODEL_LOOKUP[monitor.type];
-
-				// Checks are order newest -> oldest
-				let checks = await model
-					.find({
-						monitorId: monitor._id,
-						...(status && { status }),
-					})
-					.sort({ createdAt: checkOrder === "asc" ? 1 : -1 })
-
-					.limit(limit || 0);
-
-				//Normalize checks if requested
-				if (normalize !== undefined) {
-					checks = NormalizeData(checks, 10, 100);
-				}
-				return { ...monitor.toObject(), checks };
-			})
-		);
-		return { monitors: monitorsWithChecks, monitorCount };
-	} catch (error) {
-		error.service = SERVICE_NAME;
-		error.method = "getMonitorsByTeamId";
-		throw error;
-	}
+		monitor.checks = NormalizeData(monitor.checks, 10, 100);
+		return monitor;
+	});
+	return { monitors, summary };
 };
 
 /**
@@ -646,14 +812,15 @@ export {
 	getAllMonitorsWithUptimeStats,
 	getMonitorStatsById,
 	getMonitorById,
-	getMonitorsAndSummaryByTeamId,
 	getMonitorsByTeamId,
+	getUptimeDetailsById,
 	createMonitor,
 	deleteMonitor,
 	deleteAllMonitors,
 	deleteMonitorsByUserId,
 	editMonitor,
 	addDemoMonitors,
+	getHardwareDetailsById,
 };
 
 // Helper functions

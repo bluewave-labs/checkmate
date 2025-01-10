@@ -4,8 +4,9 @@ import { expect } from "chai";
 import NetworkService from "../../service/networkService.js";
 const SERVICE_NAME = "SettingsService";
 
-describe("SettingsService", () => {
+describe("SettingsService", function() {
 	let sandbox, mockAppSettings;
+
 	beforeEach(function () {
 		sandbox = sinon.createSandbox();
 		sandbox.stub(process.env, "CLIENT_HOST").value("http://localhost");
@@ -35,14 +36,16 @@ describe("SettingsService", () => {
 		sandbox.restore();
 		sinon.restore();
 	});
-	describe("constructor", () => {
-		it("should construct a new SettingsService", () => {
+
+	describe("constructor", function() {
+		it("should construct a new SettingsService", function() {
 			const settingsService = new SettingsService(mockAppSettings);
 			expect(settingsService.appSettings).to.equal(mockAppSettings);
 		});
 	});
-	describe("loadSettings", () => {
-		it("should load settings from DB when environment variables are not set", async () => {
+
+	describe("loadSettings", function() {
+		it("should load settings from DB when environment variables are not set", async function() {
 			const dbSettings = { logLevel: "debug", apiBaseUrl: "http://localhost" };
 			const appSettings = { findOne: sinon.stub().returns(dbSettings) };
 			const settingsService = new SettingsService(appSettings);
@@ -50,6 +53,7 @@ describe("SettingsService", () => {
 			const result = await settingsService.loadSettings();
 			expect(result).to.deep.equal(dbSettings);
 		});
+
 		it("should throw an error if settings are not found", async function () {
 			const appSettings = { findOne: sinon.stub().returns(null) };
 			const settingsService = new SettingsService(appSettings);
@@ -64,7 +68,7 @@ describe("SettingsService", () => {
 			}
 		});
 
-		it("should add its method and service name to error if not present", async () => {
+		it("should add its method and service name to error if not present", async function() {
 			const appSettings = { findOne: sinon.stub().throws(new Error("Test error")) };
 			const settingsService = new SettingsService(appSettings);
 			try {
@@ -75,7 +79,8 @@ describe("SettingsService", () => {
 				expect(error.method).to.equal("loadSettings");
 			}
 		});
-		it("should not add its method and service name to error if present", async () => {
+
+		it("should not add its method and service name to error if present", async function() {
 			const error = new Error("Test error");
 			error.method = "otherMethod";
 			error.service = "OTHER_SERVICE";
@@ -89,6 +94,7 @@ describe("SettingsService", () => {
 				expect(error.method).to.equal("otherMethod");
 			}
 		});
+
 		it("should merge DB settings with environment variables", async function () {
 			const dbSettings = { logLevel: "debug", apiBaseUrl: "http://localhost" };
 			const appSettings = { findOne: sinon.stub().returns(dbSettings) };
@@ -99,8 +105,9 @@ describe("SettingsService", () => {
 			expect(settingsService.settings.apiBaseUrl).to.equal("http://localhost");
 		});
 	});
-	describe("reloadSettings", () => {
-		it("should call loadSettings", async () => {
+
+	describe("reloadSettings", function() {
+		it("should call loadSettings", async function() {
 			const dbSettings = { logLevel: "debug", apiBaseUrl: "http://localhost" };
 			const appSettings = { findOne: sinon.stub().returns(dbSettings) };
 			const settingsService = new SettingsService(appSettings);
@@ -109,8 +116,9 @@ describe("SettingsService", () => {
 			expect(result).to.deep.equal(dbSettings);
 		});
 	});
-	describe("getSettings", () => {
-		it("should return the current settings", () => {
+
+	describe("getSettings", function() {
+		it("should return the current settings", function() {
 			const dbSettings = { logLevel: "debug", apiBaseUrl: "http://localhost" };
 			const appSettings = { findOne: sinon.stub().returns(dbSettings) };
 			const settingsService = new SettingsService(appSettings);
@@ -118,7 +126,8 @@ describe("SettingsService", () => {
 			const result = settingsService.getSettings();
 			expect(result).to.deep.equal(dbSettings);
 		});
-		it("should throw an error if settings have not been loaded", () => {
+
+		it("should throw an error if settings have not been loaded", function() {
 			const appSettings = { findOne: sinon.stub().returns(null) };
 			const settingsService = new SettingsService(appSettings);
 			settingsService.settings = null;

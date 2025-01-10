@@ -6,31 +6,32 @@ import {
 	deleteNotificationsByMonitorId,
 } from "../../db/mongo/modules/notificationModule.js";
 
-describe("notificationModule", () => {
+describe("notificationModule", function() {
 	const mockNotification = {
 		monitorId: "123",
 	};
 	const mockNotifications = [mockNotification];
 	let notificationSaveStub, notificationFindStub, notificationDeleteManyStub;
 
-	beforeEach(() => {
+	beforeEach(function() {
 		notificationSaveStub = sinon.stub(Notification.prototype, "save").resolves();
 		notificationFindStub = sinon.stub(Notification, "find").resolves();
 		notificationDeleteManyStub = sinon.stub(Notification, "deleteMany").resolves();
 	});
 
-	afterEach(() => {
+	afterEach(function() {
 		sinon.restore();
 	});
 
-	describe("createNotification", () => {
-		it("should create a new notification", async () => {
+	describe("createNotification", function() {
+		it("should create a new notification", async function() {
 			const notificationData = { _id: "123", name: "test" };
 			notificationSaveStub.resolves(notificationData);
 			const res = await createNotification(notificationData);
 			expect(res).to.deep.equal(notificationData);
 		});
-		it("should handle an error", async () => {
+
+		it("should handle an error", async function() {
 			const err = new Error("test error");
 			notificationSaveStub.rejects(err);
 			try {
@@ -41,13 +42,14 @@ describe("notificationModule", () => {
 		});
 	});
 
-	describe("getNotificationsByMonitorId", () => {
-		it("should return notifications by monitor ID", async () => {
+	describe("getNotificationsByMonitorId", function() {
+		it("should return notifications by monitor ID", async function() {
 			notificationFindStub.resolves(mockNotifications);
 			const res = await getNotificationsByMonitorId(mockNotification.monitorId);
 			expect(res).to.deep.equal(mockNotifications);
 		});
-		it("should handle an error", async () => {
+
+		it("should handle an error", async function() {
 			const err = new Error("test error");
 			notificationFindStub.rejects(err);
 			try {
@@ -58,13 +60,14 @@ describe("notificationModule", () => {
 		});
 	});
 
-	describe("deleteNotificationsByMonitorId", () => {
-		it("should delete notifications by monitor ID", async () => {
+	describe("deleteNotificationsByMonitorId", function() {
+		it("should delete notifications by monitor ID", async function() {
 			notificationDeleteManyStub.resolves({ deletedCount: mockNotifications.length });
 			const res = await deleteNotificationsByMonitorId(mockNotification.monitorId);
 			expect(res).to.deep.equal(mockNotifications.length);
 		});
-		it("should handle an error", async () => {
+
+		it("should handle an error", async function() {
 			const err = new Error("test error");
 			notificationDeleteManyStub.rejects(err);
 			try {

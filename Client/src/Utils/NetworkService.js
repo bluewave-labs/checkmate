@@ -3,6 +3,8 @@ const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 const FALLBACK_BASE_URL = "http://localhost:5000/api/v1";
 import { clearAuthState } from "../Features/Auth/authSlice";
 import { clearUptimeMonitorState } from "../Features/UptimeMonitors/uptimeMonitorsSlice";
+import { createToast } from "./toastUtils";
+
 class NetworkService {
 	constructor(store, dispatch, navigate) {
 		this.store = store;
@@ -25,11 +27,7 @@ class NetworkService {
 		this.axiosInstance.interceptors.response.use(
 			(response) => response,
 			(error) => {
-				if (error.response && error.response.status === 401) {
-					dispatch(clearAuthState());
-					dispatch(clearUptimeMonitorState());
-					navigate("/login");
-				}
+				this.handleError(error);
 				return Promise.reject(error);
 			}
 		);
@@ -38,6 +36,30 @@ class NetworkService {
 	setBaseUrl = (url) => {
 		this.axiosInstance.defaults.baseURL = url;
 	};
+
+	handleError(error) {
+		if (error.response) {
+			const status = error.response.status;
+			if (status === 401) {
+				this.dispatch(clearAuthState());
+				this.dispatch(clearUptimeMonitorState());
+				this.navigate("/login");
+			} else if (status >= 500) {
+				// Display toast for server errors to all users
+				createToast({
+					variant: "error",
+					body: "Checkmate server is not running or has issues. Please check.",
+				});
+			}
+		} else if (error.request) {
+			// Show a toast informing the user the server didn't respond
+			createToast({
+				variant: "error",
+				body: "The server did not respond. Please check your network or try again later.",
+			});
+		}
+	}
+
 
 	cleanup() {
 		if (this.unsubscribe) {
@@ -127,7 +149,7 @@ class NetworkService {
 	 * @param {Array<string>} config.types - Array of monitor types
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 */
-	async getMonitorsAndSummaryByTeamId(config) {
+	async getMonitorsSummaryByTeamId(config) {
 		const params = new URLSearchParams();
 
 		if (config.types) {
@@ -157,9 +179,6 @@ class NetworkService {
 	 * @param {string} config.teamId - The ID of the team whose monitors are to be retrieved.
 	 * @param {number} [config.limit] - The maximum number of checks to retrieve.  0 for all, -1 for none
 	 * @param {Array<string>} [config.types] - The types of monitors to retrieve.
-	 * @param {string} [config.status] - The status of the monitors to retrieve.
-	 * @param {string} [config.checkOrder] - The order in which to sort the retrieved monitors.
-	 * @param {boolean} [config.normalize] - Whether to normalize the retrieved monitors.
 	 * @param {number} [config.page] - The page number for pagination.
 	 * @param {number} [config.rowsPerPage] - The number of rows per page for pagination.
 	 * @param {string} [config.filter] - The filter to apply to the monitors.
@@ -167,21 +186,10 @@ class NetworkService {
 	 * @param {string} [config.order] - The order in which to sort the field.
 	 * @returns {Promise<AxiosResponse>} The response from the axios GET request.
 	 */
+
 	async getMonitorsByTeamId(config) {
-		const {
-			authToken,
-			teamId,
-			limit,
-			types,
-			status,
-			checkOrder,
-			normalize,
-			page,
-			rowsPerPage,
-			filter,
-			field,
-			order,
-		} = config;
+		const { authToken, teamId, limit, types, page, rowsPerPage, filter, field, order } =
+			config;
 
 		const params = new URLSearchParams();
 
@@ -191,9 +199,6 @@ class NetworkService {
 				params.append("type", type);
 			});
 		}
-		if (status) params.append("status", status);
-		if (checkOrder) params.append("checkOrder", checkOrder);
-		if (normalize) params.append("normalize", normalize);
 		if (page) params.append("page", page);
 		if (rowsPerPage) params.append("rowsPerPage", rowsPerPage);
 		if (filter) params.append("filter", filter);
@@ -234,6 +239,34 @@ class NetworkService {
 
 		return this.axiosInstance.get(
 			`/monitors/stats/${config.monitorId}?${params.toString()}`,
+			{
+				headers: {
+					Authorization: `Bearer ${config.authToken}`,
+				},
+			}
+		);
+	}
+
+	async getHardwareDetailsByMonitorId(config) {
+		const params = new URLSearchParams();
+		if (config.dateRange) params.append("dateRange", config.dateRange);
+
+		return this.axiosInstance.get(
+			`/monitors/hardware/details/${config.monitorId}?${params.toString()}`,
+			{
+				headers: {
+					Authorization: `Bearer ${config.authToken}`,
+				},
+			}
+		);
+	}
+	async getUptimeDetailsById(config) {
+		const params = new URLSearchParams();
+		if (config.dateRange) params.append("dateRange", config.dateRange);
+		if (config.normalize) params.append("normalize", config.normalize);
+
+		return this.axiosInstance.get(
+			`/monitors/uptime/details/${config.monitorId}?${params.toString()}`,
 			{
 				headers: {
 					Authorization: `Bearer ${config.authToken}`,

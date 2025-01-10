@@ -1,4 +1,4 @@
-**(when sending your PR, only remove this line. Do not remove any lines below. Check all the items before sending your PR)**
+**(when sending your PR, only remove this line. Do not remove any lines below. Check all the relevant items before sending your PR)**
 
 ## Describe your changes
 

@@ -95,7 +95,7 @@ const palette = {
 		accent: background.accent.dark,
 		stroke: background.stroke.dark,
 		gauge: background.gauge.dark,
-		textCard: background.textcard.dark
+		textCard: background.textCard.dark
 
 	},
 	border: {

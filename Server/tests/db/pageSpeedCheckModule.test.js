@@ -14,25 +14,26 @@ const mockPageSpeedCheck = {
 
 const mockDeletedResult = { deletedCount: 1 };
 
-describe("pageSpeedCheckModule", () => {
+describe("pageSpeedCheckModule", function() {
 	let pageSpeedCheckSaveStub, pageSpeedCheckDeleteManyStub;
-	beforeEach(() => {
+
+	beforeEach(function() {
 		pageSpeedCheckSaveStub = sinon.stub(PageSpeedCheck.prototype, "save");
 		pageSpeedCheckDeleteManyStub = sinon.stub(PageSpeedCheck, "deleteMany");
 	});
 
-	afterEach(() => {
+	afterEach(function() {
 		sinon.restore();
 	});
 
-	describe("createPageSpeedCheck", () => {
-		it("should return a page speed check", async () => {
+	describe("createPageSpeedCheck", function() {
+		it("should return a page speed check", async function() {
 			pageSpeedCheckSaveStub.resolves(mockPageSpeedCheck);
 			const pageSpeedCheck = await createPageSpeedCheck(mockPageSpeedCheck);
 			expect(pageSpeedCheck).to.deep.equal(mockPageSpeedCheck);
 		});
 
-		it("should handle an error", async () => {
+		it("should handle an error", async function() {
 			const err = new Error("test error");
 			pageSpeedCheckSaveStub.rejects(err);
 			try {
@@ -44,14 +45,14 @@ describe("pageSpeedCheckModule", () => {
 		});
 	});
 
-	describe("deletePageSpeedChecksByMonitorId", () => {
-		it("should return the number of deleted checks", async () => {
+	describe("deletePageSpeedChecksByMonitorId", function() {
+		it("should return the number of deleted checks", async function() {
 			pageSpeedCheckDeleteManyStub.resolves(mockDeletedResult);
 			const result = await deletePageSpeedChecksByMonitorId("monitorId");
 			expect(result).to.deep.equal(mockDeletedResult.deletedCount);
 		});
 
-		it("should handle an error", async () => {
+		it("should handle an error", async function() {
 			const err = new Error("test error");
 			pageSpeedCheckDeleteManyStub.rejects(err);
 			try {

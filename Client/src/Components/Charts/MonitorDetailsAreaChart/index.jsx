@@ -13,13 +13,20 @@ import { useTheme } from "@emotion/react";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { formatDateWithTz } from "../../../Utils/timeUtils";
+import {
+	tooltipDateFormatLookup,
+	tickDateFormatLookup,
+} from "../Utils/chartUtilFunctions";
+
 import "./index.css";
-
-const CustomToolTip = ({ active, payload, label }) => {
+const CustomToolTip = ({ active, payload, label, dateRange }) => {
+	const format = tooltipDateFormatLookup(dateRange);
 	const uiTimezone = useSelector((state) => state.ui.timezone);
-
 	const theme = useTheme();
 	if (active && payload && payload.length) {
+		const responseTime = payload[0]?.payload?.originalAvgResponseTime
+			? payload[0]?.payload?.originalAvgResponseTime
+			: (payload[0]?.payload?.avgResponseTime ?? 0);
 		return (
 			<Box
 				className="area-tooltip"
@@ -39,7 +46,7 @@ const CustomToolTip = ({ active, payload, label }) => {
 						fontWeight: 500,
 					}}
 				>
-					{formatDateWithTz(label, "ddd, MMMM D, YYYY, h:mm A", uiTimezone)}
+					{formatDateWithTz(label, format, uiTimezone)}
 				</Typography>
 				<Box mt={theme.spacing(1)}>
 					<Box
@@ -69,7 +76,7 @@ const CustomToolTip = ({ active, payload, label }) => {
 							Response Time
 						</Typography>{" "}
 						<Typography component="span">
-							{payload[0].payload.originalResponseTime}
+							{Math.floor(responseTime)}
 							<Typography
 								component="span"
 								sx={{ opacity: 0.8 }}
@@ -87,13 +94,25 @@ const CustomToolTip = ({ active, payload, label }) => {
 	return null;
 };
 
-const CustomTick = ({ x, y, payload, index }) => {
+CustomToolTip.propTypes = {
+	active: PropTypes.bool,
+	payload: PropTypes.arrayOf(
+		PropTypes.shape({
+			value: PropTypes.number,
+			payload: PropTypes.shape({
+				_id: PropTypes.string,
+				avgResponseTime: PropTypes.number,
+				originalAvgResponseTime: PropTypes.number,
+			}),
+		})
+	),
+	label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	dateRange: PropTypes.string,
+};
+const CustomTick = ({ x, y, payload, index, dateRange }) => {
+	const format = tickDateFormatLookup(dateRange);
 	const theme = useTheme();
-
 	const uiTimezone = useSelector((state) => state.ui.timezone);
-
-	// Render nothing for the first tick
-	if (index === 0) return null;
 	return (
 		<Text
 			x={x}
@@ -103,7 +122,7 @@ const CustomTick = ({ x, y, payload, index }) => {
 			fontSize={11}
 			fontWeight={400}
 		>
-			{formatDateWithTz(payload?.value, "h:mm a", uiTimezone)}
+			{formatDateWithTz(payload?.value, format, uiTimezone)}
 		</Text>
 	);
 };
@@ -113,9 +132,10 @@ CustomTick.propTypes = {
 	y: PropTypes.number,
 	payload: PropTypes.object,
 	index: PropTypes.number,
+	dateRange: PropTypes.string,
 };
 
-const MonitorDetailsAreaChart = ({ checks }) => {
+const MonitorDetailsAreaChart = ({ checks, dateRange }) => {
 	const theme = useTheme();
 	const memoizedChecks = useMemo(() => checks, [checks[0]]);
 	const [isHovered, setIsHovered] = useState(false);
@@ -168,22 +188,20 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 				</defs>
 				<XAxis
 					stroke={theme.palette.border.dark}
-					dataKey="createdAt"
-					tick={<CustomTick />}
-					minTickGap={0}
+					dataKey="_id"
+					tick={<CustomTick dateRange={dateRange} />}
 					axisLine={false}
 					tickLine={false}
 					height={20}
-					interval="equidistantPreserveStart"
 				/>
 				<Tooltip
 					cursor={{ stroke: theme.palette.border.light }}
-					content={<CustomToolTip />}
+					content={<CustomToolTip dateRange={dateRange} />}
 					wrapperStyle={{ pointerEvents: "none" }}
 				/>
 				<Area
 					type="monotone"
-					dataKey="responseTime"
+					dataKey="avgResponseTime"
 					stroke={theme.palette.primary.main}
 					fill="url(#colorUv)"
 					strokeWidth={isHovered ? 2.5 : 1.5}
@@ -196,17 +214,7 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 
 MonitorDetailsAreaChart.propTypes = {
 	checks: PropTypes.array,
+	dateRange: PropTypes.string,
 };
 
-CustomToolTip.propTypes = {
-	active: PropTypes.bool,
-	payload: PropTypes.arrayOf(
-		PropTypes.shape({
-			payload: PropTypes.shape({
-				originalResponseTime: PropTypes.number.isRequired,
-			}).isRequired,
-		})
-	),
-	label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
 export default MonitorDetailsAreaChart;

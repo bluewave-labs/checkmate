@@ -4,7 +4,7 @@ import { useTheme } from "@mui/material";
 import { Text } from "recharts";
 import { formatDateWithTz } from "../../../Utils/timeUtils";
 import { Box, Stack, Typography } from "@mui/material";
-
+import { tickDateFormatLookup, tooltipDateFormatLookup } from "./chartUtilFunctions";
 /**
  * Custom tick component for rendering time with timezone.
  *
@@ -15,10 +15,10 @@ import { Box, Stack, Typography } from "@mui/material";
  * @param {number} props.index - The index of the tick.
  * @returns {JSX.Element} The rendered tick component.
  */
-export const TzTick = ({ x, y, payload, index }) => {
+export const TzTick = ({ x, y, payload, index, dateRange }) => {
 	const theme = useTheme();
-
 	const uiTimezone = useSelector((state) => state.ui.timezone);
+	const format = tickDateFormatLookup(dateRange);
 	return (
 		<Text
 			x={x}
@@ -28,7 +28,7 @@ export const TzTick = ({ x, y, payload, index }) => {
 			fontSize={11}
 			fontWeight={400}
 		>
-			{formatDateWithTz(payload?.value, "h:mm a", uiTimezone)}
+			{formatDateWithTz(payload?.value, format, uiTimezone)}
 		</Text>
 	);
 };
@@ -38,6 +38,7 @@ TzTick.propTypes = {
 	y: PropTypes.number,
 	payload: PropTypes.object,
 	index: PropTypes.number,
+	dateRange: PropTypes.string,
 };
 
 /**
@@ -110,9 +111,12 @@ export const InfrastructureTooltip = ({
 	yIdx = -1,
 	yLabel,
 	dotColor,
+	dateRange,
 }) => {
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 	const theme = useTheme();
+
+	const format = tooltipDateFormatLookup(dateRange);
 	if (active && payload && payload.length) {
 		const [hardwareType, metric] = yKey.split(".");
 		return (
@@ -134,7 +138,7 @@ export const InfrastructureTooltip = ({
 						fontWeight: 500,
 					}}
 				>
-					{formatDateWithTz(label, "ddd, MMMM D, YYYY, h:mm A", uiTimezone)}
+					{formatDateWithTz(label, format, uiTimezone)}
 				</Typography>
 				<Box mt={theme.spacing(1)}>
 					<Box
@@ -163,7 +167,7 @@ export const InfrastructureTooltip = ({
 						>
 							{yIdx >= 0
 								? `${yLabel} ${getFormattedPercentage(payload[0].payload[hardwareType][yIdx][metric])}`
-								: `${yLabel} ${getFormattedPercentage(payload[0].payload[hardwareType][metric])}`}
+								: `${yLabel} ${getFormattedPercentage(payload[0].payload[yKey])}`}
 						</Typography>
 					</Stack>
 				</Box>
@@ -186,11 +190,20 @@ InfrastructureTooltip.propTypes = {
 	yIdx: PropTypes.number,
 	yLabel: PropTypes.string,
 	dotColor: PropTypes.string,
+	dateRange: PropTypes.string,
 };
 
-export const TemperatureTooltip = ({ active, payload, label, keys, dotColor }) => {
+export const TemperatureTooltip = ({
+	active,
+	payload,
+	label,
+	keys,
+	dotColor,
+	dateRange,
+}) => {
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 	const theme = useTheme();
+	const format = tooltipDateFormatLookup(dateRange);
 	const formatCoreKey = (key) => {
 		return key.replace(/^core(\d+)$/, "Core $1");
 	};
@@ -214,7 +227,7 @@ export const TemperatureTooltip = ({ active, payload, label, keys, dotColor }) =
 						fontWeight: 500,
 					}}
 				>
-					{formatDateWithTz(label, "ddd, MMMM D, YYYY, h:mm A", uiTimezone)}
+					{formatDateWithTz(label, format, uiTimezone)}
 				</Typography>
 
 				<Stack direction="column">
@@ -274,4 +287,6 @@ TemperatureTooltip.propTypes = {
 		PropTypes.string,
 		PropTypes.number,
 	]),
+	dotColor: PropTypes.string,
+	dateRange: PropTypes.string,
 };

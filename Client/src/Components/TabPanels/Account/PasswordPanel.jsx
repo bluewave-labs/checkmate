@@ -126,8 +126,8 @@ const PasswordPanel = () => {
 				noValidate
 				spellCheck="false"
 				gap={theme.spacing(26)}
-				maxWidth={"80ch"}
-				marginInline={"auto"}
+				maxWidth={"80ch"}  // Keep maxWidth
+				
 			>
 				<TextInput
 					type="text"
@@ -166,7 +166,7 @@ const PasswordPanel = () => {
 				</Stack>
 				<Stack
 					direction="row"
-					alignItems={"center"}
+					alignItems={"flex-start"}
 					gap={SPACING_GAP} 
 					flexWrap={"wrap"}
 				>
@@ -192,7 +192,7 @@ const PasswordPanel = () => {
 				</Stack>
 				<Stack
 					direction="row"
-					alignItems={"center"}
+					alignItems={"flex-start"}
 					gap={SPACING_GAP} 
 					flexWrap={"wrap"}
 				>

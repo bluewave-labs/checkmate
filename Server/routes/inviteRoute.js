@@ -1,14 +1,27 @@
 import { Router } from "express";
 import { verifyJWT } from "../middleware/verifyJWT.js";
 import { isAllowed } from "../middleware/isAllowed.js";
-import {
-	issueInvitation,
-	inviteVerifyController,
-} from "../controllers/inviteController.js";
 
-const router = Router();
+class InviteRoutes {
+	constructor(inviteController) {
+		this.router = Router();
+		this.inviteController = inviteController;
+		this.initRoutes();
+	}
 
-router.post("/", isAllowed(["admin", "superadmin"]), verifyJWT, issueInvitation);
-router.post("/verify", inviteVerifyController);
+	initRoutes() {
+		this.router.post(
+			"/",
+			isAllowed(["admin", "superadmin"]),
+			verifyJWT,
+			this.inviteController.issueInvitation
+		);
+		this.router.post("/verify", this.inviteController.inviteVerifyController);
+	}
 
-export default router;
+	getRouter() {
+		return this.router;
+	}
+}
+
+export default InviteRoutes;

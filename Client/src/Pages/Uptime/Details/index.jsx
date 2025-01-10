@@ -1,23 +1,13 @@
 import PropTypes from "prop-types";
 import { useEffect, useState, useCallback } from "react";
-import {
-	Box,
-	Button,
-	Popover,
-	Stack,
-	Tooltip,
-	Typography,
-	useTheme,
-} from "@mui/material";
+import { Box, Button, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { networkService } from "../../../main";
 import { logger } from "../../../Utils/Logger";
-import { formatDurationRounded, formatDurationSplit } from "../../../Utils/timeUtils";
 import MonitorDetailsAreaChart from "../../../Components/Charts/MonitorDetailsAreaChart";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import SettingsIcon from "../../../assets/icons/settings-bold.svg?react";
-import CertificateIcon from "../../../assets/icons/certificate.svg?react";
 import UptimeIcon from "../../../assets/icons/uptime-icon.svg?react";
 import ResponseTimeIcon from "../../../assets/icons/response-time-icon.svg?react";
 import AverageResponseIcon from "../../../assets/icons/average-response-icon.svg?react";
@@ -27,14 +17,16 @@ import PaginationTable from "./PaginationTable";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import PulseDot from "../../../Components/Animated/PulseDot";
 import { ChartBox } from "./styled";
-import { DownBarChart, ResponseGaugeChart, UpBarChart } from "./Charts";
 import SkeletonLayout from "./skeleton";
 import "./index.css";
 import useUtils from "../utils";
-import { formatDateWithTz } from "../../../Utils/timeUtils";
+import { formatDateWithTz, formatDurationSplit } from "../../../Utils/timeUtils";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import IconBox from "../../../Components/IconBox";
 import StatBox from "../../../Components/StatBox";
+import UpBarChart from "./Charts/UpBarChart";
+import DownBarChart from "./Charts/DownBarChart";
+import ResponseGaugeChart from "./Charts/ResponseGaugeChart";
 /**
  * Details page component displaying monitor details and related information.
  * @component
@@ -50,26 +42,16 @@ const DetailsPage = () => {
 	const [certificateExpiry, setCertificateExpiry] = useState("N/A");
 	const navigate = useNavigate();
 
-	const [anchorEl, setAnchorEl] = useState(null);
-	const openCertificate = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const closeCertificate = () => {
-		setAnchorEl(null);
-	};
-
+	const certificateDateFormat = "MMM D, YYYY h A";
 	const dateFormat = dateRange === "day" ? "MMM D, h A" : "MMM D";
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 
 	const fetchMonitor = useCallback(async () => {
 		try {
-			const res = await networkService.getStatsByMonitorId({
+			const res = await networkService.getUptimeDetailsById({
 				authToken: authToken,
 				monitorId: monitorId,
-				sortOrder: null,
-				limit: null,
 				dateRange: dateRange,
-				numToDisplay: 50,
 				normalize: true,
 			});
 			setMonitor(res?.data?.data ?? {});
@@ -95,7 +77,9 @@ const DetailsPage = () => {
 				});
 				if (res?.data?.data?.certificateDate) {
 					const date = res.data.data.certificateDate;
-					setCertificateExpiry(formatDateWithTz(date, dateFormat, uiTimezone) ?? "N/A");
+					setCertificateExpiry(
+						formatDateWithTz(date, certificateDateFormat, uiTimezone) ?? "N/A"
+					);
 				}
 			} catch (error) {
 				setCertificateExpiry("N/A");
@@ -198,7 +182,7 @@ const DetailsPage = () => {
 											},
 										}}
 									>
-										Checking every {formatDurationRounded(monitor?.interval)}.
+										{/* Checking every {formatDurationRounded(monitor?.interval)}. */}
 									</Typography>
 								</Stack>
 							</Box>
@@ -210,56 +194,6 @@ const DetailsPage = () => {
 									alignSelf: "flex-end",
 								}}
 							>
-								<IconBox
-									mr={theme.spacing(4)}
-									onClick={openCertificate}
-									sx={{
-										cursor: "pointer",
-										"& svg": {
-											width: 23,
-											height: 23,
-											top: "52%",
-										},
-									}}
-								>
-									<CertificateIcon />
-								</IconBox>
-								<Popover
-									id="certificate-dropdown"
-									anchorEl={anchorEl}
-									open={Boolean(anchorEl)}
-									onClose={closeCertificate}
-									disableScrollLock
-									marginThreshold={null}
-									anchorOrigin={{
-										vertical: "bottom",
-										horizontal: "center",
-									}}
-									transformOrigin={{
-										vertical: "top",
-										horizontal: "center",
-									}}
-									slotProps={{
-										paper: {
-											sx: {
-												mt: theme.spacing(4),
-												py: theme.spacing(2),
-												px: theme.spacing(4),
-												width: 140,
-												backgroundColor: theme.palette.background.accent,
-											},
-										},
-									}}
-								>
-									<Typography variant="body2">Certificate Expiry</Typography>
-									<Typography
-										component="span"
-										fontSize={13}
-										color={theme.palette.text.primary}
-									>
-										{certificateExpiry}
-									</Typography>
-								</Popover>
 								{isAdmin && (
 									<Button
 										variant="contained"
@@ -287,19 +221,31 @@ const DetailsPage = () => {
 							<StatBox
 								sx={statusStyles[determineState(monitor)]}
 								heading={"active for"}
-								subHeading={splitDuration(monitor?.uptimeDuration)}
+								subHeading={splitDuration(monitor?.stats?.timeSinceLastFalseCheck)}
 							/>
 							<StatBox
 								heading="last check"
-								subHeading={splitDuration(monitor?.lastChecked)}
+								subHeading={splitDuration(monitor?.stats?.timeSinceLastCheck)}
 							/>
 							<StatBox
 								heading="last response time"
 								subHeading={
 									<>
-										{monitor?.latestResponseTime}
+										{monitor?.stats?.latestResponseTime}
 										<Typography component="span">{"ms"}</Typography>
 									</>
+								}
+							/>
+							<StatBox
+								heading="certificate expiry"
+								subHeading={
+									<Typography
+										component="span"
+										fontSize={13}
+										color={theme.palette.text.primary}
+									>
+										{certificateExpiry}
+									</Typography>
 								}
 							/>
 						</Stack>
@@ -362,7 +308,9 @@ const DetailsPage = () => {
 											<Typography component="span">
 												{hoveredUptimeData !== null
 													? hoveredUptimeData.totalChecks
-													: monitor?.periodTotalChecks}
+													: (monitor.stats?.upChecks?.reduce((count, checkGroup) => {
+															return count + checkGroup.totalChecks;
+														}, 0) ?? 0)}
 											</Typography>
 											{hoveredUptimeData !== null && hoveredUptimeData.time !== null && (
 												<Typography
@@ -373,7 +321,7 @@ const DetailsPage = () => {
 													color={theme.palette.text.tertiary}
 												>
 													{formatDateWithTz(
-														hoveredUptimeData.time,
+														hoveredUptimeData._id,
 														dateFormat,
 														uiTimezone
 													)}
@@ -381,17 +329,27 @@ const DetailsPage = () => {
 											)}
 										</Box>
 										<Box>
-											<Typography>Uptime Percentage</Typography>
+											<Typography>
+												{hoveredUptimeData !== null
+													? "Avg Response Time"
+													: "Uptime Percentage"}
+											</Typography>
 											<Typography component="span">
 												{hoveredUptimeData !== null
-													? Math.floor(hoveredUptimeData.uptimePercentage * 10) / 10
-													: Math.floor(monitor?.periodUptime * 10) / 10}
-												<Typography component="span">%</Typography>
+													? Math.floor(hoveredUptimeData?.avgResponseTime ?? 0)
+													: Math.floor(
+															((monitor?.stats?.upChecksAggregate?.totalChecks ?? 0) /
+																(monitor?.stats?.totalChecks ?? 1)) *
+																100
+														)}
+												<Typography component="span">
+													{hoveredUptimeData !== null ? " ms" : " %"}
+												</Typography>
 											</Typography>
 										</Box>
 									</Stack>
 									<UpBarChart
-										data={monitor?.aggregateData}
+										stats={monitor?.stats}
 										type={dateRange}
 										onBarHover={setHoveredUptimeData}
 									/>
@@ -407,8 +365,10 @@ const DetailsPage = () => {
 										<Typography>Total Incidents</Typography>
 										<Typography component="span">
 											{hoveredIncidentsData !== null
-												? hoveredIncidentsData.totalIncidents
-												: monitor?.periodIncidents}
+												? hoveredIncidentsData.totalChecks
+												: (monitor.stats?.downChecks?.reduce((count, checkGroup) => {
+														return count + checkGroup.totalChecks;
+													}, 0) ?? 0)}
 										</Typography>
 										{hoveredIncidentsData !== null &&
 											hoveredIncidentsData.time !== null && (
@@ -420,7 +380,7 @@ const DetailsPage = () => {
 													color={theme.palette.text.tertiary}
 												>
 													{formatDateWithTz(
-														hoveredIncidentsData.time,
+														hoveredIncidentsData._id,
 														dateFormat,
 														uiTimezone
 													)}
@@ -428,7 +388,7 @@ const DetailsPage = () => {
 											)}
 									</Box>
 									<DownBarChart
-										data={monitor?.aggregateData}
+										stats={monitor?.stats}
 										type={dateRange}
 										onBarHover={setHoveredIncidentsData}
 									/>
@@ -441,7 +401,7 @@ const DetailsPage = () => {
 										<Typography component="h2">Average Response Time</Typography>
 									</Stack>
 									<ResponseGaugeChart
-										data={[{ response: monitor?.periodAvgResponseTime }]}
+										avgResponseTime={monitor?.stats?.groupAggregate?.avgResponseTime ?? 0}
 									/>
 								</ChartBox>
 								<ChartBox sx={{ padding: 0 }}>
@@ -454,7 +414,10 @@ const DetailsPage = () => {
 										</IconBox>
 										<Typography component="h2">Response Times</Typography>
 									</Stack>
-									<MonitorDetailsAreaChart checks={[...monitor.checks].reverse()} />
+									<MonitorDetailsAreaChart
+										checks={monitor?.stats?.groupChecks ?? []}
+										dateRange={dateRange}
+									/>
 								</ChartBox>
 								<ChartBox
 									gap={theme.spacing(8)}

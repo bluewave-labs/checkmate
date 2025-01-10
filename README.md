@@ -1,11 +1,9 @@
-**Need support or have a suggestion? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.**
 
-**Checkmate is on [GitHub trending](https://github.com/trending) and #1 trending for JavaScript apps on Fri Dec 13th & 15th**
+# **We're opening our $5000 grant funding announcement soon, in partnership with [UpRock](https://uprock.com) - check [our web page](https://checkmate.so) for preliminary details.** 
 
-**If you would like to support us, please consider giving it a ⭐, and think about contributing or providing feedback.**
+**If you would like to support us, please consider giving it a ⭐ and click on "watch" so you can latest news from us. Need support or have a suggestion? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.**
 
-![Frame 34](https://github.com/user-attachments/assets/4bf57845-3f47-4759-835b-285a5486191d)
-
+![Frame 34](https://github.com/user-attachments/assets/00db1520-24b6-42f2-aca2-a1c9794677da)
 
 ![](https://img.shields.io/github/license/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/repo-size/bluewave-labs/checkmate)
@@ -14,12 +12,14 @@
 ![](https://img.shields.io/github/languages/top/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/issues/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/issues-pr/bluewave-labs/checkmate)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9901/badge)](https://www.bestpractices.dev/projects/9901)
+
 
 <h1 align="center"><a href="https://bluewavelabs.ca" target="_blank">Checkmate</a></h1>
 
-<p align="center"><strong>An open source server and infrastructure monitoring application</strong></p>
+<p align="center"><strong>An open source uptime and infrastructure monitoring application</strong></p>
 
-![Dashboard-dark](https://github.com/user-attachments/assets/db875138-164f-453c-a75e-889f88747578)
+![dashboard](https://github.com/user-attachments/assets/252d6047-522b-4576-8f14-233510e464b8)
 
 Checkmate is an open source monitoring tool used to track the operational status and performance of servers and websites. It regularly checks whether a server/website is accessible and performs optimally, providing real-time alerts and reports on the monitored services' availability, downtime, and response time. 
 
@@ -53,20 +53,21 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 - Infrastructure monitoring (memory, disk usage, CPU performance etc) - requires [Capture](https://github.com/bluewave-labs/capture)
 - Docker monitoring
 - Ping monitoring
+- SSL monitoring
 - Incidents at a glance
 - E-mail notifications
 - Scheduled maintenance
-- Can monitor 1000+ servers at the same time on a moderate server
 
 **Short term roadmap:**
 
-- Global (distributed) uptime checking on Solana network
-- Status pages
-- Better notification options (think Discord, Telegram, Slack)
+- Port monitoring (**complete**, waiting to be deployed to stable version)
+- Global (distributed) uptime checking on Solana network (**in progress**)
+- Status pages (**in progress**)
+- Better notification options (Webhooks, Discord, Telegram, Slack)
 - More configuration options
+- Translations
+- Tagging/grouping monitors
 - DNS monitoring
-- SSL monitoring
-- Port monitoring
 
 ## 🏗️ Screenshots
 
@@ -98,21 +99,22 @@ Here's how you can contribute:
 5. Check for good-first-issue's if you are a newcomer.
 6. Make a pull request to add new features/make quality-of-life improvements/fix bugs.
 
-<!-- <a href="https://github.com/bluewave-labs/checkmate/graphs/contributors">
+<a href="https://github.com/bluewave-labs/checkmate/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=bluewave-labs/checkmate" />
 </a>
 
-Made with [contrib.rocks](https://contrib.rocks).
--->
+<!--
 
 ![Alt](https://repobeats.axiom.co/api/embed/c35d999c82dbb31e967427ea4166c14da4172e73.svg "Repobeats analytics image")
+
+--> 
 
 [![Star History Chart](https://api.star-history.com/svg?repos=bluewave-labs/checkmate&type=Date)](https://star-history.com/#bluewave-labs/bluewave-uptime&Date)
 
 Also check other developer and contributor-friendly projects of BlueWave:
 
-- [BlueWave DataRoom](https://github.com/bluewave-labs/bluewave-dataroom), an secure file sharing application, aka dataroom.
+- [DataRoom](https://github.com/bluewave-labs/bluewave-dataroom), an secure file sharing application, aka dataroom.
 - [BlueWave HRM](https://github.com/bluewave-labs/bluewave-hrm), a complete Human Resource Management platform.
-- [BlueWave Onboarding](https://github.com/bluewave-labs/bluewave-onboarding), an application that helps new users learn how to use your product via hints, tours, popups and banners.
+- [Guidefox](https://github.com/bluewave-labs/guidefox), an application that helps new users learn how to use your product via hints, tours, popups and banners.
 - [VerifyWise](https://github.com/bluewave-labs/verifywise), the first open source AI governance platform.
 

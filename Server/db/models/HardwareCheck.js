@@ -64,5 +64,7 @@ const HardwareCheckSchema = mongoose.Schema(
 );
 
 HardwareCheckSchema.index({ createdAt: 1 });
+HardwareCheckSchema.index({ monitorId: 1, createdAt: 1 });
+HardwareCheckSchema.index({ monitorId: 1, createdAt: -1 });
 
 export default mongoose.model("HardwareCheck", HardwareCheckSchema);

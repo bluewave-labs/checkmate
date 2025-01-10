@@ -78,30 +78,6 @@ export const getUptimeMonitorById = createAsyncThunk(
 	}
 );
 
-export const getUptimeMonitorsByTeamId = createAsyncThunk(
-	"monitors/getMonitorsByTeamId",
-	async (token, thunkApi) => {
-		const user = jwtDecode(token);
-		try {
-			const res = await networkService.getMonitorsAndSummaryByTeamId({
-				authToken: token,
-				teamId: user.teamId,
-				types: ["http", "ping", "docker"],
-			});
-			return res.data;
-		} catch (error) {
-			if (error.response && error.response.data) {
-				return thunkApi.rejectWithValue(error.response.data);
-			}
-			const payload = {
-				status: false,
-				msg: error.message ? error.message : "Unknown error",
-			};
-			return thunkApi.rejectWithValue(payload);
-		}
-	}
-);
-
 export const updateUptimeMonitor = createAsyncThunk(
 	"monitors/updateMonitor",
 	async (data, thunkApi) => {
@@ -257,26 +233,6 @@ const uptimeMonitorsSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			// *****************************************************
-			// Monitors by teamId
-			// *****************************************************
-
-			.addCase(getUptimeMonitorsByTeamId.pending, (state) => {
-				state.isLoading = true;
-			})
-			.addCase(getUptimeMonitorsByTeamId.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.success = action.payload.msg;
-				state.monitorsSummary = action.payload.data;
-			})
-			.addCase(getUptimeMonitorsByTeamId.rejected, (state, action) => {
-				state.isLoading = false;
-				state.success = false;
-				state.msg = action.payload
-					? action.payload.msg
-					: "Getting uptime monitors failed";
-			})
-
 			// *****************************************************
 			// Create Monitor
 			// *****************************************************

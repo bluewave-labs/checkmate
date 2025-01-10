@@ -7,7 +7,7 @@ import {
 } from "../../db/mongo/modules/inviteModule.js";
 import { errorMessages } from "../../utils/messages.js";
 
-describe("Invite Module", () => {
+describe("Invite Module", function() {
 	const mockUserData = {
 		email: "test@test.com",
 		teamId: "123",
@@ -19,18 +19,20 @@ describe("Invite Module", () => {
 		inviteTokenSaveStub,
 		inviteTokenFindOneStub,
 		inviteTokenFindOneAndDeleteStub;
-	beforeEach(() => {
+
+	beforeEach(function() {
 		inviteTokenDeleteManyStub = sinon.stub(InviteToken, "deleteMany");
 		inviteTokenSaveStub = sinon.stub(InviteToken.prototype, "save");
 		inviteTokenFindOneStub = sinon.stub(InviteToken, "findOne");
 		inviteTokenFindOneAndDeleteStub = sinon.stub(InviteToken, "findOneAndDelete");
 	});
 
-	afterEach(() => {
+	afterEach(function() {
 		sinon.restore();
 	});
-	describe("requestInviteToken", () => {
-		it("should return a new invite token", async () => {
+
+	describe("requestInviteToken", function() {
+		it("should return a new invite token", async function() {
 			inviteTokenDeleteManyStub.resolves();
 			inviteTokenSaveStub.resolves();
 			const inviteToken = await requestInviteToken(mockUserData);
@@ -39,7 +41,7 @@ describe("Invite Module", () => {
 			expect(inviteToken.token).to.exist;
 		});
 
-		it("should handle an error", async () => {
+		it("should handle an error", async function() {
 			const err = new Error("test error");
 			inviteTokenDeleteManyStub.rejects(err);
 			try {
@@ -50,14 +52,14 @@ describe("Invite Module", () => {
 		});
 	});
 
-	describe("getInviteToken", () => {
-		it("should return an invite token", async () => {
+	describe("getInviteToken", function() {
+		it("should return an invite token", async function() {
 			inviteTokenFindOneStub.resolves(mockInviteToken);
 			const inviteToken = await getInviteToken(mockUserData.token);
 			expect(inviteToken).to.deep.equal(mockInviteToken);
 		});
 
-		it("should handle a token not found", async () => {
+		it("should handle a token not found", async function() {
 			inviteTokenFindOneStub.resolves(null);
 			try {
 				await getInviteToken(mockUserData.token);
@@ -66,7 +68,7 @@ describe("Invite Module", () => {
 			}
 		});
 
-		it("should handle DB errors", async () => {
+		it("should handle DB errors", async function() {
 			const err = new Error("test error");
 			inviteTokenFindOneStub.rejects(err);
 			try {
@@ -78,14 +80,14 @@ describe("Invite Module", () => {
 		});
 	});
 
-	describe("getInviteTokenAndDelete", () => {
-		it("should return a deleted invite", async () => {
+	describe("getInviteTokenAndDelete", function() {
+		it("should return a deleted invite", async function() {
 			inviteTokenFindOneAndDeleteStub.resolves(mockInviteToken);
 			const deletedInvite = await getInviteTokenAndDelete(mockUserData.token);
 			expect(deletedInvite).to.deep.equal(mockInviteToken);
 		});
 
-		it("should handle a token not found", async () => {
+		it("should handle a token not found", async function() {
 			inviteTokenFindOneAndDeleteStub.resolves(null);
 			try {
 				await getInviteTokenAndDelete(mockUserData.token);
@@ -94,7 +96,7 @@ describe("Invite Module", () => {
 			}
 		});
 
-		it("should handle DB errors", async () => {
+		it("should handle DB errors", async function() {
 			const err = new Error("test error");
 			inviteTokenFindOneAndDeleteStub.rejects(err);
 			try {

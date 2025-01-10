@@ -16,7 +16,8 @@ const MAXIMUM_VALUE = 100;
  * @param {number} [props.radius=60] - Radius of the gauge circle
  * @param {number} [props.strokeWidth=15] - Width of the gauge stroke
  * @param {number} [props.threshold=50] - Threshold for color change
- *
+ * @param {number} [props.percentageFontSize] - percentage font size
+ * 
  * @example
  * <CustomGauge
  *   progress={75}
@@ -27,7 +28,7 @@ const MAXIMUM_VALUE = 100;
  *
  * @returns {React.ReactElement} Rendered CustomGauge component
  */
-const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 50 }) => {
+const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 50,percentageFontSize=12 }) => {
 	const theme = useTheme();
 	const BOX_STYLE = {
 		borderRadius: "50%",
@@ -110,7 +111,7 @@ const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 
 					transform: "translate(-50%, -50%)",
 					...theme.typography.body2,
 					fill: theme.typography.body2.color,
-					fontSize: "20px",
+					fontSize: percentageFontSize,		
 				}}
 			>
 				{`${progressWithinRange.toFixed(1)}%`}
@@ -126,4 +127,5 @@ CustomGauge.propTypes = {
 	radius: PropTypes.number,
 	strokeWidth: PropTypes.number,
 	threshold: PropTypes.number,
+	percentageFontSize:PropTypes.number,
 };

@@ -50,10 +50,15 @@ const CreateMonitor = () => {
 			placeholder: "abc123",
 			namePlaceholder: "My Container",
 		},
+		port: {
+			label: "URL to monitor",
+			placeholder: "localhost",
+			namePlaceholder: "Localhost:5173",
+		},
 	};
 
 	const { user, authToken } = useSelector((state) => state.auth);
-	const { monitors, isLoading } = useSelector((state) => state.uptimeMonitors);
+	const { isLoading } = useSelector((state) => state.uptimeMonitors);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const theme = useTheme();
@@ -82,6 +87,7 @@ const CreateMonitor = () => {
 				monitor.type === "http"
 					? `http${https ? "s" : ""}://` + monitor.url
 					: monitor.url,
+			port: monitor.type === "port" ? monitor.port : undefined,
 			name: monitor.name === "" ? monitor.url : monitor.name,
 			type: monitor.type,
 			interval: monitor.interval * MS_PER_MINUTE,
@@ -199,7 +205,7 @@ const CreateMonitor = () => {
 			}
 		};
 		fetchMonitor();
-	}, [monitorId, authToken, monitors, dispatch, navigate]);
+	}, [monitorId, authToken, dispatch, navigate]);
 
 	return (
 		<Box className="create-monitor">
@@ -253,10 +259,22 @@ const CreateMonitor = () => {
 							helperText={errors["url"]}
 						/>
 						<TextInput
+							type="number"
+							id="monitor-port"
+							label="Port to monitor"
+							placeholder="5173"
+							value={monitor.port}
+							onChange={(event) => handleChange(event, "port")}
+							error={errors["port"] ? true : false}
+							helperText={errors["port"]}
+							hidden={monitor.type !== "port"}
+						/>
+						<TextInput
 							type="text"
 							id="monitor-name"
 							label="Display name"
 							isOptional={true}
+							placeholder={monitorTypeMaps[monitor.type].namePlaceholder || ""}
 							value={monitor.name}
 							onChange={(event) => handleChange(event, "name")}
 							error={errors["name"] ? true : false}
@@ -319,6 +337,15 @@ const CreateMonitor = () => {
 							size="small"
 							value="docker"
 							checked={monitor.type === "docker"}
+							onChange={(event) => handleChange(event, "type")}
+						/>
+						<Radio
+							id="monitor-checks-port"
+							title="Port monitoring"
+							desc="Check whether your port is open or not."
+							size="small"
+							value="port"
+							checked={monitor.type === "port"}
 							onChange={(event) => handleChange(event, "type")}
 						/>
 						{errors["type"] ? (

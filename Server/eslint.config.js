@@ -14,6 +14,7 @@ export default [
 		languageOptions: {
 			globals: {
 				...globals.node, // Add Node.js globals
+				...globals.chai, // Add Chai globals
 			},
 			ecmaVersion: 2023,
 			sourceType: "module",
