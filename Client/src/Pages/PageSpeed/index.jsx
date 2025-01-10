@@ -36,8 +36,8 @@ const PageSpeed = () => {
 					field: null,
 					order: null,
 				});
-				if (res?.data?.data?.monitors) {
-					setMonitors(res.data.data.monitors);
+				if (res?.data?.data?.filteredMonitors) {
+					setMonitors(res.data.data.filteredMonitors);
 					setSummary(res.data.data.summary);
 				}
 			} catch (error) {

@@ -88,6 +88,7 @@ const UptimeDataTable = ({
 	isAdmin,
 	isLoading,
 	monitors,
+	filteredMonitors,
 	monitorCount,
 	sort,
 	setSort,
@@ -274,7 +275,7 @@ const UptimeDataTable = ({
 				)}
 				<DataTable
 					headers={headers}
-					data={monitors}
+					data={filteredMonitors}
 					config={{
 						rowSX: {
 							cursor: "pointer",
@@ -300,6 +301,7 @@ UptimeDataTable.propTypes = {
 	isAdmin: PropTypes.bool,
 	isLoading: PropTypes.bool,
 	monitors: PropTypes.array,
+	filteredMonitors: PropTypes.array,
 	monitorCount: PropTypes.number,
 	sort: PropTypes.shape({
 		field: PropTypes.string,
