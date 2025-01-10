@@ -181,10 +181,10 @@ const logoImageValidation = joi.object({
 	}),
 	size: joi
 		.number()
-		.max(800*800)
+		.max(3000000)
 		.messages({
 			"number.base": "File size must be a number.",
-			"number.max": "File size must be less than 640KB.",
+			"number.max": "File size must be less than 3MB.",
 			"number.empty": "File size required.",
 		}),
 });

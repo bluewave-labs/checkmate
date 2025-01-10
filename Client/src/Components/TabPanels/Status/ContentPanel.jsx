@@ -30,8 +30,8 @@ const ContentPanel = () => {
 				const response = await networkService.getMonitorsByTeamId({
 					authToken: authToken,
 					teamId: user.teamId,
-					limit: 50,
-					types: ["http", "ping", "pagespeed", "hardware"],
+					limit: null, // donot return any checks for the monitors
+					types: ["http"], // status page is available only for the uptime type
 				});
 				if(response.data.data.monitors.length==0){
 					setErrors({monitors: "Please config monitors to setup status page"})

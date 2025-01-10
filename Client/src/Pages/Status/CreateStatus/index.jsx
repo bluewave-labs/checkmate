@@ -29,7 +29,7 @@ import { networkService } from "../../../main";
 			["companyName", "url", "timezone", "color", "publish", "logo"],
 			["monitors", "showUptimePercentage", "showBarcode"],
 		];
-		const tabList = ["General Settings", "Contents"];
+		const tabList = ["General settings", "Contents"];
 		const hasInitForm = initForm && Object.keys(initForm).length > 0;
 		const [form, setForm] = useState(
 			hasInitForm
@@ -143,7 +143,7 @@ import { networkService } from "../../../main";
 								/>
 							))}
 						</TabList>
-					</Box>
+					</Box> 
 					<StatusFormProvider
 						form={form}
 						setForm={setForm}

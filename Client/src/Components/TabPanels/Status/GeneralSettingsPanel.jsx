@@ -31,6 +31,7 @@ const GeneralSettingsPanel = () => {
 	const intervalRef = useRef(null);
 	const SUBDOAMIN_PREFIX =
 		import.meta.env.VITE_STATUS_PAGE_SUBDOMAIN_PREFIX ?? "http://localhost/";
+	const STATUS_PAGE = import.meta.env.VITE_STATU_PAGE_URL?? "status-page";		
 
 	// Clears specific error from errors state
 	const clearError = (err) => {
@@ -91,19 +92,15 @@ const GeneralSettingsPanel = () => {
 		let error = validateField({ type: pic?.type, size: pic?.size }, logoImageValidation);
 		if (error) return;
 
+		const newLogo = {
+			src: URL.createObjectURL(pic),
+			name: pic.name,
+			type: pic.type,
+			size: pic.size,
+		}
 		setProgress((prev) => ({ ...prev, isLoading: true }));
-		setLogo({
-			src: URL.createObjectURL(pic),
-			name: pic.name,
-			type: pic.type,
-			size: pic.size,
-		});
-		setForm({...form, logo: {
-			src: URL.createObjectURL(pic),
-			name: pic.name,
-			type: pic.type,
-			size: pic.size,
-		}})
+		setLogo(newLogo);
+		setForm({ ...form, logo: newLogo });
 		intervalRef.current = setInterval(() => {
 			const buffer = 12;
 			setProgress((prev) => {
@@ -118,12 +115,7 @@ const GeneralSettingsPanel = () => {
 
 	return (
 		<TabPanel
-			value="General Settings"
-			sx={{
-				"& h1, & p, & input": {
-					color: theme.palette.text.tertiary,
-				},
-			}}
+			value="General settings"
 		>
 			<Stack
 				component="form"
@@ -176,14 +168,15 @@ const GeneralSettingsPanel = () => {
 						<TextInput
 							id="url"
 							type="url"
-							label="SubURL"
-							value={form.url}
-							startAdornment={
-								<HttpAdornment
-									prefix={SUBDOAMIN_PREFIX}
-									https={false}
-								/>
-							}
+							label="Your status page address"
+							disabled
+							value={SUBDOAMIN_PREFIX+ STATUS_PAGE}
+							// startAdornment={
+							// 	<HttpAdornment
+							// 		prefix={SUBDOAMIN_PREFIX}
+							// 		https={false}
+							// 	/>
+							// }
 							onChange={handleChange}
 							onBlur={handleBlur}
 							helperText={errors["url"]}
@@ -217,7 +210,6 @@ const GeneralSettingsPanel = () => {
 							loading={progress.isLoading && progress.value !== 100}
 							onChange={handleLogo}
 							isRound={false}
-							maxSize="640KB"
 						/>
 						{progress.isLoading || progress.value !== 0 || errors["logo"] ? (
 							<ProgressUpload
