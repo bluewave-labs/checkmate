@@ -145,7 +145,7 @@ const Login = () => {
 					fontWeight: 600,
 					fontSize: 28,
 				},
-				"& p": { fontSize: 14, color: theme.palette.text.accent },
+				"& p": { fontSize: 14, color: "red" /* theme.palette.text.accent */ },
 				"& span": { fontSize: "inherit" },
 			}}
 		>

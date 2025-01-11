@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack /* , Typography */ } from "@mui/material";
 import Arrow from "../../../assets/icons/top-right-arrow.svg?react";
 import Background from "../../../assets/Images/background-grid.svg?react";
 import ClockSnooze from "../../../assets/icons/clock-snooze.svg?react";
@@ -45,9 +45,9 @@ const StatusBox = ({ title, value }) => {
 			position="relative"
 			flex={1}
 			border={1}
+			backgroundColor={theme.palette.primary.main}
 			borderColor={theme.palette.primary.lowContrast}
 			borderRadius={theme.shape.borderRadius}
-			backgroundColor={theme.palette.primary.main}
 			p={theme.spacing(8)}
 			overflow="hidden"
 		>
@@ -58,7 +58,7 @@ const StatusBox = ({ title, value }) => {
 					left: "5%",
 					pointerEvents: "none",
 					"& svg g g:last-of-type path": {
-						stroke: theme.palette.other.grid,
+						stroke: theme.palette.primary.contrastText.tertiary,
 					},
 				}}
 			>
@@ -68,9 +68,8 @@ const StatusBox = ({ title, value }) => {
 				textTransform="uppercase"
 				fontSize={15}
 				letterSpacing={0.5}
-				color={theme.palette.primary.contrastText.secondary}
+				color={theme.palette.primary.contrastText.tertiary}
 				mb={theme.spacing(8)}
-				sx={{ opacity: 0.6 }}
 			>
 				{title}
 			</Box>
@@ -84,15 +83,18 @@ const StatusBox = ({ title, value }) => {
 				gap="2px"
 			>
 				{value}
+
+				{/* 
+				TODO check with team if this is needed
 				<Typography
-					component="span"
-					fontSize={20}
-					fontWeight={300}
-					color={theme.palette.primary.contrastText.secondary}
-					sx={{ opacity: 0.3 }}
-				>
-					#
-				</Typography>
+						component="span"
+						fontSize={20}
+						fontWeight={300}
+						color={theme.palette.primary.contrastText.secondary}
+						sx={{ opacity: 0.3 }}
+					>
+						#
+					</Typography> */}
 			</Stack>
 		</Box>
 	);

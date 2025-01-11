@@ -32,7 +32,7 @@ const TeamPanel = () => {
 
 	const SPACING_GAP = theme.spacing(12);
 
-	const { authToken, user } = useSelector((state) => state.auth);
+	const { authToken /* , user  */ } = useSelector((state) => state.auth);
 	//TODO
 	// const [orgStates, setOrgStates] = useState({
 	// 	name: "Bluewave Labs",
@@ -194,7 +194,8 @@ const TeamPanel = () => {
 				},
 				"& .MuiTable-root .MuiTableBody-root .MuiTableCell-root, & .MuiTable-root p + p":
 					{
-						color: theme.palette.text.accent,
+						/* TODO set color */
+						color: "red" /* theme.palette.text.accent */,
 					},
 			}}
 		>

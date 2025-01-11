@@ -289,7 +289,7 @@ const Card = ({ monitor }) => {
 				>
 					<Typography
 						fontSize={11}
-						color={theme.palette.text.accent}
+						color={"red" /* theme.palette.text.accent */}
 					>
 						Checking every{" "}
 						{(() => {

@@ -1,5 +1,3 @@
-/* import { light } from "@mui/material/styles/createPalette"; */
-
 const typographyBase = 14;
 
 /* TODO
@@ -67,164 +65,6 @@ const paletteColors = {
 };
 
 const semanticColors = {
-	primary: {
-		main: {
-			light: paletteColors.blueBlueWave,
-			dark: paletteColors.blueBlueWave,
-		},
-		// TODO we dont have primary light, dark or contrast text
-	},
-	secondary: {
-		main: {
-			light: paletteColors.gray100,
-			dark: paletteColors.gray800,
-		},
-		contrastText: {
-			light: paletteColors.blueGray200,
-			dark: paletteColors.blueGray200,
-		},
-		light: {
-			light: paletteColors.gray200,
-			dark: paletteColors.gray200,
-		},
-		dark: {
-			light: paletteColors.gray200,
-			dark: paletteColors.gray200,
-		},
-	},
-	success: {
-		main: {
-			light: paletteColors.green400,
-			dark: paletteColors.green400,
-		},
-		contrastText: {
-			light: paletteColors.green50,
-			dark: paletteColors.green50,
-		},
-		light: {
-			light: paletteColors.green500,
-			dark: paletteColors.green800,
-		},
-		dark: {
-			light: paletteColors.green400,
-			dark: paletteColors.green900,
-		},
-	},
-	neutral: {
-		contrastText: {
-			light: paletteColors.blueGray900,
-			dark: paletteColors.gray100,
-		},
-	},
-	error: {
-		main: {
-			light: paletteColors.red300,
-			dark: paletteColors.red300,
-		},
-		contrastText: {
-			light: paletteColors.gray50,
-			dark: paletteColors.gray50,
-		},
-		light: {
-			light: paletteColors.red100,
-			dark: paletteColors.red700,
-		},
-		dark: {
-			light: paletteColors.red800,
-			dark: paletteColors.red800,
-		},
-	},
-	warning: {
-		main: {
-			light: paletteColors.orange300,
-			dark: paletteColors.orange400,
-		},
-		contrastText: {
-			light: paletteColors.orange600,
-			dark: paletteColors.orange500,
-		},
-		light: {
-			light: paletteColors.orange100,
-			dark: paletteColors.orange800,
-		},
-		dark: {
-			light: paletteColors.orange50,
-			dark: paletteColors.gray800,
-		},
-	},
-	/* From this part on, try to create semantic structure, not feature based structure */
-	gradient: {
-		color1: {
-			light: paletteColors.gray90,
-			dark: paletteColors.gray890,
-		},
-		color2: {
-			light: paletteColors.gray80,
-			dark: paletteColors.gray880,
-		},
-		color3: {
-			light: paletteColors.gray70,
-			dark: paletteColors.gray870,
-		},
-		color4: {
-			light: paletteColors.gray60,
-			dark: paletteColors.gray860,
-		},
-		color5: {
-			light: paletteColors.gray50,
-			dark: paletteColors.gray850,
-		},
-	},
-	background: {
-		main: {
-			light: paletteColors.white,
-			dark: paletteColors.gray890,
-		},
-		alt: {
-			light: paletteColors.gray90,
-			dark: paletteColors.gray890,
-		},
-		fill: {
-			light: paletteColors.gray100,
-			dark: paletteColors.gray800,
-		},
-		accent: {
-			light: paletteColors.gray100,
-			dark: paletteColors.gray850,
-		},
-	},
-	text: {
-		primary: {
-			light: paletteColors.blueGray900,
-			dark: paletteColors.gray100,
-		},
-		secondary: {
-			light: paletteColors.blueGray400,
-			dark: paletteColors.gray200,
-		},
-		tertiary: {
-			light: paletteColors.blueGray200,
-			dark: paletteColors.gray300,
-		},
-		accent: {
-			light: paletteColors.gray500,
-			dark: paletteColors.gray500,
-		},
-	},
-	border: {
-		light: {
-			light: paletteColors.gray200,
-			dark: paletteColors.gray800,
-			/* TODO this should live in a different key (border.disabled.light and .dark) */
-			disabled: paletteColors.gray150,
-		},
-		dark: {
-			light: paletteColors.gray200,
-			dark: paletteColors.gray750,
-			/* TODO this should live in a different key (border.disabled.light and .dark) */
-			disabled: paletteColors.gray150,
-		},
-	},
 	unresolved: {
 		main: {
 			light: paletteColors.blue700,
@@ -237,21 +77,6 @@ const semanticColors = {
 		bg: {
 			light: paletteColors.gray100,
 			dark: paletteColors.gray100,
-		},
-	},
-	other: {
-		icon: {
-			light: paletteColors.blueGray150,
-		},
-		line: {
-			light: paletteColors.gray200,
-		},
-		grid: {
-			light: paletteColors.gray300,
-			dark: paletteColors.gray600,
-		},
-		autofill: {
-			light: paletteColors.blueGray20,
 		},
 	},
 };
@@ -427,3 +252,14 @@ const newSemanticColors = {
 };
 
 export { typographyLevels, semanticColors as colors, newSemanticColors };
+
+/* TODO
+
+Look up for
+"red"
+"white"
+{ text, bg, border }
+
+
+theme.palette.unresolved
+*/

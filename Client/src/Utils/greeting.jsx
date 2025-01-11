@@ -163,6 +163,7 @@ const Greeting = ({ type = "" }) => {
 				<Typography
 					component="span"
 					fontSize="inherit"
+					color={theme.palette.primary.contrastText.tertiary}
 				>
 					{prepend},{" "}
 				</Typography>
@@ -178,7 +179,7 @@ const Greeting = ({ type = "" }) => {
 			<Typography
 				variant="h2"
 				lineHeight={1}
-				color={theme.palette.text.accent}
+				color={theme.palette.primary.contrastText.tertiary}
 			>
 				{append} — Here’s an overview of your {type} monitors.
 			</Typography>

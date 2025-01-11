@@ -12,58 +12,8 @@ const darkTheme = createTheme({
 
 export default darkTheme;
 
-// const {
-// 	primary,
-// 	secondary,
-// 	success,
-// 	error,
-// 	warning,
-// 	neutral,
-// 	gradient: {
-// 		color1: { dark: color1 },
-// 		color2: { dark: color2 },
-// 		color3: { dark: color3 },
-// 		color4: { dark: color4 },
-// 		color5: { dark: color5 },
-// 	},
-// 	background,
-// 	text,
-// 	border,
-// 	unresolved,
-// 	other,
-// } = colors;
-
-// const palette = {
 // 	action: {
 // 		disabled: primary.lowContrast.disabled,
-// 	},
-// 	primary: { main: primary.main.dark },
-// 	secondary: {
-// 		main: secondary.main.dark,
-// 		contrastText: secondary.contrastText.dark,
-// 		light: secondary.dark.dark,
-// 		dark: secondary.dark.dark,
-// 	},
-// 	success: {
-// 		main: success.main.dark,
-// 		contrastText: success.contrastText.dark,
-// 		light: success.light.dark,
-// 		dark: success.dark.dark,
-// 	},
-// 	error: {
-// 		main: error.main.dark,
-// 		contrastText: error.contrastText.dark,
-// 		light: error.light.dark,
-// 		dark: error.dark.dark,
-// 	},
-// 	warning: {
-// 		main: warning.main.dark,
-// 		light: warning.light.dark,
-// 		contrastText: warning.contrastText.dark,
-// 		dark: warning.dark.dark,
-// 	},
-// 	neutral: {
-// 		contrastText: neutral.contrastText.dark,
 // 	},
 // 	/* From this part on, try to create semantic structure, not feature based structure */
 // 	percentage: {

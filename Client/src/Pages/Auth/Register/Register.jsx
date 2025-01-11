@@ -285,7 +285,8 @@ const Register = ({ isSuperAdmin }) => {
 					fontWeight: 600,
 					fontSize: 28,
 				},
-				"& p": { fontSize: 14, color: theme.palette.text.accent },
+				/* TODO set color */
+				"& p": { fontSize: 14, color: "red" /* theme.palette.text.accent */ },
 				"& span": { fontSize: "inherit" },
 			}}
 		>

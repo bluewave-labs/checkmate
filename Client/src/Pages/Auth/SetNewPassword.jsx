@@ -75,7 +75,8 @@ const SetNewPassword = () => {
 				},
 				"& p": {
 					fontSize: 14,
-					color: theme.palette.text.accent,
+					/* TODO set color */
+					color: "red" /*  theme.palette.text.accent */,
 				},
 			}}
 		>
