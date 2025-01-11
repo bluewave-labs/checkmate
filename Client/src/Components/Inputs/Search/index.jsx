@@ -142,7 +142,7 @@ const Search = ({
 							option.noOptions
 								? {
 										pointerEvents: "none",
-										backgroundColor: theme.palette.background.main,
+										backgroundColor: theme.palette.primary.main,
 									}
 								: {}
 						}

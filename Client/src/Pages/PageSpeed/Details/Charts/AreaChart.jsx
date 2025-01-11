@@ -54,7 +54,7 @@ const CustomToolTip = ({ active, payload, label, config }) => {
 		return (
 			<Box
 				sx={{
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					border: 1,
 					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
@@ -289,7 +289,7 @@ const PagespeedDetailsAreaChart = ({ data, interval, metrics }) => {
 				{Object.keys(filteredConfig).map((key) => {
 					const { color } = filteredConfig[key];
 					const strokeColor = theme.palette[color].main;
-					const bgColor = theme.palette.background.main;
+					const bgColor = theme.palette.primary.main;
 
 					return (
 						<Area

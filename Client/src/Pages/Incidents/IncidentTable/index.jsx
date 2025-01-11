@@ -132,7 +132,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 		border: 1,
 		borderColor: theme.palette.primary.lowContrast,
 		borderRadius: theme.shape.borderRadius,
-		backgroundColor: theme.palette.background.main,
+		backgroundColor: theme.palette.primary.main,
 		p: theme.spacing(30),
 	};
 

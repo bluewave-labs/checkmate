@@ -142,7 +142,7 @@ const baseTheme = (palette) => ({
 						borderColor: theme.palette.primary.lowContrast,
 						borderRadius: 4,
 						boxShadow: shadow,
-						backgroundColor: theme.palette.background.main,
+						backgroundColor: theme.palette.primary.main,
 						backgroundImage: "none",
 					};
 				},
@@ -196,7 +196,7 @@ const baseTheme = (palette) => ({
 		MuiPagination: {
 			styleOverrides: {
 				root: ({ theme }) => ({
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					border: 1,
 					borderStyle: "solid",
 					borderColor: theme.palette.primary.lowContrast,
@@ -248,7 +248,7 @@ const baseTheme = (palette) => ({
 					},
 					"& .MuiInputBase-input:-webkit-autofill": {
 						transition: "background-color 5000s ease-in-out 0s",
-						WebkitBoxShadow: `0 0 0px 1000px ${theme.palette.background.main} inset`,
+						WebkitBoxShadow: `0 0 0px 1000px ${theme.palette.primary.main} inset`,
 						WebkitTextFillColor: theme.palette.primary.contrastText.main,
 					},
 					"& .MuiInputBase-input.MuiOutlinedInput-input": {

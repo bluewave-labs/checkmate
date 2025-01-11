@@ -132,7 +132,7 @@ const ForgotPassword = () => {
 						border: 1,
 						borderRadius: theme.spacing(5),
 						borderColor: theme.palette.primary.lowContrast,
-						backgroundColor: theme.palette.background.main,
+						backgroundColor: theme.palette.primary.main,
 						padding: {
 							xs: theme.spacing(12),
 							sm: theme.spacing(20),

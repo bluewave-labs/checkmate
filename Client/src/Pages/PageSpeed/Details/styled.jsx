@@ -10,7 +10,7 @@ export const ChartBox = styled(Stack)(({ theme }) => ({
 	borderRadius: 4,
 	borderTopRightRadius: 16,
 	borderBottomRightRadius: 16,
-	backgroundColor: theme.palette.background.main,
+	backgroundColor: theme.palette.primary.main,
 	"& h2": {
 		color: theme.palette.primary.contrastText.secondary,
 		fontSize: 15,
@@ -33,8 +33,8 @@ export const ChartBox = styled(Stack)(({ theme }) => ({
 		borderLeftStyle: "solid",
 		borderLeftColor: theme.palette.primary.lowContrast,
 		borderRadius: 16,
-		backgroundColor: theme.palette.background.main,
-		background: `linear-gradient(325deg, ${theme.palette.tertiary.main} 20%, ${theme.palette.background.main} 45%)`,
+		backgroundColor: theme.palette.primary.main,
+		background: `linear-gradient(325deg, ${theme.palette.tertiary.main} 20%, ${theme.palette.primary.main} 45%)`,
 	},
 	"& path": {
 		transition: "stroke-width 400ms ease",

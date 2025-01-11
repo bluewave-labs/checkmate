@@ -5,7 +5,7 @@ const ConfigBox = styled(Stack)(({ theme }) => ({
 	flexDirection: "row",
 	justifyContent: "space-between",
 	gap: theme.spacing(20),
-	backgroundColor: theme.palette.background.main,
+	backgroundColor: theme.palette.primary.main,
 	border: 1,
 	borderStyle: "solid",
 	borderColor: theme.palette.primary.lowContrast,

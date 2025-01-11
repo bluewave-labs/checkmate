@@ -154,7 +154,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 						height="100%"
 						position="absolute"
 						sx={{
-							backgroundColor: theme.palette.background.main,
+							backgroundColor: theme.palette.primary.main,
 							opacity: 0.8,
 							zIndex: 100,
 						}}

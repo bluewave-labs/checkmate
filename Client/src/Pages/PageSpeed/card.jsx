@@ -23,7 +23,7 @@ const CustomToolTip = ({ payload }) => {
 	return (
 		<Box
 			sx={{
-				backgroundColor: theme.palette.background.main,
+				backgroundColor: theme.palette.primary.main,
 				border: 1,
 				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: theme.shape.borderRadius,
@@ -217,7 +217,7 @@ const Card = ({ monitor }) => {
 				border={1}
 				borderColor={theme.palette.primary.lowContrast}
 				borderRadius={theme.shape.borderRadius}
-				backgroundColor={theme.palette.background.main}
+				backgroundColor={theme.palette.primary.main}
 				sx={{
 					display: "grid",
 					gridTemplateColumns: "34px 2fr 1fr",

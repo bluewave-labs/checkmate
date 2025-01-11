@@ -39,8 +39,8 @@ const StatBox = ({ heading, subHeading, sx }) => {
 				borderStyle: "solid",
 				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: 4,
-				backgroundColor: theme.palette.background.main,
-				/* background: `linear-gradient(340deg, ${theme.palette.tertiary.main} 20%, ${theme.palette.background.main} 45%)`, */
+				backgroundColor: theme.palette.primary.main,
+				/* background: `linear-gradient(340deg, ${theme.palette.tertiary.main} 20%, ${theme.palette.primary.main} 45%)`, */
 				"& h2": {
 					fontSize: 13,
 					fontWeight: 500,

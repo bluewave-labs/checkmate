@@ -47,7 +47,7 @@ const StatusBox = ({ title, value }) => {
 			border={1}
 			borderColor={theme.palette.primary.lowContrast}
 			borderRadius={theme.shape.borderRadius}
-			backgroundColor={theme.palette.background.main}
+			backgroundColor={theme.palette.primary.main}
 			p={theme.spacing(8)}
 			overflow="hidden"
 		>

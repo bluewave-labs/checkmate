@@ -109,7 +109,7 @@ const BaseBox = ({ children, sx = {} }) => {
 				padding: `${theme.spacing(BASE_BOX_PADDING_VERTICAL)} ${theme.spacing(BASE_BOX_PADDING_HORIZONTAL)}`,
 				minWidth: 200,
 				width: 225,
-				backgroundColor: theme.palette.background.main,
+				backgroundColor: theme.palette.primary.main,
 				border: 1,
 				borderStyle: "solid",
 				borderColor: theme.palette.primary.lowContrast,
@@ -667,7 +667,7 @@ const InfrastructureDetails = () => {
 						border: 1,
 						borderColor: theme.palette.primary.lowContrast,
 						borderRadius: theme.shape.borderRadius,
-						backgroundColor: theme.palette.background.main,
+						backgroundColor: theme.palette.primary.main,
 						p: theme.spacing(30),
 					}}
 				/>

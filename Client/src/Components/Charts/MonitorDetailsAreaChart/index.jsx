@@ -26,7 +26,7 @@ const CustomToolTip = ({ active, payload, label }) => {
 			<Box
 				className="area-tooltip"
 				sx={{
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					border: 1,
 					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
@@ -202,7 +202,7 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 					stroke={theme.palette.primary.main}
 					fill="url(#colorUv)"
 					strokeWidth={isHovered ? 2.5 : 1.5}
-					activeDot={{ stroke: theme.palette.background.main, r: 5 }}
+					activeDot={{ stroke: theme.palette.primary.main, r: 5 }}
 				/>
 			</AreaChart>
 		</ResponsiveContainer>

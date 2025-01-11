@@ -62,7 +62,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 							border: 1,
 							borderColor: theme.palette.primary.lowContrast,
 							borderRadius: 2,
-							backgroundColor: theme.palette.background.main,
+							backgroundColor: theme.palette.primary.main,
 							"& svg": {
 								position: "absolute",
 								top: "50%",

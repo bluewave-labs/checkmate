@@ -14,7 +14,7 @@ const Fallback = ({ isAdmin }) => {
 	return (
 		<Stack
 			alignItems="center"
-			backgroundColor={theme.palette.background.main}
+			backgroundColor={theme.palette.primary.main}
 			p={theme.spacing(30)}
 			pt={theme.spacing(25)}
 			gap={theme.spacing(2)}

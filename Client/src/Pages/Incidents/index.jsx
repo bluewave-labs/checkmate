@@ -95,7 +95,7 @@ const Incidents = () => {
 							onChange={handleSelect}
 							items={Object.values(monitors)}
 							sx={{
-								backgroundColor: theme.palette.background.main,
+								backgroundColor: theme.palette.primary.main,
 							}}
 						/>
 						<ButtonGroup

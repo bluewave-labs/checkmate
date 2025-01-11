@@ -118,7 +118,7 @@ export const InfrastructureTooltip = ({
 			<Box
 				className="area-tooltip"
 				sx={{
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					border: 1,
 					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
@@ -198,7 +198,7 @@ export const TemperatureTooltip = ({ active, payload, label, keys, dotColor }) =
 			<Box
 				className="area-tooltip"
 				sx={{
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					border: 1,
 					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,

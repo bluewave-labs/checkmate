@@ -322,7 +322,7 @@ const MaintenanceTable = ({
 								minWidth: theme.spacing(20),
 								textAlign: "left",
 								"&.Mui-focused > div": {
-									backgroundColor: theme.palette.background.main,
+									backgroundColor: theme.palette.primary.main,
 								},
 							},
 						},

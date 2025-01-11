@@ -10,7 +10,7 @@ export const ChartBox = styled(Stack)(({ theme }) => ({
 	borderStyle: "solid",
 	borderColor: theme.palette.primary.lowContrast,
 	borderRadius: 4,
-	backgroundColor: theme.palette.background.main,
+	backgroundColor: theme.palette.primary.main,
 	"& h2": {
 		color: theme.palette.primary.contrastText.secondary,
 		fontSize: 15,
