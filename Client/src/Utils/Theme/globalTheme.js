@@ -189,7 +189,7 @@ const baseTheme = (palette) => ({
 		MuiTableHead: {
 			styleOverrides: {
 				root: ({ theme }) => ({
-					backgroundColor: theme.palette.background.accent,
+					backgroundColor: theme.palette.tertiary.main,
 				}),
 			},
 		},

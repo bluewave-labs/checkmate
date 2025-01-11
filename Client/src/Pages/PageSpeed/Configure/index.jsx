@@ -319,7 +319,7 @@ const PageSpeedConfigure = () => {
 								gap={theme.spacing(20)}
 								sx={{
 									".MuiInputBase-root:has(> .Mui-disabled)": {
-										backgroundColor: theme.palette.background.accent,
+										backgroundColor: theme.palette.tertiary.main,
 									},
 								}}
 							>

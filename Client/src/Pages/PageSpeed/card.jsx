@@ -225,7 +225,7 @@ const Card = ({ monitor }) => {
 					gridTemplateRows: "34px 1fr 3fr",
 					cursor: "pointer",
 					"&:hover": {
-						backgroundColor: theme.palette.background.accent,
+						backgroundColor: theme.palette.tertiary.main,
 					},
 					"& path": {
 						transition: "stroke-width 400ms ease",
@@ -279,7 +279,7 @@ const Card = ({ monitor }) => {
 					borderTop={1}
 					borderRight={1}
 					borderColor={theme.palette.primary.lowContrast}
-					backgroundColor={theme.palette.background.accent}
+					backgroundColor={theme.palette.tertiary.main}
 					sx={{
 						pointerEvents: "none",
 						userSelect: "none",

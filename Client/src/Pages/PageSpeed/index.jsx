@@ -116,7 +116,7 @@ const PageSpeed = () => {
 							color={theme.palette.primary.contrastText.main}
 							border={1}
 							borderColor={theme.palette.primary.lowContrast}
-							backgroundColor={theme.palette.background.accent}
+							backgroundColor={theme.palette.tertiary.main}
 						>
 							{monitorCount}
 						</Box>

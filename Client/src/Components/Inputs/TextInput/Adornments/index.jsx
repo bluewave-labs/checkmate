@@ -13,7 +13,7 @@ export const HttpAdornment = ({ https }) => {
 			height="100%"
 			sx={{
 				borderRight: `solid 1px ${theme.palette.primary.lowContrast}`,
-				backgroundColor: theme.palette.background.accent,
+				backgroundColor: theme.palette.tertiary.main,
 				pl: theme.spacing(6),
 			}}
 		>

@@ -34,7 +34,7 @@ export const ChartBox = styled(Stack)(({ theme }) => ({
 		borderLeftColor: theme.palette.primary.lowContrast,
 		borderRadius: 16,
 		backgroundColor: theme.palette.background.main,
-		background: `linear-gradient(325deg, ${theme.palette.background.accent} 20%, ${theme.palette.background.main} 45%)`,
+		background: `linear-gradient(325deg, ${theme.palette.tertiary.main} 20%, ${theme.palette.background.main} 45%)`,
 	},
 	"& path": {
 		transition: "stroke-width 400ms ease",

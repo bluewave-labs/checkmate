@@ -232,21 +232,21 @@ function Infrastructure() {
 								color={theme.palette.primary.contrastText.main}
 								border={1}
 								borderColor={theme.palette.primary.lowContrast}
-								backgroundColor={theme.palette.background.accent}
+								backgroundColor={theme.palette.tertiary.main}
 							>
 								{totalMonitors}
 							</Box>
 						</Stack>
 						<TableContainer component={Paper}>
 							<Table stickyHeader>
-								<TableHead sx={{ backgroundColor: theme.palette.background.accent }}>
+								<TableHead sx={{ backgroundColor: theme.palette.tertiary.main }}>
 									<TableRow>
 										{columns.map((column, index) => (
 											<TableCell
 												key={index}
 												align={index === 0 ? "left" : "center"}
 												sx={{
-													backgroundColor: theme.palette.background.accent,
+													backgroundColor: theme.palette.tertiary.main,
 												}}
 											>
 												{column.label}
@@ -263,7 +263,7 @@ function Infrastructure() {
 												sx={{
 													cursor: "pointer",
 													"&:hover": {
-														backgroundColor: theme.palette.background.accent,
+														backgroundColor: theme.palette.tertiary.main,
 													},
 												}}
 											>

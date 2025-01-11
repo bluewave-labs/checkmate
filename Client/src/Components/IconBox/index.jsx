@@ -50,7 +50,7 @@ const IconBox = styled(Box)(
 		borderStyle: "solid",
 		borderColor: theme.palette.primary.lowContrast,
 		borderRadius: borderRadius,
-		backgroundColor: theme.palette.background.accent,
+		backgroundColor: theme.palette.tertiary.main,
 		"& svg": {
 			position: "absolute",
 			top: "50%",

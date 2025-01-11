@@ -157,7 +157,6 @@ function Sidebar() {
 	}, [location]);
 
 	/* TODO refactor this, there are a some ternaries and comments in the return  */
-
 	return (
 		<Stack
 			component="aside"
@@ -170,9 +169,8 @@ function Sidebar() {
 				borderRadius: theme.shape.borderRadius,
 				/* TODO selected item */
 				"& .selected-path": {
-					/* TODO lookup theme.palette.background.accent */
-					backgroundColor:
-						theme.palette.secondary.main /* theme.palette.background.accent */,
+					/* TODO lookup theme.palette.tertiary.main */
+					backgroundColor: theme.palette.secondary.main /* theme.palette.tertiary.main */,
 
 					/* TODO not working */
 					color: theme.palette.primary.main,
@@ -383,7 +381,7 @@ function Sidebar() {
 								sx={{
 									ml: theme.spacing(8),
 									"& .selected-path": {
-										backgroundColor: theme.palette.background.accent,
+										backgroundColor: theme.palette.tertiary.main,
 									},
 								}}
 							>

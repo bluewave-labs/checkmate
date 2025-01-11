@@ -69,7 +69,7 @@ const Radio = (props) => {
 				m: theme.spacing(-2.5),
 				borderRadius: theme.shape.borderRadius,
 				"&:hover": {
-					backgroundColor: theme.palette.background.accent,
+					backgroundColor: theme.palette.tertiary.main,
 				},
 				"& .MuiButtonBase-root": {
 					p: 0,
