@@ -267,7 +267,7 @@ const newColors = {
 	blueGray600: "#344054",
 	blueGray800: "#1C2130",
 	blueBlueWave: "#1570EF",
-	green100: "#8CFFCB",
+	green100: "#67cd78",
 	green200: "#4B9B77",
 	green400: "#079455",
 	green700: "#026513",
