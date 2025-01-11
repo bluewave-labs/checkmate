@@ -122,6 +122,7 @@ ColoredLabel.propTypes = {
  * <StatusLabel status="up" text="Active" />
  */
 
+/* TODO check design aspect with Gorkem */
 const StatusLabel = ({ status, text, customStyles }) => {
 	const theme = useTheme();
 	const colors = {

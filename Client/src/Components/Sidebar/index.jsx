@@ -180,6 +180,7 @@ function Sidebar() {
 				},
 			}}
 		>
+			{/* TODO change for link */}
 			<Stack
 				pt={theme.spacing(6)}
 				pb={theme.spacing(12)}
@@ -202,7 +203,8 @@ function Sidebar() {
 						color="white"
 						sx={{
 							position: "relative",
-							backgroundColor: theme.palette.primary.main,
+							backgroundColor: theme.palette.accent.main,
+							color: theme.palette.accent.contrastText,
 							borderRadius: theme.shape.borderRadius,
 							userSelect: "none",
 						}}
