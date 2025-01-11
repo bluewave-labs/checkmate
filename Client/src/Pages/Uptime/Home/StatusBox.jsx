@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
-import { Box, Stack /* , Typography */ } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import Arrow from "../../../assets/icons/top-right-arrow.svg?react";
 import Background from "../../../assets/Images/background-grid.svg?react";
 import ClockSnooze from "../../../assets/icons/clock-snooze.svg?react";
@@ -84,17 +84,15 @@ const StatusBox = ({ title, value }) => {
 			>
 				{value}
 
-				{/* 
-				TODO check with team if this is needed
 				<Typography
-						component="span"
-						fontSize={20}
-						fontWeight={300}
-						color={theme.palette.primary.contrastText.secondary}
-						sx={{ opacity: 0.3 }}
-					>
-						#
-					</Typography> */}
+					component="span"
+					fontSize={20}
+					fontWeight={300}
+					color={theme.palette.primary.contrastText.secondary}
+					sx={{ opacity: 0.3 }}
+				>
+					#
+				</Typography>
 			</Stack>
 		</Box>
 	);

@@ -156,11 +156,14 @@ function Sidebar() {
 		}
 	}, [location]);
 
+	const iconColor = theme.palette.primary.contrastText.tertiary;
+
 	/* TODO refactor this, there are a some ternaries and comments in the return  */
 	return (
 		<Stack
 			component="aside"
 			className={collapsed ? "collapsed" : "expanded"}
+			/* TODO general padding should be here */
 			py={theme.spacing(6)}
 			gap={theme.spacing(6)}
 			sx={{
@@ -181,7 +184,8 @@ function Sidebar() {
 					color: theme.palette.secondary.main,
 				},
 				"& .MuiList-root svg path": {
-					stroke: theme.palette.primary.contrastText.tertiary,
+					/* Menu Icons */
+					stroke: iconColor,
 				},
 				"& p, & span, & .MuiListSubheader-root": {
 					color: theme.palette.primary.contrastText.secondary,
@@ -264,18 +268,17 @@ function Sidebar() {
 					</Typography>
 				</Stack>
 			</Stack>
-			{/* menu */}
 			<List
 				component="nav"
 				aria-labelledby="nested-menu-subheader"
 				disablePadding
 				subheader={
-					/* TODO Increase Menu bottom spacing */
 					<ListSubheader
 						component="div"
 						id="nested-menu-subheader"
 						sx={{
-							pt: theme.spacing(4),
+							py: theme.spacing(4),
+							/* TODO px should be centralized in container */
 							px: collapsed ? theme.spacing(2) : theme.spacing(4),
 							backgroundColor: "transparent",
 						}}
@@ -286,7 +289,7 @@ function Sidebar() {
 				sx={{
 					px: theme.spacing(6),
 					height: "100%",
-					overflow: "hidden",
+					/* overflow: "hidden", */
 				}}
 			>
 				{menu.map((item) =>
@@ -313,10 +316,12 @@ function Sidebar() {
 								className={location.pathname.includes(item.path) ? "selected-path" : ""}
 								onClick={() => navigate(`/${item.path}`)}
 								sx={{
-									/* TODO fixed height */ height: "37px",
+									/* 
+									TODO we do not need this height
+									minHeight: "37px", */
+									p: theme.spacing(5),
 									gap: theme.spacing(4),
 									borderRadius: theme.shape.borderRadius,
-									px: theme.spacing(4),
 								}}
 							>
 								<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
@@ -380,6 +385,7 @@ function Sidebar() {
 								MenuListProps={{ sx: { px: 1, py: 2 } }}
 								sx={{
 									ml: theme.spacing(8),
+									/* TODO what is this selection? */
 									"& .selected-path": {
 										backgroundColor: theme.palette.tertiary.main,
 									},
@@ -412,6 +418,7 @@ function Sidebar() {
 											sx={{
 												gap: theme.spacing(4),
 												opacity: 0.9,
+												/* TODO this has no effect? */
 												"& svg": {
 													"& path": {
 														stroke: theme.palette.primary.contrastText.tertiary,
@@ -505,6 +512,7 @@ function Sidebar() {
 														backgroundColor: theme.palette.primary.lowContrast,
 													},
 													"&.selected-path::after": {
+														/* TODO what is this selector doing? */
 														backgroundColor: theme.palette.primary.contrastText.tertiary,
 														transform: "scale(1.2)",
 													},
@@ -577,7 +585,7 @@ function Sidebar() {
 							marginLeft={"auto"}
 							columnGap={theme.spacing(2)}
 						>
-							<ThemeSwitch />
+							<ThemeSwitch color={iconColor} />
 							<Tooltip
 								title="Controls"
 								disableInteractive
@@ -595,7 +603,8 @@ function Sidebar() {
 											height: "22px",
 										},
 										"& svg path": {
-											stroke: theme.palette.primary.contrastText.tertiary,
+											/* Vertical three dots */
+											stroke: iconColor,
 										},
 									}}
 									onClick={(event) => openPopup(event, "logout")}
@@ -653,6 +662,7 @@ function Sidebar() {
 							</Box>
 						</MenuItem>
 					)}
+					{/* TODO Do we need two dividers? */}
 					{collapsed && <Divider />}
 					<Divider />
 					<MenuItem
@@ -662,7 +672,7 @@ function Sidebar() {
 							borderRadius: theme.shape.borderRadius,
 							pl: theme.spacing(4),
 							"& svg path": {
-								stroke: theme.palette.primary.contrastText.tertiary,
+								stroke: iconColor,
 							},
 						}}
 					>
