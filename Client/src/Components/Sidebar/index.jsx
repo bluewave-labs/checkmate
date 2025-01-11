@@ -168,9 +168,19 @@ function Sidebar() {
 				border: 1,
 				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: theme.shape.borderRadius,
-				backgroundColor: theme.palette.background.main,
-				"& .selected-path, & .MuiListItemButton-root:hover": {
-					backgroundColor: theme.palette.background.accent,
+				/* TODO selected item */
+				"& .selected-path": {
+					/* TODO lookup theme.palette.background.accent */
+					backgroundColor:
+						theme.palette.secondary.main /* theme.palette.background.accent */,
+
+					/* TODO not working */
+					color: theme.palette.primary.main,
+				},
+				" & .MuiListItemButton-root:hover": {
+					backgroundColor: theme.palette.tertiary.main,
+					/* TODO try and change color */
+					color: theme.palette.secondary.main,
 				},
 				"& .MuiList-root svg path": {
 					stroke: theme.palette.primary.contrastText.tertiary,
@@ -180,12 +190,48 @@ function Sidebar() {
 				},
 			}}
 		>
-			{/* TODO change for link */}
+			<IconButton
+				sx={{
+					position: "absolute",
+					/* TODO 60 is a magic number. if logo chnges size this might break */
+					top: 60,
+					right: 0,
+					transform: `translate(50%, 0)`,
+					backgroundColor: theme.palette.tertiary.main,
+					border: 1,
+					borderColor: theme.palette.primary.lowContrast,
+					p: theme.spacing(2.5),
+					"& svg": {
+						width: theme.spacing(8),
+						height: theme.spacing(8),
+						"& path": {
+							stroke: theme.palette.primary.contrastText.secondary,
+						},
+					},
+					"&:focus": { outline: "none" },
+					"&:hover": {
+						backgroundColor: theme.palette.primary.lowContrast,
+						borderColor: theme.palette.primary.lowContrast,
+					},
+				}}
+				onClick={() => {
+					setOpen((prev) =>
+						Object.fromEntries(Object.keys(prev).map((key) => [key, false]))
+					);
+					dispatch(toggleSidebar());
+				}}
+			>
+				{collapsed ? <ArrowRight /> : <ArrowLeft />}
+			</IconButton>
+
+			{/* TODO Alignment done using padding. Use single source of truth to that*/}
 			<Stack
 				pt={theme.spacing(6)}
 				pb={theme.spacing(12)}
 				pl={theme.spacing(8)}
 			>
+				{/* TODO Abstract logo into component */}
+				{/* TODO Turn logo into a link */}
 				<Stack
 					direction="row"
 					alignItems="center"
@@ -219,38 +265,6 @@ function Sidebar() {
 						Checkmate
 					</Typography>
 				</Stack>
-				<IconButton
-					sx={{
-						position: "absolute",
-						top: 60,
-						right: 0,
-						transform: `translate(50%, 0)`,
-						backgroundColor: theme.palette.primary.lowContrast,
-						border: 1,
-						borderColor: theme.palette.primary.lowContrast,
-						p: theme.spacing(2.5),
-						"& svg": {
-							width: theme.spacing(8),
-							height: theme.spacing(8),
-							"& path": {
-								stroke: theme.palette.primary.contrastText.secondary,
-							},
-						},
-						"&:focus": { outline: "none" },
-						"&:hover": {
-							backgroundColor: theme.palette.primary.lowContrast,
-							borderColor: theme.palette.primary.lowContrast,
-						},
-					}}
-					onClick={() => {
-						setOpen((prev) =>
-							Object.fromEntries(Object.keys(prev).map((key) => [key, false]))
-						);
-						dispatch(toggleSidebar());
-					}}
-				>
-					{collapsed ? <ArrowRight /> : <ArrowLeft />}
-				</IconButton>
 			</Stack>
 			{/* menu */}
 			<List
@@ -258,6 +272,7 @@ function Sidebar() {
 				aria-labelledby="nested-menu-subheader"
 				disablePadding
 				subheader={
+					/* TODO Increase Menu bottom spacing */
 					<ListSubheader
 						component="div"
 						id="nested-menu-subheader"
@@ -300,7 +315,7 @@ function Sidebar() {
 								className={location.pathname.includes(item.path) ? "selected-path" : ""}
 								onClick={() => navigate(`/${item.path}`)}
 								sx={{
-									height: "37px",
+									/* TODO fixed height */ height: "37px",
 									gap: theme.spacing(4),
 									borderRadius: theme.shape.borderRadius,
 									px: theme.spacing(4),

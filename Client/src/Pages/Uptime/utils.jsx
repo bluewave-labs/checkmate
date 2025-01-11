@@ -28,47 +28,34 @@ const useUtils = () => {
 		down: "Inactive",
 		paused: "Paused",
 	};
+
+	/* This is used on 
+	1) Details > Gradient card */
 	const statusStyles = {
 		up: {
-			backgroundColor: theme.palette.success.accent /* dark */,
+			backgroundColor: theme.palette.success.accent,
 			background: `linear-gradient(340deg, ${theme.palette.success.accent} -60%, ${theme.palette.success.contrastText} 35%)`,
-			borderColor: theme.palette.success.light,
+			borderColor: theme.palette.success.contrastText,
 			"& h2": { color: theme.palette.success.main },
 		},
-		/* TODO solve remaining gradients */
 		down: {
 			backgroundColor: theme.palette.error.accent /* dark */,
 			background: `linear-gradient(340deg, ${theme.palette.error.accent} -60%, ${theme.palette.error.contrastText} 35%)`,
-			borderColor: theme.palette.error.light,
+			borderColor: theme.palette.error.contrastText,
 			"& h2": { color: theme.palette.error.main },
-		} /* {
-			backgroundColor: theme.palette.error.dark,
-			background: `linear-gradient(340deg, ${theme.palette.error.light} -60%, ${theme.palette.error.dark} 35%)`,
-			borderColor: theme.palette.error.light,
-			"& h2": { color: theme.palette.error.main },
-		}, */,
+		},
 		paused: {
 			backgroundColor: theme.palette.warning.accent /* dark */,
 			background: `linear-gradient(340deg, ${theme.palette.warning.accent} -60%, ${theme.palette.warning.contrastText} 35%)`,
-			borderColor: theme.palette.warning.light,
+			borderColor: theme.palette.warning.contrastText,
 			"& h2": { color: theme.palette.warning.main },
-		} /* {
-			backgroundColor: theme.palette.warning.dark,
-			background: `linear-gradient(340deg, ${theme.palette.warning.light} -60%, ${theme.palette.warning.dark} 35%)`,
-			borderColor: theme.palette.warning.light,
-			"& h2": { color: theme.palette.warning.main },
-		} */,
+		},
 		pending: {
 			backgroundColor: theme.palette.warning.accent /* dark */,
 			background: `linear-gradient(340deg, ${theme.palette.warning.accent} -60%, ${theme.palette.warning.contrastText} 35%)`,
-			borderColor: theme.palette.warning.light,
+			borderColor: theme.palette.warning.contrastText,
 			"& h2": { color: theme.palette.warning.main },
-		} /* {
-			backgroundColor: theme.palette.warning.light,
-			background: `linear-gradient(340deg, ${theme.palette.warning.dark} -60%, ${theme.palette.warning.light} 35%)`,
-			borderColor: theme.palette.warning.dark,
-			"& h2": { color: theme.palette.warning.main },
-		}, */,
+		},
 	};
 	const pagespeedStyles = {
 		up: {

@@ -270,7 +270,7 @@ const newColors = {
 	green100: "#8CFFCB",
 	green200: "#4B9B77",
 	green400: "#079455",
-	green700: "#19543A",
+	green700: "#026513",
 	orange100: "#FFE5CC",
 	orange400: "#FD8F22",
 	orange600: "#9B734B",
