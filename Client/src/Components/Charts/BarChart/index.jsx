@@ -143,11 +143,7 @@ const BarChart = ({ checks = [] }) => {
 							position="relative"
 							width="9px"
 							height="100%"
-							backgroundColor={
-								check.status
-									? theme.palette.success.contrastText
-									: theme.palette.error.contrastText
-							}
+							backgroundColor={theme.palette.tertiary.main}
 							sx={{
 								borderRadius: theme.spacing(1.5),
 								/* 

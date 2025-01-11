@@ -318,12 +318,22 @@ const newSemanticColors = {
 	},
 	secondary: {
 		main: {
-			light: newColors.gray100,
+			light: newColors.gray200,
 			dark: newColors.blueGray600,
 		},
 		contrastText: {
 			light: newColors.blueGray600,
 			dark: newColors.gray200,
+		},
+	},
+	tertiary: {
+		main: {
+			light: newColors.gray100,
+			dark: newColors.blueGray800,
+		},
+		contrastText: {
+			light: newColors.blueGray800,
+			dark: newColors.gray100,
 		},
 	},
 	/* For success, warning and error, contrastText works wll with main, and with the theme primary main color. Accent is to be used in graphs */

@@ -106,11 +106,16 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 				slotProps={{
 					paper: {
 						sx: {
-							"& ul": { p: theme.spacing(2.5) },
-							"& li": { m: 0 },
+							"& ul": {
+								p: theme.spacing(2.5),
+								backgroundColor: theme.palette.primary.main,
+							},
+							"& li": { m: 0, color: theme.palette.primary.contrastText.secondary },
+							/* 
+							This should not be set automatically on the last of type
 							"& li:last-of-type": {
 								color: theme.palette.error.main,
-							},
+							}, */
 						},
 					},
 				}}
@@ -182,6 +187,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 							e.stopPropagation();
 							openRemove(e);
 						}}
+						sx={{ "&.MuiButtonBase-root": { color: theme.palette.error.main } }}
 					>
 						Remove
 					</MenuItem>

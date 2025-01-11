@@ -58,19 +58,21 @@ const UptimeMonitors = () => {
 					gap={theme.spacing(6)}
 				>
 					{canAddMonitor && (
-						<Button
-							variant="contained"
-							color="accent"
-							onClick={() => {
-								navigate("/uptime/create");
-							}}
-							sx={{
-								fontWeight: 500,
-								whiteSpace: "nowrap",
-							}}
-						>
-							Create new
-						</Button>
+						<>
+							<Button
+								variant="contained"
+								color="accent"
+								onClick={() => {
+									navigate("/uptime/create");
+								}}
+								sx={{
+									fontWeight: 500,
+									whiteSpace: "nowrap",
+								}}
+							>
+								Create new
+							</Button>
+						</>
 					)}
 				</Stack>
 				<Greeting type="uptime" />
