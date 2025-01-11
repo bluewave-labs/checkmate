@@ -54,7 +54,7 @@ const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 
 
 	const fillColor =
 		progressWithinRange > threshold
-			? theme.palette.percentage.uptimePoor
+			? theme.palette.error.main
 			: theme.palette.primary.main;
 
 	return (

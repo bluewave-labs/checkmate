@@ -250,7 +250,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 									percentageColor =
 										/* TODO colors update */
 										monitor.uptimePercentage < 0.25
-											? theme.palette.percentage.uptimePoor
+											? theme.palette.error.main
 											: monitor.uptimePercentage < 0.5
 												? theme.palette.percentage.uptimeFair
 												: monitor.uptimePercentage < 0.75
