@@ -1,31 +1,10 @@
 import { createTheme } from "@mui/material";
 import { baseTheme } from "./globalTheme";
 import { /* colors, */ newSemanticColors } from "./constants";
+import { extractThemeColors } from "./extractColorObject";
 
-function extractThemeColors(themeType, colorObject) {
-	if (!["light", "dark"].includes(themeType)) {
-		throw new Error('Invalid theme type. Use "light" or "dark".');
-	}
-
-	const extract = (obj) => {
-		if (typeof obj !== "object" || obj === null) {
-			return obj;
-		}
-
-		if ("light" in obj && "dark" in obj) {
-			return obj[themeType]; // Return the value for the specified theme
-		}
-
-		// Reduce the object, keeping only the extracted themeType values
-		return Object.keys(obj).reduce((acc, key) => {
-			acc[key] = extract(obj[key]);
-			return acc;
-		}, {});
-	};
-
-	return extract(colorObject);
-}
 const palette = extractThemeColors("light", newSemanticColors);
+
 /* TODO I figured out we could have just one theme by passing mode as parameter for theme function. Implement later */
 const lightTheme = createTheme({
 	palette,

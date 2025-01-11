@@ -267,6 +267,7 @@ const newColors = {
 	blueGray600: "#344054",
 	blueGray800: "#1C2130",
 	blueBlueWave: "#1570EF",
+	/* I changed green 100 and green 700. Need to change red and warning as well, and refactor the object following the structure */
 	green100: "#67cd78",
 	green200: "#4B9B77",
 	green400: "#079455",
@@ -281,6 +282,15 @@ const newColors = {
 	red700: "#791515",
 };
 
+/* Structure:
+Key: 
+main: background color
+contrastText: color for main contrast text
+light and dark: should be transparent (since we don't want MUI to make the light dark automatic calculations for us)
+lowerContrastText: if there are any, use nested keys secondary and tertiary
+lowContrast: if we need some low contrast for that color (for borders, and decorative elements). This should never be usend in text
+
+*/
 const newSemanticColors = {
 	accent: {
 		main: {
