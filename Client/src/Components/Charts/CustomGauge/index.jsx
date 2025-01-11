@@ -16,7 +16,8 @@ const MAXIMUM_VALUE = 100;
  * @param {number} [props.radius=60] - Radius of the gauge circle
  * @param {number} [props.strokeWidth=15] - Width of the gauge stroke
  * @param {number} [props.threshold=50] - Threshold for color change
- *
+ * @param {number} [props.percentageFontSize] - percentage font size
+ * 
  * @example
  * <CustomGauge
  *   progress={75}
@@ -27,8 +28,17 @@ const MAXIMUM_VALUE = 100;
  *
  * @returns {React.ReactElement} Rendered CustomGauge component
  */
-const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 50 }) => {
+const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 50,percentageFontSize=12 }) => {
 	const theme = useTheme();
+	const BOX_STYLE = {
+		borderRadius: "50%",
+		boxShadow: "0px 2px 4px -3px #20202040",
+		padding:"6px",
+		alignItems:"center",
+		display:"flex",
+		backgroundColor:theme.palette.background.main
+	};
+	
 	// Calculate the length of the stroke for the circle
 	const { circumference, totalSize, strokeLength } = useMemo(
 		() => ({
@@ -62,6 +72,7 @@ const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 
 			className="radial-chart"
 			width={radius}
 			height={radius}
+			sx={BOX_STYLE}
 		>
 			<svg
 				viewBox={`0 0 ${totalSize} ${totalSize}`}
@@ -70,7 +81,7 @@ const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 
 			>
 				<circle
 					className="radial-chart-base"
-					stroke={theme.palette.background.fill}
+					stroke={theme.palette.background.stroke}
 					strokeWidth={strokeWidth}
 					fill="none"
 					cx={totalSize / 2} // Center the circle
@@ -100,6 +111,7 @@ const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 
 					transform: "translate(-50%, -50%)",
 					...theme.typography.body2,
 					fill: theme.typography.body2.color,
+					fontSize: percentageFontSize,		
 				}}
 			>
 				{`${progressWithinRange.toFixed(1)}%`}
@@ -115,4 +127,5 @@ CustomGauge.propTypes = {
 	radius: PropTypes.number,
 	strokeWidth: PropTypes.number,
 	threshold: PropTypes.number,
+	percentageFontSize:PropTypes.number,
 };

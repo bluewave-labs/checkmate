@@ -99,6 +99,9 @@ const palette = {
 		alt: background.alt.light,
 		fill: background.fill.light,
 		accent: background.accent.light,
+		stroke: background.stroke.light,
+		gauge: background.gauge.light,
+		textCard:background.textCard.light
 	},
 	border: {
 		light: border.light.light,

@@ -35,6 +35,7 @@ const paletteColors = {
 	gray880: "#0C0C0E",
 	gray890: "#09090B",
 	blueGray20: "#E8F0FE",
+	blueGray50: "#CDE2FF",
 	blueGray150: "#667085",
 	blueGray200: "#475467",
 	blueGray400: "#344054",
@@ -190,6 +191,16 @@ const semanticColors = {
 			light: paletteColors.gray100,
 			dark: paletteColors.gray850,
 		},
+		stroke: {
+			light: paletteColors.blueGray50,
+			dark: paletteColors.gray800,
+		}, 
+		gauge: {
+			light: paletteColors.gray90
+		},
+		textCard:{
+			light:paletteColors.gray100
+		}
 	},
 	text: {
 		primary: {

@@ -22,7 +22,7 @@ import PropTypes from "prop-types";
 import StatBox from "../../../Components/StatBox";
 
 const BASE_BOX_PADDING_VERTICAL = 4;
-const BASE_BOX_PADDING_HORIZONTAL = 8;
+const BASE_BOX_PADDING_HORIZONTAL = 4;
 const TYPOGRAPHY_PADDING = 8;
 /**
  * Converts bytes to gigabytes
@@ -107,11 +107,12 @@ const BaseBox = ({ children, sx = {} }) => {
 				height: "100%",
 				padding: `${theme.spacing(BASE_BOX_PADDING_VERTICAL)} ${theme.spacing(BASE_BOX_PADDING_HORIZONTAL)}`,
 				minWidth: 200,
-				width: 225,
+				width: 200,
 				backgroundColor: theme.palette.background.main,
 				border: 1,
 				borderStyle: "solid",
 				borderColor: theme.palette.border.light,
+				borderRadius: theme.spacing(2),
 				...sx,
 			}}
 		>
@@ -138,7 +139,15 @@ BaseBox.propTypes = {
  */
 const GaugeBox = ({ value, heading, metricOne, valueOne, metricTwo, valueTwo }) => {
 	const theme = useTheme();
-
+	const value_style = {
+		width: " 80px",
+		textAlign: "end",
+		borderRadius: "4px",
+		padding: "3px",
+		backgroundColor: theme.palette.background.textCard,
+		fontSize: 12,
+		fontWeight: "600"
+	};
 	return (
 		<BaseBox>
 			<Stack
@@ -146,33 +155,52 @@ const GaugeBox = ({ value, heading, metricOne, valueOne, metricTwo, valueTwo }) 
 				gap={theme.spacing(2)}
 				alignItems="center"
 			>
-				<CustomGauge
-					progress={value}
-					radius={100}
-					color={theme.palette.primary.main}
-				/>
-				<Typography component="h2">{heading}</Typography>
+				<Stack
+					alignItems="center"
+					width="100%"
+					gap={theme.spacing(8)}
+					padding={`${theme.spacing(14)} ${theme.spacing(5)} ${theme.spacing(7)} ${theme.spacing(5)}`}
+					borderRadius={`${theme.spacing(4)} ${theme.spacing(4)} ${theme.spacing(0)} ${theme.spacing(0)}`}
+					sx={{ backgroundColor: `${theme.palette.background.gauge}` }}
+				>
+					<CustomGauge
+						progress={value}
+						radius={120}
+						color={theme.palette.primary.main}
+						percentageFontSize={20}
+					/>
+					<Typography
+						component="h2"
+						fontWeight="600"
+						fontSize={13}
+					>
+						{heading}
+					</Typography>
+				</Stack>
 				<Box
 					sx={{
 						width: "100%",
 						borderTop: `1px solid ${theme.palette.border.light}`,
+						padding: `${theme.spacing(6)} ${theme.spacing(3)} ${theme.spacing(3)} ${theme.spacing(3)}`,
 					}}
 				>
 					<Stack
 						justifyContent={"space-between"}
+						alignItems={"center"}
 						direction="row"
 						gap={theme.spacing(2)}
 					>
-						<Typography>{metricOne}</Typography>
-						<Typography>{valueOne}</Typography>
+						<Typography fontSize={13}>{metricOne} </Typography>
+						<Typography sx={value_style}>{valueOne}</Typography>
 					</Stack>
 					<Stack
 						justifyContent={"space-between"}
 						direction="row"
+						marginTop={theme.spacing(3)}
 						gap={theme.spacing(2)}
 					>
-						<Typography>{metricTwo}</Typography>
-						<Typography>{valueTwo}</Typography>
+						<Typography fontSize={13}>{metricTwo}</Typography>
+						<Typography sx={value_style}>{valueTwo}</Typography>
 					</Stack>
 				</Box>
 			</Stack>
@@ -206,7 +234,7 @@ const InfrastructureDetails = () => {
 	const [monitor, setMonitor] = useState(null);
 	const { authToken } = useSelector((state) => state.auth);
 	const [dateRange, setDateRange] = useState("day");
-	const { statusColor, statusStyles, determineState } = useUtils();
+	const { statusColor, statusStyles, determineState,statusMsg } = useUtils();
 	// These calculations are needed because ResponsiveContainer
 	// doesn't take padding of parent/siblings into account
 	// when calculating height.
@@ -531,20 +559,27 @@ const InfrastructureDetails = () => {
 					<Stack
 						direction="row"
 						gap={theme.spacing(8)}
+						alignItems="center"
 					>
 						<Box>
 							<PulseDot color={statusColor[determineState(monitor)]} />
 						</Box>
 						<Typography
-							alignSelf="end"
+							alignSelf="center"
 							component="h1"
 							variant="h1"
 						>
 							{monitor.name}
 						</Typography>
-						<Typography alignSelf="end">{monitor.url || "..."}</Typography>
+						<Typography alignSelf="center">{monitor.url || "..."}</Typography>
 						<Box sx={{ flexGrow: 1 }} />
-						<Typography alignSelf="end">
+						<Typography
+							alignSelf="center"
+							color={statusColor[determineState(monitor)]}
+						>
+							{statusMsg[determineState(monitor)]}
+						</Typography>
+						<Typography alignSelf="center">
 							Checking every {formatDurationRounded(monitor?.interval)}
 						</Typography>
 						<Typography alignSelf="end">
@@ -638,7 +673,12 @@ const InfrastructureDetails = () => {
 					>
 						{areaChartConfigs.map((config) => {
 							return (
-								<BaseBox key={`${config.type}-${config.diskIndex ?? ""}`}>
+								<BaseBox
+									key={`${config.type}-${config.diskIndex ?? ""}`}
+									sx={{
+										padding: `${theme.spacing(8)} ${theme.spacing(6)}`,
+									}}
+								>
 									<Typography
 										component="h2"
 										padding={theme.spacing(8)}
