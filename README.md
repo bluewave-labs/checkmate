@@ -1,5 +1,5 @@
 
-# **We're opening our $5000 grant funding announcement soon, in partnership with [UpRock](https://uprock.com) - check [our web page](https://checkmate.so) for preliminary details.** 
+# **Announcing $5000 grant funding in partnership with [UpRock](https://uprock.com) - check [our web page](https://checkmate.so) for funding ideas** 
 
 - If you would like to support us, please consider giving it a ⭐ and click on "watch". 
 - Need support or have a suggestion? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.
