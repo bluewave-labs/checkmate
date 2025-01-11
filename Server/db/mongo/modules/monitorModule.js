@@ -501,7 +501,10 @@ const getMonitorsByTeamId = async (req) => {
 	limit = parseInt(limit);
 	page = parseInt(page);
 	rowsPerPage = parseInt(rowsPerPage);
-
+	if (field === undefined) {
+		field = "name";
+		order = "asc";
+	}
 	// Build the match stage
 	const matchStage = { teamId: ObjectId.createFromHexString(req.params.teamId) };
 	if (type !== undefined) {
@@ -511,7 +514,6 @@ const getMonitorsByTeamId = async (req) => {
 	const skip = page && rowsPerPage ? page * rowsPerPage : 0;
 
 	const sort = { [field]: order === "asc" ? 1 : -1 };
-
 	const results = await Monitor.aggregate([
 		{ $match: matchStage },
 		{
