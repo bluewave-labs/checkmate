@@ -44,15 +44,15 @@ const StatBox = ({ heading, subHeading, sx }) => {
 				"& h2": {
 					fontSize: 13,
 					fontWeight: 500,
-					color: theme.palette.primary.contrastText.secondary,
+					color: theme.palette.primary.contrastTextSecondary,
 					textTransform: "uppercase",
 				},
 				"& p": {
 					fontSize: 18,
-					color: theme.palette.primary.contrastText.main,
+					color: theme.palette.primary.contrastText,
 					marginTop: theme.spacing(2),
 					"& span": {
-						color: theme.palette.primary.contrastText.tertiary,
+						color: theme.palette.primary.contrastTextTertiary,
 						marginLeft: theme.spacing(2),
 						fontSize: 15,
 					},

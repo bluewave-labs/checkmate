@@ -54,7 +54,7 @@ const Select = ({
 	const theme = useTheme();
 	const itemStyles = {
 		fontSize: "var(--env-var-font-size-medium)",
-		color: theme.palette.primary.contrastText.tertiary,
+		color: theme.palette.primary.contrastTextTertiary,
 		borderRadius: theme.shape.borderRadius,
 		margin: theme.spacing(2),
 	};
@@ -67,7 +67,7 @@ const Select = ({
 			{label && (
 				<Typography
 					component="h3"
-					color={theme.palette.primary.contrastText.secondary}
+					color={theme.palette.primary.contrastTextSecondary}
 					fontWeight={500}
 					fontSize={13}
 				>
@@ -95,7 +95,7 @@ const Select = ({
 						borderColor: theme.palette.primary.lowContrast,
 					},
 					"& svg path": {
-						fill: theme.palette.primary.contrastText.tertiary,
+						fill: theme.palette.primary.contrastTextTertiary,
 					},
 					...sx,
 				}}

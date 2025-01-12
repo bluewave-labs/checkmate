@@ -51,7 +51,7 @@ const Check = ({ text, noHighlightText, variant = "info", outlined = false }) =>
 				sx={{
 					color:
 						variant === "info"
-							? theme.palette.primary.contrastText.tertiary
+							? theme.palette.primary.contrastTextTertiary
 							: colors[variant],
 					opacity: 0.8,
 				}}

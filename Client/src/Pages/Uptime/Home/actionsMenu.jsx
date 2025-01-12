@@ -90,7 +90,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 						outline: "none",
 					},
 					"& svg path": {
-						stroke: theme.palette.primary.contrastText.tertiary,
+						stroke: theme.palette.primary.contrastTextTertiary,
 					},
 				}}
 			>
@@ -110,7 +110,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 								p: theme.spacing(2.5),
 								backgroundColor: theme.palette.primary.main,
 							},
-							"& li": { m: 0, color: theme.palette.primary.contrastText.secondary },
+							"& li": { m: 0, color: theme.palette.primary.contrastTextSecondary },
 							/* 
 							This should not be set automatically on the last of type
 							"& li:last-of-type": {

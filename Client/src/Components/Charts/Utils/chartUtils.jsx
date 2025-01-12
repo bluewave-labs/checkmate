@@ -23,7 +23,7 @@ export const TzTick = ({ x, y, payload, index }) => {
 			x={x}
 			y={y + 10}
 			textAnchor="middle"
-			fill={theme.palette.primary.contrastText.tertiary}
+			fill={theme.palette.primary.contrastTextTertiary}
 			fontSize={11}
 			fontWeight={400}
 		>
@@ -57,7 +57,7 @@ export const PercentTick = ({ x, y, payload, index }) => {
 			x={x - 20}
 			y={y}
 			textAnchor="middle"
-			fill={theme.palette.primary.contrastText.tertiary}
+			fill={theme.palette.primary.contrastTextTertiary}
 			fontSize={11}
 			fontWeight={400}
 		>
@@ -128,7 +128,7 @@ export const InfrastructureTooltip = ({
 			>
 				<Typography
 					sx={{
-						color: theme.palette.primary.contrastText.tertiary,
+						color: theme.palette.primary.contrastTextTertiary,
 						fontSize: 12,
 						fontWeight: 500,
 					}}
@@ -150,7 +150,7 @@ export const InfrastructureTooltip = ({
 						ml={theme.spacing(3)}
 						sx={{
 							"& span": {
-								color: theme.palette.primary.contrastText.tertiary,
+								color: theme.palette.primary.contrastTextTertiary,
 								fontSize: 11,
 								fontWeight: 500,
 							},
@@ -208,7 +208,7 @@ export const TemperatureTooltip = ({ active, payload, label, keys, dotColor }) =
 			>
 				<Typography
 					sx={{
-						color: theme.palette.primary.contrastText.tertiary,
+						color: theme.palette.primary.contrastTextTertiary,
 						fontSize: 12,
 						fontWeight: 500,
 					}}
@@ -227,7 +227,7 @@ export const TemperatureTooltip = ({ active, payload, label, keys, dotColor }) =
 								ml={theme.spacing(3)}
 								sx={{
 									"& span": {
-										color: theme.palette.primary.contrastText.tertiary,
+										color: theme.palette.primary.contrastTextTertiary,
 										fontSize: 11,
 										fontWeight: 500,
 									},

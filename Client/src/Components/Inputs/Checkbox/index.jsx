@@ -94,10 +94,10 @@ const Checkbox = ({
 				},
 				"& span.MuiTypography-root": {
 					fontSize: 13,
-					color: theme.palette.primary.contrastText.tertiary,
+					color: theme.palette.primary.contrastTextTertiary,
 				},
 				".MuiFormControlLabel-label.Mui-disabled": {
-					color: theme.palette.primary.contrastText.tertiary,
+					color: theme.palette.primary.contrastTextTertiary,
 					opacity: 0.25,
 				},
 			}}

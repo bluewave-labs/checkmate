@@ -179,7 +179,7 @@ const CreatePageSpeed = () => {
 			className="create-monitor"
 			sx={{
 				"& h1": {
-					color: theme.palette.primary.contrastText.main,
+					color: theme.palette.primary.contrastText,
 				},
 			}}
 		>
@@ -207,7 +207,7 @@ const CreatePageSpeed = () => {
 						component="span"
 						fontSize="inherit"
 						fontWeight="inherit"
-						color={theme.palette.primary.contrastText.secondary}
+						color={theme.palette.primary.contrastTextSecondary}
 					>
 						PageSpeed monitor
 					</Typography>

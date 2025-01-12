@@ -11,10 +11,10 @@ const useUtils = () => {
 	const theme = useTheme();
 
 	const statusColor = {
-		up: theme.palette.success.accent,
-		down: theme.palette.error.accent,
-		paused: theme.palette.warning.accent,
-		pending: theme.palette.warning.accent,
+		up: theme.palette.success.lowContrast,
+		down: theme.palette.error.lowContrast,
+		paused: theme.palette.warning.lowContrast,
+		pending: theme.palette.warning.lowContrast,
 	};
 
 	const statusMsg = {
@@ -31,32 +31,39 @@ const useUtils = () => {
 
 	/* This is used on 
 	1) Details > Gradient card */
+	/* These are rediections. We should do something that maps up to success, down to error, and get the theme by that
+	
+	*/
 	const statusStyles = {
 		up: {
-			backgroundColor: theme.palette.success.accent,
-			background: `linear-gradient(340deg, ${theme.palette.success.accent} -60%, ${theme.palette.success.contrastText} 35%)`,
+			backgroundColor: theme.palette.success.lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette.success.lowContrast} -60%, ${theme.palette.success.contrastText} 35%)`,
 			borderColor: theme.palette.success.contrastText,
 			"& h2": { color: theme.palette.success.main },
 		},
 		down: {
-			backgroundColor: theme.palette.error.accent /* dark */,
-			background: `linear-gradient(340deg, ${theme.palette.error.accent} -60%, ${theme.palette.error.contrastText} 35%)`,
+			backgroundColor: theme.palette.error.lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette.error.lowContrast} -60%, ${theme.palette.error.contrastText} 35%)`,
 			borderColor: theme.palette.error.contrastText,
 			"& h2": { color: theme.palette.error.main },
 		},
 		paused: {
-			backgroundColor: theme.palette.warning.accent /* dark */,
-			background: `linear-gradient(340deg, ${theme.palette.warning.accent} -60%, ${theme.palette.warning.contrastText} 35%)`,
+			backgroundColor: theme.palette.warning.lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette.warning.lowContrast} -60%, ${theme.palette.warning.contrastText} 35%)`,
 			borderColor: theme.palette.warning.contrastText,
 			"& h2": { color: theme.palette.warning.main },
 		},
 		pending: {
-			backgroundColor: theme.palette.warning.accent /* dark */,
-			background: `linear-gradient(340deg, ${theme.palette.warning.accent} -60%, ${theme.palette.warning.contrastText} 35%)`,
+			backgroundColor: theme.palette.warning.lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette.warning.lowContrast} -60%, ${theme.palette.warning.contrastText} 35%)`,
 			borderColor: theme.palette.warning.contrastText,
 			"& h2": { color: theme.palette.warning.main },
 		},
 	};
+
+	/* These are rediections. We should do something that maps up to success, down to error, and get the theme by that
+	
+	*/
 	const pagespeedStyles = {
 		up: {
 			bg: theme.palette.success.dark,

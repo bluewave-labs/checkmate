@@ -97,22 +97,36 @@ const newColors = {
 	green200: "#4B9B77",
 	green400: "#079455",
 	green700: "#026513",
-	orange100: "#FFE5CC",
+	orange100: "#CCB368",
 	orange400: "#FD8F22",
 	orange600: "#9B734B",
-	orange700: "#694016",
-	red100: "#F9C2C2",
+	orange700: "#884605" /* "#6F5404" */,
+	/* warning: {
+		main: {
+			light: newColors.orange700,
+			dark: newColors.orange100,
+		},
+		contrastText: {
+			light: newColors.offWhite,
+			dark: newColors.offBlack,
+		},
+		lowContrast: {
+			light: newColors.orange400,
+			dark: newColors.orange600,
+		},
+	}, */
+	red100: "#F27C7C",
 	red400: "#D92020",
 	red600: "#9B4B4B",
-	red700: "#791515",
+	red700: "#980303",
 };
 
 /* Structure:
 Key: 
 main: background color
 contrastText: color for main contrast text
-light and dark: should be transparent (since we don't want MUI to make the light dark automatic calculations for us)
-lowerContrastText: if there are any, use nested keys secondary and tertiary
+contrastTextSecondary: if needed
+contrastTextTertiary: if needed
 lowContrast: if we need some low contrast for that color (for borders, and decorative elements). This should never be usend in text
 
 */
@@ -133,18 +147,16 @@ const newSemanticColors = {
 			dark: newColors.offBlack,
 		},
 		contrastText: {
-			main: {
-				light: newColors.blueGray800,
-				dark: newColors.blueGray50,
-			},
-			secondary: {
-				light: newColors.blueGray600,
-				dark: newColors.gray200,
-			},
-			tertiary: {
-				light: newColors.blueGray500,
-				dark: newColors.gray500,
-			},
+			light: newColors.blueGray800,
+			dark: newColors.blueGray50,
+		},
+		contrastTextSecondary: {
+			light: newColors.blueGray600,
+			dark: newColors.gray200,
+		},
+		contrastTextTertiary: {
+			light: newColors.blueGray500,
+			dark: newColors.gray500,
 		},
 		lowContrast: {
 			light: newColors.gray200,
@@ -171,33 +183,18 @@ const newSemanticColors = {
 			dark: newColors.gray100,
 		},
 	},
-	/* For success, warning and error, contrastText works wll with main, and with the theme primary main color. Accent is to be used in graphs */
 	success: {
 		main: {
 			light: newColors.green700,
 			dark: newColors.green100,
 		},
 		contrastText: {
-			light: newColors.green100,
-			dark: newColors.green700,
+			light: newColors.offWhite,
+			dark: newColors.offBlack,
 		},
-		accent: {
+		lowContrast: {
 			light: newColors.green400,
 			dark: newColors.green200,
-		},
-	},
-	error: {
-		main: {
-			light: newColors.red700,
-			dark: newColors.red100,
-		},
-		contrastText: {
-			light: newColors.red100,
-			dark: newColors.red700,
-		},
-		accent: {
-			light: newColors.red400,
-			dark: newColors.red600,
 		},
 	},
 	warning: {
@@ -206,12 +203,26 @@ const newSemanticColors = {
 			dark: newColors.orange100,
 		},
 		contrastText: {
-			light: newColors.orange100,
-			dark: newColors.orange700,
+			light: newColors.offWhite,
+			dark: newColors.offBlack,
 		},
-		accent: {
+		lowContrast: {
 			light: newColors.orange400,
 			dark: newColors.orange600,
+		},
+	},
+	error: {
+		main: {
+			light: newColors.red700,
+			dark: newColors.red100,
+		},
+		contrastText: {
+			light: newColors.offWhite,
+			dark: newColors.offBlack,
+		},
+		lowContrast: {
+			light: newColors.red400,
+			dark: newColors.red600,
 		},
 	},
 	/* These are temporary, just for everything not to break */
@@ -237,12 +248,6 @@ const newSemanticColors = {
 			dark: paletteColors.gray850,
 		},
 	},
-	other: {
-		grid: {
-			light: paletteColors.gray300,
-			dark: paletteColors.gray600,
-		},
-	},
 	unresolved: {
 		main: {
 			light: paletteColors.blue700,
@@ -255,7 +260,15 @@ export { typographyLevels, semanticColors as colors, newSemanticColors };
 
 /* TODO
 
+
+
 Look up for
+
+success.contrastText
+warning.contrastText
+error.contrastText
+
+
 "red"
 "white"
 { text, bg, border }
@@ -263,5 +276,5 @@ Look up for
  .dark
 
 
-theme.palette.unresolved
+theme.palette.unresolved (will become tertiary)
 */

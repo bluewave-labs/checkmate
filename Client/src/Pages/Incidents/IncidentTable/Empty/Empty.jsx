@@ -16,7 +16,7 @@ const Empty = ({ styles, mode }) => {
 			</Box>
 			<Typography
 				textAlign="center"
-				color={theme.palette.primary.contrastText.secondary}
+				color={theme.palette.primary.contrastTextSecondary}
 			>
 				No incidents recorded yet.
 			</Typography>

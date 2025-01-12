@@ -72,6 +72,45 @@ const UptimeMonitors = () => {
 							>
 								Create new
 							</Button>
+							<Button
+								variant="contained"
+								color="success"
+								onClick={() => {
+									navigate("/uptime/create");
+								}}
+								sx={{
+									fontWeight: 500,
+									whiteSpace: "nowrap",
+								}}
+							>
+								Create new
+							</Button>
+							<Button
+								variant="contained"
+								color="warning"
+								onClick={() => {
+									navigate("/uptime/create");
+								}}
+								sx={{
+									fontWeight: 500,
+									whiteSpace: "nowrap",
+								}}
+							>
+								Create new
+							</Button>
+							<Button
+								variant="contained"
+								color="error"
+								onClick={() => {
+									navigate("/uptime/create");
+								}}
+								sx={{
+									fontWeight: 500,
+									whiteSpace: "nowrap",
+								}}
+							>
+								Create new
+							</Button>
 						</>
 					)}
 				</Stack>

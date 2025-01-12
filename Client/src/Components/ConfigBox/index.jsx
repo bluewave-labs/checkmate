@@ -28,10 +28,10 @@ const ConfigBox = styled(Stack)(({ theme }) => ({
 		paddingLeft: theme.spacing(18),
 	},
 	"& h1, & h2": {
-		color: theme.palette.primary.contrastText.secondary,
+		color: theme.palette.primary.contrastTextSecondary,
 	},
 	"& p": {
-		color: theme.palette.primary.contrastText.tertiary,
+		color: theme.palette.primary.contrastTextTertiary,
 	},
 }));
 

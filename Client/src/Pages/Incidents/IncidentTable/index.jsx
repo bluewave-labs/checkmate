@@ -159,7 +159,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 					</Box>
 					<Typography
 						textAlign="center"
-						color={theme.palette.primary.contrastText.secondary}
+						color={theme.palette.primary.contrastTextSecondary}
 					>
 						The monitor you have selected has no recorded incidents yet.
 					</Typography>

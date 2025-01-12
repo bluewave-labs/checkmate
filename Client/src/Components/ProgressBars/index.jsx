@@ -71,7 +71,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 								width: 23,
 								height: 23,
 								"& path": {
-									fill: theme.palette.primary.contrastText.tertiary,
+									fill: theme.palette.primary.contrastTextTertiary,
 								},
 							},
 						}}
@@ -90,7 +90,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 						{error}
 					</Typography>
 				) : (
-					<Box color={theme.palette.primary.contrastText.tertiary}>
+					<Box color={theme.palette.primary.contrastTextTertiary}>
 						<Typography
 							component="h2"
 							mb={theme.spacing(1.5)}

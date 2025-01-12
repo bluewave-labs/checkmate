@@ -31,8 +31,8 @@ const BaseLabel = ({ label, styles, children }) => {
 			className="label"
 			sx={{
 				borderRadius: borderRadius,
-				border: `1px solid ${theme.palette.primary.contrastText.tertiary}`,
-				color: theme.palette.primary.contrastText.tertiary,
+				border: `1px solid ${theme.palette.primary.contrastTextTertiary}`,
+				color: theme.palette.primary.contrastTextTertiary,
 				padding: padding,
 				...styles,
 			}}
@@ -122,55 +122,58 @@ ColoredLabel.propTypes = {
  * <StatusLabel status="up" text="Active" />
  */
 
-/* TODO check design aspect with Gorkem */
+const statusToTheme = {
+	up: "success",
+	down: "error",
+	paused: "warning",
+	pending: "secondary",
+	"cannot resolve": "tertiary",
+};
+
 const StatusLabel = ({ status, text, customStyles }) => {
 	const theme = useTheme();
-	const colors = {
+	/* const colors = {
 		up: {
 			dotColor: theme.palette.success.main,
-			/* bgColor: theme.palette.success.contrastText */ /* dark */
-			borderColor: theme.palette.success.main /* light */,
+			borderColor: theme.palette.success.main ,
 		},
 		down: {
 			dotColor: theme.palette.error.main,
-			/* TODO Look for dark and light, they still work */
-			/* bgColor: theme.palette.primary.lowContrast, */
 			borderColor: theme.palette.error.light,
 		},
 		paused: {
 			dotColor: theme.palette.warning.main,
-			/* bgColor: theme.palette.warning.dark, */
 			borderColor: theme.palette.warning.light,
 		},
 		pending: {
-			dotColor: theme.palette.primary.contrastText.secondary,
-			bgColor: theme.palette.primary.main,
+			dotColor: theme.palette.primary.contrastTextSecondary,
 			borderColor: theme.palette.primary.lowContrast,
 		},
 		"cannot resolve": {
 			dotColor: theme.palette.unresolved.main,
-			bgColor: theme.palette.primary.lowContrast,
 			borderColor: theme.palette.unresolved.light,
 		},
-	};
+	}; */
+
+	const themeColor = statusToTheme[status];
 
 	// Look up the color for the status
-	const { borderColor, bgColor, dotColor } = colors[status];
+	/* const { borderColor, bgColor, dotColor } = colors[status]; */
 
 	return (
 		<BaseLabel
 			label={text}
 			styles={{
-				color: dotColor,
-				backgroundColor: bgColor,
-				borderColor: borderColor,
+				color: theme.palette[themeColor].main /* dotColor */,
+				/*backgroundColor:  bgColor, */
+				borderColor: theme.palette[themeColor].lowContrast /* borderColor */,
 				...customStyles,
 			}}
 		>
 			<Box
 				width={7}
 				height={7}
-				bgcolor={dotColor}
+				bgcolor={theme.palette[themeColor].lowContrast /* dotColor */}
 				borderRadius="50%"
 				marginRight="5px"
 			/>

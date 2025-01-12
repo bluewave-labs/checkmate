@@ -171,7 +171,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 					>
 						<CircularProgress
 							sx={{
-								color: theme.palette.primary.contrastText.tertiary,
+								color: theme.palette.primary.contrastTextTertiary,
 							}}
 						/>
 					</Box>
@@ -182,7 +182,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 					sx={{
 						backgroundColor: theme.palette.primary.main,
 						"& :is(th, td)": {
-							color: theme.palette.primary.contrastText.main,
+							color: theme.palette.primary.contrastText,
 						},
 					}}
 				>
@@ -238,7 +238,7 @@ const MonitorTable = ({ isAdmin, filter, setIsSearching, isSearching, handlePaus
 						{monitors.length > 0 ? (
 							monitors.map((monitor) => {
 								let uptimePercentage = "";
-								let percentageColor = theme.palette.success.accent;
+								let percentageColor = theme.palette.success.lowContrast;
 
 								// Determine uptime percentage and color based on the monitor's uptimePercentage value
 								if (monitor.uptimePercentage !== undefined) {

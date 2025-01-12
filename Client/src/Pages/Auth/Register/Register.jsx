@@ -50,7 +50,7 @@ const LandingPage = ({ isSuperAdmin, onSignup }) => {
 							"& svg": {
 								mr: theme.spacing(4),
 								"& path": {
-									stroke: theme.palette.primary.contrastText.tertiary,
+									stroke: theme.palette.primary.contrastTextTertiary,
 								},
 							},
 							"&:focus-visible": {
@@ -77,7 +77,7 @@ const LandingPage = ({ isSuperAdmin, onSignup }) => {
 							}}
 							sx={{
 								"&:hover": {
-									color: theme.palette.primary.contrastText.tertiary,
+									color: theme.palette.primary.contrastTextTertiary,
 								},
 							}}
 						>
@@ -95,7 +95,7 @@ const LandingPage = ({ isSuperAdmin, onSignup }) => {
 							}}
 							sx={{
 								"&:hover": {
-									color: theme.palette.primary.contrastText.tertiary,
+									color: theme.palette.primary.contrastTextTertiary,
 								},
 							}}
 						>

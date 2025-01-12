@@ -251,7 +251,7 @@ const BasicTable = ({ data, paginated, reversed, table, emptyMessage = "No data"
 					px={theme.spacing(4)}
 					sx={{
 						"& p": {
-							color: theme.palette.primary.contrastText.tertiary,
+							color: theme.palette.primary.contrastTextTertiary,
 						},
 					}}
 				>
@@ -305,9 +305,9 @@ const BasicTable = ({ data, paginated, reversed, table, emptyMessage = "No data"
 						}}
 						sx={{
 							mt: theme.spacing(6),
-							color: theme.palette.primary.contrastText.secondary,
+							color: theme.palette.primary.contrastTextSecondary,
 							"& svg path": {
-								stroke: theme.palette.primary.contrastText.tertiary,
+								stroke: theme.palette.primary.contrastTextTertiary,
 								strokeWidth: 1.3,
 							},
 							"& .MuiSelect-select": {

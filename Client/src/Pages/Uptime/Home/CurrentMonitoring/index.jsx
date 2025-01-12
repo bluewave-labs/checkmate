@@ -30,7 +30,7 @@ const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin, handlePause }) =>
 
 				<Box
 					className="current-monitors-counter"
-					color={theme.palette.primary.contrastText.main}
+					color={theme.palette.primary.contrastText}
 					border={1}
 					borderColor={theme.palette.primary.lowContrast}
 					backgroundColor={theme.palette.tertiary.main}

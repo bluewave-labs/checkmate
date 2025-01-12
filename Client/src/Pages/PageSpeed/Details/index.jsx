@@ -151,7 +151,7 @@ const PageSpeedDetails = () => {
 											width: 4,
 											height: 4,
 											borderRadius: "50%",
-											backgroundColor: theme.palette.primary.contrastText.tertiary,
+											backgroundColor: theme.palette.primary.contrastTextTertiary,
 											opacity: 0.8,
 											left: -9,
 											top: "50%",
@@ -175,7 +175,7 @@ const PageSpeedDetails = () => {
 									"& svg": {
 										mr: theme.spacing(3),
 										"& path": {
-											stroke: theme.palette.primary.contrastText.tertiary,
+											stroke: theme.palette.primary.contrastTextTertiary,
 										},
 									},
 								}}
@@ -410,7 +410,7 @@ const PageSpeedDetails = () => {
 													component="span"
 													fontSize={14}
 													fontWeight={500}
-													color={theme.palette.primary.contrastText.main}
+													color={theme.palette.primary.contrastText}
 												>
 													{value}
 													<Typography

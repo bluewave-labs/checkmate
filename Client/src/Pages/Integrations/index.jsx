@@ -126,7 +126,7 @@ const Integrations = () => {
 			gap={theme.spacing(2)}
 			sx={{
 				"& h1, & p": {
-					color: theme.palette.primary.contrastText.secondary,
+					color: theme.palette.primary.contrastTextSecondary,
 				},
 			}}
 		>

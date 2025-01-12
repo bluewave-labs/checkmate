@@ -58,7 +58,7 @@ const baseTheme = (palette) => ({
 							props: (props) => props.variant === "group",
 							style: {
 								/* color: theme.palette.secondary.contrastText, */
-								color: theme.palette.primary.contrastText.main,
+								color: theme.palette.primary.contrastText,
 								backgroundColor: theme.palette.primary.main,
 								border: 1,
 								borderStyle: "solid",
@@ -114,7 +114,7 @@ const baseTheme = (palette) => ({
 					"&.MuiLoadingButton-root": {
 						"&:disabled": {
 							backgroundColor: theme.palette.secondary.main,
-							color: theme.palette.primary.contrastText.main,
+							color: theme.palette.primary.contrastText,
 						},
 					},
 					"&.MuiLoadingButton-loading": {
@@ -177,7 +177,7 @@ const baseTheme = (palette) => ({
 					borderRadius: 4,
 					backgroundColor: "inherit",
 					padding: "4px 6px",
-					color: theme.palette.primary.contrastText.secondary,
+					color: theme.palette.primary.contrastTextSecondary,
 					fontSize: 13,
 					margin: 2,
 					minWidth: 100,
@@ -210,7 +210,7 @@ const baseTheme = (palette) => ({
 					borderStyle: "solid",
 					borderColor: theme.palette.primary.lowContrast,
 					"& button": {
-						color: theme.palette.primary.contrastText.tertiary,
+						color: theme.palette.primary.contrastTextTertiary,
 						borderRadius: 4,
 					},
 					"& li:first-of-type button, & li:last-of-type button": {
@@ -258,7 +258,7 @@ const baseTheme = (palette) => ({
 					"& .MuiInputBase-input:-webkit-autofill": {
 						transition: "background-color 5000s ease-in-out 0s",
 						WebkitBoxShadow: `0 0 0px 1000px ${theme.palette.primary.main} inset`,
-						WebkitTextFillColor: theme.palette.primary.contrastText.main,
+						WebkitTextFillColor: theme.palette.primary.contrastText,
 					},
 					"& .MuiInputBase-input.MuiOutlinedInput-input": {
 						padding: "0 var(--env-var-spacing-1-minus) !important",

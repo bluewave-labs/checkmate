@@ -156,7 +156,7 @@ function Sidebar() {
 		}
 	}, [location]);
 
-	const iconColor = theme.palette.primary.contrastText.tertiary;
+	const iconColor = theme.palette.primary.contrastTextTertiary;
 
 	/* TODO refactor this, there are a some ternaries and comments in the return  */
 	return (
@@ -178,7 +178,7 @@ function Sidebar() {
 					Text color for unselected menu items and menu headings
 					Secondary contrast text against main background
 					*/
-					color: theme.palette.primary.contrastText.secondary,
+					color: theme.palette.primary.contrastTextSecondary,
 				},
 				"& .MuiList-root svg path": {
 					/* Menu Icons */
@@ -228,7 +228,7 @@ function Sidebar() {
 						height: theme.spacing(8),
 						"& path": {
 							/* TODO this should be set at the top level if possible */
-							stroke: theme.palette.primary.contrastText.secondary,
+							stroke: theme.palette.primary.contrastTextSecondary,
 						},
 					},
 					"&:focus": { outline: "none" },
@@ -443,7 +443,7 @@ function Sidebar() {
 												/* TODO this has no effect? */
 												"& svg": {
 													"& path": {
-														stroke: theme.palette.primary.contrastText.tertiary,
+														stroke: theme.palette.primary.contrastTextTertiary,
 														strokeWidth: 1.1,
 													},
 												},
@@ -536,7 +536,7 @@ function Sidebar() {
 													},
 													"&.selected-path::after": {
 														/* TODO what is this selector doing? */
-														backgroundColor: theme.palette.primary.contrastText.tertiary,
+														backgroundColor: theme.palette.primary.contrastTextTertiary,
 														transform: "scale(1.2)",
 													},
 												}}

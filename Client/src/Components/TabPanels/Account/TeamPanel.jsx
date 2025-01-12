@@ -91,7 +91,7 @@ const TeamPanel = () => {
 							id: idx,
 							data: (
 								<Stack>
-									<Typography color={theme.palette.primary.contrastText.secondary}>
+									<Typography color={theme.palette.primary.contrastTextSecondary}>
 										{member.firstName + " " + member.lastName}
 									</Typography>
 									<Typography>
@@ -190,7 +190,7 @@ const TeamPanel = () => {
 			value="team"
 			sx={{
 				"& h1": {
-					color: theme.palette.primary.contrastText.tertiary,
+					color: theme.palette.primary.contrastTextTertiary,
 				},
 				"& .MuiTable-root .MuiTableBody-root .MuiTableCell-root, & .MuiTable-root p + p":
 					{

@@ -12,27 +12,27 @@ const StatusBox = ({ title, value }) => {
 		position: "absolute",
 		right: 8,
 		opacity: 0.5,
-		"& svg path": { stroke: theme.palette.primary.contrastText.tertiary },
+		"& svg path": { stroke: theme.palette.primary.contrastTextTertiary },
 	};
 
 	let color;
 	let icon;
 	if (title === "up") {
-		color = theme.palette.success.accent;
+		color = theme.palette.success.lowContrast;
 		icon = (
 			<Box sx={{ ...sharedStyles, top: 8 }}>
 				<Arrow />
 			</Box>
 		);
 	} else if (title === "down") {
-		color = theme.palette.error.accent;
+		color = theme.palette.error.lowContrast;
 		icon = (
 			<Box sx={{ ...sharedStyles, transform: "rotate(180deg)", top: 5 }}>
 				<Arrow />
 			</Box>
 		);
 	} else if (title === "paused") {
-		color = theme.palette.warning.accent;
+		color = theme.palette.warning.lowContrast;
 		icon = (
 			<Box sx={{ ...sharedStyles, top: 12, right: 12 }}>
 				<ClockSnooze />
@@ -58,7 +58,7 @@ const StatusBox = ({ title, value }) => {
 					left: "5%",
 					pointerEvents: "none",
 					"& svg g g:last-of-type path": {
-						stroke: theme.palette.primary.contrastText.tertiary,
+						stroke: theme.palette.primary.contrastTextTertiary,
 					},
 				}}
 			>
@@ -68,7 +68,7 @@ const StatusBox = ({ title, value }) => {
 				textTransform="uppercase"
 				fontSize={15}
 				letterSpacing={0.5}
-				color={theme.palette.primary.contrastText.tertiary}
+				color={theme.palette.primary.contrastTextTertiary}
 				mb={theme.spacing(8)}
 			>
 				{title}
@@ -88,7 +88,7 @@ const StatusBox = ({ title, value }) => {
 					component="span"
 					fontSize={20}
 					fontWeight={300}
-					color={theme.palette.primary.contrastText.secondary}
+					color={theme.palette.primary.contrastTextSecondary}
 					sx={{ opacity: 0.3 }}
 				>
 					#

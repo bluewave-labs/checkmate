@@ -12,16 +12,16 @@ export const ChartBox = styled(Stack)(({ theme }) => ({
 	borderRadius: 4,
 	backgroundColor: theme.palette.primary.main,
 	"& h2": {
-		color: theme.palette.primary.contrastText.secondary,
+		color: theme.palette.primary.contrastTextSecondary,
 		fontSize: 15,
 		fontWeight: 500,
 	},
 	"& .MuiBox-root:not(.area-tooltip) p": {
-		color: theme.palette.primary.contrastText.tertiary,
+		color: theme.palette.primary.contrastTextTertiary,
 		fontSize: 13,
 	},
 	"& .MuiBox-root > span": {
-		color: theme.palette.primary.contrastText.main,
+		color: theme.palette.primary.contrastText,
 		fontSize: 20,
 		"& span": {
 			opacity: 0.8,
@@ -37,7 +37,7 @@ export const ChartBox = styled(Stack)(({ theme }) => ({
 		alignItems: "center",
 	},
 	"& tspan, & text": {
-		fill: theme.palette.primary.contrastText.tertiary,
+		fill: theme.palette.primary.contrastTextTertiary,
 	},
 	"& path": {
 		transition: "fill 300ms ease, stroke-width 400ms ease",

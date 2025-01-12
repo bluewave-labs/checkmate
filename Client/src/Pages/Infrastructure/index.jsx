@@ -156,7 +156,7 @@ function Infrastructure() {
 					? theme.palette.percentage.uptimeFair
 					: monitor.uptimePercentage < 0.75
 						? theme.palette.percentage.uptimeGood
-						: theme.palette.success.accent;
+						: theme.palette.success.lowContrast;
 		return {
 			id: monitor._id,
 			name: monitor.name,
@@ -229,7 +229,7 @@ function Infrastructure() {
 							<Box
 								component="span"
 								className="current-monitors-counter"
-								color={theme.palette.primary.contrastText.main}
+								color={theme.palette.primary.contrastText}
 								border={1}
 								borderColor={theme.palette.primary.lowContrast}
 								backgroundColor={theme.palette.tertiary.main}
@@ -313,7 +313,7 @@ function Infrastructure() {
 													<IconButton
 														sx={{
 															"& svg path": {
-																stroke: theme.palette.primary.contrastText.tertiary,
+																stroke: theme.palette.primary.contrastTextTertiary,
 															},
 														}}
 													>

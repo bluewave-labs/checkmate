@@ -216,7 +216,7 @@ const ProfilePanel = () => {
 			value="profile"
 			sx={{
 				"& h1, & p, & input": {
-					color: theme.palette.primary.contrastText.tertiary,
+					color: theme.palette.primary.contrastTextTertiary,
 				},
 			}}
 		>

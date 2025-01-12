@@ -394,7 +394,7 @@ const CreateMaintenance = () => {
 												py: 0,
 												mr: 0,
 												"& path": {
-													stroke: theme.palette.primary.contrastText.tertiary,
+													stroke: theme.palette.primary.contrastTextTertiary,
 													strokeWidth: 1.1,
 												},
 												"&:hover": { backgroundColor: "transparent" },

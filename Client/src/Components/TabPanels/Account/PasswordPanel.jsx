@@ -115,7 +115,7 @@ const PasswordPanel = () => {
 			value="password"
 			sx={{
 				"& h1, & input": {
-					color: theme.palette.primary.contrastText.tertiary,
+					color: theme.palette.primary.contrastTextTertiary,
 				},
 			}}
 		>
