@@ -228,7 +228,7 @@ const PasswordPanel = () => {
 				>
 					<LoadingButton
 						variant="contained"
-						color="primary"
+						color="accent"
 						type="submit"
 						loading={isLoading}
 						loadingIndicator="Saving..."

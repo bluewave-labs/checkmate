@@ -201,7 +201,27 @@ const BasicTable = ({ data, paginated, reversed, table, emptyMessage = "No data"
 	return (
 		<>
 			<TableContainer component={Paper}>
-				<Table>
+				<Table
+					sx={{
+						"&.MuiTable-root  :is(.MuiTableHead-root, .MuiTableBody-root) :is(th, td)": {
+							paddingLeft: theme.spacing(12),
+						},
+						"& th": {
+							backgroundColor: theme.palette.secondary.main,
+							color: theme.palette.secondary.contrastText,
+							/* 
+						TODO all general styling for th should live here
+					 */
+						},
+						"& td": {
+							backgroundColor: theme.palette.primary.main,
+							color: theme.palette.primary.contrastTextSecondary,
+							/* 
+						TODO all general styling for td should live here
+					 */
+						},
+					}}
+				>
 					<TableHead>
 						<TableRow>
 							{data.cols.map((col) => (

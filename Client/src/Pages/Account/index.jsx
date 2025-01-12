@@ -57,10 +57,10 @@ const Account = ({ open = "profile" }) => {
 			className="account"
 			px={theme.spacing(20)}
 			py={theme.spacing(12)}
-			border={1}
-			borderColor={theme.palette.primary.lowContrast}
-			borderRadius={theme.shape.borderRadius}
 			backgroundColor={theme.palette.primary.main}
+			borderColor={theme.palette.primary.lowContrast}
+			border={1}
+			borderRadius={theme.shape.borderRadius}
 		>
 			<TabContext value={tab}>
 				<Box
@@ -88,17 +88,18 @@ const Account = ({ open = "profile" }) => {
 									textTransform: "none",
 									minWidth: "fit-content",
 									minHeight: 0,
-									paddingLeft: 0,
 									paddingY: theme.spacing(4),
 									fontWeight: 400,
-									marginRight: theme.spacing(8),
+									/* marginRight: theme.spacing(8), */
 									borderBottom: "2px solid transparent",
-									"&:focus": {
-										borderBottom: `2px solid ${theme.palette.primary.lowContrast}`,
+									"&:focus, &.Mui-selected": {
+										/* TODO this appears and disapears. Investigate */
+										color: theme.palette.primary.contrastText,
+										borderColor: theme.palette.primary.contrastText,
+										fontWeight: 700,
 									},
-
 									"&:hover": {
-										borderBottom: `2px solid ${theme.palette.primary.lowContrast}`,
+										borderColor: theme.palette.primary.lowContrast,
 									},
 								}}
 							/>

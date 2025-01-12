@@ -242,7 +242,7 @@ const TeamPanel = () => {
 					<LoadingButton
 						loading={isSendingInvite}
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={() => setIsOpen(true)}
 					>
 						Invite a team member

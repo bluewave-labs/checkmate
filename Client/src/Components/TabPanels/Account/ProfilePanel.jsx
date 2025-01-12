@@ -344,7 +344,7 @@ const ProfilePanel = () => {
 					<Box width="fit-content">
 						<LoadingButton
 							variant="contained"
-							color="primary"
+							color="accent"
 							onClick={handleSaveProfile}
 							loading={isLoading}
 							loadingIndicator="Saving..."
