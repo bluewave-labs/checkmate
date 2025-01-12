@@ -260,8 +260,9 @@ const PagespeedDetailsAreaChart = ({ data, interval, metrics }) => {
 				/>
 				<defs>
 					{Object.values(filteredConfig).map(({ id, color }) => {
+						/* TODO not working? */
 						const startColor = theme.palette[color].main;
-						const endColor = theme.palette[color].light;
+						const endColor = theme.palette[color].lowContrast;
 
 						return (
 							<linearGradient

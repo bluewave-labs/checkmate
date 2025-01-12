@@ -97,32 +97,18 @@ const newColors = {
 	green200: "#4B9B77",
 	green400: "#079455",
 	green700: "#026513",
-	orange100: "#CCB368",
-	orange400: "#FD8F22",
+	orange100: "#FD8F22",
+	orange200: "#D69A5D",
 	orange600: "#9B734B",
-	orange700: "#884605" /* "#6F5404" */,
-	/* warning: {
-		main: {
-			light: newColors.orange700,
-			dark: newColors.orange100,
-		},
-		contrastText: {
-			light: newColors.offWhite,
-			dark: newColors.offBlack,
-		},
-		lowContrast: {
-			light: newColors.orange400,
-			dark: newColors.orange600,
-		},
-	}, */
+	orange700: "#884605",
 	red100: "#F27C7C",
 	red400: "#D92020",
 	red600: "#9B4B4B",
 	red700: "#980303",
 };
 
-/* Structure:
-Key: 
+/* 
+Structure:
 main: background color
 contrastText: color for main contrast text
 contrastTextSecondary: if needed
@@ -200,14 +186,14 @@ const newSemanticColors = {
 	warning: {
 		main: {
 			light: newColors.orange700,
-			dark: newColors.orange100,
+			dark: newColors.orange200,
 		},
 		contrastText: {
 			light: newColors.offWhite,
 			dark: newColors.offBlack,
 		},
 		lowContrast: {
-			light: newColors.orange400,
+			light: newColors.orange100,
 			dark: newColors.orange600,
 		},
 	},
@@ -248,33 +234,6 @@ const newSemanticColors = {
 			dark: paletteColors.gray850,
 		},
 	},
-	unresolved: {
-		main: {
-			light: paletteColors.blue700,
-			dark: paletteColors.purple300,
-		},
-	},
 };
 
 export { typographyLevels, semanticColors as colors, newSemanticColors };
-
-/* TODO
-
-
-
-Look up for
-
-success.contrastText
-warning.contrastText
-error.contrastText
-
-
-"red"
-"white"
-{ text, bg, border }
- .light
- .dark
-
-
-theme.palette.unresolved (will become tertiary)
-*/

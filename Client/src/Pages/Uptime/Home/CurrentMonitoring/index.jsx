@@ -26,7 +26,12 @@ const CurrentMonitoring = ({ totalMonitors, monitors, isAdmin, handlePause }) =>
 				alignItems="center"
 				mb={theme.spacing(8)}
 			>
-				<Heading component="h2">Uptime monitors</Heading>
+				<Heading
+					component="h2"
+					style={{ color: theme.palette.primary.contrastTextSecondary }}
+				>
+					Uptime monitors
+				</Heading>
 
 				<Box
 					className="current-monitors-counter"

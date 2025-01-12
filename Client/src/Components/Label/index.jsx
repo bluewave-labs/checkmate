@@ -132,48 +132,22 @@ const statusToTheme = {
 
 const StatusLabel = ({ status, text, customStyles }) => {
 	const theme = useTheme();
-	/* const colors = {
-		up: {
-			dotColor: theme.palette.success.main,
-			borderColor: theme.palette.success.main ,
-		},
-		down: {
-			dotColor: theme.palette.error.main,
-			borderColor: theme.palette.error.light,
-		},
-		paused: {
-			dotColor: theme.palette.warning.main,
-			borderColor: theme.palette.warning.light,
-		},
-		pending: {
-			dotColor: theme.palette.primary.contrastTextSecondary,
-			borderColor: theme.palette.primary.lowContrast,
-		},
-		"cannot resolve": {
-			dotColor: theme.palette.unresolved.main,
-			borderColor: theme.palette.unresolved.light,
-		},
-	}; */
 
 	const themeColor = statusToTheme[status];
-
-	// Look up the color for the status
-	/* const { borderColor, bgColor, dotColor } = colors[status]; */
 
 	return (
 		<BaseLabel
 			label={text}
 			styles={{
-				color: theme.palette[themeColor].main /* dotColor */,
-				/*backgroundColor:  bgColor, */
-				borderColor: theme.palette[themeColor].lowContrast /* borderColor */,
+				color: theme.palette[themeColor].main,
+				borderColor: theme.palette[themeColor].lowContrast,
 				...customStyles,
 			}}
 		>
 			<Box
 				width={7}
 				height={7}
-				bgcolor={theme.palette[themeColor].lowContrast /* dotColor */}
+				bgcolor={theme.palette[themeColor].lowContrast}
 				borderRadius="50%"
 				marginRight="5px"
 			/>

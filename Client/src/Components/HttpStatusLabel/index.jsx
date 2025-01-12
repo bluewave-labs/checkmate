@@ -30,32 +30,28 @@ const HttpStatusLabel = ({ status, customStyles }) => {
 	const theme = useTheme();
 	const colors = {
 		400: {
-			dotColor: theme.palette.warning.main,
-			bgColor: theme.palette.warning.dark,
-			borderColor: theme.palette.warning.light,
+			color: theme.palette.warning.main,
+			borderColor: theme.palette.warning.lowContrast,
 		},
 		500: {
-			dotColor: theme.palette.error.main,
-			bgColor: theme.palette.error.dark,
-			borderColor: theme.palette.error.light,
+			color: theme.palette.error.main,
+			borderColor: theme.palette.error.lowContrast,
 		},
 		default: {
-			dotColor: theme.palette.unresolved.main,
-			bgColor: theme.palette.primary.lowContrast,
-			borderColor: theme.palette.unresolved.light,
+			color: theme.palette.primary.contrastText,
+			borderColor: theme.palette.primary.lowContrast,
 		},
 	};
 
 	const statusCode = handleStatusCode(status);
 
-	const { borderColor, bgColor, dotColor } =
+	const { borderColor, color } =
 		colors[getRoundedStatusCode(statusCode)] || colors.default;
 	return (
 		<BaseLabel
 			label={String(statusCode)}
 			styles={{
-				color: dotColor,
-				backgroundColor: bgColor,
+				color: color,
 				borderColor: borderColor,
 				...customStyles,
 			}}

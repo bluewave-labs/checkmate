@@ -31,8 +31,8 @@ const NewPasswordConfirmed = () => {
 					fontWeight: 600,
 					fontSize: 21,
 				},
-				/* TODO set color and font size*/
-				"& p": { fontSize: 13.5, color: "red" /* theme.palette.text.accent */ },
+				/* TODO font size from theme*/
+				"& p": { fontSize: 13.5, color: theme.palette.primary.contrastTextSecondary },
 			}}
 		>
 			<Box

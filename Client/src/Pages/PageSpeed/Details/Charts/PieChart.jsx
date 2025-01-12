@@ -126,29 +126,29 @@ const PieChart = ({ audits }) => {
 		if (value >= 90 && value <= 100)
 			return {
 				stroke: theme.palette.success.main,
-				strokeBg: theme.palette.success.light,
+				strokeBg: theme.palette.success.lowContrast,
 				text: theme.palette.success.contrastText,
-				bg: theme.palette.success.light,
+				bg: theme.palette.success.lowContrast,
 			};
 		else if (value >= 50 && value < 90)
 			return {
 				stroke: theme.palette.warning.main,
-				strokeBg: theme.palette.warning.light,
+				strokeBg: theme.palette.warning.lowContrast,
 				text: theme.palette.warning.contrastText,
-				bg: theme.palette.warning.dark,
+				bg: theme.palette.warning.lowContrast,
 			};
 		else if (value >= 0 && value < 50)
 			return {
 				stroke: theme.palette.error.contrastText,
-				strokeBg: theme.palette.error.light,
+				strokeBg: theme.palette.error.lowContrast,
 				text: theme.palette.error.contrastText,
-				bg: theme.palette.error.dark,
+				bg: theme.palette.error.lowContrast,
 			};
 		return {
-			stroke: theme.palette.unresolved.main,
-			strokeBg: theme.palette.unresolved.light,
-			text: theme.palette.unresolved.main,
-			bg: theme.palette.primary.lowContrast,
+			stroke: theme.palette.tertiary.contrastText,
+			strokeBg: theme.palette.tertiary.contrastText,
+			text: theme.palette.tertiary.contrastText,
+			bg: theme.palette.tertiary.main,
 		};
 	};
 

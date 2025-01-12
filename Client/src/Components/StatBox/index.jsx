@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
+import useUtils from "../../Pages/Uptime/utils";
 
 /**
  * StatBox Component
@@ -12,6 +13,8 @@ import PropTypes from "prop-types";
  * @param {Object} props - The component props
  * @param {string} props.heading - The primary heading/title of the statistic
  * @param {string|React.ReactNode} props.subHeading - The value or description of the statistic
+ * @param {boolean} [props.gradient=false] - Determines if the box should have a gradient background
+ * @param {string} [props.status] - The status of the statistic
  * @param {Object} [props.sx] - Additional custom styling to be applied to the box
  *
  * @example
@@ -26,8 +29,46 @@ import PropTypes from "prop-types";
  * @returns {React.ReactElement} A styled box containing the statistic
  */
 
-const StatBox = ({ heading, subHeading, sx }) => {
+const StatBox = ({ heading, subHeading, gradient = false, status = "", sx }) => {
 	const theme = useTheme();
+	const { statusToTheme } = useUtils();
+	const themeColor = statusToTheme[status];
+
+	const statusBoxStyles = gradient
+		? {
+				background: `linear-gradient(to bottom right, ${theme.palette[themeColor].main} 30%, ${theme.palette[themeColor].lowContrast} 70%)`,
+				borderColor: theme.palette[themeColor].lowContrast,
+			}
+		: {
+				background: `linear-gradient(340deg, ${theme.palette.tertiary.main} 20%, ${theme.palette.primary.main} 45%)`,
+				borderColor: theme.palette.primary.lowContrast,
+			};
+
+	const headingStyles = gradient
+		? {
+				color: theme.palette[themeColor].contrastText,
+			}
+		: {
+				color: theme.palette.primary.contrastTextSecondary,
+			};
+
+	const spanFixedStyles = { marginLeft: theme.spacing(2), fontSize: 15 };
+	const detailTextStyles = gradient
+		? {
+				color: theme.palette[themeColor].contrastText,
+				"& span": {
+					color: theme.palette[themeColor].contrastText,
+					...spanFixedStyles,
+				},
+			}
+		: {
+				color: theme.palette.primary.contrastText,
+				"& span": {
+					color: theme.palette.primary.contrastTextTertiary,
+					...spanFixedStyles,
+				},
+			};
+
 	return (
 		<Box
 			sx={{
@@ -37,25 +78,19 @@ const StatBox = ({ heading, subHeading, sx }) => {
 				width: 225,
 				border: 1,
 				borderStyle: "solid",
-				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: 4,
-				backgroundColor: theme.palette.primary.main,
-				/* background: `linear-gradient(340deg, ${theme.palette.tertiary.main} 20%, ${theme.palette.primary.main} 45%)`, */
+				...statusBoxStyles,
 				"& h2": {
+					/* TODO font size should come from theme */
 					fontSize: 13,
 					fontWeight: 500,
-					color: theme.palette.primary.contrastTextSecondary,
 					textTransform: "uppercase",
+					...headingStyles,
 				},
 				"& p": {
 					fontSize: 18,
-					color: theme.palette.primary.contrastText,
 					marginTop: theme.spacing(2),
-					"& span": {
-						color: theme.palette.primary.contrastTextTertiary,
-						marginLeft: theme.spacing(2),
-						fontSize: 15,
-					},
+					...detailTextStyles,
 				},
 				...sx,
 			}}
@@ -69,6 +104,8 @@ const StatBox = ({ heading, subHeading, sx }) => {
 StatBox.propTypes = {
 	heading: PropTypes.string.isRequired,
 	subHeading: PropTypes.node.isRequired,
+	gradient: PropTypes.bool,
+	status: PropTypes.string,
 	sx: PropTypes.object,
 };
 

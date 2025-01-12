@@ -202,7 +202,7 @@ function Infrastructure() {
 							{isAdmin && (
 								<Button
 									variant="contained"
-									color="primary"
+									color="accent"
 									onClick={navigateToCreate}
 									sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
 								>

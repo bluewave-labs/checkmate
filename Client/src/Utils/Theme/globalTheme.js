@@ -32,9 +32,9 @@ const baseTheme = (palette) => ({
 			fontWeight: 400,
 		},
 	},
-	/* TODO we can skip using the callback functions on the next lines since we are already accessing it on line 10. That was the last thing I managed to do, so we are sort of doing it twice*/
-
+	/* TODO change to 4 */
 	spacing: 2,
+	/* TODO we can skip using the callback functions on the next lines since we are already accessing it on line 10. That was the last thing I managed to do, so we are sort of doing it twice*/
 	/* TODO All these should live inside of a component*/
 	components: {
 		MuiButton: {

@@ -81,6 +81,7 @@ CustomToolTip.propTypes = {
 	payload: PropTypes.array,
 };
 
+/* TODO separate utils in folder*/
 /**
  * Processes the raw data to include a score for each entry.
  * @param {Array<Object>} data - The raw data array.
@@ -104,6 +105,7 @@ const processData = (data) => {
 	return formattedData;
 };
 
+/* TODO separate component*/
 /**
  * Renders an area chart displaying page speed scores.
  * @param {Object} props
@@ -114,7 +116,9 @@ const processData = (data) => {
 const PagespeedAreaChart = ({ data, status }) => {
 	const theme = useTheme();
 	const [isHovered, setIsHovered] = useState(false);
-	const { pagespeedStyles } = useUtils();
+	const { statusToTheme } = useUtils();
+
+	const themeColor = statusToTheme[status];
 
 	const formattedData = processData(data);
 
@@ -154,24 +158,24 @@ const PagespeedAreaChart = ({ data, status }) => {
 					>
 						<stop
 							offset="0%"
-							stopColor={pagespeedStyles[status].stroke}
+							stopColor={theme.palette[themeColor].lowContrast}
 							stopOpacity={0.8}
 						/>
 						<stop
 							offset="100%"
-							stopColor={pagespeedStyles[status].light}
+							stopColor={theme.palette[themeColor].main}
 							stopOpacity={0}
 						/>
 					</linearGradient>
 				</defs>
 				<Area
 					dataKey="score"
-					stroke={pagespeedStyles[status].stroke}
+					stroke={theme.palette[themeColor].lowContrast}
 					strokeWidth={isHovered ? 2.5 : 1.5}
 					fill={`url(#pagespeed-chart-${status})`}
 					activeDot={{
-						stroke: pagespeedStyles[status].light,
-						fill: pagespeedStyles[status].stroke,
+						stroke: theme.palette[themeColor].main,
+						fill: theme.palette[themeColor].lowContrast,
 						r: 4.5,
 					}}
 				/>
@@ -192,6 +196,7 @@ PagespeedAreaChart.propTypes = {
 	status: PropTypes.string.isRequired,
 };
 
+/* TODO separate component */
 /**
  * Renders a card displaying monitor details and an area chart.
  * @param {Object} props
@@ -289,7 +294,7 @@ const Card = ({ monitor }) => {
 				>
 					<Typography
 						fontSize={11}
-						color={"red" /* theme.palette.text.accent */}
+						color={theme.palette.primary.contrastTextSecondary}
 					>
 						Checking every{" "}
 						{(() => {

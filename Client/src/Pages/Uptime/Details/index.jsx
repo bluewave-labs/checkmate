@@ -33,7 +33,7 @@ import ResponseGaugeChart from "./Charts/ResponseGaugeChart";
  */
 const DetailsPage = () => {
 	const theme = useTheme();
-	const { statusColor, statusStyles, statusMsg, determineState } = useUtils();
+	const { statusColor, statusMsg, determineState } = useUtils();
 	const isAdmin = useIsAdmin();
 	const [monitor, setMonitor] = useState({});
 	const { monitorId } = useParams();
@@ -236,7 +236,10 @@ const DetailsPage = () => {
 							gap={theme.spacing(8)}
 						>
 							<StatBox
-								sx={statusStyles[determineState(monitor)]}
+								/* sx={getStatusStyles(determineState(monitor))} */
+								/* statusStyles[determineState(monitor)] */
+								gradient={true}
+								status={determineState(monitor)}
 								heading={"active for"}
 								subHeading={splitDuration(monitor?.stats?.timeSinceLastFalseCheck)}
 							/>

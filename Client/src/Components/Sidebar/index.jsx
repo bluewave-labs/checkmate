@@ -269,7 +269,7 @@ function Sidebar() {
 						minHeight={theme.spacing(16)}
 						pl="1px"
 						fontSize={18}
-						color="white"
+						color={theme.palette.accent.contrastText}
 						sx={{
 							position: "relative",
 							backgroundColor: theme.palette.accent.main,

@@ -34,7 +34,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 				backgroundColor: theme.palette.primary.lowContrast,
 				"&:has(.input-error)": {
 					borderColor: theme.palette.error.main,
-					backgroundColor: theme.palette.error.dark,
+					backgroundColor: theme.palette.error.lowContrast,
 					py: theme.spacing(4),
 					px: theme.spacing(8),
 					"& > .MuiStack-root > svg": {

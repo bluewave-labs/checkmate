@@ -372,7 +372,7 @@ const PageSpeedDetails = () => {
 												? theme.palette.warning.main
 												: score >= 0
 													? theme.palette.error.contrastText
-													: theme.palette.unresolved.main;
+													: theme.palette.tertiary.main;
 
 									// Find the position where the number ends and the unit begins
 									const match = audit.displayValue.match(/(\d+\.?\d*)\s*([a-zA-Z]+)/);

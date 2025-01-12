@@ -95,9 +95,9 @@ const ForgotPassword = () => {
 					fontSize: 21,
 				},
 				"& p": {
+					/* TODO font size from theme */
 					fontSize: 14,
-					/* TODO set color */
-					color: "red" /*  theme.palette.text.accent */,
+					color: theme.palette.primary.contrastTextSecondary,
 				},
 			}}
 		>

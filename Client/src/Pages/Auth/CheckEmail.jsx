@@ -94,8 +94,8 @@ const CheckEmail = () => {
 					fontWeight: 600,
 					fontSize: 22,
 				},
-				/* TODO set color */
-				"& p": { color: "red" /* theme.palette.text.accent */, fontSize: 13.5 },
+				/* TODO font size from theme */
+				"& p": { color: theme.palette.primary.contrastTextSecondary, fontSize: 13.5 },
 				"& span": { fontSize: "inherit" },
 			}}
 		>

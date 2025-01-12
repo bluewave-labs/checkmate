@@ -58,7 +58,7 @@ const DownBarChart = memo(({ stats, type, onBarHover }) => {
 								hoveredBarIndex === index
 									? theme.palette.error.main
 									: chartHovered
-										? theme.palette.error.light
+										? theme.palette.error.contrastText
 										: theme.palette.error.main
 							}
 							onMouseEnter={() => {

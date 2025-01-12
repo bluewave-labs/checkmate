@@ -91,7 +91,7 @@ const PageSpeed = () => {
 							{isAdmin && (
 								<Button
 									variant="contained"
-									color="primary"
+									color="accent"
 									onClick={() => navigate("/pagespeed/create")}
 									sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
 								>

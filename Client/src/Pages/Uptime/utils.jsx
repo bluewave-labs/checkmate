@@ -32,8 +32,34 @@ const useUtils = () => {
 	/* This is used on 
 	1) Details > Gradient card */
 	/* These are rediections. We should do something that maps up to success, down to error, and get the theme by that
-	
+	See Client\src\Components\Label\index.jsx
 	*/
+
+	const statusToTheme = {
+		up: "success",
+		down: "error",
+		paused: "warning",
+		pending: "secondary",
+		"cannot resolve": "tertiary",
+	};
+
+	const getStatusStyles = (status) => {
+		const themeColor = statusToTheme[status];
+
+		return {
+			backgroundColor: theme.palette[themeColor].lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette[themeColor].main} -60%, ${theme.palette[themeColor].lowContrast} 35%)`,
+			borderColor: theme.palette[themeColor].lowContrast,
+			"& h2": {
+				color: theme.palette[themeColor].contrastText,
+				textTransform: "uppercase",
+			},
+			"& p": {
+				color: theme.palette[themeColor].contrastText,
+			},
+		};
+	};
+
 	const statusStyles = {
 		up: {
 			backgroundColor: theme.palette.success.lowContrast,
@@ -64,36 +90,15 @@ const useUtils = () => {
 	/* These are rediections. We should do something that maps up to success, down to error, and get the theme by that
 	
 	*/
-	const pagespeedStyles = {
-		up: {
-			bg: theme.palette.success.dark,
-			light: theme.palette.success.light,
-			stroke: theme.palette.success.main,
-		},
-		down: {
-			bg: theme.palette.error.dark,
-			light: theme.palette.error.light,
-			stroke: theme.palette.error.main,
-		},
-		paused: {
-			bg: theme.palette.warning.dark,
-			light: theme.palette.warning.light,
-			stroke: theme.palette.warning.main,
-		},
-		pending: {
-			bg: theme.palette.warning.dark,
-			light: theme.palette.warning.light,
-			stroke: theme.palette.warning.main,
-		},
-	};
 
 	return {
 		determineState,
 		statusColor,
 		statusMsg,
 		pagespeedStatusMsg,
-		pagespeedStyles,
 		statusStyles,
+		statusToTheme,
+		getStatusStyles,
 	};
 };
 
