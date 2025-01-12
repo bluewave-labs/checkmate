@@ -194,8 +194,7 @@ const TeamPanel = () => {
 				},
 				"& .MuiTable-root .MuiTableBody-root .MuiTableCell-root, & .MuiTable-root p + p":
 					{
-						/* TODO set color */
-						color: "red" /* theme.palette.text.accent */,
+						color: theme.palette.primary.contrastTextSecondary,
 					},
 			}}
 		>

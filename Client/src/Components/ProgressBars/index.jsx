@@ -1,4 +1,3 @@
-import React from "react";
 import { useTheme } from "@emotion/react";
 import PropTypes from "prop-types";
 import { Box, IconButton, LinearProgress, Stack, Typography } from "@mui/material";

@@ -96,6 +96,7 @@ const Incidents = () => {
 							items={Object.values(monitors)}
 							sx={{
 								backgroundColor: theme.palette.primary.main,
+								color: theme.palette.primary.contrastTextSecondary,
 							}}
 						/>
 						<ButtonGroup

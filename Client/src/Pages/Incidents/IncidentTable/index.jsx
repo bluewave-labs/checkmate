@@ -167,7 +167,12 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 			) : (
 				<>
 					<TableContainer component={Paper}>
-						<Table>
+						<Table
+							sx={{
+								"& :is(th)": { color: theme.palette.primary.contrastText },
+								"& :is(td)": { color: theme.palette.primary.contrastTextSecondary },
+							}}
+						>
 							<TableHead>
 								<TableRow>
 									<TableCell>Monitor Name</TableCell>
