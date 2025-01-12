@@ -166,29 +166,46 @@ function Sidebar() {
 			/* TODO general padding should be here */
 			py={theme.spacing(6)}
 			gap={theme.spacing(6)}
+			/* TODO set all style in this sx if possible (when general)
+			This is the top lever for styles
+			*/
 			sx={{
 				border: 1,
 				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: theme.shape.borderRadius,
-				/* TODO selected item */
-				"& .selected-path": {
-					/* TODO lookup theme.palette.tertiary.main */
-					backgroundColor: theme.palette.secondary.main /* theme.palette.tertiary.main */,
-
-					/* TODO not working */
-					color: theme.palette.primary.main,
-				},
-				" & .MuiListItemButton-root:hover": {
-					backgroundColor: theme.palette.tertiary.main,
-					/* TODO try and change color */
-					color: theme.palette.secondary.main,
+				"& :is(p, span, .MuiListSubheader-root)": {
+					/* 
+					Text color for unselected menu items and menu headings
+					Secondary contrast text against main background
+					*/
+					color: theme.palette.primary.contrastText.secondary,
 				},
 				"& .MuiList-root svg path": {
 					/* Menu Icons */
 					stroke: iconColor,
 				},
-				"& p, & span, & .MuiListSubheader-root": {
-					color: theme.palette.primary.contrastText.secondary,
+				"& .selected-path": {
+					/* Selected menu item */
+					backgroundColor: theme.palette.secondary.main,
+					"& .MuiListItemIcon-root svg path": {
+						/* Selected menu item icon */
+						stroke: theme.palette.secondary.contrastText,
+					},
+					"& .MuiListItemText-root :is(p, span)": {
+						/* Selected menu item text */
+						color: theme.palette.secondary.contrastText,
+					},
+				},
+				"& .MuiListItemButton-root": {
+					transition: "background-color .3s",
+					" &:hover": {
+						/* Hovered menu item bg color */
+						backgroundColor: theme.palette.tertiary.main,
+						"& :is(p, span)": {
+							/* Hovered menu item text color */
+							color: theme.palette.tertiary.contrastText,
+						},
+					},
 				},
 			}}
 		>
@@ -207,6 +224,7 @@ function Sidebar() {
 						width: theme.spacing(8),
 						height: theme.spacing(8),
 						"& path": {
+							/* TODO this should be set at the top level if possible */
 							stroke: theme.palette.primary.contrastText.secondary,
 						},
 					},
@@ -294,6 +312,7 @@ function Sidebar() {
 			>
 				{menu.map((item) =>
 					item.path ? (
+						/* If item has a path */
 						<Tooltip
 							key={item.path}
 							placement="right"
@@ -329,7 +348,7 @@ function Sidebar() {
 							</ListItemButton>
 						</Tooltip>
 					) : collapsed ? (
-						/* TODO Do we ever get here? */
+						/* TODO Do we ever get here? If item does not have a path and collapsed state is true  */
 						<React.Fragment key={item.name}>
 							<Tooltip
 								placement="right"
@@ -435,6 +454,7 @@ function Sidebar() {
 							</Menu>
 						</React.Fragment>
 					) : (
+						/* TODO Do we ever get here? If item does not have a path and collapsed state is false */
 						<React.Fragment key={item.name}>
 							<ListItemButton
 								onClick={() =>
