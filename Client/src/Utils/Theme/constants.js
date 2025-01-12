@@ -259,6 +259,8 @@ Look up for
 "red"
 "white"
 { text, bg, border }
+ .light
+ .dark
 
 
 theme.palette.unresolved

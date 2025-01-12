@@ -46,6 +46,15 @@ const baseTheme = (palette) => ({
 				root: ({ theme }) => ({
 					variants: [
 						{
+							props: (props) => props.color === "accent",
+							style: {
+								"&:hover": {
+									color: theme.palette.accent.main,
+									backgroundColor: theme.palette.accent.contrastText,
+								},
+							},
+						},
+						{
 							props: (props) => props.variant === "group",
 							style: {
 								/* color: theme.palette.secondary.contrastText, */
