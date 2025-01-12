@@ -187,6 +187,9 @@ function Sidebar() {
 				"& .selected-path": {
 					/* Selected menu item */
 					backgroundColor: theme.palette.secondary.main,
+					"&:hover": {
+						backgroundColor: theme.palette.secondary.main,
+					},
 					"& .MuiListItemIcon-root svg path": {
 						/* Selected menu item icon */
 						stroke: theme.palette.secondary.contrastText,
@@ -196,7 +199,7 @@ function Sidebar() {
 						color: theme.palette.secondary.contrastText,
 					},
 				},
-				"& .MuiListItemButton-root": {
+				"& .MuiListItemButton-root:not(.selected-path)": {
 					transition: "background-color .3s",
 					" &:hover": {
 						/* Hovered menu item bg color */
