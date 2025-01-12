@@ -58,7 +58,7 @@ const CreateMonitor = () => {
 	};
 
 	const { user, authToken } = useSelector((state) => state.auth);
-	const { monitors, isLoading } = useSelector((state) => state.uptimeMonitors);
+	const { isLoading } = useSelector((state) => state.uptimeMonitors);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const theme = useTheme();
@@ -205,7 +205,7 @@ const CreateMonitor = () => {
 			}
 		};
 		fetchMonitor();
-	}, [monitorId, authToken, monitors, dispatch, navigate]);
+	}, [monitorId, authToken, dispatch, navigate]);
 
 	return (
 		<Box className="create-monitor">

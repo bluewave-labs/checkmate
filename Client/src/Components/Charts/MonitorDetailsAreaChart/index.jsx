@@ -13,9 +13,14 @@ import { useTheme } from "@emotion/react";
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { formatDateWithTz } from "../../../Utils/timeUtils";
-import "./index.css";
+import {
+	tooltipDateFormatLookup,
+	tickDateFormatLookup,
+} from "../Utils/chartUtilFunctions";
 
-const CustomToolTip = ({ active, payload, label }) => {
+import "./index.css";
+const CustomToolTip = ({ active, payload, label, dateRange }) => {
+	const format = tooltipDateFormatLookup(dateRange);
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 	const theme = useTheme();
 	if (active && payload && payload.length) {
@@ -41,7 +46,7 @@ const CustomToolTip = ({ active, payload, label }) => {
 						fontWeight: 500,
 					}}
 				>
-					{formatDateWithTz(label, "ddd, MMMM D, YYYY, h:mm A", uiTimezone)}
+					{formatDateWithTz(label, format, uiTimezone)}
 				</Typography>
 				<Box mt={theme.spacing(1)}>
 					<Box
@@ -102,13 +107,12 @@ CustomToolTip.propTypes = {
 		})
 	),
 	label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	dateRange: PropTypes.string,
 };
-const CustomTick = ({ x, y, payload, index }) => {
+const CustomTick = ({ x, y, payload, dateRange }) => {
+	const format = tickDateFormatLookup(dateRange);
 	const theme = useTheme();
-
 	const uiTimezone = useSelector((state) => state.ui.timezone);
-	// Render nothing for the first tick
-	if (index === 0) return null;
 	return (
 		<Text
 			x={x}
@@ -118,7 +122,7 @@ const CustomTick = ({ x, y, payload, index }) => {
 			fontSize={11}
 			fontWeight={400}
 		>
-			{formatDateWithTz(payload?.value, "h:mm a", uiTimezone)}
+			{formatDateWithTz(payload?.value, format, uiTimezone)}
 		</Text>
 	);
 };
@@ -128,9 +132,10 @@ CustomTick.propTypes = {
 	y: PropTypes.number,
 	payload: PropTypes.object,
 	index: PropTypes.number,
+	dateRange: PropTypes.string,
 };
 
-const MonitorDetailsAreaChart = ({ checks }) => {
+const MonitorDetailsAreaChart = ({ checks, dateRange }) => {
 	const theme = useTheme();
 	const memoizedChecks = useMemo(() => checks, [checks[0]]);
 	const [isHovered, setIsHovered] = useState(false);
@@ -184,16 +189,14 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 				<XAxis
 					stroke={theme.palette.primary.lowContrast}
 					dataKey="_id"
-					tick={<CustomTick />}
-					minTickGap={0}
+					tick={<CustomTick dateRange={dateRange} />}
 					axisLine={false}
 					tickLine={false}
 					height={20}
-					interval="equidistantPreserveStart"
 				/>
 				<Tooltip
 					cursor={{ stroke: theme.palette.primary.lowContrast }}
-					content={<CustomToolTip />}
+					content={<CustomToolTip dateRange={dateRange} />}
 					wrapperStyle={{ pointerEvents: "none" }}
 				/>
 				<Area
@@ -211,6 +214,7 @@ const MonitorDetailsAreaChart = ({ checks }) => {
 
 MonitorDetailsAreaChart.propTypes = {
 	checks: PropTypes.array,
+	dateRange: PropTypes.string,
 };
 
 export default MonitorDetailsAreaChart;

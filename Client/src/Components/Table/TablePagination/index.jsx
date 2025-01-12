@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
 import { Stack, TablePagination, Typography } from "@mui/material";
 import { TablePaginationActions } from "./Actions";
-import SelectorVertical from "../../../../assets/icons/selector-vertical.svg?react";
+import SelectorVertical from "../../../assets/icons/selector-vertical.svg?react";
 
 Pagination.propTypes = {
 	monitorCount: PropTypes.number.isRequired, // Total number of items for pagination.
@@ -93,6 +93,13 @@ function Pagination({
 							textAlign: "left",
 							"&.Mui-focused > div": {
 								backgroundColor: theme.palette.primary.main,
+							},
+							"& .MuiSelect-icon": {
+								// Add this style override
+								position: "absolute",
+								right: 0,
+								top: "50%",
+								transform: "translateY(-50%)",
 							},
 						},
 					},

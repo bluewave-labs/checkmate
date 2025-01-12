@@ -1,8 +1,7 @@
 import { Box, Button, Grid, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import { useDispatch, useSelector } from "react-redux";
-import { getPageSpeedByTeamId } from "../../Features/PageSpeedMonitor/pageSpeedMonitorSlice";
+import { useSelector } from "react-redux";
 import Fallback from "../../Components/Fallback";
 import "./index.css";
 import { useNavigate } from "react-router";
@@ -15,16 +14,12 @@ import { Heading } from "../../Components/Heading";
 import { useIsAdmin } from "../../Hooks/useIsAdmin";
 const PageSpeed = () => {
 	const theme = useTheme();
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const isAdmin = useIsAdmin();
 	const { user, authToken } = useSelector((state) => state.auth);
 	const [isLoading, setIsLoading] = useState(true);
 	const [monitors, setMonitors] = useState([]);
-	const [monitorCount, setMonitorCount] = useState(0);
-	useEffect(() => {
-		dispatch(getPageSpeedByTeamId(authToken));
-	}, [authToken, dispatch]);
+	const [summary, setSummary] = useState({});
 
 	useEffect(() => {
 		const fetchMonitors = async () => {
@@ -35,18 +30,15 @@ const PageSpeed = () => {
 					teamId: user.teamId,
 					limit: 10,
 					types: ["pagespeed"],
-					status: null,
-					checkOrder: "desc",
-					normalize: true,
 					page: null,
 					rowsPerPage: null,
 					filter: null,
 					field: null,
 					order: null,
 				});
-				if (res?.data?.data?.monitors) {
-					setMonitors(res.data.data.monitors);
-					setMonitorCount(res.data.data.monitorCount);
+				if (res?.data?.data?.filteredMonitors) {
+					setMonitors(res.data.data.filteredMonitors);
+					setSummary(res.data.data.summary);
 				}
 			} catch (error) {
 				console.log(error);
@@ -118,7 +110,7 @@ const PageSpeed = () => {
 							borderColor={theme.palette.primary.lowContrast}
 							backgroundColor={theme.palette.tertiary.main}
 						>
-							{monitorCount}
+							{summary?.totalMonitors ?? 0}
 						</Box>
 					</Stack>
 					<Grid

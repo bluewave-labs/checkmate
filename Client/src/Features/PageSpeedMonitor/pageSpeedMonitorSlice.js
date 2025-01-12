@@ -40,7 +40,7 @@ export const checkEndpointResolution = createAsyncThunk(
 			const res = await networkService.checkEndpointResolution({
 				authToken: authToken,
 				monitorURL: monitorURL,
-			})
+			});
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -53,7 +53,7 @@ export const checkEndpointResolution = createAsyncThunk(
 			return thunkApi.rejectWithValue(payload);
 		}
 	}
-)
+);
 
 export const getPagespeedMonitorById = createAsyncThunk(
 	"monitors/getMonitorById",
@@ -88,7 +88,6 @@ export const getPageSpeedByTeamId = createAsyncThunk(
 				teamId: user.teamId,
 				types: ["pagespeed"],
 			});
-
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {

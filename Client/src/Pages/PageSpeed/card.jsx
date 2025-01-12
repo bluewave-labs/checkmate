@@ -272,7 +272,7 @@ const Card = ({ monitor }) => {
 					sx={{ gridColumnStart: 1, gridColumnEnd: 4 }}
 				>
 					<PagespeedAreaChart
-						data={monitor.checks}
+						data={monitor.checks.slice().reverse()}
 						status={monitorState}
 					/>
 				</Box>

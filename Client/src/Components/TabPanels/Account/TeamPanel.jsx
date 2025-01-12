@@ -7,11 +7,10 @@ import { credentials } from "../../../Validation/validation";
 import { networkService } from "../../../main";
 import { createToast } from "../../../Utils/toastUtils";
 import { useSelector } from "react-redux";
-import BasicTable from "../../BasicTable";
 import Select from "../../Inputs/Select";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { GenericDialog } from "../../Dialog/genericDialog";
-
+import DataTable from "../../Table/";
 /**
  * TeamPanel component manages the organization and team members,
  * providing functionalities like renaming the organization, managing team members,
@@ -21,33 +20,46 @@ import { GenericDialog } from "../../Dialog/genericDialog";
  */
 
 const TeamPanel = () => {
-	const roleMap = {
-		superadmin: "Super admin",
-		admin: "Admin",
-		user: "Team member",
-		demo: "Demo User",
-	};
-
 	const theme = useTheme();
 
 	const SPACING_GAP = theme.spacing(12);
 
-	const { authToken /* , user  */ } = useSelector((state) => state.auth);
-	//TODO
-	// const [orgStates, setOrgStates] = useState({
-	// 	name: "Bluewave Labs",
-	// 	isEdit: false,
-	// });
+	const { authToken } = useSelector((state) => state.auth);
 	const [toInvite, setToInvite] = useState({
 		email: "",
 		role: ["0"],
 	});
-	const [tableData, setTableData] = useState({});
+	const [data, setData] = useState([]);
 	const [members, setMembers] = useState([]);
 	const [filter, setFilter] = useState("all");
 	const [isDisabled, setIsDisabled] = useState(true);
 	const [errors, setErrors] = useState({});
 	const [isSendingInvite, setIsSendingInvite] = useState(false);
+
+	const headers = [
+		{
+			id: "name",
+			content: "Name",
+			render: (row) => {
+				return (
+					<Stack>
+						<Typography color={theme.palette.text.secondary}>
+							{row.firstName + " " + row.lastName}
+						</Typography>
+						<Typography>
+							Created {new Date(row.createdAt).toLocaleDateString()}
+						</Typography>
+					</Stack>
+				);
+			},
+		},
+		{ id: "email", content: "Email", render: (row) => row.email },
+		{
+			id: "role",
+			content: "Role",
+			render: (row) => row.role,
+		},
+	];
 
 	useEffect(() => {
 		const fetchTeam = async () => {
@@ -67,6 +79,12 @@ const TeamPanel = () => {
 	}, [authToken]);
 
 	useEffect(() => {
+		const ROLE_MAP = {
+			superadmin: "Super admin",
+			admin: "Admin",
+			user: "Team member",
+			demo: "Demo User",
+		};
 		let team = members;
 		if (filter !== "all")
 			team = members.filter((member) => {
@@ -76,42 +94,14 @@ const TeamPanel = () => {
 				return member.role.includes(filter);
 			});
 
-		const data = {
-			cols: [
-				{ id: 1, name: "NAME" },
-				{ id: 2, name: "EMAIL" },
-				{ id: 3, name: "ROLE" },
-			],
-			rows: team?.map((member, idx) => {
-				const roles = member.role.map((role) => roleMap[role]).join(",");
-				return {
-					id: member._id,
-					data: [
-						{
-							id: idx,
-							data: (
-								<Stack>
-									<Typography color={theme.palette.primary.contrastTextSecondary}>
-										{member.firstName + " " + member.lastName}
-									</Typography>
-									<Typography>
-										Created {new Date(member.createdAt).toLocaleDateString()}
-									</Typography>
-								</Stack>
-							),
-						},
-						{ id: idx + 1, data: member.email },
-						{
-							id: idx + 2,
-							data: roles,
-						},
-					],
-				};
-			}),
-		};
+		team = team.map((member) => ({
+			...member,
+			id: member._id,
+			role: member.role.map((role) => ROLE_MAP[role]).join(","),
+		}));
+		setData(team);
+	}, [filter, members]);
 
-		setTableData(data);
-	}, [filter, members, roleMap, theme]);
 	useEffect(() => {
 		setIsDisabled(Object.keys(errors).length !== 0 || toInvite.email === "");
 	}, [errors, toInvite.email]);
@@ -248,12 +238,11 @@ const TeamPanel = () => {
 						Invite a team member
 					</LoadingButton>
 				</Stack>
-				<BasicTable
-					data={tableData}
-					paginated={false}
-					reversed={true}
-					table={"team"}
-					emptyMessage={"There are no team members with this role"}
+
+				<DataTable
+					headers={headers}
+					data={data}
+					config={{ emptyView: "There are no team members with this role" }}
 				/>
 			</Stack>
 

@@ -241,17 +241,17 @@ const DetailsPage = () => {
 								gradient={true}
 								status={determineState(monitor)}
 								heading={"active for"}
-								subHeading={splitDuration(monitor?.stats?.timeSinceLastFalseCheck)}
+								subHeading={splitDuration(monitor?.uptimeStreak)}
 							/>
 							<StatBox
 								heading="last check"
-								subHeading={splitDuration(monitor?.stats?.timeSinceLastCheck)}
+								subHeading={splitDuration(monitor?.timeSinceLastCheck)}
 							/>
 							<StatBox
 								heading="last response time"
 								subHeading={
 									<>
-										{monitor?.stats?.latestResponseTime}
+										{monitor?.latestResponseTime}
 										<Typography component="span">{"ms"}</Typography>
 									</>
 								}
@@ -328,7 +328,9 @@ const DetailsPage = () => {
 											<Typography component="span">
 												{hoveredUptimeData !== null
 													? hoveredUptimeData.totalChecks
-													: (monitor.stats?.upChecksAggregate?.totalChecks ?? 0)}
+													: (monitor?.groupedUpChecks?.reduce((count, checkGroup) => {
+															return count + checkGroup.totalChecks;
+														}, 0) ?? 0)}
 											</Typography>
 											{hoveredUptimeData !== null && hoveredUptimeData.time !== null && (
 												<Typography
@@ -356,8 +358,8 @@ const DetailsPage = () => {
 												{hoveredUptimeData !== null
 													? Math.floor(hoveredUptimeData?.avgResponseTime ?? 0)
 													: Math.floor(
-															((monitor?.stats?.upChecksAggregate?.totalChecks ?? 0) /
-																(monitor?.stats?.totalChecks ?? 1)) *
+															((monitor?.upChecks?.totalChecks ?? 0) /
+																(monitor?.totalChecks ?? 1)) *
 																100
 														)}
 												<Typography component="span">
@@ -367,7 +369,7 @@ const DetailsPage = () => {
 										</Box>
 									</Stack>
 									<UpBarChart
-										stats={monitor?.stats}
+										monitor={monitor}
 										type={dateRange}
 										onBarHover={setHoveredUptimeData}
 									/>
@@ -384,7 +386,9 @@ const DetailsPage = () => {
 										<Typography component="span">
 											{hoveredIncidentsData !== null
 												? hoveredIncidentsData.totalChecks
-												: (monitor.stats?.downChecksAggregate?.totalChecks ?? 0)}
+												: (monitor?.groupedDownChecks?.reduce((count, checkGroup) => {
+														return count + checkGroup.totalChecks;
+													}, 0) ?? 0)}
 										</Typography>
 										{hoveredIncidentsData !== null &&
 											hoveredIncidentsData.time !== null && (
@@ -404,7 +408,7 @@ const DetailsPage = () => {
 											)}
 									</Box>
 									<DownBarChart
-										stats={monitor?.stats}
+										monitor={monitor}
 										type={dateRange}
 										onBarHover={setHoveredIncidentsData}
 									/>
@@ -416,9 +420,7 @@ const DetailsPage = () => {
 										</IconBox>
 										<Typography component="h2">Average Response Time</Typography>
 									</Stack>
-									<ResponseGaugeChart
-										avgResponseTime={monitor?.stats?.groupAggregate?.avgResponseTime ?? 0}
-									/>
+									<ResponseGaugeChart avgResponseTime={monitor.avgResponseTime ?? 0} />
 								</ChartBox>
 								<ChartBox sx={{ padding: 0 }}>
 									<Stack
@@ -430,7 +432,10 @@ const DetailsPage = () => {
 										</IconBox>
 										<Typography component="h2">Response Times</Typography>
 									</Stack>
-									<MonitorDetailsAreaChart checks={monitor?.stats?.groupChecks ?? []} />
+									<MonitorDetailsAreaChart
+										checks={monitor.groupedChecks ?? []}
+										dateRange={dateRange}
+									/>
 								</ChartBox>
 								<ChartBox
 									gap={theme.spacing(8)}

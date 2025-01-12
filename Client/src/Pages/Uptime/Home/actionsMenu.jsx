@@ -8,13 +8,18 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import {
 	deleteUptimeMonitor,
 	pauseUptimeMonitor,
-	getUptimeMonitorsByTeamId,
 } from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
 import Settings from "../../../assets/icons/settings-bold.svg?react";
 import PropTypes from "prop-types";
 import Dialog from "../../../Components/Dialog";
 
-const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => {
+const ActionsMenu = ({
+	monitor,
+	isAdmin,
+	updateRowCallback,
+	pauseCallback,
+	setIsLoading,
+}) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [actions, setActions] = useState({});
 	const [isOpen, setIsOpen] = useState(false);
@@ -33,8 +38,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 		);
 		if (action.meta.requestStatus === "fulfilled") {
 			setIsOpen(false); // close modal
-			dispatch(getUptimeMonitorsByTeamId(authState.authToken));
-			updateCallback();
+			updateRowCallback();
 			createToast({ body: "Monitor deleted successfully." });
 		} else {
 			createToast({ body: "Failed to delete monitor." });
@@ -43,6 +47,7 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 
 	const handlePause = async () => {
 		try {
+			setIsLoading(true);
 			const action = await dispatch(
 				pauseUptimeMonitor({ authToken, monitorId: monitor._id })
 			);
@@ -174,6 +179,8 @@ const ActionsMenu = ({ monitor, isAdmin, updateRowCallback, pauseCallback }) => 
 				{isAdmin && (
 					<MenuItem
 						onClick={(e) => {
+							closeMenu(e);
+
 							e.stopPropagation();
 							handlePause(e);
 						}}
@@ -227,6 +234,7 @@ ActionsMenu.propTypes = {
 	isAdmin: PropTypes.bool,
 	updateRowCallback: PropTypes.func,
 	pauseCallback: PropTypes.func,
+	setIsLoading: PropTypes.func,
 };
 
 export default ActionsMenu;
