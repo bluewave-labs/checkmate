@@ -120,7 +120,10 @@ class EmailService {
 				const { systemEmailAddress } = this.settingsService.getSettings();
 				const info = await this.transporter.sendMail({
 					to: to,
-					from: systemEmailAddress,
+					from: {
+						name: "UpRock",
+						address: systemEmailAddress,
+					},
 					subject: subject,
 					html: html,
 				});
