@@ -56,7 +56,6 @@ const Search = ({
 	disabled,
 }) => {
 	const theme = useTheme();
-
 	return (
 		<Autocomplete
 			multiple={multiple}
@@ -132,6 +131,7 @@ const Search = ({
 				}
 				return filtered;
 			}}
+			getOptionKey={(option) => option.id}
 			renderOption={(props, option) => {
 				const { key, ...optionProps } = props;
 				return (

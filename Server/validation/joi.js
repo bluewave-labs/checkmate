@@ -136,32 +136,12 @@ const getMonitorByIdQueryValidation = joi.object({
 	normalize: joi.boolean(),
 });
 
-const getMonitorsAndSummaryByTeamIdParamValidation = joi.object({
-	teamId: joi.string().required(),
-});
-
-const getMonitorsAndSummaryByTeamIdQueryValidation = joi.object({
-	type: joi
-		.alternatives()
-		.try(
-			joi.string().valid("http", "ping", "pagespeed", "docker", "hardware", "port"),
-			joi
-				.array()
-				.items(
-					joi.string().valid("http", "ping", "pagespeed", "docker", "hardware", "port")
-				)
-		),
-});
-
-const getMonitorsByTeamIdValidation = joi.object({
+const getMonitorsByTeamIdParamValidation = joi.object({
 	teamId: joi.string().required(),
 });
 
 const getMonitorsByTeamIdQueryValidation = joi.object({
-	status: joi.boolean(),
-	checkOrder: joi.string().valid("asc", "desc"),
 	limit: joi.number(),
-	normalize: joi.boolean(),
 	type: joi
 		.alternatives()
 		.try(
@@ -467,9 +447,7 @@ export {
 	createMonitorBodyValidation,
 	getMonitorByIdParamValidation,
 	getMonitorByIdQueryValidation,
-	getMonitorsAndSummaryByTeamIdParamValidation,
-	getMonitorsAndSummaryByTeamIdQueryValidation,
-	getMonitorsByTeamIdValidation,
+	getMonitorsByTeamIdParamValidation,
 	getMonitorsByTeamIdQueryValidation,
 	getMonitorStatsByIdParamValidation,
 	getMonitorStatsByIdQueryValidation,

@@ -50,6 +50,7 @@ const Routes = () => {
 					path="/uptime"
 					element={<Monitors />}
 				/>
+
 				<Route
 					path="/distributed-uptime"
 					element={<DistributedUptime />}

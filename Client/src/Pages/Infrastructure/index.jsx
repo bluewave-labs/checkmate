@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { /* useDispatch, */ useSelector } from "react-redux";
 import { useTheme } from "@emotion/react";
@@ -50,12 +50,13 @@ function Infrastructure() {
 		setRowsPerPage(parseInt(event.target.value));
 		setPage(0);
 	};
-	const [monitorState, setMonitorState] = useState({ monitors: [], total: 0 });
+	const [monitors, setMonitors] = useState([]);
+	const [summary, setSummary] = useState({});
 
 	const { authToken } = useSelector((state) => state.auth);
 	const user = jwtDecode(authToken);
 
-	const fetchMonitors = async () => {
+	const fetchMonitors = useCallback(async () => {
 		try {
 			setIsLoading(true);
 			const response = await networkService.getMonitorsByTeamId({
@@ -63,29 +64,23 @@ function Infrastructure() {
 				teamId: user.teamId,
 				limit: 1,
 				types: ["hardware"],
-				status: null,
-				checkOrder: "desc",
-				normalize: true,
 				page: page,
 				rowsPerPage: rowsPerPage,
 			});
-			setMonitorState({
-				monitors: response?.data?.data?.monitors ?? [],
-				total: response?.data?.data?.monitorCount ?? 0,
-			});
+			setMonitors(response?.data?.data?.filteredMonitors ?? []);
+			setSummary(response?.data?.data?.summary ?? {});
 		} catch (error) {
 			console.error(error);
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, [page, rowsPerPage, authToken, user.teamId]);
 
 	useEffect(() => {
 		fetchMonitors();
-	}, [page, rowsPerPage]);
+	}, [fetchMonitors]);
 
 	const { determineState } = useUtils();
-	const { monitors, total: totalMonitors } = monitorState;
 	// do it here
 	function openDetails(id) {
 		navigate(`/infrastructure/${id}`);
@@ -93,16 +88,6 @@ function Infrastructure() {
 	function handleActionMenuDelete() {
 		fetchMonitors();
 	}
-
-	const columns = [
-		{ label: "Host" },
-		{ label: "Status" },
-		{ label: "Frequency" },
-		{ label: "CPU" },
-		{ label: "Mem" },
-		{ label: "Disk" },
-		{ label: "Actions" },
-	];
 
 	const headers = [
 		{
@@ -201,7 +186,7 @@ function Infrastructure() {
 		};
 	});
 
-	let isActuallyLoading = isLoading && monitorState.monitors?.length === 0;
+	let isActuallyLoading = isLoading && monitors?.length === 0;
 	return (
 		<Box
 			className="infrastructure-monitor"
@@ -219,7 +204,7 @@ function Infrastructure() {
 		>
 			{isActuallyLoading ? (
 				<SkeletonLayout />
-			) : monitorState.monitors?.length !== 0 ? (
+			) : monitors?.length !== 0 ? (
 				<Stack gap={theme.spacing(8)}>
 					<Box>
 						<Breadcrumbs list={BREADCRUMBS} />
@@ -264,7 +249,7 @@ function Infrastructure() {
 								borderColor={theme.palette.border.light}
 								backgroundColor={theme.palette.background.accent}
 							>
-								{totalMonitors}
+								{summary?.totalMonitors ?? 0}
 							</Box>
 						</Stack>
 
@@ -282,7 +267,7 @@ function Infrastructure() {
 							data={monitorsAsRows}
 						/>
 						<Pagination
-							monitorCount={totalMonitors}
+							monitorCount={summary?.totalMonitors ?? 0}
 							page={page}
 							rowsPerPage={rowsPerPage}
 							handleChangePage={handleChangePage}

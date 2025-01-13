@@ -8,6 +8,7 @@ const QUEUE_LOOKUP = {
 	docker: "uptime",
 	pagespeed: "pagespeed",
 };
+const getSchedulerId = (monitor) => `scheduler:${monitor.type}:${monitor._id}`;
 
 import { successMessages, errorMessages } from "../utils/messages.js";
 class NewJobQueue {
@@ -218,14 +219,6 @@ class NewJobQueue {
 			concurrency: 5,
 		});
 
-		// worker.on("active", (job) => {
-		// 	this.logger.info({
-		// 		message: `Worker started processing job: ${job.id}`,
-		// 		service: SERVICE_NAME,
-		// 		method: "createWorker",
-		// 	});
-		// });
-
 		// worker.on("completed", (job) => {
 		// 	this.logger.info({
 		// 		message: `Worker completed job: ${job.id}`,
@@ -234,22 +227,6 @@ class NewJobQueue {
 		// 	});
 		// });
 
-		// worker.on("failed", (job, err) => {
-		// 	this.logger.error({
-		// 		message: `Worker failed job: ${job.id}`,
-		// 		service: SERVICE_NAME,
-		// 		method: "createWorker",
-		// 		stack: err.stack,
-		// 	});
-		// });
-
-		// worker.on("stalled", (jobId) => {
-		// 	this.logger.warn({
-		// 		message: `Worker stalled job: ${jobId}`,
-		// 		service: SERVICE_NAME,
-		// 		method: "createWorker",
-		// 	});
-		// });
 		return worker;
 	}
 
@@ -428,27 +405,27 @@ class NewJobQueue {
 				throw new Error(`Queue for ${monitor.type} not found`);
 			}
 
-			// build job options
-			const jobOptions = {
-				attempts: 1,
-				backoff: {
-					type: "exponential",
-					delay: 1000,
+			const jobTemplate = {
+				name: jobName,
+				data: monitor,
+				opts: {
+					attempts: 1,
+					backoff: {
+						type: "exponential",
+						delay: 1000,
+					},
+					removeOnComplete: true,
+					removeOnFail: false,
+					timeout: 1 * 60 * 1000,
 				},
-				removeOnComplete: true,
-				removeOnFail: false,
-				timeout: 1 * 60 * 1000,
 			};
 
-			// Execute job immediately
-			await queue.add(jobName, monitor, jobOptions);
-			await queue.add(jobName, monitor, {
-				...jobOptions,
-				repeat: {
-					every: monitor?.interval ?? 60000,
-					immediately: false,
-				},
-			});
+			const schedulerId = getSchedulerId(monitor);
+			await queue.upsertJobScheduler(
+				schedulerId,
+				{ every: monitor?.interval ?? 60000 },
+				jobTemplate
+			);
 
 			const workerStats = await this.getWorkerStats(queue);
 			await this.scaleWorkers(workerStats, queue);
@@ -478,9 +455,9 @@ class NewJobQueue {
 	async deleteJob(monitor) {
 		try {
 			const queue = this.queues[QUEUE_LOOKUP[monitor.type]];
-			const wasDeleted = await queue.removeRepeatable(monitor._id, {
-				every: monitor.interval,
-			});
+			const schedulerId = getSchedulerId(monitor);
+			const wasDeleted = await queue.removeJobScheduler(schedulerId);
+
 			if (wasDeleted === true) {
 				this.logger.info({
 					message: successMessages.JOB_QUEUE_DELETE_JOB,

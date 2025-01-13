@@ -8,7 +8,11 @@ import { NormalizeData, NormalizeDataUptimeDetails } from "../../../utils/dataUt
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-
+import {
+	buildUptimeDetailsPipeline,
+	buildHardwareDetailsPipeline,
+} from "./monitorModuleQueries.js";
+import { ObjectId } from "mongodb";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -336,294 +340,21 @@ const getUptimeDetailsById = async (req) => {
 		};
 
 		const dateString = formatLookup[dateRange];
-		const monitorData = await Check.aggregate([
-			{
-				$match: {
-					monitorId: monitor._id,
-				},
-			},
-			{
-				$sort: {
-					createdAt: 1,
-				},
-			},
-			{
-				$facet: {
-					aggregateData: [
-						{
-							$group: {
-								_id: null,
-								avgResponseTime: {
-									$avg: "$responseTime",
-								},
-								firstCheck: {
-									$first: "$$ROOT",
-								},
-								lastCheck: {
-									$last: "$$ROOT",
-								},
-								totalChecks: {
-									$sum: 1,
-								},
-							},
-						},
-					],
-					uptimeDuration: [
-						{
-							$match: {
-								status: false,
-							},
-						},
-						{
-							$sort: {
-								createdAt: 1,
-							},
-						},
-						{
-							$group: {
-								_id: null,
-								lastFalseCheck: {
-									$last: "$$ROOT",
-								},
-							},
-						},
-					],
-					groupChecks: [
-						{
-							$match: {
-								createdAt: { $gte: dates.start, $lte: dates.end },
-							},
-						},
-						{
-							$group: {
-								_id: {
-									$dateToString: {
-										format: dateString,
-										date: "$createdAt",
-									},
-								},
-								avgResponseTime: {
-									$avg: "$responseTime",
-								},
-								totalChecks: {
-									$sum: 1,
-								},
-							},
-						},
-						{
-							$sort: {
-								_id: 1,
-							},
-						},
-					],
-					groupAggregate: [
-						{
-							$match: {
-								createdAt: { $gte: dates.start, $lte: dates.end },
-							},
-						},
-						{
-							$group: {
-								_id: null,
-								avgResponseTime: {
-									$avg: "$responseTime",
-								},
-							},
-						},
-					],
-					upChecksAggregate: [
-						{
-							$match: {
-								status: true,
-							},
-						},
-						{
-							$group: {
-								_id: null,
-								avgResponseTime: {
-									$avg: "$responseTime",
-								},
-								totalChecks: {
-									$sum: 1,
-								},
-							},
-						},
-					],
-					upChecks: [
-						{
-							$match: {
-								status: true,
-								createdAt: { $gte: dates.start, $lte: dates.end },
-							},
-						},
-						{
-							$group: {
-								_id: {
-									$dateToString: {
-										format: dateString,
-										date: "$createdAt",
-									},
-								},
-								totalChecks: {
-									$sum: 1,
-								},
-								avgResponseTime: {
-									$avg: "$responseTime",
-								},
-							},
-						},
-						{
-							$sort: { _id: 1 },
-						},
-					],
-					downChecksAggregate: [
-						{
-							$match: {
-								status: false,
-							},
-						},
-						{
-							$group: {
-								_id: null,
-								avgResponseTime: {
-									$avg: "$responseTime",
-								},
-								totalChecks: {
-									$sum: 1,
-								},
-							},
-						},
-					],
-					downChecks: [
-						{
-							$match: {
-								status: false,
-								createdAt: { $gte: dates.start, $lte: dates.end },
-							},
-						},
-						{
-							$group: {
-								_id: {
-									$dateToString: {
-										format: dateString,
-										date: "$createdAt",
-									},
-								},
-								totalChecks: {
-									$sum: 1,
-								},
-								avgResponseTime: {
-									$avg: "$responseTime",
-								},
-							},
-						},
-						{
-							$sort: { _id: 1 },
-						},
-					],
-				},
-			},
-			{
-				$project: {
-					avgResponseTime: {
-						$arrayElemAt: ["$aggregateData.avgResponseTime", 0],
-					},
-					totalChecks: {
-						$arrayElemAt: ["$aggregateData.totalChecks", 0],
-					},
-					latestResponseTime: {
-						$arrayElemAt: ["$aggregateData.lastCheck.responseTime", 0],
-					},
-					timeSinceLastCheck: {
-						$let: {
-							vars: {
-								lastCheck: {
-									$arrayElemAt: ["$aggregateData.lastCheck", 0],
-								},
-							},
-							in: {
-								$cond: [
-									{
-										$ifNull: ["$$lastCheck", false],
-									},
-									{
-										$subtract: [new Date(), "$$lastCheck.createdAt"],
-									},
-									0,
-								],
-							},
-						},
-					},
-					timeSinceLastFalseCheck: {
-						$let: {
-							vars: {
-								lastFalseCheck: {
-									$arrayElemAt: ["$uptimeDuration.lastFalseCheck", 0],
-								},
-								firstCheck: {
-									$arrayElemAt: ["$aggregateData.firstCheck", 0],
-								},
-							},
-							in: {
-								$cond: [
-									{
-										$ifNull: ["$$lastFalseCheck", false],
-									},
-									{
-										$subtract: [new Date(), "$$lastFalseCheck.createdAt"],
-									},
-									{
-										$cond: [
-											{
-												$ifNull: ["$$firstCheck", false],
-											},
-											{
-												$subtract: [new Date(), "$$firstCheck.createdAt"],
-											},
-											0,
-										],
-									},
-								],
-							},
-						},
-					},
-					groupChecks: "$groupChecks",
-					groupAggregate: {
-						$arrayElemAt: ["$groupAggregate", 0],
-					},
-					upChecksAggregate: {
-						$arrayElemAt: ["$upChecksAggregate", 0],
-					},
-					upChecks: "$upChecks",
-					downChecksAggregate: {
-						$arrayElemAt: ["$downChecksAggregate", 0],
-					},
-					downChecks: "$downChecks",
-				},
-			},
-		]);
+		const results = await Check.aggregate(
+			buildUptimeDetailsPipeline(monitor, dates, dateString)
+		);
 
+		const monitorData = results[0];
 		const normalizedGroupChecks = NormalizeDataUptimeDetails(
-			monitorData[0].groupChecks,
+			monitorData.groupedChecks,
 			10,
 			100
 		);
 
 		const monitorStats = {
 			...monitor.toObject(),
-			stats: {
-				avgResponseTime: monitorData[0].avgResponseTime,
-				totalChecks: monitorData[0].totalChecks,
-				timeSinceLastCheck: monitorData[0].timeSinceLastCheck,
-				timeSinceLastFalseCheck: monitorData[0].timeSinceLastFalseCheck,
-				latestResponseTime: monitorData[0].latestResponseTime,
-				groupChecks: normalizedGroupChecks,
-				groupAggregate: monitorData[0].groupAggregate,
-				upChecksAggregate: monitorData[0].upChecksAggregate,
-				upChecks: monitorData[0].upChecks,
-				downChecksAggregate: monitorData[0].downChecksAggregate,
-				downChecks: monitorData[0].downChecks,
-			},
+			...monitorData,
+			groupedChecks: normalizedGroupChecks,
 		};
 
 		return monitorStats;
@@ -715,261 +446,9 @@ const getHardwareDetailsById = async (req) => {
 			month: "%Y-%m-%dT00:00:00Z",
 		};
 		const dateString = formatLookup[dateRange];
-		const hardwareStats = await HardwareCheck.aggregate([
-			{
-				$match: {
-					monitorId: monitor._id,
-					createdAt: { $gte: dates.start, $lte: dates.end },
-				},
-			},
-			{
-				$sort: {
-					createdAt: 1,
-				},
-			},
-			{
-				$facet: {
-					aggregateData: [
-						{
-							$group: {
-								_id: null,
-								latestCheck: {
-									$last: "$$ROOT",
-								},
-								totalChecks: {
-									$sum: 1,
-								},
-							},
-						},
-					],
-					upChecks: [
-						{
-							$match: {
-								status: true,
-							},
-						},
-						{
-							$group: {
-								_id: null,
-								totalChecks: {
-									$sum: 1,
-								},
-							},
-						},
-					],
-					checks: [
-						{
-							$limit: 1,
-						},
-						{
-							$project: {
-								diskCount: {
-									$size: "$disk",
-								},
-							},
-						},
-						{
-							$lookup: {
-								from: "hardwarechecks",
-								let: {
-									diskCount: "$diskCount",
-								},
-								pipeline: [
-									{
-										$match: {
-											$expr: {
-												$and: [
-													{ $eq: ["$monitorId", monitor._id] },
-													{ $gte: ["$createdAt", dates.start] },
-													{ $lte: ["$createdAt", dates.end] },
-												],
-											},
-										},
-									},
-									{
-										$group: {
-											_id: {
-												$dateToString: {
-													format: dateString,
-													date: "$createdAt",
-												},
-											},
-											avgCpuUsage: {
-												$avg: "$cpu.usage_percent",
-											},
-											avgMemoryUsage: {
-												$avg: "$memory.usage_percent",
-											},
-											avgTemperatures: {
-												$push: {
-													$ifNull: ["$cpu.temperature", [0]],
-												},
-											},
-											disks: {
-												$push: "$disk",
-											},
-										},
-									},
-									{
-										$project: {
-											_id: 1,
-											avgCpuUsage: 1,
-											avgMemoryUsage: 1,
-											avgTemperature: {
-												$map: {
-													input: {
-														$range: [
-															0,
-															{
-																$size: {
-																	// Handle null temperatures array
-																	$ifNull: [
-																		{ $arrayElemAt: ["$avgTemperatures", 0] },
-																		[0], // Default to single-element array if null
-																	],
-																},
-															},
-														],
-													},
-													as: "index",
-													in: {
-														$avg: {
-															$map: {
-																input: "$avgTemperatures",
-																as: "tempArray",
-																in: {
-																	$ifNull: [
-																		{ $arrayElemAt: ["$$tempArray", "$$index"] },
-																		0, // Default to 0 if element is null
-																	],
-																},
-															},
-														},
-													},
-												},
-											},
-											disks: {
-												$map: {
-													input: {
-														$range: [0, "$$diskCount"],
-													},
-													as: "diskIndex",
-													in: {
-														name: {
-															$concat: [
-																"disk",
-																{
-																	$toString: "$$diskIndex",
-																},
-															],
-														},
-														readSpeed: {
-															$avg: {
-																$map: {
-																	input: "$disks",
-																	as: "diskArray",
-																	in: {
-																		$arrayElemAt: [
-																			"$$diskArray.read_speed_bytes",
-																			"$$diskIndex",
-																		],
-																	},
-																},
-															},
-														},
-														writeSpeed: {
-															$avg: {
-																$map: {
-																	input: "$disks",
-																	as: "diskArray",
-																	in: {
-																		$arrayElemAt: [
-																			"$$diskArray.write_speed_bytes",
-																			"$$diskIndex",
-																		],
-																	},
-																},
-															},
-														},
-														totalBytes: {
-															$avg: {
-																$map: {
-																	input: "$disks",
-																	as: "diskArray",
-																	in: {
-																		$arrayElemAt: [
-																			"$$diskArray.total_bytes",
-																			"$$diskIndex",
-																		],
-																	},
-																},
-															},
-														},
-														freeBytes: {
-															$avg: {
-																$map: {
-																	input: "$disks",
-																	as: "diskArray",
-																	in: {
-																		$arrayElemAt: [
-																			"$$diskArray.free_bytes",
-																			"$$diskIndex",
-																		],
-																	},
-																},
-															},
-														},
-														usagePercent: {
-															$avg: {
-																$map: {
-																	input: "$disks",
-																	as: "diskArray",
-																	in: {
-																		$arrayElemAt: [
-																			"$$diskArray.usage_percent",
-																			"$$diskIndex",
-																		],
-																	},
-																},
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-								],
-								as: "hourlyStats",
-							},
-						},
-						{
-							$unwind: "$hourlyStats",
-						},
-						{
-							$replaceRoot: {
-								newRoot: "$hourlyStats",
-							},
-						},
-					],
-				},
-			},
-			{
-				$project: {
-					aggregateData: {
-						$arrayElemAt: ["$aggregateData", 0],
-					},
-					upChecks: {
-						$arrayElemAt: ["$upChecks", 0],
-					},
-					checks: {
-						$sortArray: {
-							input: "$checks",
-							sortBy: { _id: 1 },
-						},
-					},
-				},
-			},
-		]);
+		const hardwareStats = await HardwareCheck.aggregate(
+			buildHardwareDetailsPipeline(monitor, dates, dateString)
+		);
 
 		const monitorStats = {
 			...monitor.toObject(),
@@ -1016,121 +495,194 @@ const getMonitorById = async (monitorId) => {
 	}
 };
 
-/**
- * Get monitors and Summary by TeamID
- * @async
- * @param {Express.Request} req
- * @param {Express.Response} res
- * @returns {Promise<Array<Monitor>>}
- * @throws {Error}
- */
+const getMonitorsByTeamId = async (req) => {
+	let { limit, type, page, rowsPerPage, filter, field, order } = req.query;
 
-const getMonitorsAndSummaryByTeamId = async (teamId, type) => {
-	try {
-		const monitors = await Monitor.find({ teamId, type });
-		const monitorCounts = monitors.reduce(
-			(acc, monitor) => {
-				if (monitor.status === true) {
-					acc.up += 1;
-				} else if (monitor.status === false) {
-					acc.down += 1;
-				} else if (monitor.isActive === false) {
-					acc.paused += 1;
-				}
-				return acc;
+	limit = parseInt(limit);
+	page = parseInt(page);
+	rowsPerPage = parseInt(rowsPerPage);
+	if (field === undefined) {
+		field = "name";
+		order = "asc";
+	}
+	// Build the match stage
+	const matchStage = { teamId: ObjectId.createFromHexString(req.params.teamId) };
+	if (type !== undefined) {
+		matchStage.type = Array.isArray(type) ? { $in: type } : type;
+	}
+
+	const skip = page && rowsPerPage ? page * rowsPerPage : 0;
+
+	const sort = { [field]: order === "asc" ? 1 : -1 };
+	const results = await Monitor.aggregate([
+		{ $match: matchStage },
+		{
+			$facet: {
+				summary: [
+					{
+						$group: {
+							_id: null,
+							totalMonitors: { $sum: 1 },
+							upMonitors: {
+								$sum: {
+									$cond: [{ $eq: ["$status", true] }, 1, 0],
+								},
+							},
+							downMonitors: {
+								$sum: {
+									$cond: [{ $eq: ["$status", false] }, 1, 0],
+								},
+							},
+							pausedMonitors: {
+								$sum: {
+									$cond: [{ $eq: ["$isActive", false] }, 1, 0],
+								},
+							},
+						},
+					},
+					{
+						$project: {
+							_id: 0,
+						},
+					},
+				],
+				monitors: [
+					{ $sort: sort },
+					{
+						$project: {
+							_id: 1,
+							name: 1,
+						},
+					},
+				],
+				filteredMonitors: [
+					...(filter !== undefined
+						? [
+								{
+									$match: {
+										$or: [
+											{ name: { $regex: filter, $options: "i" } },
+											{ url: { $regex: filter, $options: "i" } },
+										],
+									},
+								},
+							]
+						: []),
+					{ $sort: sort },
+					{ $skip: skip },
+					...(rowsPerPage ? [{ $limit: rowsPerPage }] : []),
+					...(limit
+						? [
+								{
+									$lookup: {
+										from: "checks",
+										let: { monitorId: "$_id" },
+										pipeline: [
+											{
+												$match: {
+													$expr: { $eq: ["$monitorId", "$$monitorId"] },
+												},
+											},
+											{ $sort: { createdAt: -1 } },
+											...(limit ? [{ $limit: limit }] : []),
+										],
+										as: "standardchecks",
+									},
+								},
+							]
+						: []),
+					...(limit
+						? [
+								{
+									$lookup: {
+										from: "pagespeedchecks",
+										let: { monitorId: "$_id" },
+										pipeline: [
+											{
+												$match: {
+													$expr: { $eq: ["$monitorId", "$$monitorId"] },
+												},
+											},
+											{ $sort: { createdAt: -1 } },
+											...(limit ? [{ $limit: limit }] : []),
+										],
+										as: "pagespeedchecks",
+									},
+								},
+							]
+						: []),
+					...(limit
+						? [
+								{
+									$lookup: {
+										from: "hardwarechecks",
+										let: { monitorId: "$_id" },
+										pipeline: [
+											{
+												$match: {
+													$expr: { $eq: ["$monitorId", "$$monitorId"] },
+												},
+											},
+											{ $sort: { createdAt: -1 } },
+											...(limit ? [{ $limit: limit }] : []),
+										],
+										as: "hardwarechecks",
+									},
+								},
+							]
+						: []),
+
+					{
+						$addFields: {
+							checks: {
+								$switch: {
+									branches: [
+										{
+											case: { $in: ["$type", ["http", "ping", "docker", "port"]] },
+											then: "$standardchecks",
+										},
+										{
+											case: { $eq: ["$type", "pagespeed"] },
+											then: "$pagespeedchecks",
+										},
+										{
+											case: { $eq: ["$type", "hardware"] },
+											then: "$hardwarechecks",
+										},
+									],
+									default: [],
+								},
+							},
+						},
+					},
+					{
+						$project: {
+							standardchecks: 0,
+							pagespeedchecks: 0,
+							hardwarechecks: 0,
+						},
+					},
+				],
 			},
-			{ up: 0, down: 0, paused: 0 }
-		);
-		monitorCounts.total = monitors.length;
-		return { monitors, monitorCounts };
-	} catch (error) {
-		error.service = SERVICE_NAME;
-		error.method = "getMonitorsAndSummaryByTeamId";
-		throw error;
-	}
-};
+		},
+		{
+			$project: {
+				summary: { $arrayElemAt: ["$summary", 0] },
+				filteredMonitors: 1,
+				monitors: 1,
+			},
+		},
+	]);
 
-/**
- * Get monitors by TeamID
- * @async
- * @param {Express.Request} req
- * @param {Express.Response} res
- * @returns {Promise<Array<Monitor>>}
- * @throws {Error}
- */
-const getMonitorsByTeamId = async (req, res) => {
-	try {
-		let {
-			limit,
-			type,
-			status,
-			checkOrder,
-			normalize,
-			page,
-			rowsPerPage,
-			filter,
-			field,
-			order,
-		} = req.query;
-
-		const monitorQuery = { teamId: req.params.teamId };
-
-		if (type !== undefined) {
-			monitorQuery.type = Array.isArray(type) ? { $in: type } : type;
+	let { monitors, filteredMonitors, summary } = results[0];
+	filteredMonitors = filteredMonitors.map((monitor) => {
+		if (!monitor.checks) {
+			return monitor;
 		}
-		// Add filter if provided
-		// $options: "i" makes the search case-insensitive
-		if (filter !== undefined) {
-			monitorQuery.$or = [
-				{ name: { $regex: filter, $options: "i" } },
-				{ url: { $regex: filter, $options: "i" } },
-			];
-		}
-		const monitorCount = await Monitor.countDocuments(monitorQuery);
-
-		// Pagination
-		const skip = page && rowsPerPage ? page * rowsPerPage : 0;
-
-		// Build Sort option
-		const sort = field ? { [field]: order === "asc" ? 1 : -1 } : {};
-
-		const monitors = await Monitor.find(monitorQuery)
-			.skip(skip)
-			.limit(rowsPerPage)
-			.sort(sort);
-
-		// Early return if limit is set to -1, indicating we don't want any checks
-		if (limit === "-1") {
-			return { monitors, monitorCount };
-		}
-		// Map each monitor to include its associated checks
-		const monitorsWithChecks = await Promise.all(
-			monitors.map(async (monitor) => {
-				let model = CHECK_MODEL_LOOKUP[monitor.type];
-
-				// Checks are order newest -> oldest
-				let checks = await model
-					.find({
-						monitorId: monitor._id,
-						...(status && { status }),
-					})
-					.sort({ createdAt: checkOrder === "asc" ? 1 : -1 })
-
-					.limit(limit || 0);
-
-				//Normalize checks if requested
-				if (normalize !== undefined) {
-					checks = NormalizeData(checks, 10, 100);
-				}
-				return { ...monitor.toObject(), checks };
-			})
-		);
-		return { monitors: monitorsWithChecks, monitorCount };
-	} catch (error) {
-		error.service = SERVICE_NAME;
-		error.method = "getMonitorsByTeamId";
-		throw error;
-	}
+		monitor.checks = NormalizeData(monitor.checks, 10, 100);
+		return monitor;
+	});
+	return { monitors, filteredMonitors, summary };
 };
 
 /**
@@ -1262,9 +814,8 @@ export {
 	getAllMonitorsWithUptimeStats,
 	getMonitorStatsById,
 	getMonitorById,
-	getUptimeDetailsById,
-	getMonitorsAndSummaryByTeamId,
 	getMonitorsByTeamId,
+	getUptimeDetailsById,
 	createMonitor,
 	deleteMonitor,
 	deleteAllMonitors,
