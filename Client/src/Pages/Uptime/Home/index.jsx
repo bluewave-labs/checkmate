@@ -140,7 +140,7 @@ const UptimeMonitors = () => {
 		setMonitorUpdateTrigger((prev) => !prev);
 	}, []);
 	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
-	const hasMonitors = monitorsSummary?.totalMonitors ?? 0;
+	const hasMonitors = totalMonitors > 0;
 	const canAddMonitor = isAdmin && hasMonitors;
 
 	return (
