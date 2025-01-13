@@ -1,8 +1,8 @@
 
-# **Announcing $5000 grant funding in partnership with [UpRock](https://uprock.com) - check [our web page](https://checkmate.so) for funding ideas** 
+## **Announcing $5000 grant funding in partnership with [UpRock](https://uprock.com) to build distributed uptime monitoring - check [our web page](https://checkmate.so) for funding ideas** 
 
 - If you would like to support us, please consider giving it a ⭐ and click on "watch". 
-- Need support or have a suggestion? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.
+- Have a question or suggestion for the roadmap/featureset? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.
 - Need a ping when there's a new release? Use [Newreleases](https://newreleases.io/), a free service to track releases.
 
 ![Frame 34](https://github.com/user-attachments/assets/00db1520-24b6-42f2-aca2-a1c9794677da)
