@@ -218,15 +218,6 @@ class NewJobQueue {
 			connection: this.connection,
 			concurrency: 5,
 		});
-
-		// worker.on("completed", (job) => {
-		// 	this.logger.info({
-		// 		message: `Worker completed job: ${job.id}`,
-		// 		service: SERVICE_NAME,
-		// 		method: "createWorker",
-		// 	});
-		// });
-
 		return worker;
 	}
 
