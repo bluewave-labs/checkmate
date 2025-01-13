@@ -1,4 +1,4 @@
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import DataTable from "../../Components/Table";
 import Breadcrumbs from "../../Components/Breadcrumbs";
@@ -95,6 +95,24 @@ const DistributedUptime = () => {
 			gap={theme.spacing(8)}
 		>
 			<Breadcrumbs list={BREADCRUMBS} />
+			<Stack
+				direction="row"
+				justifyContent="end"
+				alignItems="center"
+				mt={theme.spacing(5)}
+				gap={theme.spacing(6)}
+			>
+				<Button
+					variant="contained"
+					color="primary"
+					onClick={() => {
+						navigate("/distributed-uptime/create");
+					}}
+					sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
+				>
+					Create new
+				</Button>
+			</Stack>
 			<DataTable
 				headers={headers}
 				data={data}
