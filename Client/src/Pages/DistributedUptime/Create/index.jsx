@@ -9,12 +9,15 @@ import { HttpAdornment } from "../../../Components/Inputs/TextInput/Adornments";
 import Radio from "../../../Components/Inputs/Radio";
 import Checkbox from "../../../Components/Inputs/Checkbox";
 import Select from "../../../Components/Inputs/Select";
+import { createToast } from "../../../Utils/toastUtils";
 
 // Utility
 import { useTheme } from "@emotion/react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { monitorValidation } from "../../../Validation/validation";
+import { createUptimeMonitor } from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
 
 // Constants
 const BREADCRUMBS = [
@@ -33,22 +36,62 @@ const SELECT_VALUES = [
 const CreateDistributedUptime = () => {
 	// Redux state
 	const { user, authToken } = useSelector((state) => state.auth);
+	const isLoading = useSelector((state) => state.uptimeMonitors.isLoading);
 
 	// Local state
 	const [https, setHttps] = useState(true);
 	const [notifications, setNotifications] = useState([]);
 	const [monitor, setMonitor] = useState({
-		type: "http",
+		type: "distributed_http",
+		name: "",
+		url: "",
+		interval: 1,
 	});
 	const [errors, setErrors] = useState({});
 
+	//utils
+	const theme = useTheme();
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	// Handlers
 	const handleCreateMonitor = async (event) => {
-		const { error } = monitorValidation.validate(monitor, {
+		const monitorToSubmit = { ...monitor };
+
+		// Prepend protocol to url
+		monitorToSubmit.url = `http${https ? "s" : ""}://` + monitorToSubmit.url;
+
+		const { error } = monitorValidation.validate(monitorToSubmit, {
 			abortEarly: false,
 		});
 
-		console.log(monitor, error);
+		if (error) {
+			const newErrors = {};
+			error.details.forEach((err) => {
+				newErrors[err.path[0]] = err.message;
+			});
+			setErrors(newErrors);
+			createToast({ body: "Please check the form for errors." });
+			return;
+		}
+
+		// Append needed fields
+		monitorToSubmit.description = monitor.name;
+		monitorToSubmit.interval = monitor.interval * MS_PER_MINUTE;
+		monitorToSubmit.teamId = user.teamId;
+		monitorToSubmit.userId = user._id;
+		monitorToSubmit.notifications = notifications;
+
+		const action = await dispatch(
+			createUptimeMonitor({ authToken, monitor: monitorToSubmit })
+		);
+		console.log(action);
+		if (action.meta.requestStatus === "fulfilled") {
+			createToast({ body: "Monitor created successfully!" });
+			navigate("/distributed-uptime");
+		} else {
+			createToast({ body: "Failed to create monitor." });
+		}
 	};
 
 	const handleChange = (event) => {
@@ -61,16 +104,35 @@ const CreateDistributedUptime = () => {
 			{ [name]: value },
 			{ abortEarly: false }
 		);
-
+		console.log(name);
 		setErrors((prev) => ({
 			...prev,
 			...(error ? { [name]: error.details[0].message } : { [name]: undefined }),
 		}));
-
-		console.log(error);
 	};
 
-	const theme = useTheme();
+	const handleNotifications = (event, type) => {
+		const { value } = event.target;
+		let currentNotifications = [...notifications];
+		const notificationAlreadyExists = notifications.some((notification) => {
+			if (notification.type === type && notification.address === value) {
+				return true;
+			}
+			return false;
+		});
+		if (notificationAlreadyExists) {
+			currentNotifications = currentNotifications.filter((notification) => {
+				if (notification.type === type && notification.address === value) {
+					return false;
+				}
+				return true;
+			});
+		} else {
+			currentNotifications.push({ type, address: value });
+		}
+		setNotifications(currentNotifications);
+	};
+
 	return (
 		<Box>
 			<Breadcrumbs list={BREADCRUMBS} />
@@ -149,10 +211,11 @@ const CreateDistributedUptime = () => {
 								desc="Use HTTP(s) to monitor your website or API endpoint."
 								size="small"
 								value="http"
+								name="type"
 								checked={true}
-								onChange={(event) => console.log(event)}
+								onChange={handleChange}
 							/>
-							{monitor.type === "http" ? (
+							{monitor.type === "http" || monitor.type === "distributed_http" ? (
 								<ButtonGroup sx={{ ml: theme.spacing(16) }}>
 									<Button
 										variant="group"
@@ -174,7 +237,7 @@ const CreateDistributedUptime = () => {
 							)}
 						</Stack>
 
-						{/* {errors["type"] ? (
+						{errors["type"] ? (
 							<Box className="error-container">
 								<Typography
 									component="p"
@@ -186,7 +249,7 @@ const CreateDistributedUptime = () => {
 							</Box>
 						) : (
 							""
-						)} */}
+						)}
 					</Stack>
 				</ConfigBox>
 				<ConfigBox>
@@ -204,7 +267,7 @@ const CreateDistributedUptime = () => {
 								(notification) => notification.type === "email"
 							)}
 							value={user?.email}
-							onChange={(event) => console.log(event)}
+							onChange={(event) => handleNotifications(event, "email")}
 						/>
 					</Stack>
 				</ConfigBox>
@@ -216,8 +279,9 @@ const CreateDistributedUptime = () => {
 						<Select
 							id="monitor-interval"
 							label="Check frequency"
+							name="interval"
 							value={monitor.interval || 1}
-							onChange={(event) => console.log(event)}
+							onChange={handleChange}
 							items={SELECT_VALUES}
 						/>
 					</Stack>
@@ -230,8 +294,8 @@ const CreateDistributedUptime = () => {
 						variant="contained"
 						color="primary"
 						onClick={() => handleCreateMonitor()}
-						// disabled={!Object.values(errors).every((value) => value === undefined)}
-						// loading={isLoading}
+						disabled={!Object.values(errors).every((value) => value === undefined)}
+						loading={isLoading}
 					>
 						Create monitor
 					</LoadingButton>
