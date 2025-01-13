@@ -74,7 +74,7 @@ class EmailService {
 		 * @type {Object}
 		 */
 
-		const { systemEmailHost, systemEmailPort, systemEmailAddress, systemEmailPassword } =
+		const { systemEmailHost, systemEmailPort, systemEmailUser, systemEmailPassword } =
 			this.settingsService.getSettings();
 
 		const emailConfig = {
@@ -82,7 +82,7 @@ class EmailService {
 			port: systemEmailPort,
 			secure: true,
 			auth: {
-				user: systemEmailAddress,
+				user: systemEmailUser,
 				pass: systemEmailPassword,
 			},
 		};
@@ -117,8 +117,10 @@ class EmailService {
 
 		const sendEmail = async (to, subject, html) => {
 			try {
+				const { systemEmailAddress } = this.settingsService.getSettings();
 				const info = await this.transporter.sendMail({
 					to: to,
+					from: systemEmailAddress,
 					subject: subject,
 					html: html,
 				});

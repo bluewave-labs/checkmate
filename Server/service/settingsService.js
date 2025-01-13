@@ -16,6 +16,7 @@ const envConfig = {
 	pagespeedApiKey: process.env.PAGESPEED_API_KEY,
 	systemEmailHost: process.env.SYSTEM_EMAIL_HOST,
 	systemEmailPort: process.env.SYSTEM_EMAIL_PORT,
+	systemEmailUser: process.env.SYSTEM_EMAIL_USER,
 	systemEmailAddress: process.env.SYSTEM_EMAIL_ADDRESS,
 	systemEmailPassword: process.env.SYSTEM_EMAIL_PASSWORD,
 };
