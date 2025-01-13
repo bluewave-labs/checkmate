@@ -3,7 +3,7 @@ services:
     image: uptime_client:latest
     restart: always
     environment:
-      UPTIME_APP_API_BASE_URL: "https://checkmate-demo.bluewavelabs.ca/api/v1"
+      UPTIME_APP_API_BASE_URL: "https://prism.uprock.com/api/v1"
     ports:
       - "80:80"
       - "443:443"
@@ -11,15 +11,7 @@ services:
       - server
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d/:ro
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
-
-  certbot:
-    image: certbot/certbot:latest
-    restart: always
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
+      - ./nginx/ssl:/etc/nginx/ssl/:ro
   server:
     image: uptime_server:latest
     restart: always

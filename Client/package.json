@@ -25,6 +25,7 @@
 		"dayjs": "1.11.13",
 		"joi": "17.13.3",
 		"jwt-decode": "^4.0.0",
+		"maplibre-gl": "5.0.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-redux": "9.2.0",
