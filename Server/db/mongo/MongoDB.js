@@ -38,6 +38,11 @@ import * as pageSpeedCheckModule from "./modules/pageSpeedCheckModule.js";
 import * as hardwareCheckModule from "./modules/hardwareCheckModule.js";
 
 //****************************************
+// Distributed Checks
+//****************************************
+import * as distributedCheckModule from "./modules/distributedCheckModule.js";
+
+//****************************************
 // Checks
 //****************************************
 
@@ -73,6 +78,7 @@ class MongoDB {
 		Object.assign(this, monitorModule);
 		Object.assign(this, pageSpeedCheckModule);
 		Object.assign(this, hardwareCheckModule);
+		Object.assign(this, distributedCheckModule);
 		Object.assign(this, checkModule);
 		Object.assign(this, maintenanceWindowModule);
 		Object.assign(this, notificationModule);

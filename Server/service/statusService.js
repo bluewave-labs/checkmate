@@ -94,6 +94,13 @@ class StatusService {
 			message,
 		};
 
+		if (type === "distributed_http") {
+			check.continent = payload.continent;
+			check.countryCode = payload.country_code;
+			check.city = payload.city;
+			check.location = payload.location;
+		}
+
 		if (type === "pagespeed") {
 			const categories = payload.lighthouseResult?.categories;
 			const audits = payload.lighthouseResult?.audits;
@@ -145,7 +152,7 @@ class StatusService {
 				hardware: this.db.createHardwareCheck,
 				docker: this.db.createCheck,
 				port: this.db.createCheck,
-				distributed_http: this.db.createCheck,
+				distributed_http: this.db.createDistributedCheck,
 			};
 			const operation = operationMap[networkResponse.type];
 

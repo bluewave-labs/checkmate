@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import { BaseCheckSchema } from "./Check.js";
 
 // {
@@ -48,9 +49,33 @@ import { BaseCheckSchema } from "./Check.js";
 // 	}
 //   }
 
+const LocationSchema = new mongoose.Schema(
+	{
+		lat: { type: Number, required: true },
+		lng: { type: Number, required: true },
+	},
+	{ _id: false }
+);
+
 const DistributedUptimeCheckSchema = mongoose.Schema(
 	{
 		...BaseCheckSchema.obj,
+		location: {
+			type: LocationSchema,
+			required: false,
+		},
+		continent: {
+			type: String,
+			required: false,
+		},
+		countryCode: {
+			type: String,
+			required: false,
+		},
+		city: {
+			type: String,
+			required: false,
+		},
 	},
 	{ timestamps: true }
 );
