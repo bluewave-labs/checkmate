@@ -1,5 +1,6 @@
 import { errorMessages, successMessages } from "../utils/messages.js";
 const SERVICE_NAME = "NetworkService";
+const UPROCK_ENDPOINT = "https://api.uprock.com/checkmate/push";
 
 /**
  * Constructs a new NetworkService instance.
@@ -19,6 +20,7 @@ class NetworkService {
 		this.TYPE_HARDWARE = "hardware";
 		this.TYPE_DOCKER = "docker";
 		this.TYPE_PORT = "port";
+		this.TYPE_DISTRIBUTED_HTTP = "distributed_http";
 		this.SERVICE_NAME = SERVICE_NAME;
 		this.NETWORK_ERROR = 5000;
 		this.PING_ERROR = 5001;
@@ -322,6 +324,31 @@ class NetworkService {
 		}
 	}
 
+	async requestDistributedHttp(job) {
+		try {
+			const monitor = job.data;
+
+			const response = await this.axios.post(
+				UPROCK_ENDPOINT,
+				{
+					id: monitor._id,
+					url: monitor.url,
+					callback: `${process.env.NGROK_URL}/api/v1/distributed-uptime/callback`,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+						"x-checkmate-key": process.env.UPROCK_API_KEY,
+					},
+				}
+			);
+		} catch (error) {
+			error.service = this.SERVICE_NAME;
+			error.method = "requestDistributedHttp";
+			throw error;
+		}
+	}
+
 	/**
 	 * Handles unsupported job types by throwing an error with details.
 	 *
@@ -359,6 +386,8 @@ class NetworkService {
 				return await this.requestDocker(job);
 			case this.TYPE_PORT:
 				return await this.requestPort(job);
+			case this.TYPE_DISTRIBUTED_HTTP:
+				return await this.requestDistributedHttp(job);
 
 			default:
 				return this.handleUnsupportedType(type);

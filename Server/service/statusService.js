@@ -85,6 +85,7 @@ class StatusService {
 	buildCheck = (networkResponse) => {
 		const { monitorId, type, status, responseTime, code, message, payload } =
 			networkResponse;
+
 		const check = {
 			monitorId,
 			status,
@@ -144,6 +145,7 @@ class StatusService {
 				hardware: this.db.createHardwareCheck,
 				docker: this.db.createCheck,
 				port: this.db.createCheck,
+				distributed_http: this.db.createCheck,
 			};
 			const operation = operationMap[networkResponse.type];
 

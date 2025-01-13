@@ -1,4 +1,4 @@
-const QUEUE_NAMES = ["uptime", "pagespeed", "hardware"];
+const QUEUE_NAMES = ["uptime", "pagespeed", "hardware", "distributed"];
 const SERVICE_NAME = "JobQueue";
 const JOBS_PER_WORKER = 5;
 const QUEUE_LOOKUP = {
@@ -7,6 +7,7 @@ const QUEUE_LOOKUP = {
 	ping: "uptime",
 	docker: "uptime",
 	pagespeed: "pagespeed",
+	distributed_http: "distributed",
 };
 const getSchedulerId = (monitor) => `scheduler:${monitor.type}:${monitor._id}`;
 
@@ -162,6 +163,9 @@ class NewJobQueue {
 				// Get the current status
 				await job.updateProgress(30);
 				const networkResponse = await this.networkService.getStatus(job);
+				if (job.data.type === "distributed_http") {
+					return;
+				}
 				// Handle status change
 				await job.updateProgress(60);
 				const { monitor, statusChanged, prevStatus } =
@@ -346,7 +350,6 @@ class NewJobQueue {
 					const jobs = await queue.getJobs();
 					const ret = await Promise.all(
 						jobs.map(async (job) => {
-							console.log(job);
 							const state = await job.getState();
 							return { url: job.data.url, state, progress: job.progress };
 						})

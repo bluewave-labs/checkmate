@@ -243,7 +243,13 @@ const startApp = async () => {
 		ServiceRegistry.get(MongoDB.SERVICE_NAME)
 	);
 
-	const distributedUptimeController = new DistributedUptimeController();
+	const distributedUptimeController = new DistributedUptimeController(
+		http,
+		ServiceRegistry.get(StatusService.SERVICE_NAME)
+	);
+	const distributedUptimeRoutes = new DistributedUptimeRoutes(
+		distributedUptimeController
+	);
 
 	//Create routes
 	const authRoutes = new AuthRoutes(authController);
@@ -256,9 +262,7 @@ const startApp = async () => {
 	);
 	const queueRoutes = new QueueRoutes(queueController);
 	const statusPageRoutes = new StatusPageRoutes(statusPageController);
-	const distributedUptimeRoutes = new DistributedUptimeRoutes(
-		distributedUptimeController
-	);
+
 	// Init job queue
 	await jobQueue.initJobQueue();
 	// Middleware
