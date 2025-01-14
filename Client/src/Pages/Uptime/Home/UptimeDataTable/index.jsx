@@ -227,10 +227,12 @@ const UptimeDataTable = ({
 
 				<Box
 					className="current-monitors-counter"
-					color={theme.palette.text.primary}
+					/* TODO Check */
+					color={"red" /* theme.palette.text.primary */}
 					border={1}
-					borderColor={theme.palette.border.light}
-					backgroundColor={theme.palette.background.accent}
+					/* TODO Check */
+					borderColor={"red" /* theme.palette.border.light */}
+					backgroundColor={"red" /* theme.palette.background.accent */}
 				>
 					{monitorCount}
 				</Box>
@@ -250,7 +252,8 @@ const UptimeDataTable = ({
 							height="100%"
 							position="absolute"
 							sx={{
-								backgroundColor: theme.palette.background.main,
+								/* TODO check */
+								backgroundColor: "red" /* theme.palette.background.main */,
 								opacity: 0.8,
 								zIndex: 100,
 							}}
@@ -267,7 +270,8 @@ const UptimeDataTable = ({
 						>
 							<CircularProgress
 								sx={{
-									color: theme.palette.other.icon,
+									/* TODO check */
+									color: "red" /*  theme.palette.other.icon */,
 								}}
 							/>
 						</Box>
@@ -280,7 +284,8 @@ const UptimeDataTable = ({
 						rowSX: {
 							cursor: "pointer",
 							"&:hover": {
-								backgroundColor: theme.palette.background.accent,
+								/* TODO check */
+								backgroundColor: "red" /* theme.palette.background.accent */,
 							},
 						},
 						onRowClick: (row) => {

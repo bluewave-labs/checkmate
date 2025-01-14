@@ -57,7 +57,7 @@ const UptimeMonitors = () => {
 
 	const getMonitorWithPercentage = useCallback((monitor, theme) => {
 		let uptimePercentage = "";
-		let percentageColor = theme.palette.percentage.uptimeExcellent;
+		let percentageColor = "red"; /* theme.palette.percentage.uptimeExcellent */
 
 		if (monitor.uptimePercentage !== undefined) {
 			uptimePercentage =
@@ -67,12 +67,12 @@ const UptimeMonitors = () => {
 
 			percentageColor =
 				monitor.uptimePercentage < 0.25
-					? theme.palette.percentage.uptimePoor
+					? "red" /*  theme.palette.percentage.uptimePoor */
 					: monitor.uptimePercentage < 0.5
-						? theme.palette.percentage.uptimeFair
+						? "red" /* theme.palette.percentage.uptimeFair */
 						: monitor.uptimePercentage < 0.75
-							? theme.palette.percentage.uptimeGood
-							: theme.palette.percentage.uptimeExcellent;
+							? /* theme.palette.percentage.uptimeGood */ "red"
+							: "red" /* theme.palette.percentage.uptimeExcellent */;
 		}
 
 		return {

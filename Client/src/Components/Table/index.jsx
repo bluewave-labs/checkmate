@@ -47,7 +47,8 @@ const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
 					"& :is(td)": { color: theme.palette.primary.contrastTextSecondary },
 				}}
 			>
-				<TableHead sx={{ backgroundColor: theme.palette.background.accent }}>
+				{/* TODO Check */}
+				<TableHead sx={{ backgroundColor: theme.palette.secondary.main }}>
 					<TableRow>
 						{headers.map((header, index) => (
 							<TableCell

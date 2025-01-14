@@ -140,7 +140,8 @@ function Infrastructure() {
 				<IconButton
 					sx={{
 						"& svg path": {
-							stroke: theme.palette.other.icon,
+							/* TODO check */
+							stroke: "red" /* theme.palette.other.icon */,
 						},
 					}}
 				>
@@ -258,7 +259,7 @@ function Infrastructure() {
 								rowSX: {
 									cursor: "pointer",
 									"&:hover": {
-										backgroundColor: theme.palette.background.accent,
+										backgroundColor: "red" /* theme.palette.background.accent */,
 									},
 								},
 								onRowClick: (row) => openDetails(row.id),
