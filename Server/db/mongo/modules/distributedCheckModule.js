@@ -1,4 +1,5 @@
 import DistributedUptimeCheck from "../../models/DistributedUptimeCheck.js";
+import Monitor from "../../models/Monitor.js";
 const SERVICE_NAME = "distributedCheckModule";
 
 const createDistributedCheck = async (checkData) => {
@@ -12,4 +13,13 @@ const createDistributedCheck = async (checkData) => {
 	}
 };
 
-export { createDistributedCheck };
+const getDistributedMonitors = async (teamId) => {
+	try {
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "getDistributedMonitors";
+		throw error;
+	}
+};
+
+export { createDistributedCheck, getDistributedMonitors };
