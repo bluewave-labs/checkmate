@@ -23,7 +23,7 @@ const InviteTokenSchema = mongoose.Schema(
 		expiry: {
 			type: Date,
 			default: Date.now,
-			expires: 3600,
+			expires: 172800,
 		},
 	},
 	{
