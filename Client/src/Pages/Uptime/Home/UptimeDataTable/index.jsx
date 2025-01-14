@@ -156,7 +156,7 @@ const UptimeDataTable = ({
 					direction="row"
 					gap={theme.spacing(4)}
 					alignItems="center"
-					width="max-content"
+					display={"inline-flex"}
 					onClick={() => handleSort("status")}
 				>
 					{" "}
@@ -168,9 +168,9 @@ const UptimeDataTable = ({
 						}}
 					>
 						{sort.order === "asc" ? (
-							<ArrowUpwardRoundedIcon />
+							<ArrowUpwardRoundedIcon fontSize="18px" />
 						) : (
-							<ArrowDownwardRoundedIcon />
+							<ArrowDownwardRoundedIcon fontSize="18px" />
 						)}
 					</Stack>
 				</Stack>
@@ -222,17 +222,22 @@ const UptimeDataTable = ({
 				direction="row"
 				alignItems="center"
 				mb={theme.spacing(8)}
+				gap={theme.spacing(2)}
 			>
 				<Heading component="h2">Uptime monitors</Heading>
 
 				<Box
 					className="current-monitors-counter"
-					/* TODO Check */
-					color={"red" /* theme.palette.text.primary */}
-					border={1}
-					/* TODO Check */
-					borderColor={"red" /* theme.palette.border.light */}
-					backgroundColor={"red" /* theme.palette.background.accent */}
+					color={theme.palette.tertiary.contrastText}
+					border={2}
+					borderColor={theme.palette.accent.main}
+					backgroundColor={theme.palette.tertiary.main}
+					sx={{
+						padding: ".25em .75em",
+						borderRadius: "50%",
+						fontSize: "12px",
+						fontWeight: 500,
+					}}
 				>
 					{monitorCount}
 				</Box>
@@ -252,8 +257,7 @@ const UptimeDataTable = ({
 							height="100%"
 							position="absolute"
 							sx={{
-								/* TODO check */
-								backgroundColor: "red" /* theme.palette.background.main */,
+								backgroundColor: theme.palette.accent.contrastText,
 								opacity: 0.8,
 								zIndex: 100,
 							}}
@@ -270,8 +274,7 @@ const UptimeDataTable = ({
 						>
 							<CircularProgress
 								sx={{
-									/* TODO check */
-									color: "red" /*  theme.palette.other.icon */,
+									color: theme.palette.accent.main,
 								}}
 							/>
 						</Box>
@@ -283,9 +286,8 @@ const UptimeDataTable = ({
 					config={{
 						rowSX: {
 							cursor: "pointer",
-							"&:hover": {
-								/* TODO check */
-								backgroundColor: "red" /* theme.palette.background.accent */,
+							"&:hover td": {
+								backgroundColor: theme.palette.tertiary.main,
 							},
 						},
 						onRowClick: (row) => {

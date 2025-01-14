@@ -4,17 +4,3 @@
 	height: var(--env-var-height-2);
 	min-width: fit-content;
 }
-
-.current-monitors-counter {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 5px;
-	min-width: 25px;
-	min-height: 25px;
-	border-radius: 50%;
-	font-size: var(--env-var-font-size-medium);
-	font-weight: 500;
-	margin-left: 10px;
-	line-height: 0.8;
-}

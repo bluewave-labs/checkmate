@@ -43,12 +43,22 @@ const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
 			<Table
 				stickyHeader
 				sx={{
-					"& :is(th)": { color: theme.palette.primary.contrastText },
-					"& :is(td)": { color: theme.palette.primary.contrastTextSecondary },
+					"&.MuiTable-root  :is(.MuiTableHead-root, .MuiTableBody-root) :is(th, td)": {
+						paddingLeft: theme.spacing(8),
+					},
+					"& :is(th)": {
+						backgroundColor: theme.palette.secondary.main,
+						color: theme.palette.secondary.contrastText,
+						fontWeight: 600,
+						fontSize: "12px",
+					},
+					"& :is(td)": {
+						backgroundColor: theme.palette.primary.main,
+						color: theme.palette.primary.contrastTextSecondary,
+					},
 				}}
 			>
-				{/* TODO Check */}
-				<TableHead sx={{ backgroundColor: theme.palette.secondary.main }}>
+				<TableHead>
 					<TableRow>
 						{headers.map((header, index) => (
 							<TableCell

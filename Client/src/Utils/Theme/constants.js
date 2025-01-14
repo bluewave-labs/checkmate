@@ -84,8 +84,8 @@ const semanticColors = {
 const newColors = {
 	offWhite: "#FEFEFE",
 	offBlack: "#131315",
-	gray100: "#EFEFEF",
-	gray200: "#E3E3E3",
+	gray100: "#F3F3F3",
+	gray200: "#EFEFEF",
 	gray500: "#A2A3A3",
 	blueGray50: "#E8F0FE",
 	blueGray500: "#475467",

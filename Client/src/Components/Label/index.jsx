@@ -24,7 +24,7 @@ const BaseLabel = ({ label, styles, children }) => {
 	// Grab the default borderRadius from the theme to match button style
 	const { borderRadius } = theme.shape;
 	// Calculate padding for the label to mimic button.  Appears to scale correctly, not 100% sure though.
-	const padding = theme.spacing(1 * 0.75, 2);
+	const padding = theme.spacing(3, 5);
 
 	return (
 		<Box
