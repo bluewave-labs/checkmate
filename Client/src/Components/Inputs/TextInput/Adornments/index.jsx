@@ -67,10 +67,12 @@ PasswordEndAdornment.propTypes = {
 	setFieldType: PropTypes.func,
 };
 
-export const ServerStartAdornment = () => {
+export const ServerStartAdornment = (props) => {
 	return (
 		<InputAdornment position="start">
-			<ReorderRoundedIcon />
+			<Stack {...props.dragHandleProps}>
+				<ReorderRoundedIcon />
+			</Stack>
 		</InputAdornment>
 	);
 };

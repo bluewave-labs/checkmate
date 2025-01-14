@@ -1,15 +1,15 @@
-import { useState, useCallback, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Button, Box, Stack, Typography } from "@mui/material";
 import ConfigBox from "../../../Components/ConfigBox";
 import { useTheme } from "@emotion/react";
 import TabPanel from "@mui/lab/TabPanel";
-import Card from "./Card";
-import update from "immutability-helper";
 import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
 import { useSelector } from "react-redux";
 import { logger } from "../../../Utils/Logger"
 import { createToast } from "../../../Utils/toastUtils";
 import { networkService } from "../../../main";
+import ServersList from "./ServersList";
+
 
 /**
  * Content Panel is used to compose the second part of the status page
@@ -23,6 +23,7 @@ const ContentPanel = () => {
 	const [cards, setCards] = useState([]);
 	const {user, authToken } = useSelector((state) => state.auth);	
 	const [monitors, setMonitors] = useState([]);
+
 
 	useEffect(() => {
 		const fetchMonitors = async () => {
@@ -54,44 +55,6 @@ const ContentPanel = () => {
 		};			
 		fetchMonitors();
 	}, [user, authToken]);
-
-	const moveCard = useCallback(
-		(dragIndex, hoverIndex) => {
-			const dragCard = cards[dragIndex];
-			setCards(
-				update(cards, {
-					$splice: [
-						[dragIndex, 1],
-						[hoverIndex, 0, dragCard],
-					],
-				})
-			);
-		},
-		[cards]
-	);
-
-	const handleCardChange = (event, val) => {
-		event.preventDefault();
-		const { id } = event.target;
-		let idx = cards.findIndex((a) => {
-			let found = false;
-			let optionIdx = id.indexOf("-option");
-			if (optionIdx !== -1) found = a.id == id.substr(0, optionIdx);
-			else found = a.id == id;
-			return found;
-		});
-		let newCards;
-		if (idx >= 0) {
-			let x = JSON.parse(JSON.stringify(cards[idx]));
-			x.val = val;
-			newCards = update(cards, { $splice: [[idx, 1, x]] });
-			setCards(newCards);
-		} else {
-			newCards = update(cards, { $push: [{ id: id, val: val }] });
-			setCards(newCards);
-		}
-		setForm({ ...form, monitors: newCards.map(c=>c.val) });
-	};
 	const handleAddNew = () => {
 		if (cards.length === monitors.length) return;
 		const newCards = [...cards, { id: "" + Math.random(),val:{} }];
@@ -172,21 +135,14 @@ const ContentPanel = () => {
 								direction="column"
 								gap={theme.spacing(2)}
 							>
-								{cards.map((card, idx) => {
-									return (
-										<Card
-											key={idx}
-											index={idx}
-											id={card?.id ?? "" + Math.random()}
-											text={"" + idx}
-											moveCard={moveCard}
-											removeCard={removeCard}
-											value={card.val ?? {}}
-											onChange={handleCardChange}
-											monitors={monitors}
-										/>
-									);
-								})}
+								<ServersList
+									monitors={monitors}
+									cards={cards}
+									setCards={setCards}
+									form={form}
+									setForm={setForm}
+									removeItem={removeCard}									
+								/>
 							</Stack>
 						)}
 						{errors["monitors"] && (
