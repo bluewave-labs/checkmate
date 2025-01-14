@@ -67,7 +67,7 @@ function Infrastructure() {
 				page: page,
 				rowsPerPage: rowsPerPage,
 			});
-			setMonitors(response?.data?.data?.monitors ?? []);
+			setMonitors(response?.data?.data?.filteredMonitors ?? []);
 			setSummary(response?.data?.data?.summary ?? {});
 		} catch (error) {
 			console.error(error);

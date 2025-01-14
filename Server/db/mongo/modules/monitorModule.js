@@ -501,7 +501,10 @@ const getMonitorsByTeamId = async (req) => {
 	limit = parseInt(limit);
 	page = parseInt(page);
 	rowsPerPage = parseInt(rowsPerPage);
-
+	if (field === undefined) {
+		field = "name";
+		order = "asc";
+	}
 	// Build the match stage
 	const matchStage = { teamId: ObjectId.createFromHexString(req.params.teamId) };
 	if (type !== undefined) {
@@ -511,7 +514,6 @@ const getMonitorsByTeamId = async (req) => {
 	const skip = page && rowsPerPage ? page * rowsPerPage : 0;
 
 	const sort = { [field]: order === "asc" ? 1 : -1 };
-
 	const results = await Monitor.aggregate([
 		{ $match: matchStage },
 		{
@@ -545,6 +547,15 @@ const getMonitorsByTeamId = async (req) => {
 					},
 				],
 				monitors: [
+					{ $sort: sort },
+					{
+						$project: {
+							_id: 1,
+							name: 1,
+						},
+					},
+				],
+				filteredMonitors: [
 					...(filter !== undefined
 						? [
 								{
@@ -657,20 +668,21 @@ const getMonitorsByTeamId = async (req) => {
 		{
 			$project: {
 				summary: { $arrayElemAt: ["$summary", 0] },
+				filteredMonitors: 1,
 				monitors: 1,
 			},
 		},
 	]);
 
-	let { monitors, summary } = results[0];
-	monitors = monitors.map((monitor) => {
+	let { monitors, filteredMonitors, summary } = results[0];
+	filteredMonitors = filteredMonitors.map((monitor) => {
 		if (!monitor.checks) {
 			return monitor;
 		}
 		monitor.checks = NormalizeData(monitor.checks, 10, 100);
 		return monitor;
 	});
-	return { monitors, summary };
+	return { monitors, filteredMonitors, summary };
 };
 
 /**

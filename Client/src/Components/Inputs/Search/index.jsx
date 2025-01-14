@@ -58,7 +58,6 @@ const Search = ({
 	endAdornment
 }) => {
 	const theme = useTheme();
-
 	return (
 		<Autocomplete
 			multiple={multiple}
