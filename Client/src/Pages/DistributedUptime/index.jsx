@@ -13,7 +13,7 @@ import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import useUtils from "../Uptime/utils";
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 // Constants
 const BREADCRUMBS = [{ name: `Distributed Uptime`, path: "/distributed-uptime" }];
@@ -164,21 +164,23 @@ const DistributedUptime = () => {
 					Create new
 				</Button>
 			</Stack>
-			<DataTable
-				headers={headers}
-				data={filteredMonitors}
-				config={{
-					rowSX: {
-						cursor: "pointer",
-						"&:hover": {
-							backgroundColor: theme.palette.background.accent,
+			{monitors.length > 0 && (
+				<DataTable
+					headers={headers}
+					data={filteredMonitors}
+					config={{
+						rowSX: {
+							cursor: "pointer",
+							"&:hover": {
+								backgroundColor: theme.palette.background.accent,
+							},
 						},
-					},
-					onRowClick: (row) => {
-						navigate(`/distributed-uptime/${row.id}`);
-					},
-				}}
-			/>
+						onRowClick: (row) => {
+							navigate(`/distributed-uptime/${row.id}`);
+						},
+					}}
+				/>
+			)}
 		</Stack>
 	);
 };

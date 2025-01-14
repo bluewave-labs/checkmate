@@ -116,12 +116,16 @@ class DistributedUptimeController {
 
 			// Send initial data
 			const monitors = await this.db.getMonitorsByTeamId(req);
-
 			res.write(`data: ${JSON.stringify({ monitors })}\n\n`);
 
 			// Handle client disconnect
 			req.on("close", () => {
-				// Cleanup code here
+				if (batchTimeout) {
+					clearTimeout(batchTimeout);
+				}
+				monitorStream.close();
+				checksStream.close();
+				clearInterval(keepAlive);
 			});
 
 			// Keep connection alive
