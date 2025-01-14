@@ -1,19 +1,37 @@
+// Components
 import { Stack, Box, Button } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import DataTable from "../../Components/Table";
 import Breadcrumbs from "../../Components/Breadcrumbs";
-import { useNavigate } from "react-router-dom";
 import Host from "../Uptime/Home/host";
-import useUtils from "../Uptime/utils";
-import { StatusLabel } from "../../Components/Label";
 import BarChart from "../../Components/Charts/BarChart";
 import ActionsMenu from "../Uptime/Home/actionsMenu";
+import { StatusLabel } from "../../Components/Label";
+
+// Utils
+import { networkService } from "../../main";
+import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import useUtils from "../Uptime/utils";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+// Constants
 const BREADCRUMBS = [{ name: `Distributed Uptime`, path: "/distributed-uptime" }];
+const TYPE_MAP = {
+	distributed_http: "Distributed HTTP",
+};
 
 const DistributedUptime = () => {
-	const theme = useTheme();
-	const { determineState } = useUtils();
+	// Redux state
+	const { authToken, user } = useSelector((state) => state.auth);
+	// Local state
+	const [monitors, setMonitors] = useState([]);
+	const [filteredMonitors, setFilteredMonitors] = useState([]);
+	const [monitorsSummary, setMonitorsSummary] = useState({});
+	// Utils
 
+	const { determineState } = useUtils();
+	const theme = useTheme();
 	const navigate = useNavigate();
 	const headers = [
 		{
@@ -21,8 +39,8 @@ const DistributedUptime = () => {
 			content: <Box>Host</Box>,
 			render: (row) => (
 				<Host
-					key={row.id}
-					url={row.host}
+					key={row._id}
+					url={row.url}
 					title={row.title}
 					percentageColor={row.percentageColor}
 					percentage={row.percentage}
@@ -33,7 +51,7 @@ const DistributedUptime = () => {
 			id: "status",
 			content: <Box width="max-content"> Status</Box>,
 			render: (row) => {
-				const status = determineState(row);
+				const status = determineState(row?.monitor);
 				return (
 					<StatusLabel
 						status={status}
@@ -46,49 +64,82 @@ const DistributedUptime = () => {
 		{
 			id: "responseTime",
 			content: "Response Time",
-			render: (row) => <BarChart checks={row.checks.slice().reverse()} />,
+			render: (row) => <BarChart checks={row?.monitor?.checks.slice().reverse()} />,
 		},
 		{
 			id: "type",
 			content: "Type",
-			render: (row) => <span>{"Distributed uptime"}</span>,
+			render: (row) => <span>{TYPE_MAP[row.monitor.type]}</span>,
 		},
 		{
 			id: "actions",
 			content: "Actions",
 			render: (row) => (
 				<ActionsMenu
-					monitor={row}
+					monitor={row.monitor}
 					isAdmin={true}
 				/>
 			),
 		},
 	];
 
-	const data = [
-		{
-			id: 1,
-			host: "www.google.com",
-			title: "Google",
-			status: true,
-			responseTime: 123,
-			type: "distributed uptime",
-			action: "Action",
-			isActive: true,
-			percentage: 100,
-			percentageColor: theme.palette.percentage.uptimeExcellent,
-			checks: [
-				{ status: true, responseTime: 80 },
-				{ status: false, responseTime: 100 },
-				{ status: true, responseTime: 60 },
-				{ status: true, responseTime: 40 },
-				{ status: true, responseTime: 50 },
-				{ status: true, responseTime: 20 },
-				{ status: true, responseTime: 10 },
-				{ status: true, responseTime: 60 },
-			],
-		},
-	];
+	const getMonitorWithPercentage = (monitor, theme) => {
+		let uptimePercentage = "";
+		let percentageColor = theme.palette.percentage.uptimeExcellent;
+
+		if (monitor.uptimePercentage !== undefined) {
+			uptimePercentage =
+				monitor.uptimePercentage === 0
+					? "0"
+					: (monitor.uptimePercentage * 100).toFixed(2);
+
+			percentageColor =
+				monitor.uptimePercentage < 0.25
+					? theme.palette.percentage.uptimePoor
+					: monitor.uptimePercentage < 0.5
+						? theme.palette.percentage.uptimeFair
+						: monitor.uptimePercentage < 0.75
+							? theme.palette.percentage.uptimeGood
+							: theme.palette.percentage.uptimeExcellent;
+		}
+
+		return {
+			id: monitor._id,
+			name: monitor.name,
+			url: monitor.url,
+			title: monitor.name,
+			percentage: uptimePercentage,
+			percentageColor,
+			monitor: monitor,
+		};
+	};
+
+	useEffect(() => {
+		const cleanup = networkService.subscribeToDistributedUptimeMonitors({
+			authToken: authToken,
+			teamId: user.teamId,
+			limit: 25,
+			types: ["distributed_http"],
+			page: 0,
+			rowsPerPage: 10,
+			filter: null,
+			field: null,
+			order: null,
+			onUpdate: (data) => {
+				const res = data.monitors;
+				const { monitors, filteredMonitors, summary } = res;
+				const mappedMonitors = filteredMonitors.map((monitor) =>
+					getMonitorWithPercentage(monitor, theme)
+				);
+				setMonitors(monitors);
+				setFilteredMonitors(mappedMonitors);
+				setMonitorsSummary(summary);
+			},
+		});
+
+		return cleanup;
+	}, [user.teamId, authToken, theme]);
+
 	return (
 		<Stack
 			direction="column"
@@ -115,7 +166,7 @@ const DistributedUptime = () => {
 			</Stack>
 			<DataTable
 				headers={headers}
-				data={data}
+				data={filteredMonitors}
 				config={{
 					rowSX: {
 						cursor: "pointer",

@@ -8,6 +8,10 @@ class DistributedUptimeRoutes {
 	}
 	initRoutes() {
 		this.router.post("/callback", this.distributedUptimeController.resultsCallback);
+		this.router.get(
+			"/monitors/:teamId",
+			this.distributedUptimeController.getDistributedUptimeMonitors
+		);
 	}
 
 	getRouter() {

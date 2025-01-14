@@ -244,6 +244,7 @@ const startApp = async () => {
 	);
 
 	const distributedUptimeController = new DistributedUptimeController(
+		ServiceRegistry.get(MongoDB.SERVICE_NAME),
 		http,
 		ServiceRegistry.get(StatusService.SERVICE_NAME)
 	);

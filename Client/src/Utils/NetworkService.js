@@ -60,7 +60,6 @@ class NetworkService {
 		}
 	}
 
-
 	cleanup() {
 		if (this.unsubscribe) {
 			this.unsubscribe();
@@ -878,6 +877,69 @@ class NetworkService {
 		return this.axiosInstance.get(
 			"https://api.github.com/repos/bluewave-labs/bluewave-uptime/releases/latest"
 		);
+	}
+
+	subscribeToDistributedUptimeMonitors(config) {
+		const {
+			authToken,
+			teamId,
+			onUpdate,
+			limit,
+			types,
+			page,
+			rowsPerPage,
+			filter,
+			field,
+			order,
+		} = config;
+
+		const params = new URLSearchParams();
+
+		if (limit) params.append("limit", limit);
+		if (types) {
+			types.forEach((type) => {
+				params.append("type", type);
+			});
+		}
+		if (page) params.append("page", page);
+		if (rowsPerPage) params.append("rowsPerPage", rowsPerPage);
+		if (filter) params.append("filter", filter);
+		if (field) params.append("field", field);
+		if (order) params.append("order", order);
+
+		if (this.eventSource) {
+			this.eventSource.close();
+		}
+
+		const url = `${this.axiosInstance.defaults.baseURL}/distributed-uptime/monitors/${teamId}?${params.toString()}`;
+		this.eventSource = new EventSource(url, {
+			headers: { Authorization: `Bearer ${authToken}` },
+		});
+
+		this.eventSource.onopen = () => {
+			console.log("getDistributedUptimeMonitors connection opened:");
+		};
+
+		this.eventSource.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			onUpdate(data);
+		};
+
+		this.eventSource.onerror = (error) => {
+			console.error("Monitor stream error:", error);
+			this.eventSource.close();
+		};
+
+		// Returns a cleanup function
+		return () => {
+			if (this.eventSource) {
+				this.eventSource.close();
+				this.eventSource = null;
+			}
+			return () => {
+				console.log("Nothing to cleanup");
+			};
+		};
 	}
 }
 

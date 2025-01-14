@@ -497,7 +497,6 @@ const getMonitorById = async (monitorId) => {
 
 const getMonitorsByTeamId = async (req) => {
 	let { limit, type, page, rowsPerPage, filter, field, order } = req.query;
-
 	limit = parseInt(limit);
 	page = parseInt(page);
 	rowsPerPage = parseInt(rowsPerPage);
@@ -631,6 +630,26 @@ const getMonitorsByTeamId = async (req) => {
 								},
 							]
 						: []),
+					...(limit
+						? [
+								{
+									$lookup: {
+										from: "distributeduptimechecks",
+										let: { monitorId: "$_id" },
+										pipeline: [
+											{
+												$match: {
+													$expr: { $eq: ["$monitorId", "$$monitorId"] },
+												},
+											},
+											{ $sort: { createdAt: -1 } },
+											...(limit ? [{ $limit: limit }] : []),
+										],
+										as: "distributeduptimechecks",
+									},
+								},
+							]
+						: []),
 
 					{
 						$addFields: {
@@ -648,6 +667,10 @@ const getMonitorsByTeamId = async (req) => {
 										{
 											case: { $eq: ["$type", "hardware"] },
 											then: "$hardwarechecks",
+										},
+										{
+											case: { $eq: ["$type", "distributed_http"] },
+											then: "$distributeduptimechecks",
 										},
 									],
 									default: [],

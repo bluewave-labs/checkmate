@@ -25,7 +25,6 @@ const dateRangeLookup = {
 const createCheck = async (checkData) => {
 	try {
 		const { monitorId, status } = checkData;
-		console.log(checkData);
 		const n = (await Check.countDocuments({ monitorId })) + 1;
 		const check = await new Check({ ...checkData }).save();
 		const monitor = await Monitor.findById(monitorId);

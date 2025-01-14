@@ -1,13 +1,17 @@
 import { handleError } from "./controllerUtils.js";
 import { successMessages } from "../utils/messages.js";
+import Monitor from "../db/models/Monitor.js";
+import DistributedUptimeCheck from "../db/models/DistributedUptimeCheck.js";
 
 const SERVICE_NAME = "DistributedUptimeQueueController";
 
 class DistributedUptimeController {
-	constructor(http, statusService) {
+	constructor(db, http, statusService) {
+		this.db = db;
 		this.http = http;
 		this.statusService = statusService;
 		this.resultsCallback = this.resultsCallback.bind(this);
+		this.getDistributedUptimeMonitors = this.getDistributedUptimeMonitors.bind(this);
 	}
 
 	async resultsCallback(req, res, next) {
@@ -66,6 +70,71 @@ class DistributedUptimeController {
 			res.status(200).json({ message: "OK" });
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "resultsCallback"));
+		}
+	}
+
+	async getDistributedUptimeMonitors(req, res, next) {
+		try {
+			res.setHeader("Content-Type", "text/event-stream");
+			res.setHeader("Cache-Control", "no-cache");
+			res.setHeader("Connection", "keep-alive");
+			res.setHeader("Access-Control-Allow-Origin", "*");
+
+			const BATCH_DELAY = 1000;
+			let batchTimeout = null;
+			let opInProgress = false;
+
+			// Do things here
+			const notifyChange = async () => {
+				if (opInProgress) {
+					// Get data
+					const monitors = await this.db.getMonitorsByTeamId(req);
+					res.write(`data: ${JSON.stringify({ monitors })}\n\n`);
+					opInProgress = false;
+				}
+				batchTimeout = null;
+			};
+
+			const handleChange = () => {
+				opInProgress = true;
+				if (batchTimeout) clearTimeout(batchTimeout);
+				batchTimeout = setTimeout(notifyChange, BATCH_DELAY);
+			};
+
+			const monitorStream = Monitor.watch(
+				[{ $match: { operationType: { $in: ["insert", "update", "delete"] } } }],
+				{ fullDocument: "updateLookup" }
+			);
+
+			const checksStream = DistributedUptimeCheck.watch(
+				[{ $match: { operationType: { $in: ["insert", "update", "delete"] } } }],
+				{ fullDocument: "updateLookup" }
+			);
+
+			monitorStream.on("change", handleChange);
+			checksStream.on("change", handleChange);
+
+			// Send initial data
+			const monitors = await this.db.getMonitorsByTeamId(req);
+
+			res.write(`data: ${JSON.stringify({ monitors })}\n\n`);
+
+			// Handle client disconnect
+			req.on("close", () => {
+				// Cleanup code here
+			});
+
+			// Keep connection alive
+			const keepAlive = setInterval(() => {
+				res.write(": keepalive\n\n");
+			}, 30000);
+
+			// Clean up on close
+			req.on("close", () => {
+				clearInterval(keepAlive);
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "getDistributedUptimeMonitors"));
 		}
 	}
 }
