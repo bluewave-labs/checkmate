@@ -65,7 +65,7 @@ class DistributedUptimeController {
 
 			res.status(200).json({ message: "OK" });
 		} catch (error) {
-			throw handleError(error, SERVICE_NAME, "resultsCallback");
+			next(handleError(error, SERVICE_NAME, "resultsCallback"));
 		}
 	}
 }
