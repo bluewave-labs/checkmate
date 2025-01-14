@@ -532,7 +532,7 @@ const CreateMaintenance = () => {
 					<LoadingButton
 						loading={isLoading}
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={handleSubmit}
 						disabled={false}
 					>

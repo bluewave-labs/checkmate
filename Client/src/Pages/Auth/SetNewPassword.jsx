@@ -234,7 +234,7 @@ const SetNewPassword = () => {
 					</Box>
 					<LoadingButton
 						variant="contained"
-						color="primary"
+						color="accent"
 						loading={isLoading}
 						onClick={handleSubmit}
 						disabled={

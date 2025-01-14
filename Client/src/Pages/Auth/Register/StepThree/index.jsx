@@ -145,7 +145,7 @@ function StepThree({ onSubmit, onBack }) {
 						<Button
 							type="submit"
 							variant="contained"
-							color="primary"
+							color="accent"
 							disabled={
 								form.password.length === 0 ||
 								form.confirm.length === 0 ||

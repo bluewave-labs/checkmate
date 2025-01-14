@@ -187,7 +187,7 @@ const ForgotPassword = () => {
 						/>
 						<LoadingButton
 							variant="contained"
-							color="primary"
+							color="accent"
 							loading={isLoading}
 							disabled={errors.email !== undefined}
 							onClick={handleSubmit}

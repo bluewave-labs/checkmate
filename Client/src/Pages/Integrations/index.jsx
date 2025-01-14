@@ -54,7 +54,7 @@ const IntegrationsComponent = ({ icon, header, info, onClick }) => {
 				</Stack>
 				<Button
 					variant="contained"
-					color="primary"
+					color="accent"
 					onClick={onClick}
 					sx={{ alignSelf: "center" }}
 					disabled={true}

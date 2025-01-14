@@ -104,7 +104,7 @@ const NewPasswordConfirmed = () => {
 					</Box>
 					<Button
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={() => navigate("/uptime")}
 						sx={{
 							width: "100%",

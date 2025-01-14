@@ -39,7 +39,7 @@ const Fallback = ({ isAdmin }) => {
 			{isAdmin && (
 				<Button
 					variant="contained"
-					color="primary"
+					color="accent"
 					onClick={() => {
 						navigate("/uptime/create");
 					}}

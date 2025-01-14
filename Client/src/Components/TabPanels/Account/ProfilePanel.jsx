@@ -323,7 +323,7 @@ const ProfilePanel = () => {
 						</Button>
 						<Button
 							variant="text"
-							color="primary"
+							color="accent"
 							onClick={openPictureModal}
 						>
 							Update
@@ -450,7 +450,7 @@ const ProfilePanel = () => {
 					</Button>
 					<Button
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={handleUpdatePicture}
 						disabled={
 							(Object.keys(errors).length !== 0 && errors?.picture) ||

@@ -444,7 +444,7 @@ const Configure = () => {
 						>
 							<LoadingButton
 								variant="contained"
-								color="primary"
+								color="accent"
 								loading={isLoading}
 								sx={{ px: theme.spacing(12) }}
 								onClick={handleSubmit}

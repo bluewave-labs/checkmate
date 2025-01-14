@@ -297,7 +297,7 @@ const TeamPanel = () => {
 					</LoadingButton>
 					<LoadingButton
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={handleInviteMember}
 						loading={isSendingInvite}
 						disabled={isDisabled}

@@ -407,7 +407,7 @@ const CreateInfrastructureMonitor = () => {
 				>
 					<LoadingButton
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={handleCreateInfrastructureMonitor}
 						loading={monitorState?.isLoading}
 					>

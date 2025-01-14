@@ -70,7 +70,7 @@ const Maintenance = () => {
 						<Breadcrumbs list={[{ name: "maintenance", path: "/maintenance" }]} />
 						<Button
 							variant="contained"
-							color="primary"
+							color="accent"
 							onClick={() => {
 								navigate("/maintenance/create");
 							}}

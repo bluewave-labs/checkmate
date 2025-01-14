@@ -426,7 +426,7 @@ const PageSpeedConfigure = () => {
 								loading={isLoading}
 								type="submit"
 								variant="contained"
-								color="primary"
+								color="accent"
 								onClick={handleSave}
 								sx={{ px: theme.spacing(12) }}
 							>

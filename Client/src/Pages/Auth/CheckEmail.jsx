@@ -174,7 +174,7 @@ const CheckEmail = () => {
 					</Box>
 					<Button
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={openMail}
 						sx={{
 							width: "100%",

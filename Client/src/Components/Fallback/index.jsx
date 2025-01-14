@@ -70,7 +70,7 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 			{isAdmin && (
 				<Button
 					variant="contained"
-					color="primary"
+					color="accent"
 					sx={{ alignSelf: "center" }}
 					onClick={() => navigate(link)}
 				>
