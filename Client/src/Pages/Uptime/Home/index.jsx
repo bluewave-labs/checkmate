@@ -110,7 +110,7 @@ const UptimeMonitors = () => {
 			setMonitorsSummary(summary);
 		} catch (error) {
 			createToast({
-				body: "Error fetching monitors",
+				body: error.message,
 			});
 		} finally {
 			setIsLoading(false);
