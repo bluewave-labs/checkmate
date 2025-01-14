@@ -19,14 +19,6 @@ const UpBarChart = memo(({ monitor, type, onBarHover }) => {
 	const [chartHovered, setChartHovered] = useState(false);
 	const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
 
-	/* const getColorRange = (responseTime) => {
-		return responseTime < 200
-			? { main: theme.palette.success.main, light: theme.palette.success.light }
-			: responseTime < 300
-				? { main: theme.palette.warning.main, light: theme.palette.warning.light }
-				: { main: theme.palette.error.main, light: theme.palette.error.light };
-	}; */
-
 	return (
 		<ResponsiveContainer
 			width="100%"

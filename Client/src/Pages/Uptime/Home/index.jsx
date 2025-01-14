@@ -41,6 +41,7 @@ const UptimeMonitors = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const isAdmin = useIsAdmin();
+
 	const authState = useSelector((state) => state.auth);
 
 	const fetchParams = useMemo(
@@ -65,6 +66,7 @@ const UptimeMonitors = () => {
 					? "0"
 					: (monitor.uptimePercentage * 100).toFixed(2);
 
+			/* TODO check */
 			percentageColor =
 				monitor.uptimePercentage < 0.25
 					? "red" /*  theme.palette.percentage.uptimePoor */

@@ -29,7 +29,9 @@ const useUtils = () => {
 		paused: "Paused",
 	};
 
-	/* This is used on 
+	/* 
+	TODO 
+	This is used on 
 	1) Details > Gradient card */
 	/* These are rediections. We should do something that maps up to success, down to error, and get the theme by that
 	See Client\src\Components\Label\index.jsx

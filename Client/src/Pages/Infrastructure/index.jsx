@@ -259,6 +259,7 @@ function Infrastructure() {
 								rowSX: {
 									cursor: "pointer",
 									"&:hover": {
+										/* TODO check */
 										backgroundColor: "red" /* theme.palette.background.accent */,
 									},
 								},
