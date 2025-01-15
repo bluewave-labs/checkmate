@@ -58,8 +58,8 @@ const Account = ({ open = "profile" }) => {
 			px={theme.spacing(20)}
 			py={theme.spacing(12)}
 			backgroundColor={theme.palette.primary.main}
-			borderColor={theme.palette.primary.lowContrast}
 			border={1}
+			borderColor={theme.palette.primary.lowContrast}
 			borderRadius={theme.shape.borderRadius}
 		>
 			<TabContext value={tab}>
@@ -73,6 +73,11 @@ const Account = ({ open = "profile" }) => {
 					<TabList
 						onChange={handleTabChange}
 						aria-label="account tabs"
+						sx={{
+							"& .MuiTabs-indicator": {
+								backgroundColor: theme.palette.tertiary.contrastText,
+							},
+						}}
 					>
 						{tabList.map((label, index) => (
 							<Tab
@@ -86,23 +91,24 @@ const Account = ({ open = "profile" }) => {
 									fontSize: 13,
 									color: theme.palette.tertiary.contrastText,
 									backgroundColor: theme.palette.tertiary.main,
-									/* 
-									TODO implement bg color and styling for tabs
-									 */
 									textTransform: "none",
 									minWidth: "fit-content",
-									minHeight: 0,
 									paddingY: theme.spacing(6),
 									fontWeight: 400,
-									/* marginRight: theme.spacing(8), */
 									borderBottom: "2px solid transparent",
+									borderRight: `1px solid ${theme.palette.primary.lowContrast}`,
 									"&:first-child": { borderTopLeftRadius: "8px" },
-									"&:last-child": { borderTopRightRadius: "8px" },
-									"&:focus, &.Mui-selected": {
-										/* TODO this appears and disapears. Investigate */
+									"&:last-child": { borderTopRightRadius: "8px", borderRight: 0 },
+									"&:focus-visible": {
 										color: theme.palette.primary.contrastText,
-										borderColor: theme.palette.primary.contrastText,
-										fontWeight: 700,
+										borderColor: theme.palette.tertiary.contrastText,
+										borderRightColor: theme.palette.primary.lowContrast,
+									},
+									"&.Mui-selected": {
+										backgroundColor: theme.palette.secondary.main,
+										color: theme.palette.secondary.contrastText,
+										borderColor: theme.palette.secondary.contrastText,
+										borderRightColor: theme.palette.primary.lowContrast,
 									},
 									"&:hover": {
 										borderColor: theme.palette.primary.lowContrast,
