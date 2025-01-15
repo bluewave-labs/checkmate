@@ -7,5 +7,7 @@ dist/mongo/data/*
 dist/redis/data/*
 prod/mongo/data/*
 prod/redis/data/*
+realtime/mongo/data/*
+realtime/redis/data/*
 *.env
 prod/certbot/*

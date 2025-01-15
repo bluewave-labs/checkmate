@@ -1,6 +1,6 @@
 services:
   client:
-    image: uptime_client:latest
+    image: realtime_uptime_client:latest
     restart: always
     environment:
       UPTIME_APP_API_BASE_URL: "https://checkmate-test.bluewavelabs.ca/api/v1"
@@ -11,27 +11,21 @@ services:
       - server
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d/:ro
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
 
-  certbot:
-    image: certbot/certbot:latest
-    restart: always
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
   server:
-    image: uptime_server:latest
+    image: realtime_uptime_server:latest
     restart: always
     ports:
       - "5000:5000"
     env_file:
       - server.env
     depends_on:
-      - redis
-      - mongodb
+      redis:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
   redis:
-    image: uptime_redis:latest
+    image: realtime_uptime_redis:latest
     restart: always
     ports:
       - "6379:6379"
@@ -44,12 +38,23 @@ services:
       retries: 5
       start_period: 5s
   mongodb:
-    image: uptime_database_mongo:latest
-    command: ["mongod", "--quiet", "--auth"]
+    image: realtime_uptime_database_mongo:latest
+    command: ["mongod", "--quiet", "--replSet", "rs0", "--bind_ip_all"]
     ports:
       - "27017:27017"
     volumes:
       - ./mongo/data:/data/db
-      - ./mongo/init/create_users.js:/docker-entrypoint-initdb.d/create_users.js
+      # - ./mongo/init/create_users.js:/docker-entrypoint-initdb.d/create_users.js
     env_file:
       - mongo.env
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "--eval",
+          "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongodb:27017',priority:1}]}) }",
+        ]
+      interval: 5s
+      timeout: 30s
+      retries: 30
