@@ -231,6 +231,7 @@ const ProfilePanel = () => {
 					direction="row"
 					gap={SPACING_GAP}
 				>
+					{/* This 0.9 is a bit magic numbering, refactor */}
 					<Box flex={0.9}>
 						<Typography component="h1">First name</Typography>
 					</Box>
@@ -303,6 +304,7 @@ const ProfilePanel = () => {
 						direction="row"
 						alignItems="center"
 						flex={1}
+						gap={"8px"}
 					>
 						<Avatar
 							src={
@@ -312,17 +314,17 @@ const ProfilePanel = () => {
 										? localData.file
 										: ""
 							}
-							sx={{ mr: "8px" }}
+							sx={{ marginRight: "8px" }}
 						/>
 						<Button
-							variant="text"
-							color="info"
+							variant="outlined"
+							color="error"
 							onClick={handleDeletePicture}
 						>
 							Delete
 						</Button>
 						<Button
-							variant="text"
+							variant="outlined"
 							color="accent"
 							onClick={openPictureModal}
 						>
