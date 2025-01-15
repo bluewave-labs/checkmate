@@ -30,6 +30,8 @@ import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
 import PageSpeedDetails from "../Pages/PageSpeed/Details";
 import PageSpeedConfigure from "../Pages/PageSpeed/Configure";
 import withAdminCheck from "../Components/HOC/withAdminCheck";
+import Landing from "../Pages/Landing";
+import About from "../Pages/About";
 
 const Routes = () => {
 	const AdminCheckedRegister = withAdminCheck(Register);
@@ -37,6 +39,13 @@ const Routes = () => {
 		<LibRoutes>
 			<Route
 				path="/"
+				element={<Landing />}
+			/>
+			<Route
+				path="/about"
+				element={<About />}
+			/>
+			<Route
 				element={
 					<ProtectedRoute>
 						<HomeLayout />
