@@ -85,6 +85,9 @@ const Account = ({ open = "profile" }) => {
 								sx={{
 									fontSize: 13,
 									color: theme.palette.primary.contrastTextTertiary,
+									/* 
+									TODO implement bg color and styling for tabs
+									backgroundColor: theme.palette.tertiary.main, */
 									textTransform: "none",
 									minWidth: "fit-content",
 									minHeight: 0,

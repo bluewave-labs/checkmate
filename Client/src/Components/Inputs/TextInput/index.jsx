@@ -137,7 +137,6 @@ const TextInput = forwardRef(
 						},
 					}}
 					disabled={disabled}
-					color="secondary"
 				/>
 			</Stack>
 		);

@@ -18,7 +18,7 @@ const config = {
 	seo: {
 		id: "seo",
 		text: "SEO",
-		color: "unresolved",
+		color: "secondary",
 	},
 	performance: {
 		id: "performance",
@@ -33,7 +33,7 @@ const config = {
 	accessibility: {
 		id: "accessibility",
 		text: "accessibility",
-		color: "primary",
+		color: "accent",
 	},
 };
 
