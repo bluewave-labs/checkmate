@@ -136,7 +136,7 @@ const CreateMaintenance = () => {
 				const response = await networkService.getMonitorsByTeamId({
 					authToken: authToken,
 					teamId: user.teamId,
-					limit: -1,
+					limit: null,
 					types: ["http", "ping", "pagespeed"],
 				});
 				const monitors = response.data.data.monitors;
