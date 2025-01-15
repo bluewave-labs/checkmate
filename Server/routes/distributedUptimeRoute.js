@@ -12,6 +12,10 @@ class DistributedUptimeRoutes {
 			"/monitors/:teamId",
 			this.distributedUptimeController.getDistributedUptimeMonitors
 		);
+		this.router.get(
+			"/monitors/details/:monitorId",
+			this.distributedUptimeController.getDistributedUptimeMonitorDetails
+		);
 	}
 
 	getRouter() {

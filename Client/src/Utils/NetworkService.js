@@ -941,6 +941,23 @@ class NetworkService {
 			};
 		};
 	}
+
+	subscribeToDistributedUptimeDetails(config) {
+		const params = new URLSearchParams();
+		const { authToken, monitorId, onUpdate, dateRange, normalize } = config;
+		if (dateRange) params.append("dateRange", dateRange);
+		if (normalize) params.append("normalize", normalize);
+
+		const url = `${this.axiosInstance.defaults.baseURL}/distributed-uptime/monitors/details/${monitorId}?${params.toString()}`;
+		this.eventSource = new EventSource(url, {
+			headers: { Authorization: `Bearer ${authToken}` },
+		});
+
+		this.eventSource.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			onUpdate(data);
+		};
+	}
 }
 
 export default NetworkService;

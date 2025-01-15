@@ -12,12 +12,13 @@ class DistributedUptimeController {
 		this.statusService = statusService;
 		this.resultsCallback = this.resultsCallback.bind(this);
 		this.getDistributedUptimeMonitors = this.getDistributedUptimeMonitors.bind(this);
+		this.getDistributedUptimeMonitorDetails =
+			this.getDistributedUptimeMonitorDetails.bind(this);
 	}
 
 	async resultsCallback(req, res, next) {
 		try {
 			const { id, result } = req.body;
-
 			// Calculate response time
 			const {
 				first_byte_took,
@@ -139,6 +140,75 @@ class DistributedUptimeController {
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "getDistributedUptimeMonitors"));
+		}
+	}
+
+	async getDistributedUptimeMonitorDetails(req, res, next) {
+		try {
+			res.setHeader("Content-Type", "text/event-stream");
+			res.setHeader("Cache-Control", "no-cache");
+			res.setHeader("Connection", "keep-alive");
+			res.setHeader("Access-Control-Allow-Origin", "*");
+
+			const BATCH_DELAY = 1000;
+			let batchTimeout = null;
+			let opInProgress = false;
+
+			// Do things here
+			const notifyChange = async () => {
+				try {
+					if (opInProgress) {
+						// Get data
+						const monitor = await this.db.getDistributedUptimeDetailsById(req);
+						res.write(`data: ${JSON.stringify({ monitor })}\n\n`);
+						opInProgress = false;
+					}
+					batchTimeout = null;
+				} catch (error) {
+					console.error("Error in notifyChange:", error);
+					opInProgress = false;
+					batchTimeout = null;
+					next(handleError(error, SERVICE_NAME, "getDistributedUptimeMonitorDetails"));
+				}
+			};
+
+			const handleChange = () => {
+				opInProgress = true;
+				if (batchTimeout) clearTimeout(batchTimeout);
+				batchTimeout = setTimeout(notifyChange, BATCH_DELAY);
+			};
+
+			const checksStream = DistributedUptimeCheck.watch(
+				[{ $match: { operationType: { $in: ["insert", "update", "delete"] } } }],
+				{ fullDocument: "updateLookup" }
+			);
+
+			checksStream.on("change", handleChange);
+
+			// Send initial data
+			const monitor = await this.db.getDistributedUptimeDetailsById(req);
+			res.write(`data: ${JSON.stringify({ monitor })}\n\n`);
+
+			// Handle client disconnect
+			req.on("close", () => {
+				if (batchTimeout) {
+					clearTimeout(batchTimeout);
+				}
+				checksStream.close();
+				clearInterval(keepAlive);
+			});
+
+			// Keep connection alive
+			const keepAlive = setInterval(() => {
+				res.write(": keepalive\n\n");
+			}, 30000);
+
+			// Clean up on close
+			req.on("close", () => {
+				clearInterval(keepAlive);
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "getDistributedUptimeMonitorDetails"));
 		}
 	}
 }

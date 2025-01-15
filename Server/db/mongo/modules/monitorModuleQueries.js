@@ -532,4 +532,240 @@ const buildHardwareDetailsPipeline = (monitor, dates, dateString) => {
 	];
 };
 
-export { buildUptimeDetailsPipeline, buildHardwareDetailsPipeline };
+const buildDistributedUptimeDetailsPipeline = (monitor, dates, dateString) => {
+	return [
+		{
+			$match: {
+				monitorId: monitor._id,
+			},
+		},
+		{
+			$sort: {
+				createdAt: 1,
+			},
+		},
+		{
+			$facet: {
+				aggregateData: [
+					{
+						$group: {
+							_id: null,
+							avgResponseTime: {
+								$avg: "$responseTime",
+							},
+							lastCheck: {
+								$last: "$$ROOT",
+							},
+							totalChecks: {
+								$sum: 1,
+							},
+						},
+					},
+				],
+				uptimeStreak: [
+					{
+						$sort: {
+							createdAt: -1,
+						},
+					},
+					{
+						$group: {
+							_id: null,
+							checks: { $push: "$$ROOT" },
+						},
+					},
+					{
+						$project: {
+							streak: {
+								$reduce: {
+									input: "$checks",
+									initialValue: { checks: [], foundFalse: false },
+									in: {
+										$cond: [
+											{
+												$and: [
+													{ $not: "$$value.foundFalse" }, // stop reducing if a false check has been found
+													{ $eq: ["$$this.status", true] }, // continue reducing if current check true
+												],
+											},
+											// true case
+											{
+												checks: { $concatArrays: ["$$value.checks", ["$$this"]] },
+												foundFalse: false, // Add the check to the streak
+											},
+											// false case
+											{
+												checks: "$$value.checks",
+												foundFalse: true, // Mark that we found a false
+											},
+										],
+									},
+								},
+							},
+						},
+					},
+				],
+				// For the response time chart, should return checks for date window
+				// Grouped by: {day: hour}, {week: day}, {month: day}
+				groupedMapChecks: [
+					{
+						$match: {
+							createdAt: { $gte: dates.start, $lte: dates.end },
+						},
+					},
+					{
+						$group: {
+							_id: {
+								date: {
+									$dateToString: {
+										format: dateString,
+										date: "$createdAt",
+									},
+								},
+								city: "$city",
+								lat: "$location.lat",
+								lng: "$location.lng",
+							},
+							city: { $first: "$city" }, // Add this line to include city in output
+							lat: { $first: "$location.lat" },
+							lng: { $first: "$location.lng" },
+							avgResponseTime: {
+								$avg: "$responseTime",
+							},
+							totalChecks: {
+								$sum: 1,
+							},
+						},
+					},
+					{
+						$sort: {
+							"_id.date": 1,
+						},
+					},
+				],
+				groupedChecks: [
+					{
+						$match: {
+							createdAt: { $gte: dates.start, $lte: dates.end },
+						},
+					},
+					{
+						$group: {
+							_id: {
+								$dateToString: {
+									format: dateString,
+									date: "$createdAt",
+								},
+							},
+							avgResponseTime: {
+								$avg: "$responseTime",
+							},
+							totalChecks: {
+								$sum: 1,
+							},
+						},
+					},
+					{
+						$sort: {
+							_id: 1,
+						},
+					},
+				],
+				// Average response time for the date window
+				groupAvgResponseTime: [
+					{
+						$match: {
+							createdAt: { $gte: dates.start, $lte: dates.end },
+						},
+					},
+					{
+						$group: {
+							_id: null,
+							avgResponseTime: {
+								$avg: "$responseTime",
+							},
+						},
+					},
+				],
+				// All UpChecks for the date window
+				upChecks: [
+					{
+						$match: {
+							status: true,
+							createdAt: { $gte: dates.start, $lte: dates.end },
+						},
+					},
+					{
+						$group: {
+							_id: null,
+							avgResponseTime: {
+								$avg: "$responseTime",
+							},
+							totalChecks: {
+								$sum: 1,
+							},
+						},
+					},
+				],
+			},
+		},
+		{
+			$project: {
+				uptimeStreak: {
+					$cond: [
+						{ $eq: [{ $size: { $first: "$uptimeStreak.streak.checks" } }, 0] },
+						0,
+						{
+							$subtract: [
+								new Date(),
+								{
+									$last: { $first: "$uptimeStreak.streak.checks.createdAt" },
+								},
+							],
+						},
+					],
+				},
+				avgResponseTime: {
+					$arrayElemAt: ["$aggregateData.avgResponseTime", 0],
+				},
+				totalChecks: {
+					$arrayElemAt: ["$aggregateData.totalChecks", 0],
+				},
+				latestResponseTime: {
+					$arrayElemAt: ["$aggregateData.lastCheck.responseTime", 0],
+				},
+				timeSinceLastCheck: {
+					$let: {
+						vars: {
+							lastCheck: {
+								$arrayElemAt: ["$aggregateData.lastCheck", 0],
+							},
+						},
+						in: {
+							$cond: [
+								{
+									$ifNull: ["$$lastCheck", false],
+								},
+								{
+									$subtract: [new Date(), "$$lastCheck.createdAt"],
+								},
+								0,
+							],
+						},
+					},
+				},
+				groupedMapChecks: "$groupedMapChecks",
+				groupedChecks: "$groupedChecks",
+				groupedAvgResponseTime: {
+					$arrayElemAt: ["$groupAvgResponseTime", 0],
+				},
+			},
+		},
+	];
+};
+
+export {
+	buildUptimeDetailsPipeline,
+	buildHardwareDetailsPipeline,
+	buildDistributedUptimeDetailsPipeline,
+};
