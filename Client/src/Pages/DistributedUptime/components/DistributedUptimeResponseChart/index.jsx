@@ -12,7 +12,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { formatDateWithTz } from "../../../Utils/timeUtils";
+import { formatDateWithTz } from "../../../../Utils/timeUtils";
 
 const CustomToolTip = ({ active, payload, label }) => {
 	const uiTimezone = useSelector((state) => state.ui.timezone);
@@ -133,6 +133,7 @@ const DistributedUptimeResponseChart = ({ checks }) => {
 	const theme = useTheme();
 	const [isHovered, setIsHovered] = useState(false);
 
+	if (checks.length === 0) return null;
 	return (
 		<ResponsiveContainer
 			width="100%"

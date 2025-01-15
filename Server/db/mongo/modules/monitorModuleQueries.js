@@ -562,49 +562,6 @@ const buildDistributedUptimeDetailsPipeline = (monitor, dates, dateString) => {
 						},
 					},
 				],
-				uptimeStreak: [
-					{
-						$sort: {
-							createdAt: -1,
-						},
-					},
-					{
-						$group: {
-							_id: null,
-							checks: { $push: "$$ROOT" },
-						},
-					},
-					{
-						$project: {
-							streak: {
-								$reduce: {
-									input: "$checks",
-									initialValue: { checks: [], foundFalse: false },
-									in: {
-										$cond: [
-											{
-												$and: [
-													{ $not: "$$value.foundFalse" }, // stop reducing if a false check has been found
-													{ $eq: ["$$this.status", true] }, // continue reducing if current check true
-												],
-											},
-											// true case
-											{
-												checks: { $concatArrays: ["$$value.checks", ["$$this"]] },
-												foundFalse: false, // Add the check to the streak
-											},
-											// false case
-											{
-												checks: "$$value.checks",
-												foundFalse: true, // Mark that we found a false
-											},
-										],
-									},
-								},
-							},
-						},
-					},
-				],
 				// For the response time chart, should return checks for date window
 				// Grouped by: {day: hour}, {week: day}, {month: day}
 				groupedMapChecks: [
@@ -687,23 +644,17 @@ const buildDistributedUptimeDetailsPipeline = (monitor, dates, dateString) => {
 						},
 					},
 				],
-				// All UpChecks for the date window
-				upChecks: [
+				latestChecks: [
 					{
-						$match: {
-							status: true,
-							createdAt: { $gte: dates.start, $lte: dates.end },
-						},
+						$sort: { createdAt: -1 }, // Sort by newest first
 					},
 					{
-						$group: {
-							_id: null,
-							avgResponseTime: {
-								$avg: "$responseTime",
-							},
-							totalChecks: {
-								$sum: 1,
-							},
+						$limit: 5, // Get only the first 5 documents
+					},
+					{
+						$project: {
+							responseTime: 1,
+							city: 1,
 						},
 					},
 				],
@@ -711,20 +662,6 @@ const buildDistributedUptimeDetailsPipeline = (monitor, dates, dateString) => {
 		},
 		{
 			$project: {
-				uptimeStreak: {
-					$cond: [
-						{ $eq: [{ $size: { $first: "$uptimeStreak.streak.checks" } }, 0] },
-						0,
-						{
-							$subtract: [
-								new Date(),
-								{
-									$last: { $first: "$uptimeStreak.streak.checks.createdAt" },
-								},
-							],
-						},
-					],
-				},
 				avgResponseTime: {
 					$arrayElemAt: ["$aggregateData.avgResponseTime", 0],
 				},
@@ -759,6 +696,7 @@ const buildDistributedUptimeDetailsPipeline = (monitor, dates, dateString) => {
 				groupedAvgResponseTime: {
 					$arrayElemAt: ["$groupAvgResponseTime", 0],
 				},
+				latestChecks: "$latestChecks",
 			},
 		},
 	];

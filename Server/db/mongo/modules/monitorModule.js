@@ -378,7 +378,7 @@ const getDistributedUptimeDetailsById = async (req) => {
 		const { dateRange, normalize } = req.query;
 		const dates = getDateRange(dateRange);
 		const formatLookup = {
-			day: "%Y-%m-%dT%H:00:00Z",
+			day: "%Y-%m-%dT%H:%M:00Z",
 			week: "%Y-%m-%dT%H:00:00Z",
 			month: "%Y-%m-%dT00:00:00Z",
 		};

@@ -85,7 +85,6 @@ const CreateDistributedUptime = () => {
 		const action = await dispatch(
 			createUptimeMonitor({ authToken, monitor: monitorToSubmit })
 		);
-		console.log(action);
 		if (action.meta.requestStatus === "fulfilled") {
 			createToast({ body: "Monitor created successfully!" });
 			navigate("/distributed-uptime");

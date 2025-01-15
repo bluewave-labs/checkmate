@@ -884,6 +884,8 @@ class NetworkService {
 			authToken,
 			teamId,
 			onUpdate,
+			onError,
+			onOpen,
 			limit,
 			types,
 			page,
@@ -917,8 +919,12 @@ class NetworkService {
 		});
 
 		this.eventSource.onopen = () => {
-			console.log("getDistributedUptimeMonitors connection opened:");
+			onOpen?.();
 		};
+
+		this.eventSource.addEventListener("open", (e) => {
+			console.log("getDistributedUptimeMonitors connection opened:");
+		});
 
 		this.eventSource.onmessage = (event) => {
 			const data = JSON.parse(event.data);
@@ -927,6 +933,7 @@ class NetworkService {
 
 		this.eventSource.onerror = (error) => {
 			console.error("Monitor stream error:", error);
+			onError?.();
 			this.eventSource.close();
 		};
 
@@ -944,7 +951,8 @@ class NetworkService {
 
 	subscribeToDistributedUptimeDetails(config) {
 		const params = new URLSearchParams();
-		const { authToken, monitorId, onUpdate, dateRange, normalize } = config;
+		const { authToken, monitorId, onUpdate, onOpen, onError, dateRange, normalize } =
+			config;
 		if (dateRange) params.append("dateRange", dateRange);
 		if (normalize) params.append("normalize", normalize);
 
@@ -953,9 +961,19 @@ class NetworkService {
 			headers: { Authorization: `Bearer ${authToken}` },
 		});
 
+		this.eventSource.onopen = (e) => {
+			onOpen?.();
+		};
+
 		this.eventSource.onmessage = (event) => {
 			const data = JSON.parse(event.data);
 			onUpdate(data);
+		};
+
+		this.eventSource.onerror = (error) => {
+			console.error("Monitor stream error:", error);
+			onError?.();
+			this.eventSource.close();
 		};
 	}
 }
