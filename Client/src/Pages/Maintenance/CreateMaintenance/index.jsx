@@ -374,7 +374,7 @@ const CreateMaintenance = () => {
 													flexDirection: "row-reverse",
 												},
 												"& input": {
-													height: 34,
+													minHeight: 34,
 													p: 0,
 													pr: theme.spacing(5),
 												},
@@ -439,7 +439,7 @@ const CreateMaintenance = () => {
 												flexDirection: "row-reverse",
 											},
 											"& input": {
-												height: 34,
+												minHeight: 34,
 												p: 0,
 												pl: theme.spacing(5),
 											},

@@ -84,17 +84,20 @@ const Account = ({ open = "profile" }) => {
 								tabIndex={index}
 								sx={{
 									fontSize: 13,
-									color: theme.palette.primary.contrastTextTertiary,
+									color: theme.palette.tertiary.contrastText,
+									backgroundColor: theme.palette.tertiary.main,
 									/* 
 									TODO implement bg color and styling for tabs
-									backgroundColor: theme.palette.tertiary.main, */
+									 */
 									textTransform: "none",
 									minWidth: "fit-content",
 									minHeight: 0,
-									paddingY: theme.spacing(4),
+									paddingY: theme.spacing(6),
 									fontWeight: 400,
 									/* marginRight: theme.spacing(8), */
 									borderBottom: "2px solid transparent",
+									"&:first-child": { borderTopLeftRadius: "8px" },
+									"&:last-child": { borderTopRightRadius: "8px" },
 									"&:focus, &.Mui-selected": {
 										/* TODO this appears and disapears. Investigate */
 										color: theme.palette.primary.contrastText,
