@@ -31,8 +31,8 @@ const BaseLabel = ({ label, styles, children }) => {
 			className="label"
 			sx={{
 				borderRadius: borderRadius,
-				border: `1px solid ${theme.palette.primary.contrastTextTertiary}`,
-				color: theme.palette.primary.contrastTextTertiary,
+				border: `1px solid ${theme.palette.primary.lowContrast}`,
+				color: theme.palette.primary.contrastText,
 				padding: padding,
 				...styles,
 			}}
@@ -126,8 +126,8 @@ const statusToTheme = {
 	up: "success",
 	down: "error",
 	paused: "warning",
-	pending: "secondary",
-	"cannot resolve": "tertiary",
+	pending: "warning",
+	"cannot resolve": "error",
 };
 
 const StatusLabel = ({ status, text, customStyles }) => {

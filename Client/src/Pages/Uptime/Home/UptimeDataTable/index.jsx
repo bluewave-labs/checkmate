@@ -257,7 +257,7 @@ const UptimeDataTable = ({
 							height="100%"
 							position="absolute"
 							sx={{
-								backgroundColor: theme.palette.accent.contrastText,
+								backgroundColor: theme.palette.primary.main,
 								opacity: 0.8,
 								zIndex: 100,
 							}}
@@ -288,6 +288,7 @@ const UptimeDataTable = ({
 							cursor: "pointer",
 							"&:hover td": {
 								backgroundColor: theme.palette.tertiary.main,
+								transition: "background-color .3s ease",
 							},
 						},
 						onRowClick: (row) => {

@@ -137,14 +137,7 @@ function Infrastructure() {
 			id: "actions",
 			content: "Actions",
 			render: (row) => (
-				<IconButton
-					sx={{
-						"& svg path": {
-							/* TODO check */
-							stroke: "red" /* theme.palette.other.icon */,
-						},
-					}}
-				>
+				<IconButton>
 					<InfrastructureMenu
 						monitor={row}
 						isAdmin={isAdmin}
@@ -256,11 +249,12 @@ function Infrastructure() {
 
 						<DataTable
 							config={{
+								/* TODO this behavior seems to be repeated. Put it on the root table? */
 								rowSX: {
 									cursor: "pointer",
-									"&:hover": {
-										/* TODO check */
-										backgroundColor: "red" /* theme.palette.background.accent */,
+									"&:hover td": {
+										backgroundColor: theme.palette.tertiary.main,
+										transition: "background-color .3s ease",
 									},
 								},
 								onRowClick: (row) => openDetails(row.id),

@@ -169,6 +169,11 @@ const UptimeMonitors = () => {
 								sx={{
 									fontWeight: 500,
 									whiteSpace: "nowrap",
+									/* TODO IMPORTANT this should be applied to all buttons */
+									"&:focus-visible": {
+										outline: `2px solid ${theme.palette.primary.contrastText}`,
+										outlineOffset: 4,
+									},
 								}}
 							>
 								Create new

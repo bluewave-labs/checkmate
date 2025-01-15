@@ -39,7 +39,7 @@ const HttpStatusLabel = ({ status, customStyles }) => {
 		},
 		default: {
 			color: theme.palette.primary.contrastText,
-			borderColor: theme.palette.primary.lowContrast,
+			borderColor: theme.palette.primary.contrastText,
 		},
 	};
 

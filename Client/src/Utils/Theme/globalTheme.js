@@ -264,6 +264,7 @@ const baseTheme = (palette) => ({
 						padding: "0 var(--env-var-spacing-1-minus) !important",
 					},
 					"& .MuiOutlinedInput-root": {
+						color: theme.palette.primary.contrastTextSecondary,
 						borderRadius: 4,
 					},
 					"& .MuiOutlinedInput-notchedOutline": {
