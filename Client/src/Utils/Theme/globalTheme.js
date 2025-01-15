@@ -13,22 +13,22 @@ const baseTheme = (palette) => ({
 		fontSize: 14,
 		h1: {
 			fontSize: typographyLevels.xl,
-			color: palette.primary.contrastText.main,
+			color: palette.primary.contrastText,
 			fontWeight: 500,
 		},
 		h2: {
 			fontSize: typographyLevels.l,
-			color: palette.primary.contrastText.secondary,
+			color: palette.primary.contrastTextSecondary,
 			fontWeight: 400,
 		},
 		body1: {
 			fontSize: typographyLevels.m,
-			color: palette.primary.contrastText.tertiary,
+			color: palette.primary.contrastTextTertiary,
 			fontWeight: 400,
 		},
 		body2: {
 			fontSize: typographyLevels.s,
-			color: palette.primary.contrastText.tertiary,
+			color: palette.primary.contrastTextTertiary,
 			fontWeight: 400,
 		},
 	},
@@ -249,10 +249,14 @@ const baseTheme = (palette) => ({
 						minHeight: "var(--env-var-height-2)",
 						fontSize: "var(--env-var-font-size-medium)",
 						fontWeight: 400,
-						color: palette.primary.contrastText.secondary,
+						color: palette.primary.contrastTextSecondary,
 						"&.Mui-disabled": {
 							opacity: 0.3,
 							WebkitTextFillColor: "unset",
+						},
+						"& .Mui-focused": {
+							/* color: "#ff0000", */
+							/* borderColor: theme.palette.primary.contrastText, */
 						},
 					},
 					"& .MuiInputBase-input:-webkit-autofill": {

@@ -152,7 +152,7 @@ const newSemanticColors = {
 	secondary: {
 		main: {
 			light: newColors.gray200,
-			dark: newColors.blueGray600,
+			dark: "#313131" /* newColors.blueGray600 */,
 		},
 		contrastText: {
 			light: newColors.blueGray600,
