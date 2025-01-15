@@ -6,6 +6,14 @@ import PropTypes from "prop-types";
 const getSx = (theme, type, maxWidth) => {
 	const sx = {
 		maxWidth: maxWidth,
+		"&  .MuiOutlinedInput-root ": {
+			"&:hover .MuiOutlinedInput-notchedOutline": {
+				borderColor: theme.palette.primary.contrastText, // Adjust hover border color
+			},
+			"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+				borderColor: theme.palette.accent.main, // Adjust focus border color
+			},
+		},
 		"& .MuiFormHelperText-root": {
 			position: "absolute",
 			bottom: `-${theme.spacing(24)}`,
@@ -129,6 +137,7 @@ const TextInput = forwardRef(
 						},
 					}}
 					disabled={disabled}
+					color="secondary"
 				/>
 			</Stack>
 		);
