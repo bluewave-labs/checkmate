@@ -280,12 +280,6 @@ const TeamPanel = () => {
 						{ _id: "admin", name: "Admin" },
 						{ _id: "user", name: "User" },
 					]}
-					sx={{
-						color: theme.palette.primary.contrastTextTertiary,
-						"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-							borderColor: theme.palette.primary.contrastTextTertiary,
-						},
-					}}
 				/>
 				<Stack
 					direction="row"

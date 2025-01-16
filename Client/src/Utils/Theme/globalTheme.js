@@ -290,6 +290,16 @@ const baseTheme = (palette) => ({
 				}),
 			},
 		},
+		MuiOutlinedInput: {
+			styleOverrides: {
+				root: {
+					color: palette.primary.contrastTextTertiary,
+					"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+						borderColor: palette.primary.contrastTextTertiary,
+					},
+				},
+			},
+		},
 	},
 	shape: {
 		borderRadius: 2,
