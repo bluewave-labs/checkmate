@@ -3,7 +3,7 @@ services:
     image: realtime_uptime_client:latest
     restart: always
     environment:
-      UPTIME_APP_API_BASE_URL: "https://checkmate-test.bluewavelabs.ca/api/v1"
+      UPTIME_APP_API_BASE_URL: "http://64.23.225.20/api/v1"
     ports:
       - "80:80"
       - "443:443"
