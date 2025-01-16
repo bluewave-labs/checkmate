@@ -330,6 +330,7 @@ class NetworkService {
 			const CALLBACK_URL = process.env.NGROK_URL
 				? process.env.NGROK_URL
 				: process.env.CALLBACK_URL;
+
 			const response = await this.axios.post(
 				UPROCK_ENDPOINT,
 				{

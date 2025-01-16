@@ -9,5 +9,6 @@ prod/mongo/data/*
 prod/redis/data/*
 realtime/mongo/data/*
 realtime/redis/data/*
+realtime/logs/
 *.env
 prod/certbot/*

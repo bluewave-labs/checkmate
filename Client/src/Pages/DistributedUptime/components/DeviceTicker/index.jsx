@@ -44,7 +44,7 @@ const DeviceTicker = ({ data, width = "100%", connectionStatus }) => {
 						<ListItem key={Math.random()}>
 							<Stack direction="column">
 								<Typography variant="h2">{dataPoint?.city || "Unknown"}</Typography>
-								<Typography variant="p">{`Response time: ${Math.floor(dataPoint?.avgResponseTime ?? 0)} ms`}</Typography>
+								<Typography variant="p">{`Response time: ${Math.floor(dataPoint?.responseTime ?? 0)} ms`}</Typography>
 							</Stack>
 						</ListItem>
 					);
