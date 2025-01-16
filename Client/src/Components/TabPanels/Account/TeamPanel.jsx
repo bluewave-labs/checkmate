@@ -43,7 +43,7 @@ const TeamPanel = () => {
 			render: (row) => {
 				return (
 					<Stack>
-						<Typography color={theme.palette.text.secondary}>
+						<Typography color={theme.palette.primary.contrastTextSecondary}>
 							{row.firstName + " " + row.lastName}
 						</Typography>
 						<Typography>
