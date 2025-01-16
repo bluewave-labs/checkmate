@@ -290,7 +290,7 @@ const TeamPanel = () => {
 					<LoadingButton
 						loading={isSendingInvite}
 						variant="text"
-						color="info"
+						color="error"
 						onClick={closeInviteModal}
 					>
 						Cancel

@@ -234,14 +234,19 @@ function Infrastructure() {
 							}}
 						>
 							<Heading component="h2">Infrastructure monitors</Heading>
-							{/* TODO Correct the class current-monitors-counter, there are some unnecessary things there	 */}
+							{/* TODO Same as the one in UptimaDataTable. Create component */}
 							<Box
 								component="span"
-								className="current-monitors-counter"
-								color={theme.palette.primary.contrastText}
-								border={1}
-								borderColor={theme.palette.primary.lowContrast}
+								color={theme.palette.tertiary.contrastText}
+								border={2}
+								borderColor={theme.palette.accent.main}
 								backgroundColor={theme.palette.tertiary.main}
+								sx={{
+									padding: ".25em .75em",
+									borderRadius: "50%",
+									fontSize: "12px",
+									fontWeight: 500,
+								}}
 							>
 								{summary?.totalMonitors ?? 0}
 							</Box>

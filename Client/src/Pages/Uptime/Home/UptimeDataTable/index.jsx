@@ -225,9 +225,9 @@ const UptimeDataTable = ({
 				gap={theme.spacing(2)}
 			>
 				<Heading component="h2">Uptime monitors</Heading>
-
+				{/* TODO Same as the one in Infrastructure. Create component */}
 				<Box
-					className="current-monitors-counter"
+					component="span"
 					color={theme.palette.tertiary.contrastText}
 					border={2}
 					borderColor={theme.palette.accent.main}
