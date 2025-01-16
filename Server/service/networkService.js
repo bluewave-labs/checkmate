@@ -327,13 +327,15 @@ class NetworkService {
 	async requestDistributedHttp(job) {
 		try {
 			const monitor = job.data;
-
+			const CALLBACK_URL = process.env.NGROK_URL
+				? process.env.NGROK_URL
+				: process.env.CALLBACK_URL;
 			const response = await this.axios.post(
 				UPROCK_ENDPOINT,
 				{
 					id: monitor._id,
 					url: monitor.url,
-					callback: `${process.env.NGROK_URL}/api/v1/distributed-uptime/callback`,
+					callback: `${CALLBACK_URL}/api/v1/distributed-uptime/callback`,
 				},
 				{
 					headers: {
