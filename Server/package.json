@@ -20,7 +20,7 @@
 		"bcrypt": "5.1.1",
 		"bullmq": "5.34.10",
 		"cors": "^2.8.5",
-		"dockerode": "4.0.3",
+		"dockerode": "4.0.4",
 		"dotenv": "^16.4.5",
 		"express": "^4.19.2",
 		"handlebars": "^4.7.8",
