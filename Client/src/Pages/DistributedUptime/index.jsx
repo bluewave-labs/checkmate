@@ -126,6 +126,8 @@ const DistributedUptime = () => {
 			field: null,
 			order: null,
 			onUpdate: (data) => {
+				console.log("on update called");
+
 				const res = data.monitors;
 				const { monitors, filteredMonitors, summary } = res;
 				const mappedMonitors = filteredMonitors.map((monitor) =>

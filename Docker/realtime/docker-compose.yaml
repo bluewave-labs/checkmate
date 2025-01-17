@@ -44,15 +44,15 @@ services:
     volumes:
       - ./mongo/data:/data/db
     command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
-    healthcheck:
-      test:
-        [
-          "CMD",
-          'mongosh --quiet --eval ''rs.status().ok || rs.initiate({_id: "rs0", members: [{_id: 0, host: "mongodb:27017"}]})'' || exit 1',
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD",
+    #       'mongosh --quiet --eval ''rs.status().ok || rs.initiate({_id: "rs0", members: [{_id: 0, host: "mongodb:27017"}]})'' || exit 1',
+    #     ]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
   # mongodb:
   #   image: realtime_uptime_database_mongo:latest
 
