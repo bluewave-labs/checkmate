@@ -22,5 +22,3 @@ for service in "${!services[@]}"; do
     exit 1
   fi
 done
-
-echo "All images built successfully"
