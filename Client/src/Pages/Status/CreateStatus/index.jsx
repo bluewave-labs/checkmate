@@ -3,15 +3,17 @@ import { useState } from "react";
 import { Box, Tab, useTheme, Stack, Button } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
+import { useSelector } from "react-redux";
+
 import GeneralSettingsPanel from "../../../Components/TabPanels/Status/GeneralSettingsPanel";
 import ContentPanel from "../../../Components/TabPanels/Status/ContentPanel";
-import { publicPageGeneralSettingsValidation } from "../../../Validation/validation";
+import { publicPageSettingsValidation } from "../../../Validation/validation";
 import { hasValidationErrors } from "../../../Validation/error";
 import { StatusFormProvider } from "../CreateStatusContext";
 import { formatBytes } from "../../../Utils/fileUtils";
-import { useSelector } from "react-redux";
 import { createToast } from "../../../Utils/toastUtils";
 import { networkService } from "../../../main";
+import { buildErrors } from "../../../Validation/error";
 
 /**
  * CreateStatus page renders a page with tabs for general settings and contents.
@@ -31,21 +33,21 @@ import { networkService } from "../../../main";
 		];
 		const tabList = ["General settings", "Contents"];
 		const hasInitForm = initForm && Object.keys(initForm).length > 0;
-		const STATUS_PAGE = import.meta.env.VITE_STATU_PAGE_URL?? "status-page";				
+		const STATUS_PAGE = import.meta.env.VITE_STATU_PAGE_URL?? "status-page";
 		const [form, setForm] = useState(
 			hasInitForm
 				? initForm
 				: {
 						companyName: "",
-						url: STATUS_PAGE,
+						url: "/"+STATUS_PAGE,
 						timezone: "America/Toronto",
 						color: "#4169E1",
 						//which fields matching below?
-						//publish: false,
+						publish: false,
 						logo: null,
 						monitors: [],
-						// showUptimePercentage: false,
-						// showBarcode: false,
+						showUptimePercentage: false,
+						showBarcode: false,
 					}
 		);
 		const setActiveTabOnErrors = () => {
@@ -77,16 +79,15 @@ import { networkService } from "../../../main";
 						: form.monitors,
 				theme: mode,
 				logo: { type: form.logo?.type ?? "", size: form.logo?.size ?? "" },
-			};
-			delete localData.logo
+			};			
 			if (
-				hasValidationErrors(localData, publicPageGeneralSettingsValidation, setErrors)
+				hasValidationErrors(localData, publicPageSettingsValidation, setErrors)
 			) {
 				setActiveTabOnErrors();
 				return;
 			}
 
-			//localData.logo = form.logo
+			localData.logo = form.logo
 			localData.url = STATUS_PAGE
 			let config = { authToken: authToken, url: STATUS_PAGE, data: localData };
 			try {
@@ -99,6 +100,39 @@ import { networkService } from "../../../main";
 				createToast({ body: e.message || "Error creating status page" });
 			}
 		};
+
+		const handleChange = (event) => {
+			event.preventDefault();
+			const { value, id, name } = event.target;
+			setForm((prev) => ({
+				...prev,
+				[id ?? name]: value
+			}));
+		};
+
+		const handelCheckboxChange = (e) => {			
+			const { id } = e.target;
+			
+			setForm((prev) => {
+				return ({
+				...prev,
+				[id ]: !prev[id]
+			})});
+		}
+	
+		const handleBlur = (event) => {
+			event.preventDefault();
+			const { value, id } = event.target;
+			const { error } = publicPageSettingsValidation.validate(
+				{ [id]: value },
+				{
+					abortEarly: false,
+				}
+			);
+			setErrors((prev) => {
+				return buildErrors(prev, id, error);
+			});
+		};		
 
 		return (
 			<Stack
@@ -151,6 +185,9 @@ import { networkService } from "../../../main";
 						setForm={setForm}
 						errors={errors}
 						setErrors={setErrors}
+						handleBlur ={handleBlur}
+						handleChange = {handleChange}
+						handelCheckboxChange = {handelCheckboxChange}
 					>
 						{tabIdx == 0 ? <GeneralSettingsPanel /> : <ContentPanel />}
 					</StatusFormProvider>

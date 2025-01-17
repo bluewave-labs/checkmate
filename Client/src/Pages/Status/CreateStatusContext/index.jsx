@@ -5,11 +5,33 @@ const StatusFormContext = createContext({
 	setForm: () => {},
 	errors: {},
 	setErrors: () => {},
+	handleBlur: () => {},
+	handleChange: () => {},
+	handelCheckboxChange: () =>{}
 });
 
-const StatusFormProvider = ({ form, setForm, errors, setErrors, children }) => {
+const StatusFormProvider = ({
+	form,
+	setForm,
+	errors,
+	setErrors,
+	handleBlur,
+	handleChange,
+	handelCheckboxChange,
+	children,
+}) => {
 	return (
-		<StatusFormContext.Provider value={{ form, setForm, errors, setErrors }}>
+		<StatusFormContext.Provider
+			value={{
+				form,
+				setForm,
+				errors,
+				setErrors,
+				handleBlur,
+				handleChange,
+				handelCheckboxChange,
+			}}
+		>
 			{children}
 		</StatusFormContext.Provider>
 	);

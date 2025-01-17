@@ -6,7 +6,6 @@ import { MuiColorInput } from "mui-color-input";
 /**
  *
  * @param {*} id The ID of the component
- * @param {*} label The Label of the component
  * @param {*} value The color value of the component
  * @param {*} error The error of the component
  * @param {*} onChange The Change handler function
@@ -15,7 +14,6 @@ import { MuiColorInput } from "mui-color-input";
  * Example usage:
  * 	<ColorPicker
  *		id="color"
- *		label="Color"
  *		value={form.color}
  *		error={errors["color"]}
  *		onChange={handleColorChange}
@@ -23,7 +21,7 @@ import { MuiColorInput } from "mui-color-input";
  *		>
  *	</ColorPicker>
  */
-const ColorPicker = ({ id, label, value, error, onChange, onBlur }) => {
+const ColorPicker = ({ id, value, error, onChange, onBlur }) => {
 	const theme = useTheme();
 	return (
 		<Stack gap={theme.spacing(4)}>
@@ -31,7 +29,6 @@ const ColorPicker = ({ id, label, value, error, onChange, onBlur }) => {
 				format="hex"
 				value={value}
 				id={id}
-				label={label}
 				onChange={onChange}
 				onBlur={onBlur}
 			/>
@@ -54,7 +51,6 @@ const ColorPicker = ({ id, label, value, error, onChange, onBlur }) => {
 
 ColorPicker.propTypes = {
 	id: PropTypes.string.isRequired,
-	label: PropTypes.string.isRequired,
 	value: PropTypes.string,
 	error: PropTypes.string,
 	onChange: PropTypes.func.isRequired,

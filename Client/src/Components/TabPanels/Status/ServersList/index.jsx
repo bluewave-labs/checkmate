@@ -1,6 +1,8 @@
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Server from "./Server";
 import update from "immutability-helper";
+import PropTypes from "prop-types";
+import { Stack, useTheme } from "@mui/material";
 
 /**
  * 
@@ -16,7 +18,8 @@ import update from "immutability-helper";
 
 
 const ServersList = ({ monitors, cards, setCards, form, setForm, removeItem }) => {
-	const grid = 8;
+	const theme = useTheme()
+	const grid = parseInt(theme.spacing(4));
 
 	const handleCardChange = (event, val) => {
 		let newCards;
@@ -63,11 +66,11 @@ const ServersList = ({ monitors, cards, setCards, form, setForm, removeItem }) =
 	const getItemStyle = (isDragging, draggableStyle) => ({
 		// some basic styles to make the items look a bit nicer
 		userSelect: "none",
-		padding: grid * 2,
+		padding: grid,
 		margin: `0 0 ${grid}px 0`,
 
 		// change background colour if dragging
-		background: isDragging ? "lightgreen" : "lightgrey",
+		background: isDragging ? "#D0D5DD" : "#F8F9F8",
 
 		// styles we need to apply on draggables
 		...draggableStyle,
@@ -76,17 +79,17 @@ const ServersList = ({ monitors, cards, setCards, form, setForm, removeItem }) =
 	const getListStyle = (isDraggingOver) => ({
 		background: isDraggingOver ? "lightblue" : "white",
 		padding: grid,
-		width: 550,
 	});
 
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<Droppable droppableId="droppable">
 				{(provided, snapshot) => (
-					<div
+					<Stack
 						{...provided.droppableProps}
 						ref={provided.innerRef}
-						style={getListStyle(snapshot.isDraggingOver)}
+						sx={{...getListStyle(snapshot.isDraggingOver)}}
+						
 					>
 						{cards.map((item, index) => (
 							<Draggable
@@ -95,13 +98,13 @@ const ServersList = ({ monitors, cards, setCards, form, setForm, removeItem }) =
 								index={index}
 							>
 								{(provided, snapshot) => (
-									<div
+									<Stack
 										ref={provided.innerRef}
 										{...provided.draggableProps}
-										style={getItemStyle(
+										sx={{...getItemStyle(
 											snapshot.isDragging,
 											provided.draggableProps.style
-										)}
+										)}}
 									>
 										<Server
 											key={index}
@@ -112,12 +115,12 @@ const ServersList = ({ monitors, cards, setCards, form, setForm, removeItem }) =
 											removeItem={removeItem}
 											dragHandleProps={provided.dragHandleProps}
 										/>
-									</div>
+									</Stack>
 								)}
 							</Draggable>
 						))}
 						{provided.placeholder}
-					</div>
+					</Stack>
 				)}
 			</Droppable>
 		</DragDropContext>
@@ -127,10 +130,10 @@ const ServersList = ({ monitors, cards, setCards, form, setForm, removeItem }) =
 ServersList.propTypes = {
 	monitors: PropTypes.array.isRequired,
 	cards: PropTypes.array.isRequired,
-	setCards: PropTypes.function.isRequired,
+	setCards: PropTypes.func.isRequired,
 	form: PropTypes.object.isRequired,
-	setForm: PropTypes.function.isRequired,
-    removeItem: PropTypes.function.isRequired
+	setForm: PropTypes.func.isRequired,
+    removeItem: PropTypes.func.isRequired
 };
 
 export default ServersList;

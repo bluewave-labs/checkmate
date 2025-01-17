@@ -189,7 +189,7 @@ const logoImageValidation = joi.object({
 		}),
 });
 
-const publicPageGeneralSettingsValidation = joi.object({
+const publicPageSettingsValidation = joi.object({
 	publish: joi.bool(),
 	companyName: joi
 		.string()
@@ -205,7 +205,11 @@ const publicPageGeneralSettingsValidation = joi.object({
 		"array.empty": "At least one monitor is required",
 		"any.required": "Monitors are required",
 	}),
-	logo: logoImageValidation
+	logo: logoImageValidation,
+	showUptimePercentage: joi.boolean(),
+	showBarcode: joi.boolean(),
+	showBarcode: joi.boolean()
+
 });
 const settingsValidation = joi.object({
 	ttl: joi.number().required().messages({
@@ -321,6 +325,6 @@ export {
 	maintenanceWindowValidation,
 	advancedSettingsValidation,
 	infrastructureMonitorValidation,
-	publicPageGeneralSettingsValidation,
+	publicPageSettingsValidation,
 	logoImageValidation
 };

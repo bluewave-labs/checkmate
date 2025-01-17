@@ -3,12 +3,13 @@ import Search from "../../../../Inputs/Search";
 import {useState} from "react"
 import React from "react"; 
 import { Stack } from "@mui/material";
+import PropTypes from "prop-types";
 
 /**
  * 
  * @param {*} id The Id of the Server component
  * @param {*} monitors The server monitors options
- * @param {*} value the option label of the server/monitor, namely the monitor name field
+ * @param {*} value - Current input value for the Autocomplete
  * @param {*} removeItem The function used to remove a single server
  * @param {*} onChange The Change handler function to handle when the server value is changed
  * used to update the server(monitor) lists* 
@@ -49,9 +50,9 @@ const Server = ({ id, value, monitors, onChange, removeItem, dragHandleProps }) 
 Server.propTypes = {
 	id: PropTypes.string.isRequired,
 	monitors: PropTypes.array.isRequired,
-	value: PropTypes.string.isRequired,
-	removeItem: PropTypes.function.isRequired,
-	onChange: PropTypes.function.isRequired,
+	value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+	removeItem: PropTypes.func.isRequired,
+	onChange: PropTypes.func.isRequired,
 	dragHandleProps: PropTypes.object.isRequired,
 };
 

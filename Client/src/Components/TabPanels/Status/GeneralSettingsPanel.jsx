@@ -1,38 +1,34 @@
 import { useState, useRef, useContext } from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import ConfigBox  from "../../../Components/ConfigBox";
 import { useTheme } from "@emotion/react";
 import TabPanel from "@mui/lab/TabPanel";
+import ImageIcon from "@mui/icons-material/Image";
+
+import ConfigBox from "../../../Components/ConfigBox";
 import TextInput from "../../Inputs/TextInput";
 import ImageField from "../../Inputs/Image";
 import timezones from "../../../Utils/timezones.json";
 import Select from "../../Inputs/Select";
-import {
-	logoImageValidation,
-	publicPageGeneralSettingsValidation,
-} from "../../../Validation/validation";
-import { buildErrors } from "../../../Validation/error";
+import { logoImageValidation } from "../../../Validation/validation";
 import { formatBytes } from "../../../Utils/fileUtils";
 import ProgressUpload from "../../ProgressBars";
-import ImageIcon from "@mui/icons-material/Image";
-import { HttpAdornment } from "../../Inputs/TextInput/Adornments";
 import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
 import ColorPicker from "../../Inputs/ColorPicker";
+import Checkbox from "../../Inputs/Checkbox";
 
 /**
  * General settings panel is ued to compose part of the public static page
  * for general informations like company name, subdomain url, logo and color etc
  */
 const GeneralSettingsPanel = () => {
-	const theme = useTheme();	
-	const { form, setForm, errors, setErrors  } = useContext(StatusFormContext);
+	const theme = useTheme();
+	const { form, setForm, errors, setErrors, handleBlur, handleChange, handelCheckboxChange } =
+		useContext(StatusFormContext);
 	const [logo, setLogo] = useState(form.logo);
 
 	const [progress, setProgress] = useState({ value: 0, isLoading: false });
 	const intervalRef = useRef(null);
-	const SUBDOAMIN_PREFIX =
-		import.meta.env.VITE_STATUS_PAGE_SUBDOMAIN_PREFIX ?? "http://localhost/";
-	const STATUS_PAGE = import.meta.env.VITE_STATU_PAGE_URL?? "status-page";		
+	const STATUS_PAGE = import.meta.env.VITE_STATU_PAGE_URL ?? "status-page";
 
 	// Clears specific error from errors state
 	const clearError = (err) => {
@@ -59,29 +55,6 @@ const GeneralSettingsPanel = () => {
 			...prev,
 			color: newValue,
 		}));
-	}
-
-	const handleChange = (event) => {
-		event.preventDefault();
-		const { value, id, name } = event.target;
-		setForm((prev) => ({
-			...prev,
-			[id ?? name]: value,
-		}));
-	};
-
-	const handleBlur = (event) => {
-		event.preventDefault();
-		const { value, id } = event.target;
-		const { error } = publicPageGeneralSettingsValidation.validate(
-			{ [id]: value },
-			{
-				abortEarly: false,
-			}
-		);
-		setErrors((prev) => {
-			return buildErrors(prev, id, error);
-		});
 	};
 
 	const validateField = (toValidate, schema, name = "logo") => {
@@ -105,7 +78,7 @@ const GeneralSettingsPanel = () => {
 			name: pic.name,
 			type: pic.type,
 			size: pic.size,
-		}
+		};
 		setProgress((prev) => ({ ...prev, isLoading: true }));
 		setLogo(newLogo);
 		setForm({ ...form, logo: newLogo });
@@ -141,13 +114,14 @@ const GeneralSettingsPanel = () => {
 						</Stack>
 					</Box>
 					<Stack gap={theme.spacing(6)}>
-						{/* <Checkbox
-							id="published-to-public"
+						<Checkbox
+							id="publish"
 							label={`Published and visible to the public`}
 							isChecked={form.publish}
-							onChange={handleChange}
+							value={form.publish}
+							onChange={handelCheckboxChange}
 							onBlur={handleBlur}
-						/> */}
+						/>
 					</Stack>
 				</ConfigBox>
 
@@ -176,13 +150,7 @@ const GeneralSettingsPanel = () => {
 							type="url"
 							label="Your status page address"
 							disabled
-							value={form.url ?? STATUS_PAGE}
-							startAdornment={
-								<HttpAdornment
-									prefix={SUBDOAMIN_PREFIX}
-									https={false}
-								/>
-							}
+							value={form.url ?? "/" + STATUS_PAGE}
 							onChange={handleChange}
 							onBlur={handleBlur}
 							helperText={errors["url"]}
@@ -210,46 +178,67 @@ const GeneralSettingsPanel = () => {
 							items={timezones}
 							error={errors["display-timezone"]}
 						/>
-						<ImageField
-							id="logo"
-							src={form.logo?.src ?? logo?.src}
-							loading={progress.isLoading && progress.value !== 100}
-							onChange={handleLogo}
-							isRound={false}
-						/>
-						{progress.isLoading || progress.value !== 0 || errors["logo"] ? (
-							<ProgressUpload
-								icon={<ImageIcon />}
-								label={logo?.name}
-								size={formatBytes(logo?.size)}
-								progress={progress.value}
-								onClick={removeLogo}
-								error={errors["logo"]}
-							/>
-						) : logo && logo.type ? (
-							<Button
-								variant="contained"
-								color="secondary"
-								onClick={removeLogo}
-								sx={{
-									width: "100%",
-									maxWidth: "200px",
-									alignSelf: "center",
-								}}
+						<Stack direction={"column"}>
+							<Typography
+								component="h3"
+								color={theme.palette.text.secondary}
+								fontWeight={500}
+								fontSize={13}
+								sx={{ mb: theme.spacing(-2) }}
 							>
-								Remove Logo
-							</Button>
-						) : (
-							""
-						)}
-						<ColorPicker
-							id="color"
-							label="Color"
-							value={form.color}
-							error={errors["color"]}
-							onChange={handleColorChange}
-							onBlur={handleBlur}
-						></ColorPicker>
+								Logo
+							</Typography>
+							<ImageField
+								id="logo"
+								src={form.logo?.src ?? logo?.src}
+								loading={progress.isLoading && progress.value !== 100}
+								onChange={handleLogo}
+								isRound={false}
+							/>
+							{progress.isLoading || progress.value !== 0 || errors["logo"] ? (
+								<ProgressUpload
+									icon={<ImageIcon />}
+									label={logo?.name}
+									size={formatBytes(logo?.size)}
+									progress={progress.value}
+									onClick={removeLogo}
+									error={errors["logo"]}
+								/>
+							) : logo && logo.type ? (
+								<Button
+									variant="contained"
+									color="secondary"
+									onClick={removeLogo}
+									sx={{
+										width: "100%",
+										maxWidth: "200px",
+										alignSelf: "center",
+									}}
+								>
+									Remove Logo
+								</Button>
+							) : (
+								""
+							)}
+						</Stack>
+						<Stack direction={"column"}>
+							<Typography
+								component="h3"
+								color={theme.palette.text.secondary}
+								fontWeight={500}
+								fontSize={13}
+							>
+								Color
+							</Typography>
+
+							<ColorPicker
+								id="color"
+								value={form.color}
+								error={errors["color"]}
+								onChange={handleColorChange}
+								onBlur={handleBlur}
+							></ColorPicker>
+						</Stack>
 					</Stack>
 				</ConfigBox>
 			</Stack>

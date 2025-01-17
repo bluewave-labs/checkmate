@@ -115,7 +115,7 @@ Checkbox.propTypes = {
 	label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
 	size: PropTypes.oneOf(["small", "medium", "large"]),
 	isChecked: PropTypes.bool.isRequired,
-	value: PropTypes.string,
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 	onChange: PropTypes.func,
 	isDisabled: PropTypes.bool,
 	alignSelf: PropTypes.bool,

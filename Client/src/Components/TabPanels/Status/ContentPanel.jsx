@@ -1,29 +1,36 @@
 import { useState, useContext, useEffect } from "react";
 import { Button, Box, Stack, Typography } from "@mui/material";
-import ConfigBox from "../../../Components/ConfigBox";
 import { useTheme } from "@emotion/react";
 import TabPanel from "@mui/lab/TabPanel";
+
+import ConfigBox from "../../../Components/ConfigBox";
 import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
 import { useSelector } from "react-redux";
-import { logger } from "../../../Utils/Logger"
+import { logger } from "../../../Utils/Logger";
 import { createToast } from "../../../Utils/toastUtils";
 import { networkService } from "../../../main";
 import ServersList from "./ServersList";
-
+import Checkbox from "../../Inputs/Checkbox";
 
 /**
  * Content Panel is used to compose the second part of the status page
- * for the servers/monitors to watch for in its public page presence and some 
+ * for the servers/monitors to watch for in its public page presence and some
  * other server related configurations etc
- * 
+ *
  */
 const ContentPanel = () => {
 	const theme = useTheme();
-	const { form, setForm, errors, setErrors } = useContext(StatusFormContext);
+	const {
+		form,
+		setForm,
+		errors,
+		setErrors,
+		handleBlur,
+		handelCheckboxChange,
+	} = useContext(StatusFormContext);
 	const [cards, setCards] = useState([]);
-	const {user, authToken } = useSelector((state) => state.auth);	
+	const { user, authToken } = useSelector((state) => state.auth);
 	const [monitors, setMonitors] = useState([]);
-
 
 	useEffect(() => {
 		const fetchMonitors = async () => {
@@ -34,10 +41,10 @@ const ContentPanel = () => {
 					limit: null, // donot return any checks for the monitors
 					types: ["http"], // status page is available only for the uptime type
 				});
-				if(response.data.data.monitors.length==0){
-					setErrors({monitors: "Please config monitors to setup status page"})
+				if (response.data.data.monitors.length == 0) {
+					setErrors({ monitors: "Please config monitors to setup status page" });
 				}
-				const fullMonitors = response.data.data.monitors ;
+				const fullMonitors = response.data.data.monitors;
 				setMonitors(fullMonitors);
 				if (form.monitors.length > 0) {
 					const initiCards = form.monitors.map((mid, idx) => ({
@@ -52,12 +59,12 @@ const ContentPanel = () => {
 				createToast({ body: "Failed to fetch monitors data" });
 				logger.error("Failed to fetch monitors", error);
 			}
-		};			
+		};
 		fetchMonitors();
 	}, [user, authToken]);
 	const handleAddNew = () => {
 		if (cards.length === monitors.length) return;
-		const newCards = [...cards, { id: "" + Math.random(),val:{} }];
+		const newCards = [...cards, { id: "" + Math.random(), val: {} }];
 		setCards(newCards);
 	};
 	const removeCard = (id) => {
@@ -96,10 +103,10 @@ const ContentPanel = () => {
 							</Typography>
 						</Stack>
 					</Box>
-					<Box
+					<Stack
 						className="status-contents-server-list"
 						sx={{
-							margin: theme.spacing(20),
+							margin: theme.spacing(6),
 							border: "solid",
 							borderRadius: theme.shape.borderRadius,
 							borderColor: theme.palette.border.light,
@@ -129,22 +136,16 @@ const ContentPanel = () => {
 								Add new
 							</Button>
 						</Stack>
-						{cards.length > 0 && (
-							<Stack
-								id="monitors"
-								direction="column"
-								gap={theme.spacing(2)}
-							>
-								<ServersList
-									monitors={monitors}
-									cards={cards}
-									setCards={setCards}
-									form={form}
-									setForm={setForm}
-									removeItem={removeCard}									
-								/>
-							</Stack>
-						)}
+
+						<ServersList
+							monitors={monitors}
+							cards={cards}
+							setCards={setCards}
+							form={form}
+							setForm={setForm}
+							removeItem={removeCard}
+						/>
+
 						{errors["monitors"] && (
 							<Typography
 								component="span"
@@ -157,7 +158,7 @@ const ContentPanel = () => {
 								{errors["monitors"]}
 							</Typography>
 						)}
-					</Box>
+					</Stack>
 				</ConfigBox>
 
 				<ConfigBox>
@@ -167,23 +168,22 @@ const ContentPanel = () => {
 							<Typography component="p">Show more details on the status page</Typography>
 						</Stack>
 					</Box>
-					{/* <Stack	sx={{margin: theme.spacing(20)}}
-					>
+					<Stack sx={{ margin: theme.spacing(6) }}>
 						<Checkbox
-							id="show-barcode"
+							id="showBarcode"
 							label={`Show Barcode`}
 							isChecked={form.showBarcode}
-							onChange={handleChange}
+							onChange={handelCheckboxChange}
 							onBlur={handleBlur}
 						/>
 						<Checkbox
-							id="show-uptime-percentage"
+							id="showUptimePercentage"
 							label={`Show Uptime Percentage`}
 							isChecked={form.showUptimePercentage}
-							onChange={handleChange}
+							onChange={handelCheckboxChange}
 							onBlur={handleBlur}
-						/>						
-					</Stack> */}
+						/>
+					</Stack>
 				</ConfigBox>
 			</Stack>
 		</TabPanel>
