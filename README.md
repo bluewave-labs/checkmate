@@ -72,11 +72,11 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 
 ## 🏗️ Screenshots
 
-![Group 3765](https://github.com/user-attachments/assets/8e8144f2-a769-4707-8ea1-99cf758284a8)
-
-![Group 3768](https://github.com/user-attachments/assets/05aed2f2-2cf7-487f-879b-cf8bfb0e9241)
-
-![Group 3768-1](https://github.com/user-attachments/assets/d4ee4bcf-4d69-4e4a-9bce-fd3541129c24)
+<img width="2714" alt="server" src="https://github.com/user-attachments/assets/f7cb272a-69a6-48c5-93b0-249ecf20ecc6" />
+<p>
+<img width="2714" alt="uptime" src="https://github.com/user-attachments/assets/98ddc6c0-3384-47fd-96ce-7e53e6b688ac" />
+<p>
+<img width="2714" alt="page speed" src="https://github.com/user-attachments/assets/b5589f79-da30-4239-9846-1f8bb2637ff9" />
 
 ## 🏗️ Tech stack
 
@@ -120,3 +120,4 @@ Also check other developer and contributor-friendly projects of BlueWave:
 - [Guidefox](https://github.com/bluewave-labs/guidefox), an application that helps new users learn how to use your product via hints, tours, popups and banners.
 - [VerifyWise](https://github.com/bluewave-labs/verifywise), the first open source AI governance platform.
 
+![image](https://badges.pufler.dev/visits/bluewave-labs/checkmate) since 14 Jan, 2025
