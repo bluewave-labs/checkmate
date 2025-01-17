@@ -76,6 +76,7 @@ class DistributedUptimeController {
 
 	async getDistributedUptimeMonitors(req, res, next) {
 		try {
+			console.log("getDistributedUptimeMonitors");
 			res.setHeader("Content-Type", "text/event-stream");
 			res.setHeader("Cache-Control", "no-cache");
 			res.setHeader("Connection", "keep-alive");
@@ -87,6 +88,10 @@ class DistributedUptimeController {
 
 			// Do things here
 			const notifyChange = async () => {
+				// Send initial data
+				const monitors = await this.db.getMonitorsByTeamId(req);
+				res.write(`data: ${JSON.stringify({ monitors })}\n\n`);
+
 				if (opInProgress) {
 					// Get data
 					const monitors = await this.db.getMonitorsByTeamId(req);
@@ -114,10 +119,6 @@ class DistributedUptimeController {
 
 			monitorStream.on("change", handleChange);
 			checksStream.on("change", handleChange);
-
-			// Send initial data
-			const monitors = await this.db.getMonitorsByTeamId(req);
-			res.write(`data: ${JSON.stringify({ monitors })}\n\n`);
 
 			// Handle client disconnect
 			req.on("close", () => {
