@@ -90,7 +90,6 @@ class MongoDB {
 		try {
 			const connectionString =
 				process.env.DB_CONNECTION_STRING || "mongodb://localhost:27017/uptime_db";
-			console.log(connectionString);
 			await mongoose.connect(connectionString);
 			// If there are no AppSettings, create one
 			let appSettings = await AppSettings.find();
@@ -111,7 +110,6 @@ class MongoDB {
 				method: "connect",
 			});
 		} catch (error) {
-			console.log(error);
 			logger.error({
 				message: error.message,
 				service: this.SERVICE_NAME,
