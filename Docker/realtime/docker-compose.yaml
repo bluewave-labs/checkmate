@@ -3,7 +3,7 @@ services:
     image: realtime_uptime_client:latest
     restart: always
     environment:
-      UPTIME_APP_API_BASE_URL: "http://64.23.225.20/api/v1"
+      UPTIME_APP_API_BASE_URL: "http://localhost/api/v1"
     ports:
       - "80:80"
       - "443:443"
@@ -38,23 +38,33 @@ services:
       retries: 5
       start_period: 5s
   mongodb:
-    image: realtime_uptime_database_mongo:latest
-    command: ["mongod", "--quiet", "--replSet", "rs0", "--bind_ip_all"]
+    image: realtime_uptime_database_mongo
     ports:
       - "27017:27017"
     volumes:
       - ./mongo/data:/data/db
-      # - ./mongo/init/create_users.js:/docker-entrypoint-initdb.d/create_users.js
-    env_file:
-      - mongo.env
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     healthcheck:
       test:
         [
           "CMD",
-          "mongosh",
-          "--eval",
-          "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongodb:27017',priority:1}]}) }",
+          'mongosh --quiet --eval ''rs.status().ok || rs.initiate({_id: "rs0", members: [{_id: 0, host: "mongodb:27017"}]})'' || exit 1',
         ]
-      interval: 5s
-      timeout: 30s
-      retries: 30
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  # mongodb:
+  #   image: realtime_uptime_database_mongo:latest
+
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - ./mongo/data:/data/db
+  #   env_file:
+  #     - mongo.env
+  #   command: ["-f", "/etc/mongod.conf"]
+  #   healthcheck:
+  #     test: ["CMD", "mongosh", "--eval", "try { rs.status() } catch (err) {}"]
+  #     interval: 5s
+  #     timeout: 30s
+  #     retries: 30
