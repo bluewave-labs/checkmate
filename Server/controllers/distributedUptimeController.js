@@ -86,12 +86,12 @@ class DistributedUptimeController {
 			let batchTimeout = null;
 			let opInProgress = false;
 
+			// Send initial data
+			const monitors = await this.db.getMonitorsByTeamId(req);
+			res.write(`data: ${JSON.stringify({ monitors })}\n\n`);
+
 			// Do things here
 			const notifyChange = async () => {
-				// Send initial data
-				const monitors = await this.db.getMonitorsByTeamId(req);
-				res.write(`data: ${JSON.stringify({ monitors })}\n\n`);
-
 				if (opInProgress) {
 					// Get data
 					const monitors = await this.db.getMonitorsByTeamId(req);
