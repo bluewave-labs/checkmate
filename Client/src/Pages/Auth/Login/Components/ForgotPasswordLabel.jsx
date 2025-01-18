@@ -1,10 +1,12 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router";
+import { useTranslate } from "@tolgee/react";
 
 const ForgotPasswordLabel = ({ email, errorEmail }) => {
 	const theme = useTheme();
 	const navigate = useNavigate();
+	const { t } = useTranslate();
 
 	const handleNavigate = () => {
 		if (email !== "" && !errorEmail) {
@@ -19,25 +21,18 @@ const ForgotPasswordLabel = ({ email, errorEmail }) => {
 				className="forgot-p"
 				display="inline-block"
 				color={theme.palette.primary.main}
-			>
-				Forgot password?
-			</Typography>
-			<Typography
-				component="span"
-				color={theme.palette.primary.main}
-				ml={theme.spacing(2)}
-				sx={{ userSelect: "none" }}
 				onClick={handleNavigate}
+				sx={{ cursor: "pointer" }}
 			>
-				Reset password
+				{t("login.forgotPassword")}
 			</Typography>
 		</Box>
 	);
 };
 
-ForgotPasswordLabel.proptype = {
+ForgotPasswordLabel.propTypes = {
 	email: PropTypes.string.isRequired,
-	emailError: PropTypes.string.isRequired,
+	errorEmail: PropTypes.string,
 };
 
 export default ForgotPasswordLabel;

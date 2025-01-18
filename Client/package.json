@@ -5,22 +5,25 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
+		"build": "npm run fetch-translations && vite build",
 		"build-dev": "vite build --mode development",
 		"lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"fetch-translations": "node scripts/fetch-translations.js"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.13.3",
 		"@emotion/styled": "^11.13.0",
 		"@fontsource/roboto": "^5.0.13",
-		"@mui/icons-material": "6.4.0",
-		"@mui/lab": "6.0.0-beta.23",
-		"@mui/material": "6.4.0",
+		"@mui/icons-material": "6.3.1",
+		"@mui/lab": "6.0.0-beta.22",
+		"@mui/material": "6.3.1",
 		"@mui/x-charts": "^7.5.1",
 		"@mui/x-data-grid": "7.23.6",
 		"@mui/x-date-pickers": "7.23.6",
 		"@reduxjs/toolkit": "2.5.0",
+		"@tolgee/format-icu": "^6.0.0",
+		"@tolgee/react": "^6.0.0",
 		"axios": "^1.7.4",
 		"dayjs": "1.11.13",
 		"joi": "17.13.3",
@@ -39,10 +42,12 @@
 		"@types/react": "^18.2.66",
 		"@types/react-dom": "^18.2.22",
 		"@vitejs/plugin-react": "^4.2.1",
+		"dotenv": "^16.4.7",
 		"eslint": "^8.57.0",
 		"eslint-plugin-react": "^7.34.1",
 		"eslint-plugin-react-hooks": "^5.0.0",
 		"eslint-plugin-react-refresh": "^0.4.6",
+		"node-fetch": "^3.3.2",
 		"prettier": "^3.3.3",
 		"vite": "^5.2.0"
 	}
