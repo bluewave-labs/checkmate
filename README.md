@@ -64,9 +64,10 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 - Port monitoring (**complete**, waiting to be deployed to stable version)
 - Global (distributed) uptime checking on Solana network (**in progress**)
 - Status pages (**in progress**)
+- Translations (i18n) (**in progress**)
 - Better notification options (Webhooks, Discord, Telegram, Slack)
+- Server security monitoring 
 - More configuration options
-- Translations
 - Tagging/grouping monitors
 - DNS monitoring
 
