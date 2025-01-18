@@ -1,0 +1,11 @@
+{
+  "login": {
+    "dontHaveAccount": "Sie haben noch kein Konto?",
+    "email": "E-Mail",
+    "forgotPassword": "Passwort vergessen",
+    "password": "Passwort",
+    "signUp": "Melden Sie sich an",
+    "submit": "Einloggen",
+    "title": "Einloggen"
+  }
+}
