@@ -377,14 +377,6 @@ const Configure = () => {
 							<Stack gap={theme.spacing(6)}>
 								<Typography component="p">When there is a new incident,</Typography>
 								<Checkbox
-									id="notify-sms"
-									label="Notify via SMS (coming soon)"
-									isChecked={false}
-									value=""
-									onChange={() => logger.warn("disabled")}
-									isDisabled={true}
-								/>
-								<Checkbox
 									id="notify-email-default"
 									label={`Notify via email (to ${user.email})`}
 									isChecked={
@@ -394,14 +386,6 @@ const Configure = () => {
 									}
 									value={user?.email}
 									onChange={(event) => handleChange(event)}
-								/>
-								<Checkbox
-									id="notify-email"
-									label="Also notify via email to multiple addresses (coming soon)"
-									isChecked={false}
-									value=""
-									onChange={() => logger.warn("disabled")}
-									isDisabled={true}
 								/>
 								{monitor?.notifications?.some(
 									(notification) => notification.type === "emails"
