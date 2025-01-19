@@ -115,7 +115,7 @@ const CheckEmail = () => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Typography sx={{ userSelect: "none" }}>Checkmate</Typography>
 			</Stack>
 			<Stack
 				width="100%"
