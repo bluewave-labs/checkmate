@@ -13,11 +13,12 @@ import { Stack, useTheme } from "@mui/material";
  * @param {*} form The Status page form
  * @param {*} setForm Function to set the form
  * @param {*} removeItem The function used to remove a single server
+ * @param {*} onBlur Function to call when the input is blured* 
  * @returns A list of user selected Servers/Monitors
  */
 
 
-const ServersList = ({ monitors, cards, setCards, form, setForm, removeItem }) => {
+const ServersList = ({ monitors, cards, setCards, form, setForm, removeItem, onBlur }) => {
 	const theme = useTheme()
 	const grid = parseInt(theme.spacing(4));
 
@@ -114,6 +115,7 @@ const ServersList = ({ monitors, cards, setCards, form, setForm, removeItem }) =
 											onChange={handleCardChange}
 											removeItem={removeItem}
 											dragHandleProps={provided.dragHandleProps}
+											onBlur={onBlur}
 										/>
 									</Stack>
 								)}
@@ -133,7 +135,8 @@ ServersList.propTypes = {
 	setCards: PropTypes.func.isRequired,
 	form: PropTypes.object.isRequired,
 	setForm: PropTypes.func.isRequired,
-    removeItem: PropTypes.func.isRequired
+    removeItem: PropTypes.func.isRequired,
+	onBlur: PropTypes.func.isRequired
 };
 
 export default ServersList;

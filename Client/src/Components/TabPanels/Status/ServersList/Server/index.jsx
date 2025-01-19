@@ -13,12 +13,13 @@ import PropTypes from "prop-types";
  * @param {*} removeItem The function used to remove a single server
  * @param {*} onChange The Change handler function to handle when the server value is changed
  * used to update the server(monitor) lists* 
+ * @param {*} onBlur Function to call when the input is blured
  * @param {*} dragHandleProps the dragHandleProps passed on to the designated dom node 
  * so that there will be a draging indicator when mouse over it
  * @returns A single server whose value is one of the existing monitors
  */
 
-const Server = ({ id, value, monitors, onChange, removeItem, dragHandleProps }) => {
+const Server = ({ id, value, monitors, onChange, removeItem, onBlur, dragHandleProps }) => {
 	const [search, setSearch] = useState("");
 	const handleSearch = (val) => {
 		setSearch(val);
@@ -32,6 +33,7 @@ const Server = ({ id, value, monitors, onChange, removeItem, dragHandleProps }) 
 				options={monitors ? monitors : []}
 				filteredBy="name"
 				inputValue={search}
+				onBlur={onBlur}
 				value={value}
 				startAdornment={<ServerStartAdornment dragHandleProps={dragHandleProps} />}
 				endAdornment={
@@ -51,8 +53,9 @@ Server.propTypes = {
 	id: PropTypes.string.isRequired,
 	monitors: PropTypes.array.isRequired,
 	value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-	removeItem: PropTypes.func.isRequired,
+	removeItem: PropTypes.func.isRequired,	
 	onChange: PropTypes.func.isRequired,
+	onBlur: PropTypes.func.isRequired,
 	dragHandleProps: PropTypes.object.isRequired,
 };
 

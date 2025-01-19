@@ -11,6 +11,8 @@ import { createToast } from "../../../Utils/toastUtils";
 import { networkService } from "../../../main";
 import ServersList from "./ServersList";
 import Checkbox from "../../Inputs/Checkbox";
+import { publicPageSettingsValidation } from "../../../Validation/validation";
+import { buildErrors } from "../../../Validation/error";
 
 /**
  * Content Panel is used to compose the second part of the status page
@@ -76,6 +78,17 @@ const ContentPanel = () => {
 		});
 	};
 
+	const handleServersBlur = () => {
+		const { error } = publicPageSettingsValidation.validate(
+			{ "monitors": form.monitors },
+			{
+				abortEarly: false,
+			}
+		);
+		setErrors((prev) => {
+			return buildErrors(prev, "monitors", error);
+		});
+	};			
 	return (
 		<TabPanel
 			value="Contents"
@@ -144,6 +157,7 @@ const ContentPanel = () => {
 							form={form}
 							setForm={setForm}
 							removeItem={removeCard}
+							onBlur= {handleServersBlur}
 						/>
 
 						{errors["monitors"] && (

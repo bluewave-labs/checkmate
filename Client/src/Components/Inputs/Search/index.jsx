@@ -12,6 +12,7 @@ import SearchIcon from "../../../assets/icons/search.svg?react";
  * @param {string} props.filteredBy - Key to access the option label from the options
  * @param {string} props.value - Current input value for the Autocomplete
  * @param {Function} props.handleChange - Function to call when the input changes
+ * @param {Function} Prop.onBlur - Function to call when the input is blured
  * @param {Object} props.sx - Additional styles to apply to the component
  * @returns {JSX.Element} The rendered Search component
  */
@@ -55,11 +56,13 @@ const Search = ({
 	error,
 	disabled,
 	startAdornment,
-	endAdornment
+	endAdornment,
+	onBlur
 }) => {
 	const theme = useTheme();
 	return (
 		<Autocomplete
+			onBlur={onBlur}
 			multiple={multiple}
 			id={id}
 			value={value}
@@ -202,7 +205,8 @@ Search.propTypes = {
 	error: PropTypes.string,
 	disabled: PropTypes.bool,
 	startAdornment: PropTypes.object,
-	endAdornment: PropTypes.object
+	endAdornment: PropTypes.object,
+	onBlur: PropTypes.func
 };
 
 export default Search;
