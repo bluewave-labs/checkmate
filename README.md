@@ -57,14 +57,16 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 
 **Short term roadmap:**
 
-- Port monitoring (**complete**, waiting to be deployed to stable version)
-- Global (distributed) uptime checking on Solana network (**in progress**)
-- Status pages (**in progress**)
+- Port monitoring (**complete**, waiting to be deployed to stable version) https://github.com/bluewave-labs/Checkmate/issues/1476
+- Global (distributed) uptime checking on Solana network (**in progress**) 
+- Status pages (**in progress**) https://github.com/bluewave-labs/Checkmate/issues/1131 
 - Translations (i18n) (**in progress**)
-- Better notification options (Webhooks, Discord, Telegram, Slack)
+- Better notification options (Webhooks, Discord, Telegram, Slack) https://github.com/bluewave-labs/Checkmate/issues/1545
 - Server security monitoring 
+- Command line interface (CLI) https://github.com/bluewave-labs/Checkmate/issues/1558
+- JSON query monitoring https://github.com/bluewave-labs/Checkmate/issues/1573
 - More configuration options
-- Tagging/grouping monitors
+- Tagging/grouping monitors https://github.com/bluewave-labs/Checkmate/issues/1546
 - DNS monitoring
 
 ## 🏗️ Screenshots
