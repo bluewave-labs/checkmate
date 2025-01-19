@@ -1,0 +1,8 @@
+apprise-api:
+  image: caronc/apprise-api:latest
+  container_name: apprise-api
+  ports:
+    - "8000:8000"
+  environment:
+    - APPRISE_STATELESS_MODE=yes
+  restart: unless-stopped 

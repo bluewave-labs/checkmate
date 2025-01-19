@@ -8,7 +8,18 @@ const NotificationSchema = mongoose.Schema(
 		},
 		type: {
 			type: String,
-			enum: ["email", "sms"],
+			enum: ["email", "sms", "apprise"],
+		},
+		appriseUrl: {
+			type: String,
+			validate: {
+				validator: function(v) {
+					return !this.type || 
+						   this.type !== 'apprise' || 
+						   /^[a-zA-Z]+:\/\//.test(v);
+				},
+				message: 'Invalid Apprise URL format'
+			}
 		},
 		address: {
 			type: String,
