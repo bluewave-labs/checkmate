@@ -46,8 +46,7 @@ import Docs from "../../assets/icons/docs.svg?react";
 import Folder from "../../assets/icons/folder.svg?react";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 
-import "../../../../Client/src/i18n"
-
+import "../../i18n"
 
 import "./index.css";
 
@@ -101,9 +100,9 @@ function Sidebar() {
 			name: t("Account"),
 			icon: <Account />,
 			nested: [
-				{ name: "Profile", path: "account/profile", icon: <UserSvg /> },
-				{ name: "Password", path: "account/password", icon: <LockSvg /> },
-				{ name: "Team", path: "account/team", icon: <TeamSvg /> },
+				{ name: t("Profile"), path: "account/profile", icon: <UserSvg /> },
+				{ name: t("Password"), path: "account/password", icon: <LockSvg /> },
+				{ name: t("Team"), path: "account/team", icon: <TeamSvg /> },
 			],
 		},
 		{
@@ -115,14 +114,14 @@ function Sidebar() {
 			name: t("Other"),
 			icon: <Folder />,
 			nested: [
-				{ name: "Support", path: "support", icon: <Support /> },
+				{ name: t("Support"), path: "support", icon: <Support /> },
 				{
-					name: "Discussions",
+					name: t("Discussions"),
 					path: "discussions",
 					icon: <ChatBubbleOutlineRoundedIcon />,
 				},
-				{ name: "Docs", path: "docs", icon: <Docs /> },
-				{ name: "Changelog", path: "changelog", icon: <ChangeLog /> },
+				{ name: t("Docs"), path: "docs", icon: <Docs /> },
+				{ name: t("Changelog"), path: "changelog", icon: <ChangeLog /> },
 			],
 		},
 	];
@@ -272,7 +271,7 @@ function Sidebar() {
 							backgroundColor: "transparent",
 						}}
 					>
-						{t("menu")}
+						{t("Menu")}
 					</ListSubheader>
 				}
 				sx={{

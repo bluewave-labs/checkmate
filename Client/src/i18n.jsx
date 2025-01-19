@@ -2,7 +2,7 @@ import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 
 i18n.use(initReactI18next).init({
-    debug: true,
+    debug: process.env.NODE_ENV === 'development',
     fallbackLng: "en",
 
     resources: {
@@ -17,6 +17,13 @@ i18n.use(initReactI18next).init({
                 Account: "Account",
                 Settings: "Settings",
                 Other: "Other",
+                Profile: "Profile1",
+                Password: "Password1",
+                Team: "Team1",
+                Support: "Support",
+                Discussions: "Discussion",
+                Docs: "Docs",
+                Changelog: "Changelog",
             },
         },
         es: {
@@ -29,7 +36,14 @@ i18n.use(initReactI18next).init({
                 Maintenance: "Mantenimiento",
                 Account: "Cuenta",
                 Settings: "Ajuste",
-                Other: "Otro"
+                Other: "Otro",
+                Profile: "Perfil",
+                Password: "Contraseña",
+                Team: "Equipo",
+                Support: "Apoyo",
+                Discussions: "Discusión",
+                Docs: "Documentos",
+                Changelog: "Registro de cambios",
             }
         }
     }
