@@ -1,11 +1,7 @@
 
 ## **Announcing $5000 grant funding in partnership with [UpRock](https://uprock.com) to build distributed uptime monitoring - check [our web page](https://checkmate.so) for funding ideas** 
 
-- If you would like to support us, please consider giving it a ⭐ and click on "watch". 
-- Have a question or suggestion for the roadmap/featureset? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.
-- Need a ping when there's a new release? Use [Newreleases](https://newreleases.io/), a free service to track releases.
-
-![Frame 34](https://github.com/user-attachments/assets/00db1520-24b6-42f2-aca2-a1c9794677da)
+![Frame 34](https://github.com/user-attachments/assets/4ecf2d6e-b3f9-47e9-9e31-b9cb8f3f00b9)
 
 ![](https://img.shields.io/github/license/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/repo-size/bluewave-labs/checkmate)
@@ -61,22 +57,28 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 
 **Short term roadmap:**
 
-- Port monitoring (**complete**, waiting to be deployed to stable version)
-- Global (distributed) uptime checking on Solana network (**in progress**)
-- Status pages (**in progress**)
-- Better notification options (Webhooks, Discord, Telegram, Slack)
+- Port monitoring (**complete**, waiting to be deployed to stable version) https://github.com/bluewave-labs/Checkmate/issues/1476
+- Global (distributed) uptime checking on Solana network (**in progress**) 
+- Status pages (**in progress**) https://github.com/bluewave-labs/Checkmate/issues/1131 
+- Translations (i18n) (**in progress**)
+- Better notification options (Webhooks, Discord, Telegram, Slack) https://github.com/bluewave-labs/Checkmate/issues/1545
+- Server security monitoring 
+- Command line interface (CLI) https://github.com/bluewave-labs/Checkmate/issues/1558
+- JSON query monitoring https://github.com/bluewave-labs/Checkmate/issues/1573
 - More configuration options
-- Translations
-- Tagging/grouping monitors
+- Tagging/grouping monitors https://github.com/bluewave-labs/Checkmate/issues/1546
 - DNS monitoring
 
 ## 🏗️ Screenshots
-
+<p>
 <img width="2714" alt="server" src="https://github.com/user-attachments/assets/f7cb272a-69a6-48c5-93b0-249ecf20ecc6" />
+</p>
 <p>
 <img width="2714" alt="uptime" src="https://github.com/user-attachments/assets/98ddc6c0-3384-47fd-96ce-7e53e6b688ac" />
+</p>
 <p>
 <img width="2714" alt="page speed" src="https://github.com/user-attachments/assets/b5589f79-da30-4239-9846-1f8bb2637ff9" />
+</p>
 
 ## 🏗️ Tech stack
 
@@ -86,6 +88,13 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 - [MongoDB](https://mongodb.com)
 - [Recharts](https://recharts.org)
 - Lots of other open source components!
+
+## A few links 
+
+- If you would like to support us, please consider giving it a ⭐ and click on "watch". 
+- Have a question or suggestion for the roadmap/featureset? Check our [Discord channel](https://discord.gg/NAb6H3UTjK) or [Discussions](https://github.com/bluewave-labs/checkmate/discussions) forum.
+- Need a ping when there's a new release? Use [Newreleases](https://newreleases.io/), a free service to track releases.
+- Watch a Checkmate [installation and usage video](https://www.youtube.com/watch?v=GfFOc0xHIwY)
 
 ## 🤝 Contributing
 
