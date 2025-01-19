@@ -11,6 +11,10 @@ import { getAppSettings } from "./Features/Settings/settingsSlice";
 import { logger } from "./Utils/Logger"; // Import the logger
 import { networkService } from "./main";
 import { Routes } from "./Routes";
+import { useTranslation } from "react-i18next";
+
+// import "./i18n"
+
 
 function App() {
 	const mode = useSelector((state) => state.ui.mode);
@@ -29,6 +33,12 @@ function App() {
 			logger.cleanup();
 			networkService.cleanup();
 		};
+	}, []);
+
+	const { i18n } = useTranslation();
+
+	useEffect(() => {
+		i18n.changeLanguage(navigator.language)
 	}, []);
 
 	return (

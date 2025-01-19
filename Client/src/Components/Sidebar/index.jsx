@@ -18,6 +18,7 @@ import {
 import { useLocation, useNavigate } from "react-router";
 import { useTheme } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { clearAuthState } from "../../Features/Auth/authSlice";
 import { toggleSidebar } from "../../Features/UI/uiSlice";
 import { clearUptimeMonitorState } from "../../Features/UptimeMonitors/uptimeMonitorsSlice";
@@ -45,45 +46,10 @@ import Docs from "../../assets/icons/docs.svg?react";
 import Folder from "../../assets/icons/folder.svg?react";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 
-import "./index.css";
+import "../../../../Client/src/i18n"
 
-const menu = [
-	{ name: "Uptime", path: "uptime", icon: <Monitors /> },
-	{ name: "Pagespeed", path: "pagespeed", icon: <PageSpeed /> },
-	{ name: "Infrastructure", path: "infrastructure", icon: <Integrations /> },
-	{ name: "Incidents", path: "incidents", icon: <Incidents /> },
-	// { name: "Status pages", path: "status", icon: <StatusPages /> },
-	{ name: "Maintenance", path: "maintenance", icon: <Maintenance /> },
-	// { name: "Integrations", path: "integrations", icon: <Integrations /> },
-	{
-		name: "Account",
-		icon: <Account />,
-		nested: [
-			{ name: "Profile", path: "account/profile", icon: <UserSvg /> },
-			{ name: "Password", path: "account/password", icon: <LockSvg /> },
-			{ name: "Team", path: "account/team", icon: <TeamSvg /> },
-		],
-	},
-	{
-		name: "Settings",
-		icon: <Settings />,
-		path: "settings",
-	},
-	{
-		name: "Other",
-		icon: <Folder />,
-		nested: [
-			{ name: "Support", path: "support", icon: <Support /> },
-			{
-				name: "Discussions",
-				path: "discussions",
-				icon: <ChatBubbleOutlineRoundedIcon />,
-			},
-			{ name: "Docs", path: "docs", icon: <Docs /> },
-			{ name: "Changelog", path: "changelog", icon: <ChangeLog /> },
-		],
-	},
-];
+
+import "./index.css";
 
 /* TODO this could be a key in nested Path would be the link */
 const URL_MAP = {
@@ -119,6 +85,47 @@ function Sidebar() {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popup, setPopup] = useState();
 	const { user } = useSelector((state) => state.auth);
+	
+	const { t } = useTranslation();
+	
+
+	const menu = [
+		{ name: t("Uptime"), path: "uptime", icon: <Monitors /> },
+		{ name: t("Pagespeed"), path: "pagespeed", icon: <PageSpeed /> },
+		{ name: t("Infrastructure"), path: "infrastructure", icon: <Integrations /> },
+		{ name: t("Incidents"), path: "incidents", icon: <Incidents /> },
+		// { name: "Status pages", path: "status", icon: <StatusPages /> },
+		{ name: t("Maintenance"), path: "maintenance", icon: <Maintenance /> },
+		// { name: "Integrations", path: "integrations", icon: <Integrations /> },
+		{
+			name: t("Account"),
+			icon: <Account />,
+			nested: [
+				{ name: "Profile", path: "account/profile", icon: <UserSvg /> },
+				{ name: "Password", path: "account/password", icon: <LockSvg /> },
+				{ name: "Team", path: "account/team", icon: <TeamSvg /> },
+			],
+		},
+		{
+			name: t("Settings"),
+			icon: <Settings />,
+			path: "settings",
+		},
+		{
+			name: t("Other"),
+			icon: <Folder />,
+			nested: [
+				{ name: "Support", path: "support", icon: <Support /> },
+				{
+					name: "Discussions",
+					path: "discussions",
+					icon: <ChatBubbleOutlineRoundedIcon />,
+				},
+				{ name: "Docs", path: "docs", icon: <Docs /> },
+				{ name: "Changelog", path: "changelog", icon: <ChangeLog /> },
+			],
+		},
+	];
 
 	const accountMenuItem = menu.find((item) => item.name === "Account");
 	if (user.role?.includes("demo") && accountMenuItem) {
@@ -265,7 +272,7 @@ function Sidebar() {
 							backgroundColor: "transparent",
 						}}
 					>
-						Menu
+						{t("menu")}
 					</ListSubheader>
 				}
 				sx={{
