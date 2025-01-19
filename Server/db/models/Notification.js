@@ -14,11 +14,14 @@ const NotificationSchema = mongoose.Schema(
 			type: String,
 			validate: {
 				validator: function(v) {
-					return !this.type || 
-						   this.type !== 'apprise' || 
-						   /^[a-zA-Z]+:\/\//.test(v);
+					if (this.type !== 'apprise') return true;
+					if (!v || v.length > 2048) return false;
+					
+					// Apprise URL format: scheme://[user:pass@]host[:port]/path
+					const appriseUrlRegex = /^[a-zA-Z]+:\/\/([^:\s]+:[^@\s]+@)?[^\s\/:]+(:\d+)?(\/[^\s]*)?$/;
+					return appriseUrlRegex.test(v);
 				},
-				message: 'Invalid Apprise URL format'
+				message: 'Invalid Apprise URL: Must be a valid service URL under 2048 characters'
 			}
 		},
 		address: {
