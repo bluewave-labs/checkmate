@@ -100,6 +100,7 @@ const successMessages = {
 	MONITOR_GET_ALL: "Got all monitors successfully",
 	MONITOR_STATS_BY_ID: "Got monitor stats by Id successfully",
 	MONITOR_GET_BY_ID: "Got monitor by Id successfully",
+	MONITOR_GET_BY_TEAM_ID: "Got monitors by Team Id successfully",
 	MONITOR_GET_BY_USER_ID: (userId) => `Got monitor for ${userId} successfully"`,
 	MONITOR_CREATE: "Monitor created successfully",
 	MONITOR_DELETE: "Monitor deleted successfully",
