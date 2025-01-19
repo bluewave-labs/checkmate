@@ -1,7 +1,7 @@
 
 ## **Announcing $5000 grant funding in partnership with [UpRock](https://uprock.com) to build distributed uptime monitoring - check [our web page](https://checkmate.so) for funding ideas** 
 
-![Frame 34](https://github.com/user-attachments/assets/00db1520-24b6-42f2-aca2-a1c9794677da)
+![Frame 34](https://github.com/user-attachments/assets/4ecf2d6e-b3f9-47e9-9e31-b9cb8f3f00b9)
 
 ![](https://img.shields.io/github/license/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/repo-size/bluewave-labs/checkmate)
@@ -70,12 +70,15 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 - DNS monitoring
 
 ## 🏗️ Screenshots
-
+<p>
 <img width="2714" alt="server" src="https://github.com/user-attachments/assets/f7cb272a-69a6-48c5-93b0-249ecf20ecc6" />
+</p>
 <p>
 <img width="2714" alt="uptime" src="https://github.com/user-attachments/assets/98ddc6c0-3384-47fd-96ce-7e53e6b688ac" />
+</p>
 <p>
 <img width="2714" alt="page speed" src="https://github.com/user-attachments/assets/b5589f79-da30-4239-9846-1f8bb2637ff9" />
+</p>
 
 ## 🏗️ Tech stack
 
