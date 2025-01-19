@@ -1,8 +1,21 @@
 apprise-api:
-  image: caronc/apprise-api:latest
+  image: caronc/apprise-api:1.2.0
   container_name: apprise-api
   ports:
     - "8000:8000"
   environment:
     - APPRISE_STATELESS_MODE=yes
-  restart: unless-stopped 
+  restart: unless-stopped
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+    interval: 30s
+    timeout: 10s
+    retries: 3
+  deploy:
+    resources:
+      limits:
+        cpus: '0.50'
+        memory: 256M
+      reservations:
+        cpus: '0.25'
+        memory: 128M 
