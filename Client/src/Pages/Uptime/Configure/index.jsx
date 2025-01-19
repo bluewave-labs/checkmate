@@ -387,24 +387,6 @@ const Configure = () => {
 									value={user?.email}
 									onChange={(event) => handleChange(event)}
 								/>
-								{monitor?.notifications?.some(
-									(notification) => notification.type === "emails"
-								) ? (
-									<Box mx={theme.spacing(16)}>
-										<TextInput
-											id="notify-email-list"
-											type="text"
-											placeholder="name@gmail.com"
-											value=""
-											onChange={() => logger.warn("disabled")}
-										/>
-										<Typography mt={theme.spacing(4)}>
-											You can separate multiple emails with a comma
-										</Typography>
-									</Box>
-								) : (
-									""
-								)}
 							</Stack>
 						</ConfigBox>
 						<ConfigBox>
