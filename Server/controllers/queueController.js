@@ -11,8 +11,7 @@ class JobQueueController {
 	getMetrics = async (req, res, next) => {
 		try {
 			const metrics = await this.jobQueue.getMetrics();
-			res.status(200).json({
-				success: true,
+			res.successs({
 				msg: successMessages.QUEUE_GET_METRICS,
 				data: metrics,
 			});
@@ -25,8 +24,7 @@ class JobQueueController {
 	getJobs = async (req, res, next) => {
 		try {
 			const jobs = await this.jobQueue.getJobStats();
-			return res.status(200).json({
-				success: true,
+			return res.successs({
 				msg: successMessages.QUEUE_GET_METRICS,
 				data: jobs,
 			});
@@ -39,8 +37,7 @@ class JobQueueController {
 	addJob = async (req, res, next) => {
 		try {
 			await this.jobQueue.addJob(Math.random().toString(36).substring(7));
-			return res.status(200).json({
-				success: true,
+			return res.successs({
 				msg: successMessages.QUEUE_ADD_JOB,
 			});
 		} catch (error) {
@@ -52,9 +49,9 @@ class JobQueueController {
 	obliterateQueue = async (req, res, next) => {
 		try {
 			await this.jobQueue.obliterate();
-			return res
-				.status(200)
-				.json({ success: true, msg: successMessages.QUEUE_OBLITERATE });
+			return res.successs({
+				msg: successMessages.QUEUE_OBLITERATE,
+			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "obliterateQueue"));
 			return;
