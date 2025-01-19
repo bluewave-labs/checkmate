@@ -83,6 +83,7 @@ const successMessages = {
 	AUTH_ADMIN_CHECK: "Admin check completed successfully",
 	AUTH_DELETE_USER: "User deleted successfully",
 	AUTH_TOKEN_REFRESHED: "Auth token is refreshed",
+	AUTH_GET_ALL_USERS: "Got all users successfully",
 
 	// Check Controller
 	CHECK_CREATE: "Check created successfully",

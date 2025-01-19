@@ -115,8 +115,7 @@ class AuthController {
 					});
 				});
 
-			return res.status(200).json({
-				success: true,
+			res.success({
 				msg: successMessages.AUTH_CREATE_USER,
 				data: { user: newUser, token: token, refreshToken: refreshToken },
 			});
@@ -174,10 +173,13 @@ class AuthController {
 			// reset avatar image
 			userWithoutPassword.avatarImage = user.avatarImage;
 
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.AUTH_LOGIN_USER,
-				data: { user: userWithoutPassword, token: token, refreshToken: refreshToken },
+				data: {
+					user: userWithoutPassword,
+					token: token,
+					refreshToken: refreshToken,
+				},
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "loginUser"));
@@ -237,8 +239,7 @@ class AuthController {
 				appSettings
 			);
 
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.AUTH_TOKEN_REFRESHED,
 				data: { user: payloadData, token: newAuthToken, refreshToken: refreshToken },
 			});
@@ -306,8 +307,7 @@ class AuthController {
 			}
 
 			const updatedUser = await this.db.updateUser(req, res);
-			return res.status(200).json({
-				success: true,
+			res.success({
 				msg: successMessages.AUTH_UPDATE_USER,
 				data: updatedUser,
 			});
@@ -328,8 +328,8 @@ class AuthController {
 	checkSuperadminExists = async (req, res, next) => {
 		try {
 			const superAdminExists = await this.db.checkSuperadmin(req, res);
-			return res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.AUTH_ADMIN_EXISTS,
 				data: superAdminExists,
 			});
@@ -375,8 +375,7 @@ class AuthController {
 				"Checkmate Password Reset"
 			);
 
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.AUTH_CREATE_RECOVERY_TOKEN,
 				data: msgId,
 			});
@@ -406,8 +405,8 @@ class AuthController {
 
 		try {
 			await this.db.validateRecoveryToken(req, res);
-			return res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.AUTH_VERIFY_RECOVERY_TOKEN,
 			});
 		} catch (error) {
@@ -439,8 +438,8 @@ class AuthController {
 			const user = await this.db.resetPassword(req, res);
 			const appSettings = await this.settingsService.getSettings();
 			const token = this.issueToken(user._doc, tokenType.ACCESS_TOKEN, appSettings);
-			res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.AUTH_RESET_PASSWORD,
 				data: { user, token },
 			});
@@ -493,8 +492,8 @@ class AuthController {
 			}
 			// 6. Delete the user by id
 			await this.db.deleteUser(user._id);
-			return res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.AUTH_DELETE_USER,
 			});
 		} catch (error) {
@@ -505,7 +504,11 @@ class AuthController {
 	getAllUsers = async (req, res, next) => {
 		try {
 			const allUsers = await this.db.getAllUsers(req, res);
-			res.status(200).json({ success: true, msg: "Got all users", data: allUsers });
+
+			return res.success({
+				msg: successMessages.AUTH_GET_ALL_USERS,
+				data: allUsers,
+			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "getAllUsersController"));
 		}
