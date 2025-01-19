@@ -73,6 +73,7 @@ const successMessages = {
 	ALERT_EDIT: "Alert edited successfully",
 	ALERT_DELETE: "Alert deleted successfully",
 
+	// Auth Controller
 	AUTH_CREATE_USER: "User created successfully",
 	AUTH_LOGIN_USER: "User logged in successfully",
 	AUTH_LOGOUT_USER: "User logged out successfully",
@@ -84,6 +85,10 @@ const successMessages = {
 	AUTH_DELETE_USER: "User deleted successfully",
 	AUTH_TOKEN_REFRESHED: "Auth token is refreshed",
 	AUTH_GET_ALL_USERS: "Got all users successfully",
+
+	// Invite Controller
+	INVITE_ISSUED: "Invite sent successfully",
+	INVITE_VERIFIED: "Invite verified successfully",
 
 	// Check Controller
 	CHECK_CREATE: "Check created successfully",
