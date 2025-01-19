@@ -34,9 +34,11 @@ class CheckController {
 		try {
 			const checkData = { ...req.body };
 			const check = await this.db.createCheck(checkData);
-			return res
-				.status(200)
-				.json({ success: true, msg: successMessages.CHECK_CREATE, data: check });
+
+			return res.success({
+				msg: successMessages.CHECK_CREATE,
+				data: check,
+			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "createCheck"));
 		}
@@ -54,8 +56,8 @@ class CheckController {
 		try {
 			const checks = await this.db.getChecks(req);
 			const checksCount = await this.db.getChecksCount(req);
-			return res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.CHECK_GET,
 				data: { checksCount, checks },
 			});
@@ -74,8 +76,8 @@ class CheckController {
 		}
 		try {
 			const checkData = await this.db.getTeamChecks(req);
-			return res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.CHECK_GET,
 				data: checkData,
 			});
@@ -94,8 +96,8 @@ class CheckController {
 
 		try {
 			const deletedCount = await this.db.deleteChecks(req.params.monitorId);
-			return res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.CHECK_DELETE,
 				data: { deletedCount },
 			});
@@ -114,8 +116,8 @@ class CheckController {
 
 		try {
 			const deletedCount = await this.db.deleteChecksByTeamId(req.params.teamId);
-			return res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.CHECK_DELETE,
 				data: { deletedCount },
 			});
@@ -141,8 +143,8 @@ class CheckController {
 			const { teamId } = jwt.verify(token, jwtSecret);
 			const ttl = parseInt(req.body.ttl, 10) * SECONDS_PER_DAY;
 			await this.db.updateChecksTTL(teamId, ttl);
-			return res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.CHECK_UPDATE_TTL,
 			});
 		} catch (error) {
