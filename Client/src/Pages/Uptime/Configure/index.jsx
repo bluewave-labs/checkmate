@@ -376,6 +376,7 @@ const Configure = () => {
 							</Box>
 							<Stack gap={theme.spacing(6)}>
 								<Typography component="p">When there is a new incident,</Typography>
+								{/* {Leaving components commented for future funtionality implimentation} */}
 								{/* <Checkbox
 									id="notify-sms"
 									label="Notify via SMS (coming soon)"
