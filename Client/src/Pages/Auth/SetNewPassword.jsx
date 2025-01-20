@@ -13,7 +13,7 @@ import TextInput from "../../Components/Inputs/TextInput";
 import { PasswordEndAdornment } from "../../Components/Inputs/TextInput/Adornments";
 import IconBox from "../../Components/IconBox";
 import LockIcon from "../../assets/icons/lock.svg?react";
-import Logo from "../../assets/icons/bwu-icon.svg?react";
+import Logo from "../../assets/icons/checkmate-icon.svg?react";
 import Background from "../../assets/Images/background-grid.svg?react";
 import "./index.css";
 import { useValidatePassword } from "./hooks/useValidatePassword";
@@ -96,7 +96,7 @@ const SetNewPassword = () => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Typography sx={{ userSelect: "none" }}>Checkmate</Typography>
 			</Stack>
 			<Stack
 				width="100%"
