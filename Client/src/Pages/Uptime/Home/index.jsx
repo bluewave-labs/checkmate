@@ -110,7 +110,7 @@ const UptimeMonitors = () => {
 			setMonitorsSummary(summary);
 		} catch (error) {
 			createToast({
-				body: "Error fetching monitors",
+				body: error.message,
 			});
 		} finally {
 			setIsLoading(false);
@@ -140,7 +140,7 @@ const UptimeMonitors = () => {
 		setMonitorUpdateTrigger((prev) => !prev);
 	}, []);
 	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
-	const hasMonitors = monitorsSummary?.totalMonitors ?? 0;
+	const hasMonitors = totalMonitors > 0;
 	const canAddMonitor = isAdmin && hasMonitors;
 
 	return (

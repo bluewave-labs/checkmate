@@ -27,7 +27,13 @@ class NetworkService {
 		this.axiosInstance.interceptors.response.use(
 			(response) => response,
 			(error) => {
-				this.handleError(error);
+				if (!error.request && error.response && error.response.status === 401) {
+					dispatch(clearAuthState());
+					dispatch(clearUptimeMonitorState());
+					navigate("/login");
+				} else if (error.request && !error.response) {
+					return Promise.reject(error);
+				}
 				return Promise.reject(error);
 			}
 		);
@@ -36,29 +42,6 @@ class NetworkService {
 	setBaseUrl = (url) => {
 		this.axiosInstance.defaults.baseURL = url;
 	};
-
-	handleError(error) {
-		if (error.response) {
-			const status = error.response.status;
-			if (status === 401) {
-				this.dispatch(clearAuthState());
-				this.dispatch(clearUptimeMonitorState());
-				this.navigate("/login");
-			} else if (status >= 500) {
-				// Display toast for server errors to all users
-				createToast({
-					variant: "error",
-					body: "Checkmate server is not running or has issues. Please check.",
-				});
-			}
-		} else if (error.request) {
-			// Show a toast informing the user the server didn't respond
-			createToast({
-				variant: "error",
-				body: "The server did not respond. Please check your network or try again later.",
-			});
-		}
-	}
 
 	cleanup() {
 		if (this.unsubscribe) {
