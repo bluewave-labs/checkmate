@@ -655,6 +655,7 @@ const buildDistributedUptimeDetailsPipeline = (monitor, dates, dateString) => {
 						$project: {
 							responseTime: 1,
 							city: 1,
+							countryCode: 1,
 						},
 					},
 				],
