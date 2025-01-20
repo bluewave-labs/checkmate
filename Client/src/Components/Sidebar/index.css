@@ -49,6 +49,12 @@ aside .MuiList-root .MuiListItemText-root + svg {
 	opacity: 0.9;
 }
 
+.user-context-menu .user-name { 
+	white-space: nowrap; 
+	overflow: hidden; 
+	text-overflow: ellipsis; 
+}
+
 /* TRANSITIONS */
 aside {
 	flex: 1;
