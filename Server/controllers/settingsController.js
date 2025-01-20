@@ -34,7 +34,7 @@ class SettingsController {
 			await this.db.updateAppSettings(req.body);
 			const updatedSettings = { ...(await this.settingsService.reloadSettings()) };
 			delete updatedSettings.jwtSecret;
-			return res.successs({
+			return res.success({
 				msg: successMessages.UPDATE_APP_SETTINGS,
 				data: updatedSettings,
 			});

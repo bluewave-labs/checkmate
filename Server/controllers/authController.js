@@ -153,7 +153,9 @@ class AuthController {
 			// Compare password
 			const match = await user.comparePassword(password);
 			if (match !== true) {
-				next(new Error(errorMessages.AUTH_INCORRECT_PASSWORD));
+				const error = new Error(errorMessages.AUTH_INCORRECT_PASSWORD);
+				error.status = 401;
+				next(error);
 				return;
 			}
 
@@ -182,6 +184,7 @@ class AuthController {
 				},
 			});
 		} catch (error) {
+			error.status = 401;
 			next(handleError(error, SERVICE_NAME, "loginUser"));
 		}
 	};
