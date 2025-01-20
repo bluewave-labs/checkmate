@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createToast } from "../../../Utils/toastUtils";
 import { networkService } from "../../../main";
 import Background from "../../../assets/Images/background-grid.svg?react";
-import Logo from "../../../assets/icons/bwu-icon.svg?react";
+import Logo from "../../../assets/icons/checkmate-icon.svg?react";
 import { logger } from "../../../Utils/Logger";
 import "../index.css";
 import EmailStep from "./Components/EmailStep";

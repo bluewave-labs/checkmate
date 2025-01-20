@@ -12,7 +12,7 @@ import { credentials } from "../../../Validation/validation";
 import { createToast } from "../../../Utils/toastUtils";
 import { register } from "../../../Features/Auth/authSlice";
 import Background from "../../../assets/Images/background-grid.svg?react";
-import Logo from "../../../assets/icons/bwu-icon.svg?react";
+import Logo from "../../../assets/icons/checkmate-icon.svg?react";
 import Mail from "../../../assets/icons/mail.svg?react";
 import "../index.css";
 
