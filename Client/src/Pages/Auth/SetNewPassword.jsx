@@ -13,7 +13,6 @@ import TextInput from "../../Components/Inputs/TextInput";
 import { PasswordEndAdornment } from "../../Components/Inputs/TextInput/Adornments";
 import IconBox from "../../Components/IconBox";
 import LockIcon from "../../assets/icons/lock.svg?react";
-import Logo from "../../assets/icons/bwu-icon.svg?react";
 import Background from "../../assets/Images/background-grid.svg?react";
 import "./index.css";
 import { useValidatePassword } from "./hooks/useValidatePassword";
@@ -95,8 +94,24 @@ const SetNewPassword = () => {
 				px={theme.spacing(12)}
 				gap={theme.spacing(4)}
 			>
-				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Stack
+					justifyContent="center"
+					alignItems="center"
+					minWidth={theme.spacing(16)}
+					minHeight={theme.spacing(16)}
+					pl="1px"
+					fontSize={18}
+					color="white"
+					sx={{
+						position: "relative",
+						backgroundColor: theme.palette.primary.main,
+						borderRadius: theme.shape.borderRadius,
+						userSelect: "none",
+					}}
+				>
+					P
+				</Stack>
+				<Typography sx={{ userSelect: "none" }}>Prism</Typography>
 			</Stack>
 			<Stack
 				width="100%"
