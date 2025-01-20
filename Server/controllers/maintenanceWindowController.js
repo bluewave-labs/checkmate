@@ -43,8 +43,8 @@ class MaintenanceWindowController {
 				});
 			});
 			await Promise.all(dbTransactions);
-			return res.status(201).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.MAINTENANCE_WINDOW_CREATE,
 			});
 		} catch (error) {
@@ -61,8 +61,8 @@ class MaintenanceWindowController {
 		}
 		try {
 			const maintenanceWindow = await this.db.getMaintenanceWindowById(req.params.id);
-			return res.status(200).json({
-				success: true,
+
+			return res.success({
 				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_ID,
 				data: maintenanceWindow,
 			});
@@ -88,8 +88,7 @@ class MaintenanceWindowController {
 				req.query
 			);
 
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_TEAM,
 				data: maintenanceWindows,
 			});
@@ -111,8 +110,7 @@ class MaintenanceWindowController {
 				req.params.monitorId
 			);
 
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_USER,
 				data: maintenanceWindows,
 			});
@@ -130,8 +128,7 @@ class MaintenanceWindowController {
 		}
 		try {
 			await this.db.deleteMaintenanceWindowById(req.params.id);
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MAINTENANCE_WINDOW_DELETE,
 			});
 		} catch (error) {
@@ -152,8 +149,7 @@ class MaintenanceWindowController {
 				req.params.id,
 				req.body
 			);
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MAINTENANCE_WINDOW_EDIT,
 				data: editedMaintenanceWindow,
 			});
