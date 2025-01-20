@@ -289,7 +289,7 @@ const TeamPanel = () => {
 				>
 					<LoadingButton
 						loading={isSendingInvite}
-						variant="text"
+						variant="contained" // CAIO_REVIEW
 						color="error"
 						onClick={closeInviteModal}
 					>

@@ -69,7 +69,7 @@ const UpBarChart = memo(({ monitor, type, onBarHover }) => {
 									hoveredBarIndex === index
 										? theme.palette[themeColor].main
 										: chartHovered
-											? theme.palette[themeColor].accent
+											? theme.palette[themeColor].light // CAIO_REVIEW
 											: theme.palette[themeColor].main
 								}
 								onMouseEnter={() => {

@@ -1,3 +1,5 @@
+import { lighten } from "@mui/material/styles"; // CAIO_REVIEW
+
 const typographyBase = 14;
 
 /* TODO
@@ -121,6 +123,10 @@ const newSemanticColors = {
 		main: {
 			light: newColors.blueBlueWave,
 			dark: newColors.blueBlueWave,
+		},
+		light: {
+			light: lighten(newColors.blueBlueWave, 0.2), //CAIO_REVIEW
+			dark: lighten(newColors.blueBlueWave, 0.2), //CAIO_REVIEW
 		},
 		contrastText: {
 			light: newColors.offWhite,

@@ -53,26 +53,28 @@ const DownBarChart = memo(({ monitor, type, onBarHover }) => {
 					maxBarSize={7}
 					background={{ fill: "transparent" }}
 				>
-					{monitor.groupedDownChecks.map((entry, index) => (
-						<Cell
-							key={`cell-${entry.time}`}
-							fill={
-								hoveredBarIndex === index
-									? theme.palette.error.main
-									: chartHovered
-										? theme.palette.error.contrastText
-										: theme.palette.error.main
-							}
-							onMouseEnter={() => {
-								setHoveredBarIndex(index);
-								onBarHover(entry);
-							}}
-							onMouseLeave={() => {
-								setHoveredBarIndex(null);
-								onBarHover({ time: null, totalChecks: 0 });
-							}}
-						/>
-					))}
+					{monitor.groupedDownChecks.map((entry, index) => {
+						return (
+							<Cell
+								key={`cell-${entry.time}`}
+								fill={
+									hoveredBarIndex === index
+										? theme.palette.error.main
+										: chartHovered
+											? theme.palette.error.light // CAIO_REVIEW
+											: theme.palette.error.main
+								}
+								onMouseEnter={() => {
+									setHoveredBarIndex(index);
+									onBarHover(entry);
+								}}
+								onMouseLeave={() => {
+									setHoveredBarIndex(null);
+									onBarHover({ time: null, totalChecks: 0 });
+								}}
+							/>
+						);
+					})}
 				</Bar>
 			</BarChart>
 		</ResponsiveContainer>

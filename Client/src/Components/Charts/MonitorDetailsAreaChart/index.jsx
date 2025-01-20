@@ -139,7 +139,6 @@ const MonitorDetailsAreaChart = ({ checks, dateRange }) => {
 	const theme = useTheme();
 	const memoizedChecks = useMemo(() => checks, [checks[0]]);
 	const [isHovered, setIsHovered] = useState(false);
-
 	return (
 		<ResponsiveContainer
 			width="100%"
@@ -176,12 +175,12 @@ const MonitorDetailsAreaChart = ({ checks, dateRange }) => {
 					>
 						<stop
 							offset="0%"
-							stopColor={theme.palette.primary.main}
+							stopColor={theme.palette.accent.main}
 							stopOpacity={0.8}
 						/>
 						<stop
 							offset="100%"
-							stopColor={theme.palette.primary.light}
+							stopColor={theme.palette.accent.light}
 							stopOpacity={0}
 						/>
 					</linearGradient>
@@ -202,10 +201,10 @@ const MonitorDetailsAreaChart = ({ checks, dateRange }) => {
 				<Area
 					type="monotone"
 					dataKey="avgResponseTime"
-					stroke={theme.palette.primary.main}
+					stroke={theme.palette.accent.main} // CAIO_REVIEW
 					fill="url(#colorUv)"
 					strokeWidth={isHovered ? 2.5 : 1.5}
-					activeDot={{ stroke: theme.palette.primary.main, r: 5 }}
+					activeDot={{ stroke: theme.palette.accent.main, r: 5 }} // CAIO_REVIEW
 				/>
 			</AreaChart>
 		</ResponsiveContainer>

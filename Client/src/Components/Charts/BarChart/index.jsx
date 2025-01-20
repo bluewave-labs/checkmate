@@ -39,7 +39,9 @@ const BarChart = ({ checks = [] }) => {
 		>
 			{checks.map((check, index) =>
 				check === "placeholder" ? (
-					/* TODO what is the purpose of this box? */
+					/* TODO what is the purpose of this box? 	*/
+					// CAIO_REVIEW the purpose of this box is to make sure there are always at least 25 bars
+					// even if there are less than 25 checks
 					<Box
 						key={`${check}-${index}`}
 						position="relative"
@@ -143,7 +145,7 @@ const BarChart = ({ checks = [] }) => {
 							position="relative"
 							width="9px"
 							height="100%"
-							backgroundColor={theme.palette.tertiary.main}
+							backgroundColor={theme.palette.primary.lowContrast} // CAIO_REVIEW
 							sx={{
 								borderRadius: theme.spacing(1.5),
 								/* 

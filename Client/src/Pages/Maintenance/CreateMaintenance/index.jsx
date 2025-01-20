@@ -136,7 +136,7 @@ const CreateMaintenance = () => {
 				const response = await networkService.getMonitorsByTeamId({
 					authToken: authToken,
 					teamId: user.teamId,
-					limit: -1,
+					limit: null,
 					types: ["http", "ping", "pagespeed"],
 				});
 				const monitors = response.data.data.monitors;
@@ -360,7 +360,6 @@ const CreateMaintenance = () => {
 								<DatePicker
 									id="startDate"
 									disablePast
-									label="Date"
 									disableHighlightToday
 									value={form.startDate}
 									slots={{ openPickerIcon: CalendarIcon }}
@@ -398,6 +397,30 @@ const CreateMaintenance = () => {
 													strokeWidth: 1.1,
 												},
 												"&:hover": { backgroundColor: "transparent" },
+											},
+										},
+										// CAIO_REVIEW, entire popper
+										popper: {
+											sx: {
+												"& .MuiPickersDay-root": {
+													color: theme.palette.primary.contrastText,
+													"&.Mui-selected": {
+														backgroundColor: theme.palette.accent.main, // Selected day background
+														color: theme.palette.primary.contrastText, // Selected day text color
+													},
+													"&:hover": {
+														backgroundColor: theme.palette.accent.light, // Hover background
+													},
+													"&.Mui-disabled": {
+														color: theme.palette.primary.lowContrast, // Disabled day color
+													},
+												},
+												"& .MuiDayCalendar-weekDayLabel": {
+													color: theme.palette.primary.contrastText,
+												},
+												"& .MuiPickersCalendarHeader-label": {
+													color: theme.palette.primary.contrastText,
+												},
 											},
 										},
 									}}

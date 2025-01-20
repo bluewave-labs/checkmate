@@ -317,14 +317,14 @@ const ProfilePanel = () => {
 							sx={{ marginRight: "8px" }}
 						/>
 						<Button
-							variant="outlined"
+							variant="contained" // CAIO_REIVEW
 							color="error"
 							onClick={handleDeletePicture}
 						>
 							Delete
 						</Button>
 						<Button
-							variant="outlined"
+							variant="contained" // CAIO_REVIEW
 							color="accent"
 							onClick={openPictureModal}
 						>

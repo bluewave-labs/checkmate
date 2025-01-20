@@ -13,7 +13,12 @@ const getSx = (theme, type, maxWidth) => {
 			"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
 				borderColor: theme.palette.accent.main, // Adjust focus border color
 			},
+			"&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+				borderColor: theme.palette.primary.contrastText, // CAIO_REVIEW
+				opacity: 0.5,
+			},
 		},
+
 		"& .MuiFormHelperText-root": {
 			position: "absolute",
 			bottom: `-${theme.spacing(24)}`,
