@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 import { ThemeProvider } from "@emotion/react";
 import lightTheme from "./Utils/Theme/lightTheme";
 import darkTheme from "./Utils/Theme/darkTheme";
@@ -29,6 +30,12 @@ function App() {
 			logger.cleanup();
 			networkService.cleanup();
 		};
+	}, []);
+
+	const { i18n } = useTranslation();
+
+	useEffect(() => {
+		i18n.changeLanguage(navigator.language)
 	}, []);
 
 	return (
