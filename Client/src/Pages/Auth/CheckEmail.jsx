@@ -7,7 +7,7 @@ import { createToast } from "../../Utils/toastUtils";
 import { forgotPassword } from "../../Features/Auth/authSlice";
 import Background from "../../assets/Images/background-grid.svg?react";
 import EmailIcon from "../../assets/icons/email.svg?react";
-import Logo from "../../assets/icons/bwu-icon.svg?react";
+import Logo from "../../assets/icons/checkmate-icon.svg?react";
 import IconBox from "../../Components/IconBox";
 import "./index.css";
 
@@ -115,7 +115,7 @@ const CheckEmail = () => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Typography sx={{ userSelect: "none" }}>Checkmate</Typography>
 			</Stack>
 			<Stack
 				width="100%"

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { credentials } from "../../Validation/validation";
 import { useNavigate } from "react-router-dom";
 import TextInput from "../../Components/Inputs/TextInput";
-import Logo from "../../assets/icons/bwu-icon.svg?react";
+import Logo from "../../assets/icons/checkmate-icon.svg?react";
 import Key from "../../assets/icons/key.svg?react";
 import Background from "../../assets/Images/background-grid.svg?react";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -117,7 +117,7 @@ const ForgotPassword = () => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Typography sx={{ userSelect: "none" }}>Checkmate</Typography>
 			</Stack>
 			<Stack
 				width="100%"

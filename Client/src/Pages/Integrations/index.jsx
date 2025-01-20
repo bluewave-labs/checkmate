@@ -132,7 +132,7 @@ const Integrations = () => {
 		>
 			<Typography component="h1">Integrations</Typography>
 			<Typography mb={theme.spacing(12)}>
-				Connect BlueWave Uptime to your favorite service.
+				Connect Checkmate to your favorite service.
 			</Typography>
 			<Grid
 				container
