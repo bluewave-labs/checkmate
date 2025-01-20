@@ -181,7 +181,7 @@ const CreateMaintenance = () => {
 		setSearch(value);
 	};
 
-	const handleSelectMonitors = (monitors) => {
+	const handleSelectMonitors = (_, monitors) => {
 		setForm({ ...form, monitors });
 		const { error } = maintenanceWindowValidation.validate(
 			{ monitors },

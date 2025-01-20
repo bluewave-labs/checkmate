@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 		>
 			<Router>
 				<NetworkServiceProvider>
-					<App />
+						<App />
 				</NetworkServiceProvider>
 			</Router>
 		</PersistGate>
