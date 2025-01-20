@@ -958,6 +958,12 @@ class NetworkService {
 			onError?.();
 			this.eventSource.close();
 		};
+		return () => {
+			if (this.eventSource) {
+				this.eventSource.close();
+				this.eventSource = null;
+			}
+		};
 	}
 }
 

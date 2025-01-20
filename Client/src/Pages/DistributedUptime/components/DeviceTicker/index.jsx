@@ -87,9 +87,9 @@ const DeviceTicker = ({ data, width = "100%", connectionStatus }) => {
 			</Stack>
 			<List>
 				{data.slice(Math.max(data.length - 5, 0)).map((dataPoint) => {
-					console.log(dataPoint);
 					const countryCode = dataPoint?.countryCode?.toLowerCase() ?? null;
 					const flag = countryCode ? `fi fi-${countryCode}` : null;
+					const randomDevice = getRandomDevice();
 					return (
 						<ListItem key={Math.random()}>
 							<Stack direction="column">
@@ -102,7 +102,7 @@ const DeviceTicker = ({ data, width = "100%", connectionStatus }) => {
 									<Typography variant="h2">{dataPoint?.city || "Unknown"}</Typography>
 								</Stack>
 								<Typography variant="p">{`Response time: ${Math.floor(dataPoint?.responseTime ?? 0)} ms`}</Typography>
-								<Typography variant="p">{`${getRandomDevice().manufacturer} ${getRandomDevice().model}`}</Typography>
+								<Typography variant="p">{`${randomDevice.manufacturer} ${randomDevice.model}`}</Typography>
 							</Stack>
 						</ListItem>
 					);

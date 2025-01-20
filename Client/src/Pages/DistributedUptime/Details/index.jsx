@@ -105,6 +105,7 @@ const DistributedUptimeDetails = () => {
 		};
 
 		const cleanup = connectToService();
+		console.log(cleanup);
 		return cleanup;
 	}, [authToken, monitorId, dateRange, retryCount]);
 
