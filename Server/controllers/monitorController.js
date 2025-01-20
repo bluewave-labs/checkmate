@@ -105,7 +105,6 @@ class MonitorController {
 		try {
 			const monitorStats = await this.db.getMonitorStatsById(req);
 			return res.success({
-				success: true,
 				msg: successMessages.MONITOR_STATS_BY_ID,
 				data: monitorStats,
 			});

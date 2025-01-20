@@ -13,7 +13,7 @@ class SettingsController {
 		try {
 			const settings = { ...(await this.settingsService.getSettings()) };
 			delete settings.jwtSecret;
-			return res.successs({
+			return res.success({
 				msg: successMessages.GET_APP_SETTINGS,
 				data: settings,
 			});

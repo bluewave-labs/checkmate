@@ -7,7 +7,7 @@ const responseHandler = (req, res, next) => {
 		});
 	};
 
-	res.error = ({ status = 500, msg = "Internal server erro", data = null }) => {
+	res.error = ({ status = 500, msg = "Internal server error", data = null }) => {
 		return res.status(status).json({
 			success: false,
 			msg,

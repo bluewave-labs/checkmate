@@ -11,7 +11,7 @@ class JobQueueController {
 	getMetrics = async (req, res, next) => {
 		try {
 			const metrics = await this.jobQueue.getMetrics();
-			res.successs({
+			res.success({
 				msg: successMessages.QUEUE_GET_METRICS,
 				data: metrics,
 			});
@@ -24,7 +24,7 @@ class JobQueueController {
 	getJobs = async (req, res, next) => {
 		try {
 			const jobs = await this.jobQueue.getJobStats();
-			return res.successs({
+			return res.success({
 				msg: successMessages.QUEUE_GET_METRICS,
 				data: jobs,
 			});
@@ -37,7 +37,7 @@ class JobQueueController {
 	addJob = async (req, res, next) => {
 		try {
 			await this.jobQueue.addJob(Math.random().toString(36).substring(7));
-			return res.successs({
+			return res.success({
 				msg: successMessages.QUEUE_ADD_JOB,
 			});
 		} catch (error) {
@@ -49,7 +49,7 @@ class JobQueueController {
 	obliterateQueue = async (req, res, next) => {
 		try {
 			await this.jobQueue.obliterate();
-			return res.successs({
+			return res.success({
 				msg: successMessages.QUEUE_OBLITERATE,
 			});
 		} catch (error) {
