@@ -6,7 +6,6 @@ import { clearAuthState } from "../../Features/Auth/authSlice";
 import { clearUptimeMonitorState } from "../../Features/UptimeMonitors/uptimeMonitorsSlice";
 import Background from "../../assets/Images/background-grid.svg?react";
 import ConfirmIcon from "../../assets/icons/check-outlined.svg?react";
-import Logo from "../../assets/icons/prism-icon.svg?react";
 import IconBox from "../../Components/IconBox";
 import "./index.css";
 
@@ -50,7 +49,23 @@ const NewPasswordConfirmed = () => {
 				px={theme.spacing(12)}
 				gap={theme.spacing(4)}
 			>
-				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
+				<Stack
+					justifyContent="center"
+					alignItems="center"
+					minWidth={theme.spacing(16)}
+					minHeight={theme.spacing(16)}
+					pl="1px"
+					fontSize={18}
+					color="white"
+					sx={{
+						position: "relative",
+						backgroundColor: theme.palette.primary.main,
+						borderRadius: theme.shape.borderRadius,
+						userSelect: "none",
+					}}
+				>
+					P
+				</Stack>
 				<Typography sx={{ userSelect: "none" }}>Prism</Typography>
 			</Stack>
 			<Stack

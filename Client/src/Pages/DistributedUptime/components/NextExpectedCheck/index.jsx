@@ -21,7 +21,7 @@ const NextExpectedCheck = ({ lastUpdateTime, interval, trigger }) => {
 			<Box sx={{ width: "100%" }}>
 				<LinearProgress
 					variant="determinate"
-					value={(elapsedMs / interval) * 100}
+					value={Math.min((elapsedMs / interval) * 100, 100)}
 				/>
 			</Box>
 		</Stack>

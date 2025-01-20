@@ -23,6 +23,7 @@
 		"@reduxjs/toolkit": "2.5.0",
 		"axios": "^1.7.4",
 		"dayjs": "1.11.13",
+		"flag-icons": "7.3.2",
 		"joi": "17.13.3",
 		"jwt-decode": "^4.0.0",
 		"maplibre-gl": "5.0.0",
