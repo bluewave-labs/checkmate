@@ -7,6 +7,9 @@ import { persistor, store } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
 import NetworkServiceProvider from "./Utils/NetworkServiceProvider.jsx";
 import { networkService } from "./Utils/NetworkService";
+import { TolgeeProvider, DevTools } from "@tolgee/react";
+import tolgee from "./Utils/tolgee";
+
 export { networkService };
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -17,7 +20,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 		>
 			<Router>
 				<NetworkServiceProvider>
-					<App />
+					<TolgeeProvider
+						tolgee={tolgee}
+						options={{
+							useSuspense: false,
+							preloadData: true,
+						}}
+					>
+						<App />
+						{import.meta.env.DEV && <DevTools />}
+					</TolgeeProvider>
 				</NetworkServiceProvider>
 			</Router>
 		</PersistGate>

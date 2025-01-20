@@ -1,0 +1,11 @@
+{
+  "login": {
+    "dontHaveAccount": "Hesabınız yok mu?",
+    "email": "E-posta",
+    "forgotPassword": "Şifremi Unuttum",
+    "password": "Şifre",
+    "signUp": "Kayıt Ol",
+    "submit": "Giriş Yap",
+    "title": "Giriş Yap"
+  }
+}

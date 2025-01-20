@@ -3,6 +3,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import TextInput from "../../../../Components/Inputs/TextInput";
 import PropTypes from "prop-types";
+import { useTranslate } from "@tolgee/react";
 
 /**
  * Renders the email step of the login process which includes an email field.
@@ -12,12 +13,12 @@ import PropTypes from "prop-types";
  * @param {Object} props.errors - Object containing form validation errors.
  * @param {Function} props.onSubmit - Callback function to handle form submission.
  * @param {Function} props.onChange - Callback function to handle form input changes.
- * @param {Function} props.onBack - Callback function to handle "Back" button click.
  * @returns {JSX.Element}
  */
 const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 	const theme = useTheme();
 	const inputRef = useRef(null);
+	const { t } = useTranslate();
 
 	useEffect(() => {
 		if (inputRef.current) {
@@ -33,8 +34,8 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 				position="relative"
 			>
 				<Box>
-					<Typography component="h1">Log In</Typography>
-					<Typography>Enter your email address</Typography>
+					<Typography component="h1">{t("login.title")}</Typography>
+					<Typography>{t("login.email")}</Typography>
 				</Box>
 				<Box
 					textAlign="left"
@@ -48,7 +49,7 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 					<TextInput
 						type="email"
 						id="login-email-input"
-						label="Email"
+						label={t("login.email")}
 						isRequired={true}
 						placeholder="jordan.ellis@domain.com"
 						autoComplete="email"
@@ -61,8 +62,23 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 					/>
 					<Stack
 						direction="row"
-						justifyContent="flex-end"
+						justifyContent="space-between"
+						alignItems="center"
 					>
+						<Typography
+							variant="body2"
+							color="textSecondary"
+						>
+							{t("login.dontHaveAccount")}{" "}
+							<Typography
+								component="a"
+								href="/register"
+								color="primary"
+								sx={{ textDecoration: "none" }}
+							>
+								{t("login.signUp")}
+							</Typography>
+						</Typography>
 						<Button
 							variant="contained"
 							color="primary"
@@ -77,7 +93,7 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 								},
 							}}
 						>
-							Continue
+							{t("login.submit")}
 						</Button>
 					</Stack>
 				</Box>
