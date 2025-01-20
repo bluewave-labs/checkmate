@@ -10,9 +10,13 @@ COPY ../../Client .
 
 RUN npm run build
 
-FROM nginx:1.27.1-alpine
+# Serve the app directly
+FROM node:20-alpine
 
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY --from=build /app/env.sh /docker-entrypoint.d/env.sh
-RUN chmod +x /docker-entrypoint.d/env.sh
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /app
+
+COPY --from=build /app/dist .
+
+EXPOSE 80
+
+CMD ["npx", "http-server", "-p", "80", "."]

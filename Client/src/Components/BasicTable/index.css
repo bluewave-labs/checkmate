@@ -1,0 +1,130 @@
+.MuiTable-root .host {
+	width: fit-content;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.MuiTable-root .host span {
+	font-size: 11px;
+}
+
+.MuiTable-root .label {
+	line-height: 1;
+	border-radius: var(--env-var-radius-2);
+	padding: 7px;
+	font-size: var(--env-var-font-size-small-plus);
+}
+
+.MuiPaper-root:has(table.MuiTable-root) {
+	box-shadow: none;
+}
+.MuiTable-root .MuiTableBody-root .MuiTableRow-root:last-child .MuiTableCell-root {
+	border: none;
+}
+
+.MuiTable-root .MuiTableHead-root .MuiTableCell-root,
+.MuiTable-root .MuiTableBody-root .MuiTableCell-root {
+	font-size: var(--env-var-font-size-medium);
+}
+.MuiTable-root .MuiTableHead-root .MuiTableCell-root {
+	padding: var(--env-var-spacing-1);
+	font-weight: 500;
+}
+.MuiTable-root .MuiTableHead-root span {
+	display: inline-block;
+	height: 17px;
+	width: 20px;
+	overflow: hidden;
+	margin-bottom: -3px;
+	margin-left: 3px;
+}
+.MuiTable-root .MuiTableHead-root span svg {
+	width: 20px;
+	height: 20px;
+}
+.MuiTable-root .MuiTableBody-root .MuiTableCell-root {
+	padding: var(--env-var-spacing-1);
+}
+.MuiTable-root .MuiTableBody-root .MuiTableRow-root {
+	height: 50px;
+}
+
+.MuiPaper-root + .MuiPagination-root {
+	border-radius: var(--env-var-radius-1);
+	padding: var(--env-var-spacing-1-plus) var(--env-var-spacing-2);
+}
+.MuiPaper-root + .MuiPagination-root ul {
+	justify-content: center;
+}
+.MuiPaper-root + .MuiPagination-root button {
+	font-size: var(--env-var-font-size-medium);
+	font-weight: 500;
+}
+.MuiPaper-root + .MuiPagination-root ul li:first-child {
+	margin-right: auto;
+}
+.MuiPaper-root + .MuiPagination-root ul li:last-child {
+	margin-left: auto;
+}
+.MuiPaper-root + .MuiPagination-root ul li:first-child button {
+	padding: 0 var(--env-var-spacing-1) 0 var(--env-var-spacing-1-plus);
+}
+.MuiPaper-root + .MuiPagination-root ul li:last-child button {
+	padding: 0 var(--env-var-spacing-1-plus) 0 var(--env-var-spacing-1);
+}
+.MuiPaper-root + .MuiPagination-root ul li:first-child button::after,
+.MuiPaper-root + .MuiPagination-root ul li:last-child button::before {
+	position: relative;
+	display: inline-block;
+}
+.MuiPaper-root + .MuiPagination-root ul li:first-child button::after {
+	content: "Previous";
+	margin-left: 15px;
+}
+.MuiPaper-root + .MuiPagination-root ul li:last-child button::before {
+	content: "Next";
+	margin-right: 15px;
+}
+.MuiPaper-root + .MuiPagination-root div.MuiPaginationItem-root {
+	user-select: none;
+}
+
+.MuiTablePagination-root p {
+	font-weight: 500;
+	font-size: var(--env-var-font-size-small-plus);
+}
+.MuiTablePagination-root .MuiTablePagination-select.MuiSelect-select {
+	text-align: left;
+	text-align-last: left;
+}
+.MuiTablePagination-root button {
+	min-width: 0;
+	padding: 4px;
+	margin-left: 5px;
+}
+.MuiTablePagination-root svg {
+	width: 22px;
+	height: 22px;
+}
+.MuiTablePagination-root .MuiSelect-icon {
+	width: 16px;
+	height: 16px;
+	top: 50%;
+	right: 8%;
+	transform: translateY(-50%);
+}
+.MuiTablePagination-root button.Mui-disabled {
+	opacity: 0.4;
+}
+
+.table-container .MuiTable-root .MuiTableHead-root .MuiTableCell-root {
+	text-transform: uppercase;
+	opacity: 0.8;
+	font-size: var(--env-var-font-size-small-plus);
+	font-weight: 400;
+}
+.monitors .MuiTableCell-root:not(:first-of-type):not(:last-of-type),
+.monitors .MuiTableCell-root:not(:first-of-type):not(:last-of-type) {
+	padding-left: var(--env-var-spacing-1);
+	padding-right: var(--env-var-spacing-1);
+}
