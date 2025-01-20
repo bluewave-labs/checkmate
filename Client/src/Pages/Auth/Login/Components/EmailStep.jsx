@@ -65,7 +65,7 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 					>
 						<Button
 							variant="contained"
-							color="primary"
+							color="accent"
 							type="submit"
 							disabled={errors.email && true}
 							sx={{

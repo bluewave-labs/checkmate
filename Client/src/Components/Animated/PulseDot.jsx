@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, useTheme } from "@mui/material";
+// import useUtils from "../../Pages/Uptime/utils";
 
 /**
  * A component that renders a pulsating dot with a specified color.
@@ -15,6 +16,11 @@ import { Box, Stack } from "@mui/material";
  */
 
 const PulseDot = ({ color }) => {
+	const theme = useTheme();
+	// const { statusToTheme } = useUtils();
+	/* TODO refactor so it gets status and gets theme color. Then uses theme.palette.[themeColor].lowContrast  */
+	/* const themeColor = statusToTheme[status]; */
+
 	return (
 		<Stack
 			width="26px"
@@ -44,7 +50,7 @@ const PulseDot = ({ color }) => {
 						width: "7px",
 						height: "7px",
 						borderRadius: "50%",
-						backgroundColor: "white",
+						backgroundColor: theme.palette.accent.contrastText,
 						top: "50%",
 						left: "50%",
 						transform: "translate(-50%, -50%)",

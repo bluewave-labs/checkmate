@@ -11,10 +11,10 @@ const useUtils = () => {
 	const theme = useTheme();
 
 	const statusColor = {
-		up: theme.palette.success.main,
-		down: theme.palette.error.main,
-		paused: theme.palette.warning.main,
-		pending: theme.palette.warning.main,
+		up: theme.palette.success.lowContrast,
+		down: theme.palette.error.lowContrast,
+		paused: theme.palette.warning.lowContrast,
+		pending: theme.palette.warning.lowContrast,
 	};
 
 	const statusMsg = {
@@ -28,62 +28,79 @@ const useUtils = () => {
 		down: "Inactive",
 		paused: "Paused",
 	};
+
+	/* 
+	TODO 
+	This is used on 
+	1) Details > Gradient card */
+	/* These are rediections. We should do something that maps up to success, down to error, and get the theme by that
+	See Client\src\Components\Label\index.jsx
+	*/
+
+	const statusToTheme = {
+		up: "success",
+		down: "error",
+		paused: "warning",
+		pending: "secondary",
+		"cannot resolve": "tertiary",
+	};
+
+	const getStatusStyles = (status) => {
+		const themeColor = statusToTheme[status];
+
+		return {
+			backgroundColor: theme.palette[themeColor].lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette[themeColor].main} -60%, ${theme.palette[themeColor].lowContrast} 35%)`,
+			borderColor: theme.palette[themeColor].lowContrast,
+			"& h2": {
+				color: theme.palette[themeColor].contrastText,
+				textTransform: "uppercase",
+			},
+			"& p": {
+				color: theme.palette[themeColor].contrastText,
+			},
+		};
+	};
+
 	const statusStyles = {
 		up: {
-			backgroundColor: theme.palette.success.dark,
-			background: `linear-gradient(340deg, ${theme.palette.success.dark} -60%, ${theme.palette.success.light} 35%)`,
-			borderColor: theme.palette.success.light,
+			backgroundColor: theme.palette.success.lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette.success.lowContrast} -60%, ${theme.palette.success.contrastText} 35%)`,
+			borderColor: theme.palette.success.contrastText,
 			"& h2": { color: theme.palette.success.main },
 		},
 		down: {
-			backgroundColor: theme.palette.error.dark,
-			background: `linear-gradient(340deg, ${theme.palette.error.light} -60%, ${theme.palette.error.dark} 35%)`,
-			borderColor: theme.palette.error.light,
+			backgroundColor: theme.palette.error.lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette.error.lowContrast} -60%, ${theme.palette.error.contrastText} 35%)`,
+			borderColor: theme.palette.error.contrastText,
 			"& h2": { color: theme.palette.error.main },
 		},
 		paused: {
-			backgroundColor: theme.palette.warning.dark,
-			background: `linear-gradient(340deg, ${theme.palette.warning.light} -60%, ${theme.palette.warning.dark} 35%)`,
-			borderColor: theme.palette.warning.light,
+			backgroundColor: theme.palette.warning.lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette.warning.lowContrast} -60%, ${theme.palette.warning.contrastText} 35%)`,
+			borderColor: theme.palette.warning.contrastText,
 			"& h2": { color: theme.palette.warning.main },
 		},
 		pending: {
-			backgroundColor: theme.palette.warning.light,
-			background: `linear-gradient(340deg, ${theme.palette.warning.dark} -60%, ${theme.palette.warning.light} 35%)`,
-			borderColor: theme.palette.warning.dark,
+			backgroundColor: theme.palette.warning.lowContrast,
+			background: `linear-gradient(340deg, ${theme.palette.warning.lowContrast} -60%, ${theme.palette.warning.contrastText} 35%)`,
+			borderColor: theme.palette.warning.contrastText,
 			"& h2": { color: theme.palette.warning.main },
 		},
 	};
-	const pagespeedStyles = {
-		up: {
-			bg: theme.palette.success.dark,
-			light: theme.palette.success.light,
-			stroke: theme.palette.success.main,
-		},
-		down: {
-			bg: theme.palette.error.dark,
-			light: theme.palette.error.light,
-			stroke: theme.palette.error.main,
-		},
-		paused: {
-			bg: theme.palette.warning.dark,
-			light: theme.palette.warning.light,
-			stroke: theme.palette.warning.main,
-		},
-		pending: {
-			bg: theme.palette.warning.dark,
-			light: theme.palette.warning.light,
-			stroke: theme.palette.warning.main,
-		},
-	};
+
+	/* These are rediections. We should do something that maps up to success, down to error, and get the theme by that
+	
+	*/
 
 	return {
 		determineState,
 		statusColor,
 		statusMsg,
 		pagespeedStatusMsg,
-		pagespeedStyles,
 		statusStyles,
+		statusToTheme,
+		getStatusStyles,
 	};
 };
 

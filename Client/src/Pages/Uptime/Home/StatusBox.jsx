@@ -12,27 +12,27 @@ const StatusBox = ({ title, value }) => {
 		position: "absolute",
 		right: 8,
 		opacity: 0.5,
-		"& svg path": { stroke: theme.palette.other.icon },
+		"& svg path": { stroke: theme.palette.primary.contrastTextTertiary },
 	};
 
 	let color;
 	let icon;
 	if (title === "up") {
-		color = theme.palette.success.main;
+		color = theme.palette.success.lowContrast;
 		icon = (
 			<Box sx={{ ...sharedStyles, top: 8 }}>
 				<Arrow />
 			</Box>
 		);
 	} else if (title === "down") {
-		color = theme.palette.error.main;
+		color = theme.palette.error.lowContrast;
 		icon = (
 			<Box sx={{ ...sharedStyles, transform: "rotate(180deg)", top: 5 }}>
 				<Arrow />
 			</Box>
 		);
 	} else if (title === "paused") {
-		color = theme.palette.warning.main;
+		color = theme.palette.warning.lowContrast;
 		icon = (
 			<Box sx={{ ...sharedStyles, top: 12, right: 12 }}>
 				<ClockSnooze />
@@ -45,16 +45,11 @@ const StatusBox = ({ title, value }) => {
 			position="relative"
 			flex={1}
 			border={1}
-			borderColor={theme.palette.border.light}
+			backgroundColor={theme.palette.primary.main}
+			borderColor={theme.palette.primary.lowContrast}
 			borderRadius={theme.shape.borderRadius}
-			backgroundColor={theme.palette.background.main}
 			p={theme.spacing(8)}
 			overflow="hidden"
-			sx={{
-				"&:hover": {
-					backgroundColor: theme.palette.background.accent,
-				},
-			}}
 		>
 			<Box
 				sx={{
@@ -63,7 +58,7 @@ const StatusBox = ({ title, value }) => {
 					left: "5%",
 					pointerEvents: "none",
 					"& svg g g:last-of-type path": {
-						stroke: theme.palette.other.grid,
+						stroke: theme.palette.primary.contrastTextTertiary,
 					},
 				}}
 			>
@@ -73,9 +68,8 @@ const StatusBox = ({ title, value }) => {
 				textTransform="uppercase"
 				fontSize={15}
 				letterSpacing={0.5}
-				color={theme.palette.text.secondary}
+				color={theme.palette.primary.contrastTextTertiary}
 				mb={theme.spacing(8)}
-				sx={{ opacity: 0.6 }}
 			>
 				{title}
 			</Box>
@@ -89,11 +83,12 @@ const StatusBox = ({ title, value }) => {
 				gap="2px"
 			>
 				{value}
+
 				<Typography
 					component="span"
 					fontSize={20}
 					fontWeight={300}
-					color={theme.palette.text.secondary}
+					color={theme.palette.primary.contrastTextSecondary}
 					sx={{ opacity: 0.3 }}
 				>
 					#

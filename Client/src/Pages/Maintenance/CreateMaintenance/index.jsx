@@ -360,7 +360,6 @@ const CreateMaintenance = () => {
 								<DatePicker
 									id="startDate"
 									disablePast
-									label="Date"
 									disableHighlightToday
 									value={form.startDate}
 									slots={{ openPickerIcon: CalendarIcon }}
@@ -374,17 +373,17 @@ const CreateMaintenance = () => {
 													flexDirection: "row-reverse",
 												},
 												"& input": {
-													height: 34,
+													minHeight: 34,
 													p: 0,
 													pr: theme.spacing(5),
 												},
 												"& fieldset": {
-													borderColor: theme.palette.border.dark,
+													borderColor: theme.palette.primary.lowContrast,
 													borderRadius: theme.shape.borderRadius,
 												},
 												"&:not(:has(.Mui-disabled)):not(:has(.Mui-error)) .MuiOutlinedInput-root:not(:has(input:focus)):hover fieldset":
 													{
-														borderColor: theme.palette.border.dark,
+														borderColor: theme.palette.primary.lowContrast,
 													},
 											},
 										},
@@ -394,10 +393,34 @@ const CreateMaintenance = () => {
 												py: 0,
 												mr: 0,
 												"& path": {
-													stroke: theme.palette.other.icon,
+													stroke: theme.palette.primary.contrastTextTertiary,
 													strokeWidth: 1.1,
 												},
 												"&:hover": { backgroundColor: "transparent" },
+											},
+										},
+										// CAIO_REVIEW, entire popper
+										popper: {
+											sx: {
+												"& .MuiPickersDay-root": {
+													color: theme.palette.primary.contrastText,
+													"&.Mui-selected": {
+														backgroundColor: theme.palette.accent.main, // Selected day background
+														color: theme.palette.primary.contrastText, // Selected day text color
+													},
+													"&:hover": {
+														backgroundColor: theme.palette.accent.light, // Hover background
+													},
+													"&.Mui-disabled": {
+														color: theme.palette.primary.lowContrast, // Disabled day color
+													},
+												},
+												"& .MuiDayCalendar-weekDayLabel": {
+													color: theme.palette.primary.contrastText,
+												},
+												"& .MuiPickersCalendarHeader-label": {
+													color: theme.palette.primary.contrastText,
+												},
 											},
 										},
 									}}
@@ -439,17 +462,17 @@ const CreateMaintenance = () => {
 												flexDirection: "row-reverse",
 											},
 											"& input": {
-												height: 34,
+												minHeight: 34,
 												p: 0,
 												pl: theme.spacing(5),
 											},
 											"& fieldset": {
-												borderColor: theme.palette.border.dark,
+												borderColor: theme.palette.primary.lowContrast,
 												borderRadius: theme.shape.borderRadius,
 											},
 											"&:not(:has(.Mui-disabled)):not(:has(.Mui-error)) .MuiOutlinedInput-root:not(:has(input:focus)):hover fieldset":
 												{
-													borderColor: theme.palette.border.dark,
+													borderColor: theme.palette.primary.lowContrast,
 												},
 										},
 									},
@@ -532,7 +555,7 @@ const CreateMaintenance = () => {
 					<LoadingButton
 						loading={isLoading}
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={handleSubmit}
 						disabled={false}
 					>

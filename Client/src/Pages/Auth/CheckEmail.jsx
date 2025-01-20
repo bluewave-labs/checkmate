@@ -94,7 +94,8 @@ const CheckEmail = () => {
 					fontWeight: 600,
 					fontSize: 22,
 				},
-				"& p": { color: theme.palette.text.accent, fontSize: 13.5 },
+				/* TODO font size from theme */
+				"& p": { color: theme.palette.primary.contrastTextSecondary, fontSize: 13.5 },
 				"& span": { fontSize: "inherit" },
 			}}
 		>
@@ -102,7 +103,7 @@ const CheckEmail = () => {
 				className="background-pattern-svg"
 				sx={{
 					"& svg g g:last-of-type path": {
-						stroke: theme.palette.border.light,
+						stroke: theme.palette.primary.lowContrast,
 					},
 				}}
 			>
@@ -129,8 +130,8 @@ const CheckEmail = () => {
 					"& > .MuiStack-root": {
 						border: 1,
 						borderRadius: theme.spacing(5),
-						borderColor: theme.palette.border.light,
-						backgroundColor: theme.palette.background.main,
+						borderColor: theme.palette.primary.lowContrast,
+						backgroundColor: theme.palette.primary.main,
 						padding: {
 							xs: theme.spacing(12),
 							sm: theme.spacing(20),
@@ -173,7 +174,7 @@ const CheckEmail = () => {
 					</Box>
 					<Button
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={openMail}
 						sx={{
 							width: "100%",

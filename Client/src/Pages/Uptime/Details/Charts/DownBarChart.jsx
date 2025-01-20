@@ -31,7 +31,7 @@ const DownBarChart = memo(({ monitor, type, onBarHover }) => {
 				}}
 			>
 				<XAxis
-					stroke={theme.palette.border.dark}
+					stroke={theme.palette.primary.lowContrast}
 					height={15}
 					tick={false}
 					label={
@@ -53,26 +53,28 @@ const DownBarChart = memo(({ monitor, type, onBarHover }) => {
 					maxBarSize={7}
 					background={{ fill: "transparent" }}
 				>
-					{monitor.groupedDownChecks.map((entry, index) => (
-						<Cell
-							key={`cell-${entry.time}`}
-							fill={
-								hoveredBarIndex === index
-									? theme.palette.error.main
-									: chartHovered
-										? theme.palette.error.light
-										: theme.palette.error.main
-							}
-							onMouseEnter={() => {
-								setHoveredBarIndex(index);
-								onBarHover(entry);
-							}}
-							onMouseLeave={() => {
-								setHoveredBarIndex(null);
-								onBarHover({ time: null, totalChecks: 0 });
-							}}
-						/>
-					))}
+					{monitor.groupedDownChecks.map((entry, index) => {
+						return (
+							<Cell
+								key={`cell-${entry.time}`}
+								fill={
+									hoveredBarIndex === index
+										? theme.palette.error.main
+										: chartHovered
+											? theme.palette.error.light // CAIO_REVIEW
+											: theme.palette.error.main
+								}
+								onMouseEnter={() => {
+									setHoveredBarIndex(index);
+									onBarHover(entry);
+								}}
+								onMouseLeave={() => {
+									setHoveredBarIndex(null);
+									onBarHover({ time: null, totalChecks: 0 });
+								}}
+							/>
+						);
+					})}
 				</Bar>
 			</BarChart>
 		</ResponsiveContainer>

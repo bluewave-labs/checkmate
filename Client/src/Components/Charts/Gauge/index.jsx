@@ -58,7 +58,7 @@ function Gauge({ progressValue, width = DEFAULT_WIDTH }) {
 	const chartColor =
 		progressValue > PROGRESS_THRESHOLD
 			? theme.palette.primary.main
-			: theme.palette.percentage.uptimePoor;
+			: theme.palette.error.main;
 	const chartData = [
 		CHART_MAXIMUM_DATA,
 		{
@@ -82,9 +82,9 @@ function Gauge({ progressValue, width = DEFAULT_WIDTH }) {
 					fill={
 						progressValue > PROGRESS_THRESHOLD
 							? theme.palette.primary.main
-							: theme.palette.percentage.uptimePoor
+							: theme.palette.error.main
 					}
-					background={{ fill: theme.palette.background.fill }}
+					background={{ fill: theme.palette.primary.lowContrast }}
 					label={{
 						position: "center",
 						content: () => (

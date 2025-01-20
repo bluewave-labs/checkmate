@@ -95,7 +95,7 @@ const ActionsMenu = ({
 						outline: "none",
 					},
 					"& svg path": {
-						stroke: theme.palette.other.icon,
+						stroke: theme.palette.primary.contrastTextTertiary,
 					},
 				}}
 			>
@@ -111,11 +111,16 @@ const ActionsMenu = ({
 				slotProps={{
 					paper: {
 						sx: {
-							"& ul": { p: theme.spacing(2.5) },
-							"& li": { m: 0 },
+							"& ul": {
+								p: theme.spacing(2.5),
+								backgroundColor: theme.palette.primary.main,
+							},
+							"& li": { m: 0, color: theme.palette.primary.contrastTextSecondary },
+							/* 
+							This should not be set automatically on the last of type
 							"& li:last-of-type": {
 								color: theme.palette.error.main,
-							},
+							}, */
 						},
 					},
 				}}
@@ -189,6 +194,7 @@ const ActionsMenu = ({
 							e.stopPropagation();
 							openRemove(e);
 						}}
+						sx={{ "&.MuiButtonBase-root": { color: theme.palette.error.main } }}
 					>
 						Remove
 					</MenuItem>

@@ -249,7 +249,7 @@ const PageSpeedConfigure = () => {
 												width: 4,
 												height: 4,
 												borderRadius: "50%",
-												backgroundColor: theme.palette.text.tertiary,
+												backgroundColor: theme.palette.primary.contrastTextTertiary,
 												opacity: 0.8,
 												left: -10,
 												top: "50%",
@@ -276,7 +276,7 @@ const PageSpeedConfigure = () => {
 										"& svg": {
 											mr: theme.spacing(2),
 											"& path": {
-												stroke: theme.palette.other.icon,
+												stroke: theme.palette.primary.contrastTextTertiary,
 												strokeWidth: 0.1,
 											},
 										},
@@ -319,7 +319,7 @@ const PageSpeedConfigure = () => {
 								gap={theme.spacing(20)}
 								sx={{
 									".MuiInputBase-root:has(> .Mui-disabled)": {
-										backgroundColor: theme.palette.background.accent,
+										backgroundColor: theme.palette.tertiary.main,
 									},
 								}}
 							>
@@ -426,7 +426,7 @@ const PageSpeedConfigure = () => {
 								loading={isLoading}
 								type="submit"
 								variant="contained"
-								color="primary"
+								color="accent"
 								onClick={handleSave}
 								sx={{ px: theme.spacing(12) }}
 							>

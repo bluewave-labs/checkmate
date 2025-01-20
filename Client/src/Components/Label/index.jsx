@@ -24,15 +24,15 @@ const BaseLabel = ({ label, styles, children }) => {
 	// Grab the default borderRadius from the theme to match button style
 	const { borderRadius } = theme.shape;
 	// Calculate padding for the label to mimic button.  Appears to scale correctly, not 100% sure though.
-	const padding = theme.spacing(1 * 0.75, 2);
+	const padding = theme.spacing(3, 5);
 
 	return (
 		<Box
 			className="label"
 			sx={{
 				borderRadius: borderRadius,
-				border: `1px solid ${theme.palette.text.tertiary}`,
-				color: theme.palette.text.tertiary,
+				border: `1px solid ${theme.palette.primary.lowContrast}`,
+				color: theme.palette.primary.contrastText,
 				padding: padding,
 				...styles,
 			}}
@@ -87,7 +87,7 @@ const ColoredLabel = ({ label, color }) => {
 	const theme = useTheme();
 	// If an invalid color is passed, default to the labelGray color
 	if (typeof color !== "string" || !/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(color)) {
-		color = theme.palette.border.light;
+		color = theme.palette.primary.lowContrast;
 	}
 
 	// Calculate lighter shades for border and bg
@@ -122,53 +122,32 @@ ColoredLabel.propTypes = {
  * <StatusLabel status="up" text="Active" />
  */
 
+const statusToTheme = {
+	up: "success",
+	down: "error",
+	paused: "warning",
+	pending: "warning",
+	"cannot resolve": "error",
+};
+
 const StatusLabel = ({ status, text, customStyles }) => {
 	const theme = useTheme();
-	const colors = {
-		up: {
-			dotColor: theme.palette.success.main,
-			bgColor: theme.palette.success.contrastText /* dark */,
-			borderColor: theme.palette.success.main /* light */,
-		},
-		down: {
-			dotColor: theme.palette.error.main,
-			bgColor: theme.palette.error.dark,
-			borderColor: theme.palette.error.light,
-		},
-		paused: {
-			dotColor: theme.palette.warning.main,
-			bgColor: theme.palette.warning.dark,
-			borderColor: theme.palette.warning.light,
-		},
-		pending: {
-			dotColor: theme.palette.text.secondary,
-			bgColor: theme.palette.background.main,
-			borderColor: theme.palette.border.dark,
-		},
-		"cannot resolve": {
-			dotColor: theme.palette.unresolved.main,
-			bgColor: theme.palette.unresolved.bg,
-			borderColor: theme.palette.unresolved.light,
-		},
-	};
 
-	// Look up the color for the status
-	const { borderColor, bgColor, dotColor } = colors[status];
+	const themeColor = statusToTheme[status];
 
 	return (
 		<BaseLabel
 			label={text}
 			styles={{
-				color: dotColor,
-				backgroundColor: bgColor,
-				borderColor: borderColor,
+				color: theme.palette[themeColor].main,
+				borderColor: theme.palette[themeColor].lowContrast,
 				...customStyles,
 			}}
 		>
 			<Box
 				width={7}
 				height={7}
-				bgcolor={dotColor}
+				bgcolor={theme.palette[themeColor].lowContrast}
 				borderRadius="50%"
 				marginRight="5px"
 			/>

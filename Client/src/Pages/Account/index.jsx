@@ -57,22 +57,27 @@ const Account = ({ open = "profile" }) => {
 			className="account"
 			px={theme.spacing(20)}
 			py={theme.spacing(12)}
+			backgroundColor={theme.palette.primary.main}
 			border={1}
-			borderColor={theme.palette.border.light}
+			borderColor={theme.palette.primary.lowContrast}
 			borderRadius={theme.shape.borderRadius}
-			backgroundColor={theme.palette.background.main}
 		>
 			<TabContext value={tab}>
 				<Box
 					sx={{
 						borderBottom: 1,
-						borderColor: theme.palette.border.light,
+						borderColor: theme.palette.primary.lowContrast,
 						"& .MuiTabs-root": { height: "fit-content", minHeight: "0" },
 					}}
 				>
 					<TabList
 						onChange={handleTabChange}
 						aria-label="account tabs"
+						sx={{
+							"& .MuiTabs-indicator": {
+								backgroundColor: theme.palette.tertiary.contrastText,
+							},
+						}}
 					>
 						{tabList.map((label, index) => (
 							<Tab
@@ -84,21 +89,29 @@ const Account = ({ open = "profile" }) => {
 								tabIndex={index}
 								sx={{
 									fontSize: 13,
-									color: theme.palette.text.tertiary,
+									color: theme.palette.tertiary.contrastText,
+									backgroundColor: theme.palette.tertiary.main,
 									textTransform: "none",
 									minWidth: "fit-content",
-									minHeight: 0,
-									paddingLeft: 0,
-									paddingY: theme.spacing(4),
+									paddingY: theme.spacing(6),
 									fontWeight: 400,
-									marginRight: theme.spacing(8),
 									borderBottom: "2px solid transparent",
-									"&:focus": {
-										borderBottom: `2px solid ${theme.palette.border.light}`,
+									borderRight: `1px solid ${theme.palette.primary.lowContrast}`,
+									"&:first-child": { borderTopLeftRadius: "8px" },
+									"&:last-child": { borderTopRightRadius: "8px", borderRight: 0 },
+									"&:focus-visible": {
+										color: theme.palette.primary.contrastText,
+										borderColor: theme.palette.tertiary.contrastText,
+										borderRightColor: theme.palette.primary.lowContrast,
 									},
-
+									"&.Mui-selected": {
+										backgroundColor: theme.palette.secondary.main,
+										color: theme.palette.secondary.contrastText,
+										borderColor: theme.palette.secondary.contrastText,
+										borderRightColor: theme.palette.primary.lowContrast,
+									},
 									"&:hover": {
-										borderBottom: `2px solid ${theme.palette.border.light}`,
+										borderColor: theme.palette.primary.lowContrast,
 									},
 								}}
 							/>

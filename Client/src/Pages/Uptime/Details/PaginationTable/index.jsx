@@ -19,8 +19,9 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { logger } from "../../../../Utils/Logger";
 import { formatDateWithTz } from "../../../../Utils/timeUtils";
-
+import { useTheme } from "@emotion/react";
 const PaginationTable = ({ monitorId, dateRange }) => {
+	const theme = useTheme();
 	const { authToken } = useSelector((state) => state.auth);
 	const [checks, setChecks] = useState([]);
 	const [checksCount, setChecksCount] = useState(0);
@@ -96,7 +97,23 @@ const PaginationTable = ({ monitorId, dateRange }) => {
 	return (
 		<>
 			<TableContainer component={Paper}>
-				<Table>
+				<Table
+					sx={{
+						"&.MuiTable-root  :is(.MuiTableHead-root, .MuiTableBody-root) :is(th, td)": {
+							paddingLeft: theme.spacing(8),
+						},
+						"& :is(th)": {
+							backgroundColor: theme.palette.secondary.main,
+							color: theme.palette.secondary.contrastText,
+							fontWeight: 600,
+							fontSize: "12px",
+						},
+						"& :is(td)": {
+							backgroundColor: theme.palette.primary.main,
+							color: theme.palette.primary.contrastTextSecondary,
+						},
+					}}
+				>
 					<TableHead>
 						<TableRow>
 							<TableCell>Status</TableCell>

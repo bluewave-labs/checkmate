@@ -22,9 +22,9 @@ const GenericDialog = ({ title, description, open, onClose, theme, children }) =
 					left: "50%",
 					transform: "translate(-50%, -50%)",
 					width: 400,
-					bgcolor: theme.palette.background.main,
+					bgcolor: theme.palette.primary.main,
 					border: 1,
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					boxShadow: 24,
 					p: theme.spacing(15),
@@ -37,7 +37,7 @@ const GenericDialog = ({ title, description, open, onClose, theme, children }) =
 					id={titleId}
 					component="h2"
 					fontSize={16}
-					color={theme.palette.text.primary}
+					color={theme.palette.primary.contrastText}
 					fontWeight={600}
 				>
 					{title}
@@ -45,7 +45,7 @@ const GenericDialog = ({ title, description, open, onClose, theme, children }) =
 				{description && (
 					<Typography
 						id={descriptionId}
-						color={theme.palette.text.tertiary}
+						color={theme.palette.primary.contrastTextTertiary}
 					>
 						{description}
 					</Typography>

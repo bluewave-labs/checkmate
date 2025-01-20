@@ -137,13 +137,7 @@ function Infrastructure() {
 			id: "actions",
 			content: "Actions",
 			render: (row) => (
-				<IconButton
-					sx={{
-						"& svg path": {
-							stroke: theme.palette.other.icon,
-						},
-					}}
-				>
+				<IconButton>
 					<InfrastructureMenu
 						monitor={row}
 						isAdmin={isAdmin}
@@ -166,12 +160,12 @@ function Infrastructure() {
 			.toString();
 		const percentageColor =
 			monitor.uptimePercentage < 0.25
-				? theme.palette.percentage.uptimePoor
+				? theme.palette.error.main
 				: monitor.uptimePercentage < 0.5
 					? theme.palette.percentage.uptimeFair
 					: monitor.uptimePercentage < 0.75
 						? theme.palette.percentage.uptimeGood
-						: theme.palette.percentage.uptimeExcellent;
+						: theme.palette.success.lowContrast;
 		return {
 			id: monitor._id,
 			name: monitor.name,
@@ -194,10 +188,10 @@ function Infrastructure() {
 				':has(> [class*="fallback__"])': {
 					position: "relative",
 					border: 1,
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					borderStyle: "dashed",
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					overflow: "hidden",
 				},
 			}}
@@ -217,7 +211,7 @@ function Infrastructure() {
 							{isAdmin && (
 								<Button
 									variant="contained"
-									color="primary"
+									color="accent"
 									onClick={navigateToCreate}
 									sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
 								>
@@ -240,14 +234,19 @@ function Infrastructure() {
 							}}
 						>
 							<Heading component="h2">Infrastructure monitors</Heading>
-							{/* TODO Correct the class current-monitors-counter, there are some unnecessary things there	 */}
+							{/* TODO Same as the one in UptimaDataTable. Create component */}
 							<Box
 								component="span"
-								className="current-monitors-counter"
-								color={theme.palette.text.primary}
-								border={1}
-								borderColor={theme.palette.border.light}
-								backgroundColor={theme.palette.background.accent}
+								color={theme.palette.tertiary.contrastText}
+								border={2}
+								borderColor={theme.palette.accent.main}
+								backgroundColor={theme.palette.tertiary.main}
+								sx={{
+									padding: ".25em .75em",
+									borderRadius: "50%",
+									fontSize: "12px",
+									fontWeight: 500,
+								}}
 							>
 								{summary?.totalMonitors ?? 0}
 							</Box>
@@ -255,10 +254,12 @@ function Infrastructure() {
 
 						<DataTable
 							config={{
+								/* TODO this behavior seems to be repeated. Put it on the root table? */
 								rowSX: {
 									cursor: "pointer",
-									"&:hover": {
-										backgroundColor: theme.palette.background.accent,
+									"&:hover td": {
+										backgroundColor: theme.palette.tertiary.main,
+										transition: "background-color .3s ease",
 									},
 								},
 								onRowClick: (row) => openDetails(row.id),
@@ -266,6 +267,7 @@ function Infrastructure() {
 							headers={headers}
 							data={monitorsAsRows}
 						/>
+
 						<Pagination
 							monitorCount={summary?.totalMonitors ?? 0}
 							page={page}

@@ -39,7 +39,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 							borderRadius: theme.shape.borderRadius,
 							borderColor: isDragging
 								? theme.palette.primary.main
-								: theme.palette.border.light,
+								: theme.palette.primary.lowContrast,
 							borderWidth: "2px",
 							transition: "0.2s",
 							"&:hover": {
@@ -86,7 +86,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 								sx={{
 									pointerEvents: "none",
 									borderRadius: theme.shape.borderRadius,
-									border: `solid ${theme.shape.borderThick}px ${theme.palette.border.light}`,
+									border: `solid ${theme.shape.borderThick}px ${theme.palette.primary.lowContrast}`,
 									boxShadow: theme.shape.boxShadow,
 								}}
 							>
@@ -94,7 +94,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 							</IconButton>
 							<Typography
 								component="h2"
-								color={theme.palette.text.tertiary}
+								color={theme.palette.primary.contrastTextTertiary}
 							>
 								<Typography
 									component="span"
@@ -108,7 +108,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 							</Typography>
 							<Typography
 								component="p"
-								color={theme.palette.text.tertiary}
+								color={theme.palette.primary.contrastTextTertiary}
 								sx={{ opacity: 0.6 }}
 							>
 								(maximum size: 3MB)
@@ -117,7 +117,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 					</Box>
 					<Typography
 						component="p"
-						color={theme.palette.text.tertiary}
+						color={theme.palette.primary.contrastTextTertiary}
 						sx={{ opacity: 0.6 }}
 					>
 						Supported formats: JPG, PNG

@@ -42,6 +42,7 @@ const Host = ({ url, title, percentageColor, percentage }) => {
 					sx={{
 						color: percentageColor,
 						fontWeight: 500,
+						/* TODO point font weight to theme */
 						ml: "15px",
 					}}
 				>

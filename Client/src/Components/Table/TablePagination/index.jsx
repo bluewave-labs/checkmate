@@ -92,7 +92,7 @@ function Pagination({
 							minWidth: theme.spacing(20),
 							textAlign: "left",
 							"&.Mui-focused > div": {
-								backgroundColor: theme.palette.background.main,
+								backgroundColor: theme.palette.primary.main,
 							},
 							"& .MuiSelect-icon": {
 								// Add this style override
@@ -105,14 +105,14 @@ function Pagination({
 					},
 				}}
 				sx={{
-					color: theme.palette.text.secondary,
+					color: theme.palette.primary.contrastTextSecondary,
 					"& svg path": {
-						stroke: theme.palette.text.tertiary,
+						stroke: theme.palette.primary.contrastTextTertiary,
 						strokeWidth: 1.3,
 					},
 					"& .MuiSelect-select": {
 						border: 1,
-						borderColor: theme.palette.border.light,
+						borderColor: theme.palette.primary.lowContrast,
 						borderRadius: theme.shape.borderRadius,
 					},
 				}}

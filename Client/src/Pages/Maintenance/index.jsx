@@ -51,10 +51,10 @@ const Maintenance = () => {
 				':has(> [class*="fallback__"])': {
 					position: "relative",
 					border: 1,
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					borderStyle: "dashed",
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					overflow: "hidden",
 				},
 			}}
@@ -70,7 +70,7 @@ const Maintenance = () => {
 						<Breadcrumbs list={[{ name: "maintenance", path: "/maintenance" }]} />
 						<Button
 							variant="contained"
-							color="primary"
+							color="accent"
 							onClick={() => {
 								navigate("/maintenance/create");
 							}}

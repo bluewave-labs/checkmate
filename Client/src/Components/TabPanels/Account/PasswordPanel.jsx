@@ -28,8 +28,7 @@ const PasswordPanel = () => {
 	const theme = useTheme();
 	const dispatch = useDispatch();
 
-
-	const SPACING_GAP = theme.spacing(12); 
+	const SPACING_GAP = theme.spacing(12);
 
 	//redux state
 	const { authToken, isLoading } = useSelector((state) => state.auth);
@@ -116,7 +115,7 @@ const PasswordPanel = () => {
 			value="password"
 			sx={{
 				"& h1, & input": {
-					color: theme.palette.text.tertiary,
+					color: theme.palette.primary.contrastTextTertiary,
 				},
 			}}
 		>
@@ -126,8 +125,7 @@ const PasswordPanel = () => {
 				noValidate
 				spellCheck="false"
 				gap={theme.spacing(26)}
-				maxWidth={"80ch"}  // Keep maxWidth
-				
+				maxWidth={"80ch"} // Keep maxWidth
 			>
 				<TextInput
 					type="text"
@@ -142,7 +140,7 @@ const PasswordPanel = () => {
 					direction="row"
 					justifyContent={"flex-start"}
 					alignItems={"center"}
-					gap={SPACING_GAP} 
+					gap={SPACING_GAP}
 					flexWrap={"wrap"}
 				>
 					<Typography
@@ -167,7 +165,7 @@ const PasswordPanel = () => {
 				<Stack
 					direction="row"
 					alignItems={"flex-start"}
-					gap={SPACING_GAP} 
+					gap={SPACING_GAP}
 					flexWrap={"wrap"}
 				>
 					<Typography
@@ -193,7 +191,7 @@ const PasswordPanel = () => {
 				<Stack
 					direction="row"
 					alignItems={"flex-start"}
-					gap={SPACING_GAP} 
+					gap={SPACING_GAP}
 					flexWrap={"wrap"}
 				>
 					<Typography
@@ -230,7 +228,7 @@ const PasswordPanel = () => {
 				>
 					<LoadingButton
 						variant="contained"
-						color="primary"
+						color="accent"
 						type="submit"
 						loading={isLoading}
 						loadingIndicator="Saving..."

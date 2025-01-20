@@ -158,9 +158,9 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 
 	let sharedStyles = {
 		border: 1,
-		borderColor: theme.palette.border.light,
+		borderColor: theme.palette.primary.lowContrast,
 		borderRadius: theme.shape.borderRadius,
-		backgroundColor: theme.palette.background.main,
+		backgroundColor: theme.palette.primary.main,
 		p: theme.spacing(30),
 	};
 
@@ -187,7 +187,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 					</Box>
 					<Typography
 						textAlign="center"
-						color={theme.palette.text.secondary}
+						color={theme.palette.primary.contrastTextSecondary}
 					>
 						The monitor you have selected has no recorded incidents yet.
 					</Typography>

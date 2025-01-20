@@ -12,7 +12,7 @@
 	width: max-content;
 }
 [class*="fallback__"] button.MuiButtonBase-root {
-	height: 34px;
+	min-height: 34px;
 }
 [class*="fallback__"] .check span.MuiTypography-root,
 [class*="fallback__"] button.MuiButtonBase-root {

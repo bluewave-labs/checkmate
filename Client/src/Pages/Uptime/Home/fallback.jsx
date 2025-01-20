@@ -14,14 +14,14 @@ const Fallback = ({ isAdmin }) => {
 	return (
 		<Stack
 			alignItems="center"
-			backgroundColor={theme.palette.background.main}
+			backgroundColor={theme.palette.primary.main}
 			p={theme.spacing(30)}
 			pt={theme.spacing(25)}
 			gap={theme.spacing(2)}
 			border={1}
 			borderRadius={theme.shape.borderRadius}
-			borderColor={theme.palette.border.light}
-			color={theme.palette.text.secondary}
+			borderColor={theme.palette.primary.lowContrast}
+			color={theme.palette.primary.contrastTextSecondary}
 		>
 			<Box pb={theme.spacing(20)}>
 				{mode === "light" ? <PlaceholderLight /> : <PlaceholderDark />}
@@ -39,7 +39,7 @@ const Fallback = ({ isAdmin }) => {
 			{isAdmin && (
 				<Button
 					variant="contained"
-					color="primary"
+					color="accent"
 					onClick={() => {
 						navigate("/uptime/create");
 					}}

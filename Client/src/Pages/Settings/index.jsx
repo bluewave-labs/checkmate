@@ -287,7 +287,7 @@ const Settings = () => {
 								<Typography>Add demo monitors</Typography>
 								<LoadingButton
 									variant="contained"
-									color="primary"
+									color="accent"
 									loading={isLoading || authIsLoading || checksIsLoading}
 									onClick={handleInsertDemoMonitors}
 									sx={{ mt: theme.spacing(4) }}
@@ -346,7 +346,7 @@ const Settings = () => {
 						loading={isLoading || authIsLoading || checksIsLoading}
 						disabled={Object.keys(errors).length > 0}
 						variant="contained"
-						color="primary"
+						color="accent"
 						sx={{ px: theme.spacing(12), mt: theme.spacing(20) }}
 						onClick={handleSave}
 					>

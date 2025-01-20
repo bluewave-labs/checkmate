@@ -24,7 +24,7 @@ export const TzTick = ({ x, y, payload, index, dateRange }) => {
 			x={x}
 			y={y + 10}
 			textAnchor="middle"
-			fill={theme.palette.text.tertiary}
+			fill={theme.palette.primary.contrastTextTertiary}
 			fontSize={11}
 			fontWeight={400}
 		>
@@ -59,7 +59,7 @@ export const PercentTick = ({ x, y, payload, index }) => {
 			x={x - 20}
 			y={y}
 			textAnchor="middle"
-			fill={theme.palette.text.tertiary}
+			fill={theme.palette.primary.contrastTextTertiary}
 			fontSize={11}
 			fontWeight={400}
 		>
@@ -123,9 +123,9 @@ export const InfrastructureTooltip = ({
 			<Box
 				className="area-tooltip"
 				sx={{
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					border: 1,
-					borderColor: theme.palette.border.dark,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					py: theme.spacing(2),
 					px: theme.spacing(4),
@@ -133,7 +133,7 @@ export const InfrastructureTooltip = ({
 			>
 				<Typography
 					sx={{
-						color: theme.palette.text.tertiary,
+						color: theme.palette.primary.contrastTextTertiary,
 						fontSize: 12,
 						fontWeight: 500,
 					}}
@@ -155,7 +155,7 @@ export const InfrastructureTooltip = ({
 						ml={theme.spacing(3)}
 						sx={{
 							"& span": {
-								color: theme.palette.text.tertiary,
+								color: theme.palette.primary.contrastTextTertiary,
 								fontSize: 11,
 								fontWeight: 500,
 							},
@@ -212,9 +212,9 @@ export const TemperatureTooltip = ({
 			<Box
 				className="area-tooltip"
 				sx={{
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					border: 1,
-					borderColor: theme.palette.border.dark,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					py: theme.spacing(2),
 					px: theme.spacing(4),
@@ -222,7 +222,7 @@ export const TemperatureTooltip = ({
 			>
 				<Typography
 					sx={{
-						color: theme.palette.text.tertiary,
+						color: theme.palette.primary.contrastTextTertiary,
 						fontSize: 12,
 						fontWeight: 500,
 					}}
@@ -241,7 +241,7 @@ export const TemperatureTooltip = ({
 								ml={theme.spacing(3)}
 								sx={{
 									"& span": {
-										color: theme.palette.text.tertiary,
+										color: theme.palette.primary.contrastTextTertiary,
 										fontSize: 11,
 										fontWeight: 500,
 									},

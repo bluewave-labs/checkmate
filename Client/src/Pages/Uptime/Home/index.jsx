@@ -41,6 +41,7 @@ const UptimeMonitors = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const isAdmin = useIsAdmin();
+
 	const authState = useSelector((state) => state.auth);
 
 	const fetchParams = useMemo(
@@ -57,7 +58,7 @@ const UptimeMonitors = () => {
 
 	const getMonitorWithPercentage = useCallback((monitor, theme) => {
 		let uptimePercentage = "";
-		let percentageColor = theme.palette.percentage.uptimeExcellent;
+		let percentageColor = "";
 
 		if (monitor.uptimePercentage !== undefined) {
 			uptimePercentage =
@@ -67,12 +68,12 @@ const UptimeMonitors = () => {
 
 			percentageColor =
 				monitor.uptimePercentage < 0.25
-					? theme.palette.percentage.uptimePoor
+					? theme.palette.error.main
 					: monitor.uptimePercentage < 0.5
-						? theme.palette.percentage.uptimeFair
+						? theme.palette.warning.main
 						: monitor.uptimePercentage < 0.75
-							? theme.palette.percentage.uptimeGood
-							: theme.palette.percentage.uptimeExcellent;
+							? theme.palette.success.main
+							: theme.palette.success.main;
 		}
 
 		return {
@@ -158,16 +159,26 @@ const UptimeMonitors = () => {
 					gap={theme.spacing(6)}
 				>
 					{canAddMonitor && (
-						<Button
-							variant="contained"
-							color="primary"
-							onClick={() => {
-								navigate("/uptime/create");
-							}}
-							sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
-						>
-							Create new
-						</Button>
+						<>
+							<Button
+								variant="contained"
+								color="accent"
+								onClick={() => {
+									navigate("/uptime/create");
+								}}
+								sx={{
+									fontWeight: 500,
+									whiteSpace: "nowrap",
+									/* TODO IMPORTANT this should be applied to all buttons */
+									"&:focus-visible": {
+										outline: `2px solid ${theme.palette.primary.contrastText}`,
+										outlineOffset: 4,
+									},
+								}}
+							>
+								Create new
+							</Button>
+						</>
 					)}
 				</Stack>
 				<Greeting type="uptime" />

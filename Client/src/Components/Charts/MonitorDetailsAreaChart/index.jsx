@@ -31,9 +31,9 @@ const CustomToolTip = ({ active, payload, label, dateRange }) => {
 			<Box
 				className="area-tooltip"
 				sx={{
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					border: 1,
-					borderColor: theme.palette.border.dark,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					py: theme.spacing(2),
 					px: theme.spacing(4),
@@ -41,7 +41,7 @@ const CustomToolTip = ({ active, payload, label, dateRange }) => {
 			>
 				<Typography
 					sx={{
-						color: theme.palette.text.tertiary,
+						color: theme.palette.primary.contrastTextTertiary,
 						fontSize: 12,
 						fontWeight: 500,
 					}}
@@ -63,7 +63,7 @@ const CustomToolTip = ({ active, payload, label, dateRange }) => {
 						ml={theme.spacing(3)}
 						sx={{
 							"& span": {
-								color: theme.palette.text.tertiary,
+								color: theme.palette.primary.contrastTextTertiary,
 								fontSize: 11,
 								fontWeight: 500,
 							},
@@ -109,7 +109,7 @@ CustomToolTip.propTypes = {
 	label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	dateRange: PropTypes.string,
 };
-const CustomTick = ({ x, y, payload, index, dateRange }) => {
+const CustomTick = ({ x, y, payload, dateRange }) => {
 	const format = tickDateFormatLookup(dateRange);
 	const theme = useTheme();
 	const uiTimezone = useSelector((state) => state.ui.timezone);
@@ -118,7 +118,7 @@ const CustomTick = ({ x, y, payload, index, dateRange }) => {
 			x={x}
 			y={y + 10}
 			textAnchor="middle"
-			fill={theme.palette.text.tertiary}
+			fill={theme.palette.primary.contrastTextTertiary}
 			fontSize={11}
 			fontWeight={400}
 		>
@@ -139,7 +139,6 @@ const MonitorDetailsAreaChart = ({ checks, dateRange }) => {
 	const theme = useTheme();
 	const memoizedChecks = useMemo(() => checks, [checks[0]]);
 	const [isHovered, setIsHovered] = useState(false);
-
 	return (
 		<ResponsiveContainer
 			width="100%"
@@ -160,7 +159,7 @@ const MonitorDetailsAreaChart = ({ checks, dateRange }) => {
 				onMouseLeave={() => setIsHovered(false)}
 			>
 				<CartesianGrid
-					stroke={theme.palette.border.light}
+					stroke={theme.palette.primary.lowContrast}
 					strokeWidth={1}
 					strokeOpacity={1}
 					fill="transparent"
@@ -176,18 +175,18 @@ const MonitorDetailsAreaChart = ({ checks, dateRange }) => {
 					>
 						<stop
 							offset="0%"
-							stopColor={theme.palette.primary.main}
+							stopColor={theme.palette.accent.main}
 							stopOpacity={0.8}
 						/>
 						<stop
 							offset="100%"
-							stopColor={theme.palette.primary.light}
+							stopColor={theme.palette.accent.light}
 							stopOpacity={0}
 						/>
 					</linearGradient>
 				</defs>
 				<XAxis
-					stroke={theme.palette.border.dark}
+					stroke={theme.palette.primary.lowContrast}
 					dataKey="_id"
 					tick={<CustomTick dateRange={dateRange} />}
 					axisLine={false}
@@ -195,17 +194,17 @@ const MonitorDetailsAreaChart = ({ checks, dateRange }) => {
 					height={20}
 				/>
 				<Tooltip
-					cursor={{ stroke: theme.palette.border.light }}
+					cursor={{ stroke: theme.palette.primary.lowContrast }}
 					content={<CustomToolTip dateRange={dateRange} />}
 					wrapperStyle={{ pointerEvents: "none" }}
 				/>
 				<Area
 					type="monotone"
 					dataKey="avgResponseTime"
-					stroke={theme.palette.primary.main}
+					stroke={theme.palette.accent.main} // CAIO_REVIEW
 					fill="url(#colorUv)"
 					strokeWidth={isHovered ? 2.5 : 1.5}
-					activeDot={{ stroke: theme.palette.background.main, r: 5 }}
+					activeDot={{ stroke: theme.palette.accent.main, r: 5 }} // CAIO_REVIEW
 				/>
 			</AreaChart>
 		</ResponsiveContainer>

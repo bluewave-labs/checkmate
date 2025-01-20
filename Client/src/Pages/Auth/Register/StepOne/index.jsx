@@ -111,7 +111,7 @@ function StepOne({ form, errors, onSubmit, onChange, onBack }) {
 						</Button>
 						<Button
 							variant="contained"
-							color="primary"
+							color="accent"
 							type="submit"
 							disabled={(errors.firstName || errors.lastName) && true}
 							sx={{

@@ -4,5 +4,5 @@
 	font-size: var(--env-var-font-size-small);
 }
 .page-speed:not(:has([class*="fallback__"])) button {
-	height: 34px;
+	min-height: 34px;
 }

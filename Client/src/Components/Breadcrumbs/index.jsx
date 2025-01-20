@@ -28,13 +28,16 @@ const Breadcrumbs = ({ list }) => {
 			px={theme.spacing(2)}
 			py={theme.spacing(3.5)}
 			width="fit-content"
-			backgroundColor={theme.palette.background.fill}
+			backgroundColor={theme.palette.secondary.main}
 			borderRadius={theme.shape.borderRadius}
 			lineHeight="18px"
 			sx={{
+				"& .MuiBreadcrumbs-li a": {
+					transition: "background-color 0.2s ease-in-out, color 0.2s ease-in-out",
+				},
 				"& .MuiBreadcrumbs-li:not(:last-of-type):hover a": {
-					backgroundColor: theme.palette.other.fill,
-					opacity: 1,
+					backgroundColor: theme.palette.secondary.contrastText,
+					color: theme.palette.secondary.main,
 				},
 			}}
 		>
@@ -52,7 +55,7 @@ const Breadcrumbs = ({ list }) => {
 							opacity: 0.8,
 							textTransform: "capitalize",
 							"&, &:hover": {
-								color: theme.palette.text.tertiary,
+								color: theme.palette.secondary.contrastText,
 							},
 						}}
 					>

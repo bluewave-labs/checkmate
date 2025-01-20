@@ -4,18 +4,20 @@ import { ResponsiveContainer, BarChart, XAxis, Bar, Cell } from "recharts";
 import PropTypes from "prop-types";
 import CustomLabels from "./CustomLabels";
 
+const getThemeColor = (responseTime) => {
+	if (responseTime < 200) {
+		return "success";
+	} else if (responseTime < 300) {
+		return "warning";
+	} else {
+		return "error";
+	}
+};
+
 const UpBarChart = memo(({ monitor, type, onBarHover }) => {
 	const theme = useTheme();
 	const [chartHovered, setChartHovered] = useState(false);
 	const [hoveredBarIndex, setHoveredBarIndex] = useState(null);
-
-	const getColorRange = (responseTime) => {
-		return responseTime < 200
-			? { main: theme.palette.success.main, light: theme.palette.success.light }
-			: responseTime < 300
-				? { main: theme.palette.warning.main, light: theme.palette.warning.light }
-				: { main: theme.palette.error.main, light: theme.palette.error.light };
-	};
 
 	return (
 		<ResponsiveContainer
@@ -38,7 +40,7 @@ const UpBarChart = memo(({ monitor, type, onBarHover }) => {
 				}}
 			>
 				<XAxis
-					stroke={theme.palette.border.dark}
+					stroke={theme.palette.primary.lowContrast}
 					height={15}
 					tick={false}
 					label={
@@ -59,11 +61,17 @@ const UpBarChart = memo(({ monitor, type, onBarHover }) => {
 					background={{ fill: "transparent" }}
 				>
 					{monitor.groupedUpChecks.map((entry, index) => {
-						let { main, light } = getColorRange(entry.avgResponseTime);
+						const themeColor = getThemeColor(entry.avgResponseTime);
 						return (
 							<Cell
 								key={`cell-${entry.time}`}
-								fill={hoveredBarIndex === index ? main : chartHovered ? light : main}
+								fill={
+									hoveredBarIndex === index
+										? theme.palette[themeColor].main
+										: chartHovered
+											? theme.palette[themeColor].light // CAIO_REVIEW
+											: theme.palette[themeColor].main
+								}
 								onMouseEnter={() => {
 									setHoveredBarIndex(index);
 									onBarHover(entry);

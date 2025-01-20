@@ -60,10 +60,10 @@ const PageSpeed = () => {
 				':has(> [class*="fallback__"])': {
 					position: "relative",
 					border: 1,
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					borderStyle: "dashed",
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					overflow: "hidden",
 				},
 			}}
@@ -83,7 +83,7 @@ const PageSpeed = () => {
 							{isAdmin && (
 								<Button
 									variant="contained"
-									color="primary"
+									color="accent"
 									onClick={() => navigate("/pagespeed/create")}
 									sx={{ fontWeight: 500, whiteSpace: "nowrap" }}
 								>
@@ -105,10 +105,10 @@ const PageSpeed = () => {
 						<Box
 							component="span"
 							className="current-monitors-counter"
-							color={theme.palette.text.primary}
+							color={theme.palette.primary.contrastText}
 							border={1}
-							borderColor={theme.palette.border.light}
-							backgroundColor={theme.palette.background.accent}
+							borderColor={theme.palette.primary.lowContrast}
+							backgroundColor={theme.palette.tertiary.main}
 						>
 							{summary?.totalMonitors ?? 0}
 						</Box>

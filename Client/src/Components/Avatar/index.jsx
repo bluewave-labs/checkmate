@@ -32,13 +32,16 @@ const Avatar = ({ src, small, sx }) => {
 	return (
 		<MuiAvatar
 			alt={`${user?.firstName} ${user?.lastName}`}
+			/* TODO What is the  /static/images/avatar/2.jpg ?*/
 			src={src ? src : user?.avatarImage ? image : "/static/images/avatar/2.jpg"}
 			sx={{
 				fontSize: small ? "16px" : "22px",
-				color: "white",
 				fontWeight: 400,
-				backgroundColor: theme.palette.primary.main, // Same BG color as checkmate BG in sidebar
+				color: theme.palette.accent.contrastText,
+				backgroundColor: theme.palette.accent.main, // Same BG color as checkmate BG in sidebar
 				display: "inline-flex",
+				/* 
+				TODO not sure what this is for*/
 				"&::before": {
 					content: `""`,
 					position: "absolute",
@@ -54,7 +57,7 @@ const Avatar = ({ src, small, sx }) => {
 			}}
 		>
 			{user.firstName?.charAt(0)}
-			{user.lastName?.charAt(0) || ''} 
+			{user.lastName?.charAt(0) || ""}
 		</MuiAvatar>
 	);
 };

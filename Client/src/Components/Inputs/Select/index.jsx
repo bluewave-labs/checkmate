@@ -54,11 +54,11 @@ const Select = ({
 	const theme = useTheme();
 	const itemStyles = {
 		fontSize: "var(--env-var-font-size-medium)",
-		color: theme.palette.text.tertiary,
+		color: theme.palette.primary.contrastTextTertiary,
 		borderRadius: theme.shape.borderRadius,
 		margin: theme.spacing(2),
 	};
-	
+
 	return (
 		<Stack
 			gap={theme.spacing(labelControlSpacing)}
@@ -67,7 +67,7 @@ const Select = ({
 			{label && (
 				<Typography
 					component="h3"
-					color={theme.palette.text.secondary}
+					color={theme.palette.primary.contrastTextSecondary}
 					fontWeight={500}
 					fontSize={13}
 				>
@@ -89,13 +89,13 @@ const Select = ({
 					minWidth: "125px",
 					"& fieldset": {
 						borderRadius: theme.shape.borderRadius,
-						borderColor: theme.palette.border.dark,
+						borderColor: theme.palette.primary.lowContrast,
 					},
 					"&:not(.Mui-focused):hover fieldset": {
-						borderColor: theme.palette.border.dark,
+						borderColor: theme.palette.primary.lowContrast,
 					},
 					"& svg path": {
-						fill: theme.palette.other.icon,
+						fill: theme.palette.primary.contrastTextTertiary,
 					},
 					...sx,
 				}}

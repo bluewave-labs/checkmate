@@ -40,7 +40,7 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 				className="background-pattern-svg"
 				sx={{
 					"& svg g g:last-of-type path": {
-						stroke: theme.palette.border.light,
+						stroke: theme.palette.primary.lowContrast,
 					},
 				}}
 			>
@@ -54,7 +54,7 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 				<Typography
 					component="h1"
 					marginY={theme.spacing(4)}
-					color={theme.palette.text.tertiary}
+					color={theme.palette.primary.contrastTextTertiary}
 				>
 					{vowelStart ? "An" : "A"} {title} is used to:
 				</Typography>
@@ -70,7 +70,7 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 			{isAdmin && (
 				<Button
 					variant="contained"
-					color="primary"
+					color="accent"
 					sx={{ alignSelf: "center" }}
 					onClick={() => navigate(link)}
 				>

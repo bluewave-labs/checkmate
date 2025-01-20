@@ -48,9 +48,9 @@ const IconBox = styled(Box)(
 		position: "relative",
 		border: 1,
 		borderStyle: "solid",
-		borderColor: theme.palette.border.dark,
+		borderColor: theme.palette.primary.lowContrast,
 		borderRadius: borderRadius,
-		backgroundColor: theme.palette.background.accent,
+		backgroundColor: theme.palette.tertiary.main,
 		"& svg": {
 			position: "absolute",
 			top: "50%",
@@ -59,7 +59,7 @@ const IconBox = styled(Box)(
 			width: svgWidth,
 			height: svgHeight,
 			"& path": {
-				stroke: theme.palette.text.tertiary,
+				stroke: theme.palette.primary.contrastTextTertiary,
 			},
 		},
 	})

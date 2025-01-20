@@ -29,12 +29,12 @@ const ResponseGaugeChart = ({ avgResponseTime }) => {
 					? {
 							category: "Acceptable",
 							main: theme.palette.warning.main,
-							bg: theme.palette.warning.dark,
+							bg: theme.palette.warning.lowContrast,
 						}
 					: {
 							category: "Poor",
 							main: theme.palette.error.main,
-							bg: theme.palette.error.light,
+							bg: theme.palette.error.contrastText,
 						};
 
 	return (

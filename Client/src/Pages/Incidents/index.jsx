@@ -83,7 +83,7 @@ const Incidents = () => {
 						<Typography
 							display="inline-block"
 							component="h1"
-							color={theme.palette.text.secondary}
+							color={theme.palette.primary.contrastTextSecondary}
 						>
 							Incidents for
 						</Typography>
@@ -94,14 +94,15 @@ const Incidents = () => {
 							onChange={handleSelect}
 							items={Object.values(monitors)}
 							sx={{
-								backgroundColor: theme.palette.background.main,
+								backgroundColor: theme.palette.primary.main,
+								color: theme.palette.primary.contrastTextSecondary,
 							}}
 						/>
 						<ButtonGroup
 							sx={{
 								ml: "auto",
 								"& .MuiButtonBase-root, & .MuiButtonBase-root:hover": {
-									borderColor: theme.palette.border.light,
+									borderColor: theme.palette.primary.lowContrast,
 								},
 							}}
 						>

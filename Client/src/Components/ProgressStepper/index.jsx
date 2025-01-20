@@ -7,9 +7,9 @@ import PropTypes from "prop-types";
 const CustomStepIcon = (props) => {
 	const { completed, active } = props;
 	return completed ? (
-		<CheckCircle color="primary" />
+		<CheckCircle color="accent" />
 	) : (
-		<RadioButtonCheckedIcon color={active ? "primary" : "disabled"} />
+		<RadioButtonCheckedIcon color={active ? "accent" : "disabled"} />
 	);
 };
 

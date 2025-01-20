@@ -54,7 +54,7 @@ const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 
 
 	const fillColor =
 		progressWithinRange > threshold
-			? theme.palette.percentage.uptimePoor
+			? theme.palette.error.main
 			: theme.palette.primary.main;
 
 	return (
@@ -70,7 +70,7 @@ const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 
 			>
 				<circle
 					className="radial-chart-base"
-					stroke={theme.palette.background.fill}
+					stroke={theme.palette.primary.lowContrast}
 					strokeWidth={strokeWidth}
 					fill="none"
 					cx={totalSize / 2} // Center the circle

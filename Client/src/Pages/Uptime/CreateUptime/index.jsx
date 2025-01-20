@@ -402,7 +402,7 @@ const CreateMonitor = () => {
 				>
 					<LoadingButton
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={handleCreateMonitor}
 						disabled={!Object.values(errors).every((value) => value === undefined)}
 						loading={isLoading}

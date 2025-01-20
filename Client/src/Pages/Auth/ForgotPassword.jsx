@@ -95,8 +95,9 @@ const ForgotPassword = () => {
 					fontSize: 21,
 				},
 				"& p": {
+					/* TODO font size from theme */
 					fontSize: 14,
-					color: theme.palette.text.accent,
+					color: theme.palette.primary.contrastTextSecondary,
 				},
 			}}
 		>
@@ -104,7 +105,7 @@ const ForgotPassword = () => {
 				className="background-pattern-svg"
 				sx={{
 					"& svg g g:last-of-type path": {
-						stroke: theme.palette.border.light,
+						stroke: theme.palette.primary.lowContrast,
 					},
 				}}
 			>
@@ -131,8 +132,8 @@ const ForgotPassword = () => {
 					"& > .MuiStack-root": {
 						border: 1,
 						borderRadius: theme.spacing(5),
-						borderColor: theme.palette.border.light,
-						backgroundColor: theme.palette.background.main,
+						borderColor: theme.palette.primary.lowContrast,
+						backgroundColor: theme.palette.primary.main,
 						padding: {
 							xs: theme.spacing(12),
 							sm: theme.spacing(20),
@@ -186,7 +187,7 @@ const ForgotPassword = () => {
 						/>
 						<LoadingButton
 							variant="contained"
-							color="primary"
+							color="accent"
 							loading={isLoading}
 							disabled={errors.email !== undefined}
 							onClick={handleSubmit}

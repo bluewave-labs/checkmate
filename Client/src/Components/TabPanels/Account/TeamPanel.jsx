@@ -43,7 +43,7 @@ const TeamPanel = () => {
 			render: (row) => {
 				return (
 					<Stack>
-						<Typography color={theme.palette.text.secondary}>
+						<Typography color={theme.palette.primary.contrastTextSecondary}>
 							{row.firstName + " " + row.lastName}
 						</Typography>
 						<Typography>
@@ -180,11 +180,11 @@ const TeamPanel = () => {
 			value="team"
 			sx={{
 				"& h1": {
-					color: theme.palette.text.tertiary,
+					color: theme.palette.primary.contrastTextTertiary,
 				},
 				"& .MuiTable-root .MuiTableBody-root .MuiTableCell-root, & .MuiTable-root p + p":
 					{
-						color: theme.palette.text.accent,
+						color: theme.palette.primary.contrastTextSecondary,
 					},
 			}}
 		>
@@ -232,7 +232,7 @@ const TeamPanel = () => {
 					<LoadingButton
 						loading={isSendingInvite}
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={() => setIsOpen(true)}
 					>
 						Invite a team member
@@ -289,15 +289,15 @@ const TeamPanel = () => {
 				>
 					<LoadingButton
 						loading={isSendingInvite}
-						variant="text"
-						color="info"
+						variant="contained" // CAIO_REVIEW
+						color="error"
 						onClick={closeInviteModal}
 					>
 						Cancel
 					</LoadingButton>
 					<LoadingButton
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={handleInviteMember}
 						loading={isSendingInvite}
 						disabled={isDisabled}

@@ -149,7 +149,7 @@ const CustomAreaChart = ({
 				/>
 
 				<CartesianGrid
-					stroke={theme.palette.border.light}
+					stroke={theme.palette.primary.lowContrast}
 					strokeWidth={1}
 					strokeOpacity={1}
 					fill="transparent"
@@ -180,7 +180,7 @@ const CustomAreaChart = ({
 				})}
 				{customTooltip ? (
 					<Tooltip
-						cursor={{ stroke: theme.palette.border.light }}
+						cursor={{ stroke: theme.palette.primary.lowContrast }}
 						content={customTooltip}
 						wrapperStyle={{ pointerEvents: "none" }}
 					/>

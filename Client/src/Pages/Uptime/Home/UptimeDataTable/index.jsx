@@ -156,7 +156,7 @@ const UptimeDataTable = ({
 					direction="row"
 					gap={theme.spacing(4)}
 					alignItems="center"
-					width="max-content"
+					display={"inline-flex"}
 					onClick={() => handleSort("status")}
 				>
 					{" "}
@@ -168,9 +168,9 @@ const UptimeDataTable = ({
 						}}
 					>
 						{sort.order === "asc" ? (
-							<ArrowUpwardRoundedIcon />
+							<ArrowUpwardRoundedIcon fontSize="18px" />
 						) : (
-							<ArrowDownwardRoundedIcon />
+							<ArrowDownwardRoundedIcon fontSize="18px" />
 						)}
 					</Stack>
 				</Stack>
@@ -222,15 +222,22 @@ const UptimeDataTable = ({
 				direction="row"
 				alignItems="center"
 				mb={theme.spacing(8)}
+				gap={theme.spacing(2)}
 			>
 				<Heading component="h2">Uptime monitors</Heading>
-
+				{/* TODO Same as the one in Infrastructure. Create component */}
 				<Box
-					className="current-monitors-counter"
-					color={theme.palette.text.primary}
-					border={1}
-					borderColor={theme.palette.border.light}
-					backgroundColor={theme.palette.background.accent}
+					component="span"
+					color={theme.palette.tertiary.contrastText}
+					border={2}
+					borderColor={theme.palette.accent.main}
+					backgroundColor={theme.palette.tertiary.main}
+					sx={{
+						padding: ".25em .75em",
+						borderRadius: "50%",
+						fontSize: "12px",
+						fontWeight: 500,
+					}}
 				>
 					{monitorCount}
 				</Box>
@@ -250,7 +257,7 @@ const UptimeDataTable = ({
 							height="100%"
 							position="absolute"
 							sx={{
-								backgroundColor: theme.palette.background.main,
+								backgroundColor: theme.palette.primary.main,
 								opacity: 0.8,
 								zIndex: 100,
 							}}
@@ -267,7 +274,7 @@ const UptimeDataTable = ({
 						>
 							<CircularProgress
 								sx={{
-									color: theme.palette.other.icon,
+									color: theme.palette.accent.main,
 								}}
 							/>
 						</Box>
@@ -279,8 +286,9 @@ const UptimeDataTable = ({
 					config={{
 						rowSX: {
 							cursor: "pointer",
-							"&:hover": {
-								backgroundColor: theme.palette.background.accent,
+							"&:hover td": {
+								backgroundColor: theme.palette.tertiary.main,
+								transition: "background-color .3s ease",
 							},
 						},
 						onRowClick: (row) => {
