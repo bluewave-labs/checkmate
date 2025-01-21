@@ -59,6 +59,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 						rowsPerPage,
 					});
 				}
+
 				setChecks(res.data.data.checks);
 				setChecksCount(res.data.data.checksCount);
 			} catch (error) {

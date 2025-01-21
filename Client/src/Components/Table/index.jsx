@@ -82,9 +82,10 @@ const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
 						</TableRow>
 					) : (
 						data.map((row) => {
+							const key = row.id || row._id || Math.random();
 							return (
 								<TableRow
-									key={row.id}
+									key={key}
 									sx={config?.rowSX ?? {}}
 									onClick={() => config?.onRowClick(row)}
 								>
