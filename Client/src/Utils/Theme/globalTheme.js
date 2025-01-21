@@ -116,6 +116,9 @@ const baseTheme = (palette) => ({
 							backgroundColor: theme.palette.secondary.main,
 							color: theme.palette.primary.contrastText,
 						},
+						"&.MuiButton-colorAccent:hover": {
+							boxShadow: `0 0 0 1px ${theme.palette.accent.main}`, // CAIO_REVIEW, this should really have a solid BG color
+						},
 					},
 					"&.MuiLoadingButton-loading": {
 						"& .MuiLoadingButton-label": {

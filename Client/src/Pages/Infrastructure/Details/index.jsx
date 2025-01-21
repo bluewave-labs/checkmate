@@ -408,8 +408,8 @@ const InfrastructureDetails = () => {
 				data: checks,
 				dataKeys: ["avgMemoryUsage"],
 				heading: "Memory usage",
-				strokeColor: theme.palette.primary.main,
-				gradientStartColor: theme.palette.primary.main,
+				strokeColor: theme.palette.accent.main, // CAIO_REVIEW
+				gradientStartColor: theme.palette.accent.main, // CAIO_REVIEW
 				yLabel: "Memory usage",
 				yDomain: [0, 1],
 				yTick: <PercentTick />,

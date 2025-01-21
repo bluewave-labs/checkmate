@@ -1,4 +1,4 @@
-import { lighten } from "@mui/material/styles"; // CAIO_REVIEW
+import { lighten, darken } from "@mui/material/styles"; // CAIO_REVIEW
 
 const typographyBase = 14;
 
