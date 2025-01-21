@@ -559,6 +559,9 @@ const buildDistributedUptimeDetailsPipeline = (monitor, dates, dateString) => {
 							totalChecks: {
 								$sum: 1,
 							},
+							uptBurnt: {
+								$sum: "$uptBurnt",
+							},
 						},
 					},
 				],
@@ -656,6 +659,7 @@ const buildDistributedUptimeDetailsPipeline = (monitor, dates, dateString) => {
 							responseTime: 1,
 							city: 1,
 							countryCode: 1,
+							uptBurnt: { $toString: "$uptBurnt" },
 						},
 					},
 				],
@@ -663,6 +667,11 @@ const buildDistributedUptimeDetailsPipeline = (monitor, dates, dateString) => {
 		},
 		{
 			$project: {
+				totalUptBurnt: {
+					$toString: {
+						$arrayElemAt: ["$aggregateData.uptBurnt", 0],
+					},
+				},
 				avgResponseTime: {
 					$arrayElemAt: ["$aggregateData.avgResponseTime", 0],
 				},

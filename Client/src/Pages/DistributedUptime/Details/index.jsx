@@ -105,7 +105,6 @@ const DistributedUptimeDetails = () => {
 		};
 
 		const cleanup = connectToService();
-		console.log(cleanup);
 		return cleanup;
 	}, [authToken, monitorId, dateRange, retryCount]);
 
@@ -139,6 +138,10 @@ const DistributedUptimeDetails = () => {
 						lastUpdateTime={0}
 						trigger={lastUpdateTrigger}
 						suffix={"seconds ago"}
+					/>
+					<StatBox
+						heading="Total UPT Burned"
+						value={monitor?.totalUptBurnt ?? 0}
 					/>
 				</Stack>
 				<NextExpectedCheck
@@ -201,7 +204,7 @@ const DistributedUptimeDetails = () => {
 				<Stack
 					direction="row"
 					gap={theme.spacing(8)}
-					height={"50vh"}
+					minHeight={"50vh"}
 				>
 					<DistributedUptimeMap
 						checks={monitor?.groupedMapChecks ?? []}

@@ -346,6 +346,7 @@ class NetworkService {
 				}
 			);
 		} catch (error) {
+			console.log(error.message);
 			error.service = this.SERVICE_NAME;
 			error.method = "requestDistributedHttp";
 			throw error;

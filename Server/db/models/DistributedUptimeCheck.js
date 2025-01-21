@@ -38,6 +38,7 @@ import { BaseCheckSchema } from "./Check.js";
 // 	  "continent": "AS",
 // 	  "country_code": "PK",
 // 	  "city": "Muzaffargarh",
+// 	  "upt_burnt" : "0.01",
 // 	  "location": {
 // 		"lat": 71.0968,
 // 		"lng": 30.0208
@@ -76,9 +77,20 @@ const DistributedUptimeCheckSchema = mongoose.Schema(
 			type: String,
 			required: false,
 		},
+		uptBurnt: {
+			type: mongoose.Schema.Types.Decimal128,
+			required: false,
+		},
 	},
 	{ timestamps: true }
 );
+
+DistributedUptimeCheckSchema.pre("save", function (next) {
+	if (this.isModified("uptBurnt") && typeof this.uptBurnt === "string") {
+		this.uptBurnt = mongoose.Types.Decimal128.fromString(this.uptBurnt);
+	}
+	next();
+});
 
 DistributedUptimeCheckSchema.index({ createdAt: 1 });
 DistributedUptimeCheckSchema.index({ monitorId: 1, createdAt: 1 });

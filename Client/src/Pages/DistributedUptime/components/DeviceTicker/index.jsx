@@ -102,6 +102,7 @@ const DeviceTicker = ({ data, width = "100%", connectionStatus }) => {
 									<Typography variant="h2">{dataPoint?.city || "Unknown"}</Typography>
 								</Stack>
 								<Typography variant="p">{`Response time: ${Math.floor(dataPoint?.responseTime ?? 0)} ms`}</Typography>
+								<Typography variant="p">{`UPT burned: ${dataPoint.uptBurnt}`}</Typography>
 								<Typography variant="p">{`${randomDevice.manufacturer} ${randomDevice.model}`}</Typography>
 							</Stack>
 						</ListItem>
