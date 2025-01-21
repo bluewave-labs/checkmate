@@ -12,6 +12,13 @@ const BaseCheckSchema = mongoose.Schema({
 		immutable: true,
 		index: true,
 	},
+
+	teamId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Team",
+		immutable: true,
+		index: true,
+	},
 	/**
 	 * Status of the check (true for up, false for down).
 	 *
