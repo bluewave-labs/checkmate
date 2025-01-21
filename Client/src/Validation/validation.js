@@ -7,11 +7,11 @@ const nameSchema = joi
 	.string()
 	.max(50)
 	.trim()
-	.pattern(/^[A-Za-z]+$/)
+	.pattern(/^[\p{L}]+(?:[\p{L}\s]+)*$/u)
 	.messages({
 		"string.empty": "Name is required",
 		"string.max": "Name must be less than 50 characters long",
-		"string.pattern.base": "Name must contain only letters",
+		"string.pattern.base": "Name must contain only letters and spaces.",
 	});
 
 const passwordSchema = joi
