@@ -4,7 +4,6 @@ import { /* colors, */ newSemanticColors } from "./constants";
 import { extractThemeColors } from "./extractColorObject";
 
 const palette = extractThemeColors("light", newSemanticColors);
-console.log(palette);
 const lightTheme = createTheme({
 	palette,
 	...baseTheme(palette),
