@@ -6,7 +6,7 @@ import "./index.css";
 import { useSelector } from "react-redux";
 
 /* TODO add prop validation and jsdocs */
-const BarChart = ({ checks = [] }) => {
+const BarChart = ({ checks = [], barWidth, barMarginBottom }) => {
 	const theme = useTheme();
 	const [animate, setAnimate] = useState(false);
 	const uiTimezone = useSelector((state) => state.ui.timezone);
@@ -35,6 +35,7 @@ const BarChart = ({ checks = [] }) => {
 			onClick={(event) => event.stopPropagation()}
 			sx={{
 				cursor: "default",
+				...(barMarginBottom && { mb: barMarginBottom }),
 			}}
 		>
 			{checks.map((check, index) =>
@@ -138,7 +139,7 @@ const BarChart = ({ checks = [] }) => {
 					>
 						<Box
 							position="relative"
-							width="9px"
+							width={barWidth ?? "9px"}
 							height="100%"
 							backgroundColor={
 								check.status
