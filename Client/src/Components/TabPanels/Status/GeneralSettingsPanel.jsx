@@ -184,7 +184,7 @@ const GeneralSettingsPanel = () => {
 								color={theme.palette.text.secondary}
 								fontWeight={500}
 								fontSize={13}
-								sx={{ mb: theme.spacing(-2) }}
+								sx={{ mb: theme.spacing(2) }}
 							>
 								Logo
 							</Typography>
@@ -213,6 +213,7 @@ const GeneralSettingsPanel = () => {
 										width: "100%",
 										maxWidth: "200px",
 										alignSelf: "center",
+										mt: theme.spacing(4)
 									}}
 								>
 									Remove Logo
