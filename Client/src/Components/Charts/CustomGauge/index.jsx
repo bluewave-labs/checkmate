@@ -54,8 +54,8 @@ const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 
 
 	const fillColor =
 		progressWithinRange > threshold
-			? theme.palette.error.lowContrast
-			: theme.palette.accent.main;
+			? theme.palette.error.lowContrast // CAIO_REVIEW
+			: theme.palette.accent.main; // CAIO_REVIEW
 
 	return (
 		<Box
@@ -70,7 +70,7 @@ const CustomGauge = ({ progress = 0, radius = 70, strokeWidth = 15, threshold = 
 			>
 				<circle
 					className="radial-chart-base"
-					stroke={theme.palette.primary.lowContrast}
+					stroke={theme.palette.primary.lowContrast} // CAIO_REVIEW
 					strokeWidth={strokeWidth}
 					fill="none"
 					cx={totalSize / 2} // Center the circle
