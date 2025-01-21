@@ -128,6 +128,12 @@ const newSemanticColors = {
 			light: lighten(newColors.blueBlueWave, 0.2), //CAIO_REVIEW
 			dark: lighten(newColors.blueBlueWave, 0.2), //CAIO_REVIEW
 		},
+		darker: {
+			// CAIO_REVIEW
+			light: darken(newColors.blueBlueWave, 0.2), // CAIO_REVIEW
+			dark: darken(newColors.blueBlueWave, 0.2), // CAIO_REVIEW
+		},
+
 		contrastText: {
 			light: newColors.offWhite,
 			dark: newColors.offWhite,

@@ -9,6 +9,7 @@ function extractThemeColors(themeType, colorObject) {
 		}
 
 		if ("light" in obj && "dark" in obj) {
+			// CAIO_REVIEW:  This will break if the root object has light and dark properties
 			return obj[themeType]; // Return the value for the specified theme
 		}
 

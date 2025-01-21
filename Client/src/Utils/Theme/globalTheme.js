@@ -49,8 +49,7 @@ const baseTheme = (palette) => ({
 							props: (props) => props.color === "accent",
 							style: {
 								"&:hover": {
-									color: theme.palette.accent.main,
-									backgroundColor: theme.palette.accent.contrastText,
+									backgroundColor: theme.palette.accent.darker,
 								},
 							},
 						},
