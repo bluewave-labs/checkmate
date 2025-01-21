@@ -73,6 +73,7 @@ const successMessages = {
 	ALERT_EDIT: "Alert edited successfully",
 	ALERT_DELETE: "Alert deleted successfully",
 
+	// Auth Controller
 	AUTH_CREATE_USER: "User created successfully",
 	AUTH_LOGIN_USER: "User logged in successfully",
 	AUTH_LOGOUT_USER: "User logged out successfully",
@@ -83,6 +84,11 @@ const successMessages = {
 	AUTH_ADMIN_CHECK: "Admin check completed successfully",
 	AUTH_DELETE_USER: "User deleted successfully",
 	AUTH_TOKEN_REFRESHED: "Auth token is refreshed",
+	AUTH_GET_ALL_USERS: "Got all users successfully",
+
+	// Invite Controller
+	INVITE_ISSUED: "Invite sent successfully",
+	INVITE_VERIFIED: "Invite verified successfully",
 
 	// Check Controller
 	CHECK_CREATE: "Check created successfully",
@@ -94,6 +100,7 @@ const successMessages = {
 	MONITOR_GET_ALL: "Got all monitors successfully",
 	MONITOR_STATS_BY_ID: "Got monitor stats by Id successfully",
 	MONITOR_GET_BY_ID: "Got monitor by Id successfully",
+	MONITOR_GET_BY_TEAM_ID: "Got monitors by Team Id successfully",
 	MONITOR_GET_BY_USER_ID: (userId) => `Got monitor for ${userId} successfully"`,
 	MONITOR_CREATE: "Monitor created successfully",
 	MONITOR_DELETE: "Monitor deleted successfully",

@@ -22,8 +22,7 @@ class StatusPageController {
 
 		try {
 			const statusPage = await this.db.createStatusPage(req.body);
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.STATUS_PAGE_CREATE,
 				data: statusPage,
 			});
@@ -42,8 +41,7 @@ class StatusPageController {
 		try {
 			const { url } = req.params;
 			const statusPage = await this.db.getStatusPageByUrl(url);
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.STATUS_PAGE_BY_URL,
 				data: statusPage,
 			});

@@ -8,6 +8,7 @@ import cors from "cors";
 import logger from "./utils/logger.js";
 import { verifyJWT } from "./middleware/verifyJWT.js";
 import { handleErrors } from "./middleware/handleErrors.js";
+import { responseHandler } from "./middleware/responseHandler.js";
 import { fileURLToPath } from "url";
 
 import AuthRoutes from "./routes/authRoute.js";
@@ -272,6 +273,8 @@ const startApp = async () => {
 	app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
 	//routes
+	app.use(responseHandler);
+
 	app.use("/api/v1/auth", authRoutes.getRouter());
 	app.use("/api/v1/settings", verifyJWT, settingsRoutes.getRouter());
 	app.use("/api/v1/invite", inviteRoutes.getRouter());
