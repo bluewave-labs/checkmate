@@ -40,11 +40,17 @@ const registrationBodyValidation = joi.object({
 	firstName: joi
 		.string()
 		.required()
-		.pattern(/^[A-Za-z]+$/),
+		.pattern(/^[\p{L}]+(?:[\p{L}\s]+)*$/u)
+		.messages({
+			"string.pattern.base": "First name must contain only letters and spaces",
+		}),
 	lastName: joi
 		.string()
 		.required()
-		.pattern(/^[A-Za-z]+$/),
+		.pattern(/^[\p{L}]+(?:[\p{L}\s]+)*$/u)
+		.messages({
+			"string.pattern.base": "Last name must contain only letters and spaces",
+		}),
 	email: joi
 		.string()
 		.email()
@@ -72,8 +78,18 @@ const editUserParamValidation = joi.object({
 });
 
 const editUserBodyValidation = joi.object({
-	firstName: joi.string().pattern(/^[A-Za-z]+$/),
-	lastName: joi.string().pattern(/^[A-Za-z]+$/),
+	firstName: joi
+	.string()
+	.pattern(/^[\p{L}]+(?:[\p{L}\s]+)*$/u)
+	.messages({
+		"string.pattern.base": "First name must contain only letters and spaces",
+	}),
+	lastName: joi
+	.string()
+	.pattern(/^[\p{L}]+(?:[\p{L}\s]+)*$/u)
+	.messages({
+		"string.pattern.base": "Last name must contain only letters and spaces",
+	}),
 	profileImage: joi.any(),
 	newPassword: joi.string().min(8).pattern(passwordPattern),
 	password: joi.string().min(8).pattern(passwordPattern),
