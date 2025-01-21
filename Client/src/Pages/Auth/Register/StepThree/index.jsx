@@ -134,7 +134,7 @@ function StepThree({ onSubmit, onBack }) {
 									mr: theme.spacing(3),
 								},
 								":focus-visible": {
-									outline: `2px solid ${theme.palette.primary.dark}`,
+									outline: `2px solid ${theme.palette.primary.lowContrast}`,
 									outlineOffset: "4px",
 								},
 							}}
@@ -145,7 +145,7 @@ function StepThree({ onSubmit, onBack }) {
 						<Button
 							type="submit"
 							variant="contained"
-							color="primary"
+							color="accent"
 							disabled={
 								form.password.length === 0 ||
 								form.confirm.length === 0 ||

@@ -93,7 +93,7 @@ function StepTwo({ form, errors, onSubmit, onChange, onBack }) {
 						</Button>
 						<Button
 							variant="contained"
-							color="primary"
+							color="accent"
 							onClick={onSubmit}
 							disabled={errors.email && true}
 							sx={{

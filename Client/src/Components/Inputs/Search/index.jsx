@@ -27,7 +27,7 @@ const SearchAdornment = () => {
 					width: 16,
 					height: 16,
 					"& path": {
-						stroke: theme.palette.text.tertiary,
+						stroke: theme.palette.primary.contrastTextTertiary,
 						strokeWidth: 1.2,
 					},
 				},
@@ -79,7 +79,7 @@ const Search = ({
 					<Typography
 						component="h3"
 						fontSize={"var(--env-var-font-size-medium)"}
-						color={theme.palette.text.secondary}
+						color={theme.palette.primary.contrastTextSecondary}
 						fontWeight={500}
 					>
 						{label}
@@ -94,12 +94,12 @@ const Search = ({
 						}}
 						sx={{
 							"& fieldset": {
-								borderColor: theme.palette.border.light,
+								borderColor: theme.palette.primary.lowContrast,
 								borderRadius: theme.shape.borderRadius,
 							},
 							"& .MuiOutlinedInput-root:hover:not(:has(input:focus)):not(:has(textarea:focus)) fieldset":
 								{
-									borderColor: theme.palette.border.light,
+									borderColor: theme.palette.primary.lowContrast,
 								},
 							"& .MuiOutlinedInput-root": {
 								paddingY: 0,
@@ -142,7 +142,7 @@ const Search = ({
 							option.noOptions
 								? {
 										pointerEvents: "none",
-										backgroundColor: theme.palette.background.main,
+										backgroundColor: theme.palette.primary.main,
 									}
 								: {}
 						}
@@ -155,16 +155,21 @@ const Search = ({
 				popper: {
 					keepMounted: true,
 					sx: {
-						"& ul": { p: 2 },
+						"& ul": { p: 2, backgroundColor: theme.palette.primary.main },
 						"& li.MuiAutocomplete-option": {
-							color: theme.palette.text.secondary,
+							color: theme.palette.primary.contrastTextSecondary,
 							px: 4,
 							borderRadius: theme.shape.borderRadius,
 						},
+
 						"& .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true'], & .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true'].Mui-focused, & .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true']:hover":
 							{
-								backgroundColor: theme.palette.background.fill,
+								backgroundColor: theme.palette.primary.lowContrast,
 							},
+						"& li.MuiAutocomplete-option:hover:not([aria-selected='true'])": {
+							color: theme.palette.primary.main,
+							backgroundColor: theme.palette.primary.contrastTextSecondary,
+						},
 						"& .MuiAutocomplete-noOptions": {
 							px: theme.spacing(6),
 							py: theme.spacing(5),

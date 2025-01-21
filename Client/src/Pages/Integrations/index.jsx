@@ -33,9 +33,9 @@ const IntegrationsComponent = ({ icon, header, info, onClick }) => {
 				pl={theme.spacing(12)}
 				height="100%"
 				border={1}
-				borderColor={theme.palette.border.light}
+				borderColor={theme.palette.primary.lowContrast}
 				borderRadius={theme.shape.borderRadius}
-				backgroundColor={theme.palette.background.main}
+				backgroundColor={theme.palette.primary.main}
 			>
 				{icon}
 				<Stack
@@ -54,7 +54,7 @@ const IntegrationsComponent = ({ icon, header, info, onClick }) => {
 				</Stack>
 				<Button
 					variant="contained"
-					color="primary"
+					color="accent"
 					onClick={onClick}
 					sx={{ alignSelf: "center" }}
 					disabled={true}
@@ -126,7 +126,7 @@ const Integrations = () => {
 			gap={theme.spacing(2)}
 			sx={{
 				"& h1, & p": {
-					color: theme.palette.text.secondary,
+					color: theme.palette.primary.contrastTextSecondary,
 				},
 			}}
 		>

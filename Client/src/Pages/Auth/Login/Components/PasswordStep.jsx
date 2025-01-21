@@ -91,7 +91,7 @@ const PasswordStep = ({ form, errors, onSubmit, onChange, onBack }) => {
 						</Button>
 						<LoadingButton
 							variant="contained"
-							color="primary"
+							color="accent"
 							type="submit"
 							loading={authState.isLoading}
 							disabled={errors.password && true}

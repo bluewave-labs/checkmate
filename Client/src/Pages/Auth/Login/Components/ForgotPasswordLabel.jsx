@@ -24,7 +24,7 @@ const ForgotPasswordLabel = ({ email, errorEmail }) => {
 			</Typography>
 			<Typography
 				component="span"
-				color={theme.palette.primary.main}
+				color={theme.palette.accent.main}
 				ml={theme.spacing(2)}
 				sx={{ userSelect: "none" }}
 				onClick={handleNavigate}

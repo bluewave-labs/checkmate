@@ -18,7 +18,7 @@ const config = {
 	seo: {
 		id: "seo",
 		text: "SEO",
-		color: "unresolved",
+		color: "secondary",
 	},
 	performance: {
 		id: "performance",
@@ -33,7 +33,7 @@ const config = {
 	accessibility: {
 		id: "accessibility",
 		text: "accessibility",
-		color: "primary",
+		color: "accent",
 	},
 };
 
@@ -54,9 +54,9 @@ const CustomToolTip = ({ active, payload, label, config }) => {
 		return (
 			<Box
 				sx={{
-					backgroundColor: theme.palette.background.main,
+					backgroundColor: theme.palette.primary.main,
 					border: 1,
-					borderColor: theme.palette.border.dark,
+					borderColor: theme.palette.primary.lowContrast,
 					borderRadius: theme.shape.borderRadius,
 					py: theme.spacing(2),
 					px: theme.spacing(4),
@@ -64,7 +64,7 @@ const CustomToolTip = ({ active, payload, label, config }) => {
 			>
 				<Typography
 					sx={{
-						color: theme.palette.text.tertiary,
+						color: theme.palette.primary.contrastTextTertiary,
 						fontSize: 12,
 						fontWeight: 500,
 					}}
@@ -86,7 +86,7 @@ const CustomToolTip = ({ active, payload, label, config }) => {
 								mt={theme.spacing(1)}
 								sx={{
 									"& span": {
-										color: theme.palette.text.tertiary,
+										color: theme.palette.primary.contrastTextTertiary,
 										fontSize: 11,
 										fontWeight: 500,
 									},
@@ -186,7 +186,7 @@ const CustomTick = ({ x, y, payload, index }) => {
 			x={x}
 			y={y + 8}
 			textAnchor="middle"
-			fill={theme.palette.text.tertiary}
+			fill={theme.palette.primary.contrastTextTertiary}
 			fontSize={11}
 			fontWeight={400}
 		>
@@ -238,14 +238,14 @@ const PagespeedDetailsAreaChart = ({ data, interval, metrics }) => {
 				onMouseLeave={() => setIsHovered(false)}
 			>
 				<CartesianGrid
-					stroke={theme.palette.border.light}
+					stroke={theme.palette.primary.lowContrast}
 					strokeWidth={1}
 					strokeOpacity={1}
 					fill="transparent"
 					vertical={false}
 				/>
 				<XAxis
-					stroke={theme.palette.border.dark}
+					stroke={theme.palette.primary.lowContrast}
 					dataKey="createdAt"
 					tick={<CustomTick />}
 					axisLine={false}
@@ -255,13 +255,14 @@ const PagespeedDetailsAreaChart = ({ data, interval, metrics }) => {
 					interval="equidistantPreserveStart"
 				/>
 				<Tooltip
-					cursor={{ stroke: theme.palette.border.light }}
+					cursor={{ stroke: theme.palette.primary.lowContrast }}
 					content={<CustomToolTip config={filteredConfig} />}
 				/>
 				<defs>
 					{Object.values(filteredConfig).map(({ id, color }) => {
+						/* TODO not working? */
 						const startColor = theme.palette[color].main;
-						const endColor = theme.palette[color].light;
+						const endColor = theme.palette[color].lowContrast;
 
 						return (
 							<linearGradient
@@ -289,7 +290,7 @@ const PagespeedDetailsAreaChart = ({ data, interval, metrics }) => {
 				{Object.keys(filteredConfig).map((key) => {
 					const { color } = filteredConfig[key];
 					const strokeColor = theme.palette[color].main;
-					const bgColor = theme.palette.background.main;
+					const bgColor = theme.palette.primary.main;
 
 					return (
 						<Area

@@ -274,7 +274,7 @@ const Configure = () => {
 												width: 4,
 												height: 4,
 												borderRadius: "50%",
-												backgroundColor: theme.palette.text.tertiary,
+												backgroundColor: theme.palette.primary.contrastTextTertiary,
 												opacity: 0.8,
 												left: -10,
 												top: "50%",
@@ -305,7 +305,7 @@ const Configure = () => {
 											width: 22,
 											height: 22,
 											"& path": {
-												stroke: theme.palette.text.tertiary,
+												stroke: theme.palette.primary.contrastTextTertiary,
 												strokeWidth: 1.7,
 											},
 										},
@@ -445,7 +445,7 @@ const Configure = () => {
 						>
 							<LoadingButton
 								variant="contained"
-								color="primary"
+								color="accent"
 								loading={isLoading}
 								sx={{ px: theme.spacing(12) }}
 								onClick={handleSubmit}

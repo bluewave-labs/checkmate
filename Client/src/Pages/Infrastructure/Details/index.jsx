@@ -108,10 +108,10 @@ const BaseBox = ({ children, sx = {} }) => {
 				padding: `${theme.spacing(BASE_BOX_PADDING_VERTICAL)} ${theme.spacing(BASE_BOX_PADDING_HORIZONTAL)}`,
 				minWidth: 200,
 				width: 225,
-				backgroundColor: theme.palette.background.main,
+				backgroundColor: theme.palette.primary.main,
 				border: 1,
 				borderStyle: "solid",
-				borderColor: theme.palette.border.light,
+				borderColor: theme.palette.primary.lowContrast,
 				...sx,
 			}}
 		>
@@ -155,7 +155,7 @@ const GaugeBox = ({ value, heading, metricOne, valueOne, metricTwo, valueTwo }) 
 				<Box
 					sx={{
 						width: "100%",
-						borderTop: `1px solid ${theme.palette.border.light}`,
+						borderTop: `1px solid ${theme.palette.primary.lowContrast}`,
 					}}
 				>
 					<Stack
@@ -408,8 +408,8 @@ const InfrastructureDetails = () => {
 				data: checks,
 				dataKeys: ["avgMemoryUsage"],
 				heading: "Memory usage",
-				strokeColor: theme.palette.primary.main,
-				gradientStartColor: theme.palette.primary.main,
+				strokeColor: theme.palette.accent.main, // CAIO_REVIEW
+				gradientStartColor: theme.palette.accent.main, // CAIO_REVIEW
 				yLabel: "Memory usage",
 				yDomain: [0, 1],
 				yTick: <PercentTick />,
@@ -668,9 +668,9 @@ const InfrastructureDetails = () => {
 				<Empty
 					styles={{
 						border: 1,
-						borderColor: theme.palette.border.light,
+						borderColor: theme.palette.primary.lowContrast,
 						borderRadius: theme.shape.borderRadius,
-						backgroundColor: theme.palette.background.main,
+						backgroundColor: theme.palette.primary.main,
 						p: theme.spacing(30),
 					}}
 				/>

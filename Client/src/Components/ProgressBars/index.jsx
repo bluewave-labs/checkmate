@@ -1,4 +1,3 @@
-import React from "react";
 import { useTheme } from "@emotion/react";
 import PropTypes from "prop-types";
 import { Box, IconButton, LinearProgress, Stack, Typography } from "@mui/material";
@@ -30,11 +29,11 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 				height: "fit-content",
 				borderRadius: theme.shape.borderRadius,
 				border: 1,
-				borderColor: theme.palette.border.light,
-				backgroundColor: theme.palette.background.fill,
+				borderColor: theme.palette.primary.lowContrast,
+				backgroundColor: theme.palette.primary.lowContrast,
 				"&:has(.input-error)": {
 					borderColor: theme.palette.error.main,
-					backgroundColor: theme.palette.error.dark,
+					backgroundColor: theme.palette.error.lowContrast,
 					py: theme.spacing(4),
 					px: theme.spacing(8),
 					"& > .MuiStack-root > svg": {
@@ -60,9 +59,9 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 							height: 30,
 							minWidth: 30,
 							border: 1,
-							borderColor: theme.palette.border.dark,
+							borderColor: theme.palette.primary.lowContrast,
 							borderRadius: 2,
-							backgroundColor: theme.palette.background.main,
+							backgroundColor: theme.palette.primary.main,
 							"& svg": {
 								position: "absolute",
 								top: "50%",
@@ -71,7 +70,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 								width: 23,
 								height: 23,
 								"& path": {
-									fill: theme.palette.other.icon,
+									fill: theme.palette.primary.contrastTextTertiary,
 								},
 							},
 						}}
@@ -90,7 +89,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 						{error}
 					</Typography>
 				) : (
-					<Box color={theme.palette.text.tertiary}>
+					<Box color={theme.palette.primary.contrastTextTertiary}>
 						<Typography
 							component="h2"
 							mb={theme.spacing(1.5)}
@@ -148,7 +147,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 								height: "10px",
 								borderRadius: theme.shape.borderRadius,
 								maxWidth: "500px",
-								backgroundColor: theme.palette.border.light,
+								backgroundColor: theme.palette.primary.lowContrast,
 							}}
 						/>
 					</Box>
