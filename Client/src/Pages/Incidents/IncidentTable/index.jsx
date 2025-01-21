@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
-import { Pagination, PaginationItem, Typography, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 
-import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { networkService } from "../../../main";
@@ -16,6 +14,7 @@ import { HttpStatusLabel } from "../../../Components/HttpStatusLabel";
 import { Empty } from "./Empty/Empty";
 import { IncidentSkeleton } from "./Skeleton/Skeleton";
 import DataTable from "../../../Components/Table";
+import Pagination from "../../../Components/Table/TablePagination";
 const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 
@@ -24,18 +23,10 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 	const mode = useSelector((state) => state.ui.mode);
 	const [checks, setChecks] = useState([]);
 	const [checksCount, setChecksCount] = useState(0);
-	const [paginationController, setPaginationController] = useState({
-		page: 0,
-		rowsPerPage: 14,
-	});
-	const [isLoading, setIsLoading] = useState(false);
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
 
-	useEffect(() => {
-		setPaginationController((prevPaginationController) => ({
-			...prevPaginationController,
-			page: 0,
-		}));
-	}, [filter, selectedMonitor]);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchPage = async () => {
@@ -53,8 +44,8 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 						limit: null,
 						dateRange: null,
 						filter: filter,
-						page: paginationController.page,
-						rowsPerPage: paginationController.rowsPerPage,
+						page: page,
+						rowsPerPage: rowsPerPage,
 					});
 				} else {
 					res = await networkService.getChecksByMonitor({
@@ -64,8 +55,8 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 						limit: null,
 						dateRange: null,
 						filter: filter,
-						page: paginationController.page,
-						rowsPerPage: paginationController.rowsPerPage,
+						page,
+						rowsPerPage,
 					});
 				}
 				setChecks(res.data.data.checks);
@@ -77,21 +68,14 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 			}
 		};
 		fetchPage();
-	}, [
-		authToken,
-		user,
-		monitors,
-		selectedMonitor,
-		filter,
-		paginationController.page,
-		paginationController.rowsPerPage,
-	]);
+	}, [authToken, user, monitors, selectedMonitor, filter, page, rowsPerPage]);
 
 	const handlePageChange = (_, newPage) => {
-		setPaginationController({
-			...paginationController,
-			page: newPage - 1, // 0-indexed
-		});
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(event.target.value);
 	};
 
 	const headers = [
@@ -133,28 +117,6 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 		},
 		{ id: "message", content: "Message", render: (row) => row.message },
 	];
-
-	let paginationComponent = <></>;
-	if (checksCount > paginationController.rowsPerPage) {
-		paginationComponent = (
-			<Pagination
-				count={Math.ceil(checksCount / paginationController.rowsPerPage)}
-				page={paginationController.page + 1} //0-indexed
-				onChange={handlePageChange}
-				shape="rounded"
-				renderItem={(item) => (
-					<PaginationItem
-						slots={{
-							previous: ArrowBackRoundedIcon,
-							next: ArrowForwardRoundedIcon,
-						}}
-						{...item}
-					/>
-				)}
-				sx={{ mt: "auto" }}
-			/>
-		);
-	}
 
 	let sharedStyles = {
 		border: 1,
@@ -198,8 +160,14 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 						headers={headers}
 						data={checks}
 					/>
-
-					{paginationComponent}
+					<Pagination
+						paginationLabel="incidents"
+						itemCount={checksCount}
+						page={page}
+						rowsPerPage={rowsPerPage}
+						handleChangePage={handlePageChange}
+						handleChangeRowsPerPage={handleChangeRowsPerPage}
+					/>
 				</>
 			)}
 		</>

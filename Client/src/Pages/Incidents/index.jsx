@@ -8,7 +8,6 @@ import { useTheme } from "@emotion/react";
 import Select from "../../Components/Inputs/Select";
 import IncidentTable from "./IncidentTable";
 import SkeletonLayout from "./skeleton";
-import "./index.css";
 
 const Incidents = () => {
 	const theme = useTheme();

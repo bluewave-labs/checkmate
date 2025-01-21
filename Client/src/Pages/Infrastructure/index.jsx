@@ -13,7 +13,7 @@ import { Box, Button, IconButton, Stack } from "@mui/material";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import { StatusLabel } from "../../Components/Label";
 import { Heading } from "../../Components/Heading";
-import { Pagination } from "../../Components/Table/TablePagination/index.jsx";
+import Pagination from "../../Components/Table/TablePagination/index.jsx";
 // import { getInfrastructureMonitorsByTeamId } from "../../Features/InfrastructureMonitors/infrastructureMonitorsSlice";
 import { networkService } from "../../Utils/NetworkService.js";
 import CustomGauge from "../../Components/Charts/CustomGauge/index.jsx";
@@ -269,7 +269,8 @@ function Infrastructure() {
 						/>
 
 						<Pagination
-							monitorCount={summary?.totalMonitors ?? 0}
+							itemCount={summary?.totalMonitors ?? 0}
+							paginationLabel="monitors"
 							page={page}
 							rowsPerPage={rowsPerPage}
 							handleChangePage={handleChangePage}
