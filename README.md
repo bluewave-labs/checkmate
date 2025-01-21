@@ -48,7 +48,7 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 - Website monitoring
 - Page speed monitoring
 - Infrastructure monitoring (memory, disk usage, CPU performance etc) - requires [Capture](https://github.com/bluewave-labs/capture)
-- Docker monitoring
+- Docker monitor
 - Ping monitoring
 - SSL monitoring
 - Incidents at a glance
