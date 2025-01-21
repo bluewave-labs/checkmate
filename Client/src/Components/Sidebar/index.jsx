@@ -56,33 +56,21 @@ const menu = [
 	{ name: "Maintenance", path: "maintenance", icon: <Maintenance /> },
 	// { name: "Integrations", path: "integrations", icon: <Integrations /> },
 	{
-		name: "Account",
-		icon: <Account />,
-		nested: [
-			{ name: "Profile", path: "account/profile", icon: <UserSvg /> },
-			{ name: "Password", path: "account/password", icon: <LockSvg /> },
-			{ name: "Team", path: "account/team", icon: <TeamSvg /> },
-		],
-	},
-	{
 		name: "Settings",
 		icon: <Settings />,
 		path: "settings",
 	},
+];
+
+const subMenu = [
+	{ name: "Support", path: "support", icon: <Support /> },
 	{
-		name: "Other",
-		icon: <Folder />,
-		nested: [
-			{ name: "Support", path: "support", icon: <Support /> },
-			{
-				name: "Discussions",
-				path: "discussions",
-				icon: <ChatBubbleOutlineRoundedIcon />,
-			},
-			{ name: "Docs", path: "docs", icon: <Docs /> },
-			{ name: "Changelog", path: "changelog", icon: <ChangeLog /> },
-		],
+		name: "Discussions",
+		path: "discussions",
+		icon: <ChatBubbleOutlineRoundedIcon />,
 	},
+	{ name: "Docs", path: "docs", icon: <Docs /> },
+	{ name: "Changelog", path: "changelog", icon: <ChangeLog /> },
 ];
 
 /* TODO this could be a key in nested Path would be the link */
@@ -270,11 +258,185 @@ function Sidebar() {
 				}
 				sx={{
 					px: theme.spacing(6),
-					height: "100%",
-					overflow: "hidden",
+					height: "auto",
 				}}
 			>
 				{menu.map((item) =>
+					item.path ? (
+						<Tooltip
+							key={item.path}
+							placement="right"
+							title={collapsed ? item.name : ""}
+							slotProps={{
+								popper: {
+									modifiers: [
+										{
+											name: "offset",
+											options: {
+												offset: [0, -16],
+											},
+										},
+									],
+								},
+							}}
+							disableInteractive
+						>
+							<ListItemButton
+								className={location.pathname.includes(item.path) ? "selected-path" : ""}
+								onClick={() => navigate(`/${item.path}`)}
+								sx={{
+									height: "37px",
+									gap: theme.spacing(4),
+									borderRadius: theme.shape.borderRadius,
+									px: theme.spacing(4),
+								}}
+							>
+								<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
+								<ListItemText>{item.name}</ListItemText>
+							</ListItemButton>
+						</Tooltip>
+					) : collapsed ? (
+						/* TODO Do we ever get here? */
+						<React.Fragment key={item.name}>
+							<Tooltip
+								placement="right"
+								title={collapsed ? item.name : ""}
+								slotProps={{
+									popper: {
+										modifiers: [
+											{
+												name: "offset",
+												options: {
+													offset: [0, -16],
+												},
+											},
+										],
+									},
+								}}
+								disableInteractive
+							>
+								<ListItemButton
+									className={
+										Boolean(anchorEl) && popup === item.name ? "selected-path" : ""
+									}
+									onClick={(event) => openPopup(event, item.name)}
+									sx={{
+										position: "relative",
+										gap: theme.spacing(4),
+										borderRadius: theme.shape.borderRadius,
+										px: theme.spacing(4),
+									}}
+								>
+									<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
+									<ListItemText>{item.name}</ListItemText>
+								</ListItemButton>
+							</Tooltip>
+							<Menu
+								className="sidebar-popup"
+								anchorEl={anchorEl}
+								open={Boolean(anchorEl) && popup === item.name}
+								onClose={closePopup}
+								disableScrollLock
+								anchorOrigin={{
+									vertical: "top",
+									horizontal: "right",
+								}}
+								slotProps={{
+									paper: {
+										sx: {
+											mt: theme.spacing(-2),
+											ml: theme.spacing(1),
+										},
+									},
+								}}
+								MenuListProps={{ sx: { px: 1, py: 2 } }}
+								sx={{
+									ml: theme.spacing(8),
+									"& .selected-path": {
+										backgroundColor: theme.palette.background.accent,
+									},
+								}}
+							>
+								{item.nested.map((child) => {
+									if (
+										child.name === "Team" &&
+										authState.user?.role &&
+										!authState.user.role.includes("superadmin")
+									) {
+										return null;
+									}
+
+									return (
+										<MenuItem
+											className={
+												location.pathname.includes(child.path) ? "selected-path" : ""
+											}
+											key={child.path}
+											onClick={() => {
+												const url = URL_MAP[child.path];
+												if (url) {
+													window.open(url, "_blank", "noreferrer");
+												} else {
+													navigate(`/${child.path}`);
+												}
+												closePopup();
+											}}
+											sx={{
+												gap: theme.spacing(4),
+												opacity: 0.9,
+												"& svg": {
+													"& path": {
+														stroke: theme.palette.other.icon,
+														strokeWidth: 1.1,
+													},
+												},
+											}}
+										>
+											{child.icon}
+											{child.name}
+										</MenuItem>
+									);
+								})}
+							</Menu>
+						</React.Fragment>
+					) : (
+						<React.Fragment key={item.name}>
+							<ListItemButton
+								onClick={() =>
+									setOpen((prev) => ({
+										...Object.fromEntries(Object.keys(prev).map((key) => [key, false])),
+										[item.name]: !prev[item.name],
+									}))
+								}
+								sx={{
+									gap: theme.spacing(4),
+									borderRadius: theme.shape.borderRadius,
+									px: theme.spacing(4),
+								}}
+							>
+								<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
+								<ListItemText>{item.name}</ListItemText>
+								{open[`${item.name}`] ? <ArrowUp /> : <ArrowDown />}
+							</ListItemButton>
+							<Collapse
+								in={open[`${item.name}`]}
+								timeout="auto"
+							></Collapse>
+						</React.Fragment>
+					)
+				)}
+			</List>
+			<List
+				component="nav"
+				aria-labelledby="nested-menu-subheader"
+				disablePadding
+				sx={{
+					px: theme.spacing(6),
+					pt: theme.spacing(35),
+					overflow: "hidden",
+				}}
+			>
+				{subMenu.map((item) =>
 					item.path ? (
 						<Tooltip
 							key={item.path}
@@ -573,7 +735,7 @@ function Sidebar() {
 										mr: "-8px",
 										"&:focus": { outline: "none" },
 										alignSelf: "center",
-										padding: '10px',
+										padding: "10px",
 
 										"& svg": {
 											width: "22px",
@@ -639,7 +801,49 @@ function Sidebar() {
 						</MenuItem>
 					)}
 					{collapsed && <Divider />}
-					<Divider />
+					<MenuItem
+						onClick={() => navigate("account/profile")}
+						sx={{
+							gap: theme.spacing(4),
+							borderRadius: theme.shape.borderRadius,
+							pl: theme.spacing(4),
+							"& svg path": {
+								stroke: theme.palette.other.icon,
+							},
+						}}
+					>
+						<UserSvg />
+						Profile
+					</MenuItem>
+
+					<MenuItem
+						onClick={() => navigate("account/password")}
+						sx={{
+							gap: theme.spacing(4),
+							borderRadius: theme.shape.borderRadius,
+							pl: theme.spacing(4),
+							"& svg path": {
+								stroke: theme.palette.other.icon,
+							},
+						}}
+					>
+						<LockSvg />
+						Password
+					</MenuItem>
+					<MenuItem
+						onClick={() => navigate("account/team")}
+						sx={{
+							gap: theme.spacing(4),
+							borderRadius: theme.shape.borderRadius,
+							pl: theme.spacing(4),
+							"& svg path": {
+								stroke: theme.palette.other.icon,
+							},
+						}}
+					>
+						<TeamSvg />
+						Team
+					</MenuItem>
 					<MenuItem
 						onClick={logout}
 						sx={{
