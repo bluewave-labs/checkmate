@@ -65,27 +65,29 @@ const useUtils = () => {
 	const statusStyles = {
 		up: {
 			backgroundColor: theme.palette.success.lowContrast,
-			background: `linear-gradient(340deg, ${theme.palette.success.lowContrast} -60%, ${theme.palette.success.contrastText} 35%)`,
+			background: `linear-gradient(340deg, ${theme.palette.tertiary.main} -60%, ${theme.palette.success.lowContrast} 35%)`, // CAIO_REVIEW
 			borderColor: theme.palette.success.contrastText,
-			"& h2": { color: theme.palette.success.main },
+			// "& h2": { color: theme.palette.success.contrastText }, // CAIO_REVIEW
 		},
 		down: {
 			backgroundColor: theme.palette.error.lowContrast,
-			background: `linear-gradient(340deg, ${theme.palette.error.lowContrast} -60%, ${theme.palette.error.contrastText} 35%)`,
+			background: `linear-gradient(340deg, ${theme.palette.tertiary.main} -60%, ${theme.palette.error.lowContrast} 35%)`, // CAIO_REVIEW
 			borderColor: theme.palette.error.contrastText,
-			"& h2": { color: theme.palette.error.main },
+			"& h2": { color: theme.palette.error.contrastText }, // CAIO_REVIEW
+			"& .MuiTypography-root": { color: theme.palette.error.contrastText }, // CAIO_REVIEW
 		},
 		paused: {
 			backgroundColor: theme.palette.warning.lowContrast,
-			background: `linear-gradient(340deg, ${theme.palette.warning.lowContrast} -60%, ${theme.palette.warning.contrastText} 35%)`,
+			background: `linear-gradient(340deg, ${theme.palette.tertiary.main} -60%, ${theme.palette.warning.lowContrast} 35%)`, // CAIO_REVIEW
 			borderColor: theme.palette.warning.contrastText,
-			"& h2": { color: theme.palette.warning.main },
+			"& h2": { color: theme.palette.warning.contrastText }, // CAIO_REVIEW
+			"& .MuiTypography-root": { color: theme.palette.warning.contrastText }, // CAIO_REVIEW
 		},
 		pending: {
 			backgroundColor: theme.palette.warning.lowContrast,
-			background: `linear-gradient(340deg, ${theme.palette.warning.lowContrast} -60%, ${theme.palette.warning.contrastText} 35%)`,
+			background: `linear-gradient(340deg, ${theme.palette.tertiary.main} -60%, ${theme.palette.warning.lowContrast} 35%)`, // CAIO_REVIEW
 			borderColor: theme.palette.warning.contrastText,
-			"& h2": { color: theme.palette.warning.main },
+			"& h2": { color: theme.palette.warning.contrastText }, // CAIO_REVIEW
 		},
 	};
 
