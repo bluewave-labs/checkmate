@@ -15,6 +15,7 @@ import Background from "../../../assets/Images/background-grid.svg?react";
 import Logo from "../../../assets/icons/bwu-icon.svg?react";
 import Mail from "../../../assets/icons/mail.svg?react";
 import "../index.css";
+import { useTranslation } from "react-i18next";
 
 /**
  * Displays the initial landing page.
@@ -118,6 +119,7 @@ const Register = ({ isSuperAdmin }) => {
 	const navigate = useNavigate();
 	const { token } = useParams();
 	const theme = useTheme();
+	const { t } = useTranslation();
 	// TODO If possible, change the IDs of these fields to match the backend
 	const idMap = {
 		"register-firstname-input": "firstName",
@@ -306,7 +308,7 @@ const Register = ({ isSuperAdmin }) => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Typography sx={{ userSelect: "none" }}>{t("commonAppName")}</Typography>
 			</Stack>
 			<Stack
 				width="100%"
@@ -366,7 +368,9 @@ const Register = ({ isSuperAdmin }) => {
 				textAlign="center"
 				p={theme.spacing(12)}
 			>
-				<Typography display="inline-block">Already have an account? —</Typography>
+				<Typography display="inline-block">
+					{t("authRegisterAlreadyHaveAccount")}
+				</Typography>
 				<Typography
 					component="span"
 					ml={theme.spacing(2)}
@@ -375,7 +379,7 @@ const Register = ({ isSuperAdmin }) => {
 					}}
 					sx={{ userSelect: "none", color: theme.palette.primary.main }}
 				>
-					Log In
+					{t("authLoginTitle")}
 				</Typography>
 			</Box>
 		</Stack>

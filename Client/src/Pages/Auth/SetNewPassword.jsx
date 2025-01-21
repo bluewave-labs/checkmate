@@ -17,11 +17,13 @@ import Logo from "../../assets/icons/bwu-icon.svg?react";
 import Background from "../../assets/Images/background-grid.svg?react";
 import "./index.css";
 import { useValidatePassword } from "./hooks/useValidatePassword";
+import { useTranslation } from "react-i18next";
 
 const SetNewPassword = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const theme = useTheme();
+	const { t } = useTranslation();
 
 	const passwordId = useId();
 	const confirmPasswordId = useId();
@@ -96,7 +98,7 @@ const SetNewPassword = () => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Typography sx={{ userSelect: "none" }}>{t("commonAppName")}</Typography>
 			</Stack>
 			<Stack
 				width="100%"
@@ -141,125 +143,108 @@ const SetNewPassword = () => {
 								<LockIcon alt="lock icon" />
 							</IconBox>
 						</Stack>
-						<Typography component="h1">Set new password</Typography>
-						<Typography>
-							Your new password must be different to previously used passwords.
-						</Typography>
+						<Typography component="h1">{t("authSetNewPasswordTitle")}</Typography>
+						<Typography>{t("authSetNewPasswordDescription")}</Typography>
 					</Box>
 					<Box
-						width="100%"
+						component="form"
+						width="95%"
 						textAlign="left"
-						sx={{
-							"& .input-error": {
-								display: "none",
-							},
-						}}
+						noValidate
+						spellCheck={false}
+						onSubmit={handleSubmit}
 					>
-						<Box
-							component="form"
-							noValidate
-							spellCheck={false}
-							onSubmit={handleSubmit}
-						>
-							<TextInput
-								id={passwordId}
-								type="password"
-								name="password"
-								label="Password"
-								isRequired={true}
-								placeholder="••••••••"
-								value={form.password}
-								onChange={handleChange}
-								error={errors.password ? true : false}
-								helperText={errors.password}
-								endAdornment={<PasswordEndAdornment />}
-							/>
-						</Box>
-						<Box
-							component="form"
-							noValidate
-							spellCheck={false}
-							onSubmit={handleSubmit}
-						>
-							<TextInput
-								id={confirmPasswordId}
-								type="password"
-								name="confirm"
-								label="Confirm password"
-								isRequired={true}
-								placeholder="••••••••"
-								value={form.confirm}
-								onChange={handleChange}
-								error={errors.confirm ? true : false}
-								helperText={errors.confirm}
-								endAdornment={<PasswordEndAdornment />}
-							/>
-						</Box>
+						<TextInput
+							type="password"
+							id={passwordId}
+							label={t("authSetNewPasswordNewPassword")}
+							isRequired={true}
+							placeholder={t("authSetNewPasswordEnterNewPassword")}
+							value={form.password}
+							onChange={handleChange}
+							error={errors.password && errors.password[0] ? true : false}
+							helperText={errors.password && errors.password[0]}
+							fullWidth
+							sx={{ mb: theme.spacing(8) }}
+							endAdornment={<PasswordEndAdornment />}
+						/>
+						<TextInput
+							type="password"
+							id={confirmPasswordId}
+							label={t("authSetNewPasswordConfirmPassword")}
+							isRequired={true}
+							placeholder={t("authSetNewPasswordReenterPassword")}
+							value={form.confirm}
+							onChange={handleChange}
+							error={errors.confirm && errors.confirm[0] ? true : false}
+							helperText={errors.confirm && errors.confirm[0]}
+							fullWidth
+							sx={{ mb: theme.spacing(8) }}
+							endAdornment={<PasswordEndAdornment />}
+						/>
 						<Stack
 							gap={theme.spacing(4)}
-							mb={theme.spacing(12)}
+							mb={{ xs: theme.spacing(6), sm: theme.spacing(8) }}
 						>
 							<Check
-								noHighlightText={"Must be at least"}
-								text={"8 characters long"}
+								noHighlightText={t("authPasswordMustBeAtLeast")}
+								text={t("authPasswordCharactersLong")}
 								variant={feedbacks.length}
 							/>
 							<Check
-								noHighlightText={"Must contain at least"}
-								text={"one special character"}
+								noHighlightText={t("authPasswordMustContainAtLeast")}
+								text={t("authPasswordSpecialCharacter")}
 								variant={feedbacks.special}
 							/>
 							<Check
-								noHighlightText={"Must contain at least"}
-								text={"one number"}
+								noHighlightText={t("authPasswordMustContainAtLeast")}
+								text={t("authPasswordOneNumber")}
 								variant={feedbacks.number}
 							/>
 							<Check
-								noHighlightText={"Must contain at least"}
-								text={"one upper character"}
+								noHighlightText={t("authPasswordMustContainAtLeast")}
+								text={t("authPasswordUpperCharacter")}
 								variant={feedbacks.uppercase}
 							/>
 							<Check
-								noHighlightText={"Must contain at least"}
-								text={"one lower character"}
+								noHighlightText={t("authPasswordMustContainAtLeast")}
+								text={t("authPasswordLowerCharacter")}
 								variant={feedbacks.lowercase}
 							/>
 							<Check
-								noHighlightText={"Confirm password and password"}
-								text={"must match"}
+								noHighlightText={t("authPasswordConfirmAndPassword")}
+								text={t("authPasswordMustMatch")}
 								variant={feedbacks.confirm}
 							/>
 						</Stack>
+						<LoadingButton
+							type="submit"
+							variant="contained"
+							fullWidth
+							loading={isLoading}
+							disabled={
+								form.password.length === 0 ||
+								form.confirm.length === 0 ||
+								Object.keys(errors).length !== 0
+							}
+						>
+							{t("authSetNewPasswordResetPassword")}
+						</LoadingButton>
 					</Box>
-					<LoadingButton
-						variant="contained"
-						color="primary"
-						loading={isLoading}
-						onClick={handleSubmit}
-						disabled={
-							form.password.length === 0 ||
-							form.confirm.length === 0 ||
-							Object.keys(errors).length !== 0
-						}
-						sx={{ width: "100%", maxWidth: 400 }}
-					>
-						Reset password
-					</LoadingButton>
 				</Stack>
 			</Stack>
 			<Box
 				textAlign="center"
 				p={theme.spacing(12)}
 			>
-				<Typography display="inline-block">Go back to —</Typography>
+				<Typography display="inline-block">{t("authSetNewPasswordBackTo")}</Typography>
 				<Typography
 					component="span"
-					color={theme.palette.primary.main}
 					ml={theme.spacing(2)}
 					onClick={() => navigate("/login")}
-					sx={{ userSelect: "none" }}
+					sx={{ userSelect: "none", color: theme.palette.primary.main }}
 				>
-					Log In
+					{t("authLoginTitle")}
 				</Typography>
 			</Box>
 		</Stack>

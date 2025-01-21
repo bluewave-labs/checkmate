@@ -1,0 +1,103 @@
+{
+  "dontHaveAccount": "Hesabın yok mu",
+  "email": "E-posta",
+  "forgotPassword": "Şifremi Unuttum",
+  "password": "şifre",
+  "signUp": "Kayıt ol",
+  "submit": "Gönder",
+  "title": "Başlık",
+  "continue": "Devam et",
+  "enterEmail": "E-posta adresinizi girin",
+  "authLoginTitle": "Giriş Yap",
+  "authLoginEnterPassword": "Şifrenizi girin",
+  "commonPassword": "Şifre",
+  "commonBack": "Geri",
+  "commonContinue": "Devam et",
+  "authForgotPasswordTitle": "Şifremi unuttum?",
+  "authForgotPasswordResetPassword": "Şifreyi sıfırla",
+  "common": {
+    "appName": "BlueWave Uptime",
+    "email": "E-posta",
+    "password": "Şifre",
+    "continue": "Devam Et",
+    "back": "Geri"
+  },
+  "auth": {
+    "login": {
+      "title": "Giriş Yap",
+      "enter-email": "E-posta adresinizi girin",
+      "enter-password": "Şifrenizi girin"
+    },
+    "register": {
+      "title": "Hesap Oluştur",
+      "already-have-account": "Zaten hesabınız var mı?",
+      "step-one": {
+        "title": "Hesabınızı oluşturun",
+        "description": "Başlamak için bilgilerinizi girin"
+      },
+      "step-two": {
+        "title": "Profilinizi ayarlayın",
+        "description": "Kendiniz hakkında daha fazla bilgi verin"
+      },
+      "step-three": {
+        "title": "Neredeyse bitti!",
+        "description": "Bilgilerinizi gözden geçirin"
+      }
+    },
+    "forgot-password": {
+      "title": "Şifremi unuttum?",
+      "description": "Endişelenmeyin, size sıfırlama talimatlarını göndereceğiz.",
+      "send-instructions": "Talimatları gönder",
+      "back-to": "Geri dön"
+    },
+    "check-email": {
+      "title": "E-postanızı kontrol edin",
+      "description": "{{email}} adresine şifre sıfırlama bağlantısı gönderdik",
+      "resend-email": "E-postayı yeniden gönder",
+      "back-to": "Geri dön"
+    },
+    "set-new-password": {
+      "title": "Yeni şifre belirle",
+      "description": "Yeni şifreniz önceden kullanılan şifrelerden farklı olmalıdır.",
+      "new-password": "Yeni şifre",
+      "confirm-password": "Şifreyi onayla",
+      "reset-password": "Şifreyi sıfırla",
+      "back-to": "Geri dön"
+    }
+  },
+  "authLoginTitle": "Giriş Yap",
+  "authLoginEnterEmail": "E-posta adresinizi girin",
+  "authRegisterTitle": "Hesap Oluştur",
+  "authRegisterAlreadyHaveAccount": "Zaten hesabınız var mı?",
+  "authRegisterStepOneTitle": "Hesabınızı oluşturun",
+  "authRegisterStepOneDescription": "Başlamak için bilgilerinizi girin",
+  "authRegisterStepTwoTitle": "Profilinizi ayarlayın",
+  "authRegisterStepTwoDescription": "Kendiniz hakkında daha fazla bilgi verin",
+  "authRegisterStepThreeTitle": "Neredeyse bitti!",
+  "authRegisterStepThreeDescription": "Bilgilerinizi gözden geçirin",
+  "authForgotPasswordTitle": "Şifremi unuttum?",
+  "authForgotPasswordDescription": "Endişelenmeyin, size sıfırlama talimatlarını göndereceğiz.",
+  "authForgotPasswordSendInstructions": "Talimatları gönder",
+  "authForgotPasswordBackTo": "Geri dön",
+  "authCheckEmailTitle": "E-postanızı kontrol edin",
+  "authCheckEmailDescription": "{{email}} adresine şifre sıfırlama bağlantısı gönderdik",
+  "authCheckEmailResendEmail": "E-postayı yeniden gönder",
+  "authCheckEmailBackTo": "Geri dön",
+  "authSetNewPasswordTitle": "Yeni şifre belirle",
+  "authSetNewPasswordDescription": "Yeni şifreniz önceden kullanılan şifrelerden farklı olmalıdır.",
+  "authSetNewPasswordNewPassword": "Yeni şifre",
+  "authSetNewPasswordConfirmPassword": "Şifreyi onayla",
+  "authSetNewPasswordResetPassword": "Şifreyi sıfırla",
+  "authSetNewPasswordBackTo": "Geri dön",
+  "authPasswordMustBeAtLeast": "En az",
+  "authPasswordCharactersLong": "8 karakter uzunluğunda olmalı",
+  "authPasswordMustContainAtLeast": "En az",
+  "authPasswordSpecialCharacter": "bir özel karakter içermeli",
+  "authPasswordOneNumber": "bir rakam içermeli",
+  "authPasswordUpperCharacter": "bir büyük harf içermeli",
+  "authPasswordLowerCharacter": "bir küçük harf içermeli",
+  "authPasswordConfirmAndPassword": "Şifre ve şifre onayı",
+  "authPasswordMustMatch": "eşleşmeli",
+  "authSetNewPasswordEnterNewPassword": "Yeni şifrenizi girin",
+  "authSetNewPasswordReenterPassword": "Yeni şifrenizi tekrar girin"
+}

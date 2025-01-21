@@ -6,6 +6,7 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import TextInput from "../../../../Components/Inputs/TextInput";
 import Check from "../../../../Components/Check/Check";
 import { useValidatePassword } from "../../hooks/useValidatePassword";
+import { useTranslation } from "react-i18next";
 
 StepThree.propTypes = {
 	onSubmit: PropTypes.func,
@@ -23,6 +24,7 @@ StepThree.propTypes = {
 function StepThree({ onSubmit, onBack }) {
 	const theme = useTheme();
 	const inputRef = useRef(null);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (inputRef.current) {
@@ -38,8 +40,8 @@ function StepThree({ onSubmit, onBack }) {
 				textAlign="center"
 			>
 				<Box>
-					<Typography component="h1">Sign Up</Typography>
-					<Typography>Create your password</Typography>
+					<Typography component="h1">{t("signUp")}</Typography>
+					<Typography>{t("createPassword")}</Typography>
 				</Box>
 				<Box
 					component="form"
@@ -63,9 +65,9 @@ function StepThree({ onSubmit, onBack }) {
 							type="password"
 							id="register-password-input"
 							name="password"
-							label="Password"
+							label={t("commonPassword")}
 							isRequired={true}
-							placeholder="Create a password"
+							placeholder={t("createAPassword")}
 							autoComplete="current-password"
 							value={form.password}
 							onChange={handleChange}
@@ -76,9 +78,9 @@ function StepThree({ onSubmit, onBack }) {
 							type="password"
 							id="register-confirm-input"
 							name="confirm"
-							label="Confirm password"
+							label={t("authSetNewPasswordConfirmPassword")}
 							isRequired={true}
-							placeholder="Confirm your password"
+							placeholder={t("confirmPassword")}
 							autoComplete="current-password"
 							value={form.confirm}
 							onChange={handleChange}
@@ -90,33 +92,33 @@ function StepThree({ onSubmit, onBack }) {
 						mb={{ xs: theme.spacing(6), sm: theme.spacing(8) }}
 					>
 						<Check
-							noHighlightText={"Must be at least"}
-							text={"8 characters long"}
+							noHighlightText={t("authPasswordMustBeAtLeast")}
+							text={t("authPasswordCharactersLong")}
 							variant={feedbacks.length}
 						/>
 						<Check
-							noHighlightText={"Must contain at least"}
-							text={"one special character"}
+							noHighlightText={t("authPasswordMustContainAtLeast")}
+							text={t("authPasswordSpecialCharacter")}
 							variant={feedbacks.special}
 						/>
 						<Check
-							noHighlightText={"Must contain at least"}
-							text={"one number"}
+							noHighlightText={t("authPasswordMustContainAtLeast")}
+							text={t("authPasswordOneNumber")}
 							variant={feedbacks.number}
 						/>
 						<Check
-							noHighlightText={"Must contain at least"}
-							text={"one upper character"}
+							noHighlightText={t("authPasswordMustContainAtLeast")}
+							text={t("authPasswordUpperCharacter")}
 							variant={feedbacks.uppercase}
 						/>
 						<Check
-							noHighlightText={"Must contain at least"}
-							text={"one lower character"}
+							noHighlightText={t("authPasswordMustContainAtLeast")}
+							text={t("authPasswordLowerCharacter")}
 							variant={feedbacks.lowercase}
 						/>
 						<Check
-							noHighlightText={"Confirm password and password"}
-							text={"must match"}
+							noHighlightText={t("authPasswordConfirmAndPassword")}
+							text={t("authPasswordMustMatch")}
 							variant={feedbacks.confirm}
 						/>
 					</Stack>
@@ -140,7 +142,7 @@ function StepThree({ onSubmit, onBack }) {
 							}}
 						>
 							<ArrowBackRoundedIcon />
-							Back
+							{t("commonBack")}
 						</Button>
 						<Button
 							type="submit"
@@ -160,7 +162,7 @@ function StepThree({ onSubmit, onBack }) {
 								},
 							}}
 						>
-							Continue
+							{t("continue")}
 						</Button>
 					</Stack>
 				</Box>

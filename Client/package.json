@@ -5,10 +5,11 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
+		"build": "npm run fetch-translations && vite build",
 		"build-dev": "vite build --mode development",
 		"lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"fetch-translations": "node scripts/fetch-translations.js"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.13.3",
@@ -23,10 +24,13 @@
 		"@reduxjs/toolkit": "2.5.0",
 		"axios": "^1.7.4",
 		"dayjs": "1.11.13",
+		"i18next": "^24.2.1",
+		"i18next-http-backend": "^3.0.1",
 		"joi": "17.13.3",
 		"jwt-decode": "^4.0.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"react-i18next": "^15.4.0",
 		"react-redux": "9.2.0",
 		"react-router": "^6.23.0",
 		"react-router-dom": "^6.23.1",
@@ -39,10 +43,12 @@
 		"@types/react": "^18.2.66",
 		"@types/react-dom": "^18.2.22",
 		"@vitejs/plugin-react": "^4.2.1",
+		"dotenv": "^16.4.7",
 		"eslint": "^8.57.0",
 		"eslint-plugin-react": "^7.34.1",
 		"eslint-plugin-react-hooks": "^5.0.0",
 		"eslint-plugin-react-refresh": "^0.4.6",
+		"node-fetch": "^3.3.2",
 		"prettier": "^3.3.3",
 		"vite": "^5.2.0"
 	}

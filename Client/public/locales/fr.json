@@ -1,0 +1,18 @@
+{
+  "dontHaveAccount": "Vous n'avez pas de compte",
+  "email": "E-mail",
+  "forgotPassword": "Mot de passe oublié",
+  "password": "mot de passe",
+  "signUp": "S'inscrire",
+  "submit": "Envoyer",
+  "title": "Titre",
+  "continue": "Continuer",
+  "enterEmail": "Entrez votre adresse e-mail",
+  "authLoginTitle": "Se connecter",
+  "authLoginEnterPassword": "Entrez votre mot de passe",
+  "commonPassword": "Mot de passe",
+  "commonBack": "Retour",
+  "commonContinue": "Continuer",
+  "authForgotPasswordTitle": "Mot de passe oublié ?",
+  "authForgotPasswordResetPassword": "Réinitialiser le mot de passe"
+}

@@ -1,3 +1,4 @@
+import "./Utils/i18n";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
@@ -7,6 +8,7 @@ import { persistor, store } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
 import NetworkServiceProvider from "./Utils/NetworkServiceProvider.jsx";
 import { networkService } from "./Utils/NetworkService";
+import { Suspense } from "react";
 export { networkService };
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -17,7 +19,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 		>
 			<Router>
 				<NetworkServiceProvider>
-					<App />
+					<Suspense fallback="Loading...">
+						<App />
+					</Suspense>
 				</NetworkServiceProvider>
 			</Router>
 		</PersistGate>

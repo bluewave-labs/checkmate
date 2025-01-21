@@ -10,11 +10,13 @@ import EmailIcon from "../../assets/icons/email.svg?react";
 import Logo from "../../assets/icons/bwu-icon.svg?react";
 import IconBox from "../../Components/IconBox";
 import "./index.css";
+import { useTranslation } from "react-i18next";
 
 const CheckEmail = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
 
 	const [email, setEmail] = useState();
 	const [disabled, setDisabled] = useState(false);
@@ -115,7 +117,7 @@ const CheckEmail = () => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Typography sx={{ userSelect: "none" }}>{t("commonAppName")}</Typography>
 			</Stack>
 			<Stack
 				width="100%"
@@ -160,12 +162,12 @@ const CheckEmail = () => {
 								<EmailIcon alt="email icon" />
 							</IconBox>
 						</Stack>
-						<Typography component="h1">Check your email</Typography>
+						<Typography component="h1">{t("authCheckEmailTitle")}</Typography>
 						<Typography>
-							We sent a password reset link to{" "}
+							{t("authCheckEmailDescription")}
 							<Typography
-								className="email-sent-to"
 								component="span"
+								className="email-sent-to"
 							>
 								{email || "username@email.com"}
 							</Typography>
@@ -183,7 +185,7 @@ const CheckEmail = () => {
 						Open email app
 					</Button>
 					<Typography sx={{ alignSelf: "center", mt: theme.spacing(6) }}>
-						Didn&apos;t receive the email?{" "}
+						{t("authCheckEmailDidntReceiveEmail")}
 						<Typography
 							component="span"
 							onClick={resendToken}
@@ -195,7 +197,7 @@ const CheckEmail = () => {
 								opacity: disabled ? 0.5 : 1,
 							}}
 						>
-							Click to resend
+							{t("authCheckEmailResendEmail")}
 						</Typography>
 					</Typography>
 				</Stack>
@@ -204,7 +206,7 @@ const CheckEmail = () => {
 				textAlign="center"
 				p={theme.spacing(12)}
 			>
-				<Typography display="inline-block">Go back to —</Typography>
+				<Typography display="inline-block">{t("goBackTo")}</Typography>
 				<Typography
 					component="span"
 					ml={theme.spacing(2)}
@@ -212,7 +214,7 @@ const CheckEmail = () => {
 					onClick={handleNavigate}
 					sx={{ userSelect: "none" }}
 				>
-					Log In
+					{t("authLoginTitle")}
 				</Typography>
 			</Box>
 		</Stack>

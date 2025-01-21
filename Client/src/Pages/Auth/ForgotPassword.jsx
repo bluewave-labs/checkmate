@@ -13,11 +13,13 @@ import Background from "../../assets/Images/background-grid.svg?react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import IconBox from "../../Components/IconBox";
 import "./index.css";
+import { useTranslation } from "react-i18next";
 
 const ForgotPassword = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const theme = useTheme();
+	const { t } = useTranslation();
 
 	const { isLoading } = useSelector((state) => state.auth);
 	const [errors, setErrors] = useState({});
@@ -117,7 +119,7 @@ const ForgotPassword = () => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Typography sx={{ userSelect: "none" }}>{t("common.appName")}</Typography>
 			</Stack>
 			<Stack
 				width="100%"
@@ -162,8 +164,8 @@ const ForgotPassword = () => {
 								<Key alt="password key icon" />
 							</IconBox>
 						</Stack>
-						<Typography component="h1">Forgot password?</Typography>
-						<Typography>No worries, we&apos;ll send you reset instructions.</Typography>
+						<Typography component="h1">{t("authForgotPasswordTitle")}</Typography>
+						<Typography>{t("authForgotPasswordDescription")}</Typography>
 					</Box>
 					<Box
 						component="form"
@@ -176,13 +178,15 @@ const ForgotPassword = () => {
 						<TextInput
 							type="email"
 							id="forgot-password-email-input"
-							label="Email"
+							label={t("common.email")}
 							isRequired={true}
 							placeholder="Enter your email"
 							value={form.email}
 							onChange={handleChange}
 							error={errors.email ? true : false}
 							helperText={errors.email}
+							fullWidth
+							sx={{ mb: theme.spacing(8) }}
 						/>
 						<LoadingButton
 							variant="contained"
@@ -195,7 +199,7 @@ const ForgotPassword = () => {
 								mt: theme.spacing(15),
 							}}
 						>
-							Send instructions
+							{t("authForgotPasswordSendInstructions")}
 						</LoadingButton>
 					</Box>
 				</Stack>
@@ -204,7 +208,7 @@ const ForgotPassword = () => {
 				textAlign="center"
 				p={theme.spacing(12)}
 			>
-				<Typography display="inline-block">Go back to —</Typography>
+				<Typography display="inline-block">{t("authForgotPasswordBackTo")}</Typography>
 				<Typography
 					component="span"
 					color={theme.palette.primary.main}
@@ -212,7 +216,7 @@ const ForgotPassword = () => {
 					onClick={handleNavigate}
 					sx={{ userSelect: "none" }}
 				>
-					Log In
+					{t("authLoginTitle")}
 				</Typography>
 			</Box>
 		</Stack>
