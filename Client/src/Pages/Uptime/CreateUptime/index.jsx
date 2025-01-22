@@ -380,7 +380,7 @@ const CreateMonitor = () => {
 							value={user?.email}
 							onChange={(event) => handleNotifications(event, "email")}
 							/>
-						<Box style={{ width: 'fit-content' }}>
+						<Box>
 							<Button
 								variant="contained"
 								color="accent"
