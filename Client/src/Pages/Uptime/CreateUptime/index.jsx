@@ -380,14 +380,15 @@ const CreateMonitor = () => {
 							value={user?.email}
 							onChange={(event) => handleNotifications(event, "email")}
 							/>
-						<Button
-							variant="contained"
-							color="accent"
-							style={{ width: 'fit-content' }}
-							onClick={() => console.log("Notification integrations clicked")}
-						>
-							Notification integrations
-						</Button>
+						<Box style={{ width: 'fit-content' }}>
+							<Button
+								variant="contained"
+								color="accent"
+								onClick={() => console.log("Notification integrations clicked")}
+							>
+								Notification integrations
+							</Button>
+						</Box>
 					</Stack>
 				</ConfigBox>
 				<ConfigBox>
