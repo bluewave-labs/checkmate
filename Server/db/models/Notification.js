@@ -8,7 +8,7 @@ const NotificationSchema = mongoose.Schema(
 		},
 		type: {
 			type: String,
-			enum: ["email", "sms"],
+			enum: ["email", "sms", "discord"],
 		},
 		address: {
 			type: String,

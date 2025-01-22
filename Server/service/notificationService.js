@@ -1,4 +1,5 @@
 const SERVICE_NAME = "NotificationService";
+import axios from 'axios';
 
 class NotificationService {
 	static SERVICE_NAME = SERVICE_NAME;
@@ -15,6 +16,26 @@ class NotificationService {
 		this.db = db;
 		this.logger = logger;
 	}
+
+	async sendDiscordNotification(networkResponse, webhookUrl) {
+        const { monitor, status } = networkResponse;
+        const message = {
+            content: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`
+        };
+
+        try {
+            await axios.post(webhookUrl, message);
+            return true;
+        } catch (error) {
+            this.logger.error({
+                message: error.message,
+                service: this.SERVICE_NAME,
+                method: "sendDiscordNotification",
+                stack: error.stack,
+            });
+            return false;
+        }
+    }
 
 	/**
 	 * Sends an email notification for hardware infrastructure alerts
