@@ -122,7 +122,7 @@ const ContentPanel = () => {
 							margin: theme.spacing(6),
 							border: "solid",
 							borderRadius: theme.shape.borderRadius,
-							borderColor: theme.palette.border.light,
+							borderColor: theme.palette.primary.lowContrast,
 							borderWidth: "1px",
 							transition: "0.2s",
 							"&:hover": {
@@ -143,6 +143,7 @@ const ContentPanel = () => {
 								Servers list{" "}
 							</Typography>
 							<Button
+								color="info"
 								onClick={handleAddNew}
 								disabled={monitors.length === 0 || monitors.length <= cards.length}
 							>

@@ -13,8 +13,7 @@ class SettingsController {
 		try {
 			const settings = { ...(await this.settingsService.getSettings()) };
 			delete settings.jwtSecret;
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.GET_APP_SETTINGS,
 				data: settings,
 			});
@@ -35,8 +34,7 @@ class SettingsController {
 			await this.db.updateAppSettings(req.body);
 			const updatedSettings = { ...(await this.settingsService.reloadSettings()) };
 			delete updatedSettings.jwtSecret;
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.UPDATE_APP_SETTINGS,
 				data: updatedSettings,
 			});

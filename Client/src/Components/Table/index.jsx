@@ -40,16 +40,30 @@ const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
 
 	return (
 		<TableContainer component={Paper}>
-			<Table stickyHeader>
-				<TableHead sx={{ backgroundColor: theme.palette.background.accent }}>
+			<Table
+				stickyHeader
+				sx={{
+					"&.MuiTable-root  :is(.MuiTableHead-root, .MuiTableBody-root) :is(th, td)": {
+						paddingLeft: theme.spacing(8),
+					},
+					"& :is(th)": {
+						backgroundColor: theme.palette.secondary.main,
+						color: theme.palette.secondary.contrastText,
+						fontWeight: 600,
+						fontSize: "12px",
+					},
+					"& :is(td)": {
+						backgroundColor: theme.palette.primary.main,
+						color: theme.palette.primary.contrastTextSecondary,
+					},
+				}}
+			>
+				<TableHead>
 					<TableRow>
 						{headers.map((header, index) => (
 							<TableCell
 								key={header.id}
 								align={index === 0 ? "left" : "center"}
-								sx={{
-									backgroundColor: theme.palette.background.accent,
-								}}
 							>
 								{header.content}
 							</TableCell>

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createToast } from "../../../Utils/toastUtils";
 import { networkService } from "../../../main";
 import Background from "../../../assets/Images/background-grid.svg?react";
-import Logo from "../../../assets/icons/bwu-icon.svg?react";
+import Logo from "../../../assets/icons/checkmate-icon.svg?react";
 import { logger } from "../../../Utils/Logger";
 import "../index.css";
 import EmailStep from "./Components/EmailStep";
@@ -145,7 +145,8 @@ const Login = () => {
 					fontWeight: 600,
 					fontSize: 28,
 				},
-				"& p": { fontSize: 14, color: theme.palette.text.accent },
+				/* TODO set font size from theme */
+				"& p": { fontSize: 14, color: theme.palette.primary.contrastTextSecondary },
 				"& span": { fontSize: "inherit" },
 			}}
 		>
@@ -153,7 +154,7 @@ const Login = () => {
 				className="background-pattern-svg"
 				sx={{
 					"& svg g g:last-of-type path": {
-						stroke: theme.palette.border.light,
+						stroke: theme.palette.primary.lowContrast,
 					},
 				}}
 			>
@@ -166,7 +167,7 @@ const Login = () => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>BlueWave Uptime</Typography>
+				<Typography sx={{ userSelect: "none" }}>Checkmate</Typography>
 			</Stack>
 			<Stack
 				width="100%"
@@ -181,8 +182,8 @@ const Login = () => {
 					"& > .MuiStack-root": {
 						border: 1,
 						borderRadius: theme.spacing(5),
-						borderColor: theme.palette.border.light,
-						backgroundColor: theme.palette.background.main,
+						borderColor: theme.palette.primary.lowContrast,
+						backgroundColor: theme.palette.primary.main,
 						padding: {
 							xs: theme.spacing(12),
 							sm: theme.spacing(20),

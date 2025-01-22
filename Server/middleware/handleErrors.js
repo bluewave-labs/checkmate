@@ -11,7 +11,10 @@ const handleErrors = (error, req, res, next) => {
 		method: error.method,
 		stack: error.stack,
 	});
-	res.status(status).json({ success: false, msg: message });
+	res.error({
+		status,
+		msg: message,
+	});
 };
 
 export { handleErrors };

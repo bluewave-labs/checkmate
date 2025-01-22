@@ -14,15 +14,15 @@ export const HttpAdornment = ({ https, prefix }) => {
 			alignItems="center"
 			height="100%"
 			sx={{
-				borderRight: `solid 1px ${theme.palette.border.dark}`,
-				backgroundColor: theme.palette.background.accent,
+				borderRight: `solid 1px ${theme.palette.primary.lowContrast}`,
+				backgroundColor: theme.palette.tertiary.main,
 				pl: theme.spacing(6),
 			}}
 		>
 			<Typography
 				component="h5"
 				paddingRight={"var(--env-var-spacing-1-minus)"}
-				color={theme.palette.text.secondary}
+				color={theme.palette.primary.contrastTextSecondary}
 				sx={{ lineHeight: 1, opacity: 0.8 }}
 			>
 				{prefix !== undefined ? prefix : https ? "https://" : "http://"}
@@ -44,7 +44,7 @@ export const PasswordEndAdornment = ({ fieldType, setFieldType }) => {
 				aria-label="toggle password visibility"
 				onClick={() => setFieldType(fieldType === "password" ? "text" : "password")}
 				sx={{
-					color: theme.palette.border.dark,
+					color: theme.palette.primary.lowContrast,
 					padding: theme.spacing(1),
 					"&:focus-visible": {
 						outline: `2px solid ${theme.palette.primary.main}`,
@@ -85,7 +85,7 @@ export const ServerEndAdornment = ({ id, removeItem }) => {
 				aria-label="remove server"
 				onClick={() => removeItem(id)}
 				sx={{
-					color: theme.palette.border.dark,
+					color: theme.palette.primary.contrastText,
 					padding: theme.spacing(1),
 					"&:focus-visible": {
 						outline: `2px solid ${theme.palette.primary.main}`,

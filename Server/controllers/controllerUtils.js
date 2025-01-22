@@ -13,18 +13,14 @@ const handleError = (error, serviceName, method, status = 500) => {
 };
 
 const fetchMonitorCertificate = async (sslChecker, monitor) => {
-	try {
-		const monitorUrl = new URL(monitor.url);
-		const hostname = monitorUrl.hostname;
-		const cert = await sslChecker(hostname);
-		// Throw an error if no cert or if cert.validTo is not present
-		if (cert?.validTo === null || cert?.validTo === undefined) {
-			throw new Error("Certificate not found");
-		}
-		return cert;
-	} catch (error) {
-		throw error;
+	const monitorUrl = new URL(monitor.url);
+	const hostname = monitorUrl.hostname;
+	const cert = await sslChecker(hostname);
+	// Throw an error if no cert or if cert.validTo is not present
+	if (cert?.validTo === null || cert?.validTo === undefined) {
+		throw new Error("Certificate not found");
 	}
+	return cert;
 };
 
 export { handleValidationError, handleError, fetchMonitorCertificate };

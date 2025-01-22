@@ -41,6 +41,7 @@ function App() {
 					return {
 						body: {
 							backgroundImage: `radial-gradient(circle, ${palette.gradient.color1}, ${palette.gradient.color2}, ${palette.gradient.color3}, ${palette.gradient.color4}, ${palette.gradient.color5})`,
+							color: palette.primary.contrastText,
 						},
 					};
 				}}

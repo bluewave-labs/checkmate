@@ -42,8 +42,7 @@ class MonitorController {
 	getAllMonitors = async (req, res, next) => {
 		try {
 			const monitors = await this.db.getAllMonitors();
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_GET_ALL,
 				data: monitors,
 			});
@@ -64,8 +63,7 @@ class MonitorController {
 	getAllMonitorsWithUptimeStats = async (req, res, next) => {
 		try {
 			const monitors = await this.db.getAllMonitorsWithUptimeStats();
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_GET_ALL,
 				data: monitors,
 			});
@@ -77,8 +75,7 @@ class MonitorController {
 	getUptimeDetailsById = async (req, res, next) => {
 		try {
 			const monitor = await this.db.getUptimeDetailsById(req);
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_GET_BY_ID,
 				data: monitor,
 			});
@@ -107,8 +104,7 @@ class MonitorController {
 
 		try {
 			const monitorStats = await this.db.getMonitorStatsById(req);
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_STATS_BY_ID,
 				data: monitorStats,
 			});
@@ -136,8 +132,7 @@ class MonitorController {
 		}
 		try {
 			const monitor = await this.db.getHardwareDetailsById(req);
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_GET_BY_ID,
 				data: monitor,
 			});
@@ -158,8 +153,7 @@ class MonitorController {
 			const monitor = await this.db.getMonitorById(monitorId);
 			const certificate = await fetchMonitorCertificate(sslChecker, monitor);
 
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_CERTIFICATE,
 				data: {
 					certificateDate: new Date(certificate.validTo),
@@ -192,8 +186,7 @@ class MonitorController {
 
 		try {
 			const monitor = await this.db.getMonitorById(req.params.monitorId);
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_GET_BY_ID,
 				data: monitor,
 			});
@@ -237,8 +230,7 @@ class MonitorController {
 			await monitor.save();
 			// Add monitor to job queue
 			this.jobQueue.addJob(monitor._id, monitor);
-			return res.status(201).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_CREATE,
 				data: monitor,
 			});
@@ -272,11 +264,9 @@ class MonitorController {
 				timeout: 5000,
 				validateStatus: () => true,
 			});
-			return res.status(200).json({
-				success: true,
-				code: response.status,
-				statusText: response.statusText,
-				msg: `URL resolved successfully`,
+			return res.success({
+				status: response.status,
+				msg: response.statusText,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "checkEndpointResolution"));
@@ -319,7 +309,7 @@ class MonitorController {
 					stack: error.stack,
 				});
 			}
-			return res.status(200).json({ success: true, msg: successMessages.MONITOR_DELETE });
+			return res.success({ msg: successMessages.MONITOR_DELETE });
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "deleteMonitor"));
 		}
@@ -359,9 +349,7 @@ class MonitorController {
 					}
 				})
 			);
-			return res
-				.status(200)
-				.json({ success: true, msg: `Deleted ${deletedCount} monitors` });
+			return res.success({ msg: `Deleted ${deletedCount} monitors` });
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "deleteAllMonitors"));
 		}
@@ -412,8 +400,7 @@ class MonitorController {
 			await this.jobQueue.deleteJob(monitorBeforeEdit);
 			// Add the new job back to the queue
 			await this.jobQueue.addJob(editedMonitor._id, editedMonitor);
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_EDIT,
 				data: editedMonitor,
 			});
@@ -449,8 +436,7 @@ class MonitorController {
 			monitor.isActive = !monitor.isActive;
 			monitor.status = undefined;
 			monitor.save();
-			return res.status(200).json({
-				success: true,
+			return res.ssuccess({
 				msg: monitor.isActive
 					? successMessages.MONITOR_RESUME
 					: successMessages.MONITOR_PAUSE,
@@ -482,8 +468,7 @@ class MonitorController {
 				demoMonitors.map((monitor) => this.jobQueue.addJob(monitor._id, monitor))
 			);
 
-			return res.status(200).json({
-				success: true,
+			return res.success({
 				msg: successMessages.MONITOR_DEMO_ADDED,
 				data: demoMonitors.length,
 			});
@@ -502,9 +487,8 @@ class MonitorController {
 
 		try {
 			const monitors = await this.db.getMonitorsByTeamId(req);
-			return res.status(200).json({
-				success: true,
-				msg: "good",
+			return res.success({
+				msg: successMessages.MONITOR_GET_BY_TEAM_ID,
 				data: monitors,
 			});
 		} catch (error) {

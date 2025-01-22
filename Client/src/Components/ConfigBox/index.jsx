@@ -5,10 +5,10 @@ const ConfigBox = styled(Stack)(({ theme }) => ({
 	flexDirection: "row",
 	justifyContent: "space-between",
 	gap: theme.spacing(20),
-	backgroundColor: theme.palette.background.main,
+	backgroundColor: theme.palette.primary.main,
 	border: 1,
 	borderStyle: "solid",
-	borderColor: theme.palette.border.light,
+	borderColor: theme.palette.primary.lowContrast,
 	borderRadius: theme.spacing(2),
 	"& > *": {
 		paddingTop: theme.spacing(12),
@@ -18,7 +18,7 @@ const ConfigBox = styled(Stack)(({ theme }) => ({
 		flex: 0.7,
 		borderRight: 1,
 		borderRightStyle: "solid",
-		borderRightColor: theme.palette.border.light,
+		borderRightColor: theme.palette.primary.lowContrast,
 		paddingRight: theme.spacing(15),
 		paddingLeft: theme.spacing(15),
 	},
@@ -28,8 +28,8 @@ const ConfigBox = styled(Stack)(({ theme }) => ({
 		paddingLeft: theme.spacing(18),
 	},
 	"& h1, & h2": {
-		color: theme.palette.text.secondary,
-	}
+		color: theme.palette.primary.contrastTextSecondary,
+	}	
 }));
 
 export default ConfigBox;

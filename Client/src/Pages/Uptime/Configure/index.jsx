@@ -274,7 +274,7 @@ const Configure = () => {
 												width: 4,
 												height: 4,
 												borderRadius: "50%",
-												backgroundColor: theme.palette.text.tertiary,
+												backgroundColor: theme.palette.primary.contrastTextTertiary,
 												opacity: 0.8,
 												left: -10,
 												top: "50%",
@@ -305,7 +305,7 @@ const Configure = () => {
 											width: 22,
 											height: 22,
 											"& path": {
-												stroke: theme.palette.text.tertiary,
+												stroke: theme.palette.primary.contrastTextTertiary,
 												strokeWidth: 1.7,
 											},
 										},
@@ -376,14 +376,15 @@ const Configure = () => {
 							</Box>
 							<Stack gap={theme.spacing(6)}>
 								<Typography component="p">When there is a new incident,</Typography>
-								<Checkbox
+								{/* {Leaving components commented for future funtionality implimentation} */}
+								{/* <Checkbox
 									id="notify-sms"
 									label="Notify via SMS (coming soon)"
 									isChecked={false}
 									value=""
 									onChange={() => logger.warn("disabled")}
 									isDisabled={true}
-								/>
+								/> */}
 								<Checkbox
 									id="notify-email-default"
 									label={`Notify via email (to ${user.email})`}
@@ -395,15 +396,15 @@ const Configure = () => {
 									value={user?.email}
 									onChange={(event) => handleChange(event)}
 								/>
-								<Checkbox
+								{/* <Checkbox
 									id="notify-email"
 									label="Also notify via email to multiple addresses (coming soon)"
 									isChecked={false}
 									value=""
 									onChange={() => logger.warn("disabled")}
 									isDisabled={true}
-								/>
-								{monitor?.notifications?.some(
+								/> */}
+								{/* {monitor?.notifications?.some(
 									(notification) => notification.type === "emails"
 								) ? (
 									<Box mx={theme.spacing(16)}>
@@ -420,7 +421,7 @@ const Configure = () => {
 									</Box>
 								) : (
 									""
-								)}
+								)} */}
 							</Stack>
 						</ConfigBox>
 						<ConfigBox>
@@ -444,7 +445,7 @@ const Configure = () => {
 						>
 							<LoadingButton
 								variant="contained"
-								color="primary"
+								color="accent"
 								loading={isLoading}
 								sx={{ px: theme.spacing(12) }}
 								onClick={handleSubmit}

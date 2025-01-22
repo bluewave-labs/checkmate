@@ -151,7 +151,7 @@ const PageSpeedDetails = () => {
 											width: 4,
 											height: 4,
 											borderRadius: "50%",
-											backgroundColor: theme.palette.text.tertiary,
+											backgroundColor: theme.palette.primary.contrastTextTertiary,
 											opacity: 0.8,
 											left: -9,
 											top: "50%",
@@ -175,7 +175,7 @@ const PageSpeedDetails = () => {
 									"& svg": {
 										mr: theme.spacing(3),
 										"& path": {
-											stroke: theme.palette.other.icon,
+											stroke: theme.palette.primary.contrastTextTertiary,
 										},
 									},
 								}}
@@ -372,7 +372,7 @@ const PageSpeedDetails = () => {
 												? theme.palette.warning.main
 												: score >= 0
 													? theme.palette.error.contrastText
-													: theme.palette.unresolved.main;
+													: theme.palette.tertiary.main;
 
 									// Find the position where the number ends and the unit begins
 									const match = audit.displayValue.match(/(\d+\.?\d*)\s*([a-zA-Z]+)/);
@@ -393,7 +393,7 @@ const PageSpeedDetails = () => {
 											gap={theme.spacing(4)}
 											p={theme.spacing(3)}
 											border={1}
-											borderColor={theme.palette.border.light}
+											borderColor={theme.palette.primary.lowContrast}
 											borderRadius={4}
 										>
 											<Box>
@@ -410,7 +410,7 @@ const PageSpeedDetails = () => {
 													component="span"
 													fontSize={14}
 													fontWeight={500}
-													color={theme.palette.text.primary}
+													color={theme.palette.primary.contrastText}
 												>
 													{value}
 													<Typography

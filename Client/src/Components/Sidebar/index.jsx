@@ -158,35 +158,105 @@ function Sidebar() {
 		}
 	}, [location]);
 
-	/* TODO refactor this, there are a some ternaries and comments in the return  */
+	const iconColor = theme.palette.primary.contrastTextTertiary;
 
+	/* TODO refactor this, there are a some ternaries and comments in the return  */
 	return (
 		<Stack
 			component="aside"
 			className={collapsed ? "collapsed" : "expanded"}
+			/* TODO general padding should be here */
 			py={theme.spacing(6)}
 			gap={theme.spacing(6)}
+			/* TODO set all style in this sx if possible (when general)
+			This is the top lever for styles
+			*/
 			sx={{
 				border: 1,
-				borderColor: theme.palette.border.light,
+				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: theme.shape.borderRadius,
-				backgroundColor: theme.palette.background.main,
-				"& .selected-path, & .MuiListItemButton-root:hover": {
-					backgroundColor: theme.palette.background.accent,
+				"& :is(p, span, .MuiListSubheader-root)": {
+					/* 
+					Text color for unselected menu items and menu headings
+					Secondary contrast text against main background
+					*/
+					color: theme.palette.primary.contrastTextSecondary,
 				},
 				"& .MuiList-root svg path": {
-					stroke: theme.palette.text.tertiary,
+					/* Menu Icons */
+					stroke: iconColor,
 				},
-				"& p, & span, & .MuiListSubheader-root": {
-					color: theme.palette.text.secondary,
+				"& .selected-path": {
+					/* Selected menu item */
+					backgroundColor: theme.palette.secondary.main,
+					"&:hover": {
+						backgroundColor: theme.palette.secondary.main,
+					},
+					"& .MuiListItemIcon-root svg path": {
+						/* Selected menu item icon */
+						stroke: theme.palette.secondary.contrastText,
+					},
+					"& .MuiListItemText-root :is(p, span)": {
+						/* Selected menu item text */
+						color: theme.palette.secondary.contrastText,
+					},
+				},
+				"& .MuiListItemButton-root:not(.selected-path)": {
+					transition: "background-color .3s",
+					" &:hover": {
+						/* Hovered menu item bg color */
+						backgroundColor: theme.palette.tertiary.main,
+						"& :is(p, span)": {
+							/* Hovered menu item text color */
+							color: theme.palette.tertiary.contrastText,
+						},
+					},
 				},
 			}}
 		>
+			<IconButton
+				sx={{
+					position: "absolute",
+					/* TODO 60 is a magic number. if logo chnges size this might break */
+					top: 60,
+					right: 0,
+					transform: `translate(50%, 0)`,
+					backgroundColor: theme.palette.tertiary.main,
+					border: 1,
+					borderColor: theme.palette.primary.lowContrast,
+					p: theme.spacing(2.5),
+					"& svg": {
+						width: theme.spacing(8),
+						height: theme.spacing(8),
+						"& path": {
+							/* TODO this should be set at the top level if possible */
+							stroke: theme.palette.primary.contrastTextSecondary,
+						},
+					},
+					"&:focus": { outline: "none" },
+					"&:hover": {
+						backgroundColor: theme.palette.primary.lowContrast,
+						borderColor: theme.palette.primary.lowContrast,
+					},
+				}}
+				onClick={() => {
+					setOpen((prev) =>
+						Object.fromEntries(Object.keys(prev).map((key) => [key, false]))
+					);
+					dispatch(toggleSidebar());
+				}}
+			>
+				{collapsed ? <ArrowRight /> : <ArrowLeft />}
+			</IconButton>
+
+			{/* TODO Alignment done using padding. Use single source of truth to that*/}
 			<Stack
 				pt={theme.spacing(6)}
 				pb={theme.spacing(12)}
 				pl={theme.spacing(8)}
 			>
+				{/* TODO Abstract logo into component */}
+				{/* TODO Turn logo into a link */}
 				<Stack
 					direction="row"
 					alignItems="center"
@@ -201,10 +271,11 @@ function Sidebar() {
 						minHeight={theme.spacing(16)}
 						pl="1px"
 						fontSize={18}
-						color="white"
+						color={theme.palette.accent.contrastText}
 						sx={{
 							position: "relative",
-							backgroundColor: theme.palette.primary.main,
+							backgroundColor: theme.palette.accent.main,
+							color: theme.palette.accent.contrastText,
 							borderRadius: theme.shape.borderRadius,
 							userSelect: "none",
 						}}
@@ -219,40 +290,7 @@ function Sidebar() {
 						Checkmate
 					</Typography>
 				</Stack>
-				<IconButton
-					sx={{
-						position: "absolute",
-						top: 60,
-						right: 0,
-						transform: `translate(50%, 0)`,
-						backgroundColor: theme.palette.background.fill,
-						border: 1,
-						borderColor: theme.palette.border.light,
-						p: theme.spacing(2.5),
-						"& svg": {
-							width: theme.spacing(8),
-							height: theme.spacing(8),
-							"& path": {
-								stroke: theme.palette.text.secondary,
-							},
-						},
-						"&:focus": { outline: "none" },
-						"&:hover": {
-							backgroundColor: theme.palette.border.light,
-							borderColor: theme.palette.border.light,
-						},
-					}}
-					onClick={() => {
-						setOpen((prev) =>
-							Object.fromEntries(Object.keys(prev).map((key) => [key, false]))
-						);
-						dispatch(toggleSidebar());
-					}}
-				>
-					{collapsed ? <ArrowRight /> : <ArrowLeft />}
-				</IconButton>
 			</Stack>
-			{/* menu */}
 			<List
 				component="nav"
 				aria-labelledby="nested-menu-subheader"
@@ -262,7 +300,8 @@ function Sidebar() {
 						component="div"
 						id="nested-menu-subheader"
 						sx={{
-							pt: theme.spacing(4),
+							py: theme.spacing(4),
+							/* TODO px should be centralized in container */
 							px: collapsed ? theme.spacing(2) : theme.spacing(4),
 							backgroundColor: "transparent",
 						}}
@@ -273,11 +312,12 @@ function Sidebar() {
 				sx={{
 					px: theme.spacing(6),
 					height: "100%",
-					overflow: "hidden",
+					/* overflow: "hidden", */
 				}}
 			>
 				{menu.map((item) =>
 					item.path ? (
+						/* If item has a path */
 						<Tooltip
 							key={item.path}
 							placement="right"
@@ -300,10 +340,12 @@ function Sidebar() {
 								className={location.pathname.includes(item.path) ? "selected-path" : ""}
 								onClick={() => navigate(`/${item.path}`)}
 								sx={{
-									height: "37px",
+									/* 
+									TODO we do not need this height
+									minHeight: "37px", */
+									p: theme.spacing(5),
 									gap: theme.spacing(4),
 									borderRadius: theme.shape.borderRadius,
-									px: theme.spacing(4),
 								}}
 							>
 								<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
@@ -311,7 +353,7 @@ function Sidebar() {
 							</ListItemButton>
 						</Tooltip>
 					) : collapsed ? (
-						/* TODO Do we ever get here? */
+						/* TODO Do we ever get here? If item does not have a path and collapsed state is true  */
 						<React.Fragment key={item.name}>
 							<Tooltip
 								placement="right"
@@ -367,8 +409,9 @@ function Sidebar() {
 								MenuListProps={{ sx: { px: 1, py: 2 } }}
 								sx={{
 									ml: theme.spacing(8),
+									/* TODO what is this selection? */
 									"& .selected-path": {
-										backgroundColor: theme.palette.background.accent,
+										backgroundColor: theme.palette.tertiary.main,
 									},
 								}}
 							>
@@ -399,9 +442,10 @@ function Sidebar() {
 											sx={{
 												gap: theme.spacing(4),
 												opacity: 0.9,
+												/* TODO this has no effect? */
 												"& svg": {
 													"& path": {
-														stroke: theme.palette.other.icon,
+														stroke: theme.palette.primary.contrastTextTertiary,
 														strokeWidth: 1.1,
 													},
 												},
@@ -415,6 +459,7 @@ function Sidebar() {
 							</Menu>
 						</React.Fragment>
 					) : (
+						/* TODO Do we ever get here? If item does not have a path and collapsed state is false */
 						<React.Fragment key={item.name}>
 							<ListItemButton
 								onClick={() =>
@@ -476,7 +521,7 @@ function Sidebar() {
 														left: "-7px",
 														height: "100%",
 														borderLeft: 1,
-														borderLeftColor: theme.palette.other.line,
+														borderLeftColor: theme.palette.primary.lowContrast,
 													},
 													"&:last-child::before": {
 														height: "50%",
@@ -489,10 +534,11 @@ function Sidebar() {
 														height: "3px",
 														width: "3px",
 														borderRadius: "50%",
-														backgroundColor: theme.palette.other.line,
+														backgroundColor: theme.palette.primary.lowContrast,
 													},
 													"&.selected-path::after": {
-														backgroundColor: theme.palette.text.tertiary,
+														/* TODO what is this selector doing? */
+														backgroundColor: theme.palette.primary.contrastTextTertiary,
 														transform: "scale(1.2)",
 													},
 												}}
@@ -564,7 +610,7 @@ function Sidebar() {
 							marginLeft={"auto"}
 							columnGap={theme.spacing(2)}
 						>
-							<ThemeSwitch />
+							<ThemeSwitch color={iconColor} />
 							<Tooltip
 								title="Controls"
 								disableInteractive
@@ -575,14 +621,15 @@ function Sidebar() {
 										mr: "-8px",
 										"&:focus": { outline: "none" },
 										alignSelf: "center",
-										padding: '10px',
+										padding: "10px",
 
 										"& svg": {
 											width: "22px",
 											height: "22px",
 										},
 										"& svg path": {
-											stroke: theme.palette.other.icon,
+											/* Vertical three dots */
+											stroke: iconColor,
 										},
 									}}
 									onClick={(event) => openPopup(event, "logout")}
@@ -640,6 +687,7 @@ function Sidebar() {
 							</Box>
 						</MenuItem>
 					)}
+					{/* TODO Do we need two dividers? */}
 					{collapsed && <Divider />}
 					<Divider />
 					<MenuItem
@@ -649,7 +697,7 @@ function Sidebar() {
 							borderRadius: theme.shape.borderRadius,
 							pl: theme.spacing(4),
 							"& svg path": {
-								stroke: theme.palette.other.icon,
+								stroke: iconColor,
 							},
 						}}
 					>

@@ -141,15 +141,15 @@ import { buildErrors } from "../../../Validation/error";
 				py={theme.spacing(12)}
 				gap={theme.spacing(12)}
 				border={1}
-				borderColor={theme.palette.border.light}
+				borderColor={theme.palette.primary.lowContrast}
 				borderRadius={theme.shape.borderRadius}
-				backgroundColor={theme.palette.background.main}
+				backgroundColor={theme.palette.primary.main}
 			>
 				<TabContext value={tabList[tabIdx]}>
 					<Box
 						sx={{
 							borderBottom: 1,
-							borderColor: theme.palette.border.light,
+							borderColor: theme.palette.primary.lowContrast,
 							"& .MuiTabs-root": { height: "fit-content", minHeight: "0" },
 						}}
 					>
@@ -164,7 +164,7 @@ import { buildErrors } from "../../../Validation/error";
 									value={label}
 									sx={{
 										fontSize: 13,
-										color: theme.palette.text.tertiary,
+										color: theme.palette.primary.contrastTextSecondary,
 										textTransform: "none",
 										minWidth: "fit-content",
 										minHeight: 0,
@@ -198,7 +198,7 @@ import { buildErrors } from "../../../Validation/error";
 				>
 					<Button
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={handleSubmit}
 					>
 						Save

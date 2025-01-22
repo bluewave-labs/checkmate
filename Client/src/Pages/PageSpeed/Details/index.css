@@ -1,5 +1,5 @@
 .page-speed-details button.MuiButtonBase-root {
-	height: 34px;
+	min-height: 34px;
 }
 
 .page-speed-details .MuiPieArcLabel-root {

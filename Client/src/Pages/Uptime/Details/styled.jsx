@@ -8,20 +8,20 @@ export const ChartBox = styled(Stack)(({ theme }) => ({
 	padding: theme.spacing(8),
 	border: 1,
 	borderStyle: "solid",
-	borderColor: theme.palette.border.light,
+	borderColor: theme.palette.primary.lowContrast,
 	borderRadius: 4,
-	backgroundColor: theme.palette.background.main,
+	backgroundColor: theme.palette.primary.main,
 	"& h2": {
-		color: theme.palette.text.secondary,
+		color: theme.palette.primary.contrastTextSecondary,
 		fontSize: 15,
 		fontWeight: 500,
 	},
 	"& .MuiBox-root:not(.area-tooltip) p": {
-		color: theme.palette.text.tertiary,
+		color: theme.palette.primary.contrastTextTertiary,
 		fontSize: 13,
 	},
 	"& .MuiBox-root > span": {
-		color: theme.palette.text.primary,
+		color: theme.palette.primary.contrastText,
 		fontSize: 20,
 		"& span": {
 			opacity: 0.8,
@@ -37,7 +37,7 @@ export const ChartBox = styled(Stack)(({ theme }) => ({
 		alignItems: "center",
 	},
 	"& tspan, & text": {
-		fill: theme.palette.text.tertiary,
+		fill: theme.palette.primary.contrastTextTertiary,
 	},
 	"& path": {
 		transition: "fill 300ms ease, stroke-width 400ms ease",
