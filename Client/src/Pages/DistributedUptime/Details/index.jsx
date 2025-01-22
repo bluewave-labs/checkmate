@@ -8,6 +8,7 @@ import ResponseTimeIcon from "../../../assets/icons/response-time-icon.svg?react
 import DeviceTicker from "../components/DeviceTicker";
 import DistributedUptimeResponseChart from "../components/DistributedUptimeResponseChart";
 import UptimeIcon from "../../../assets/icons/uptime-icon.svg?react";
+import UptLogo from "../../../assets/icons/upt_logo.png";
 import LastUpdate from "../components/LastUpdate";
 import NextExpectedCheck from "../components/NextExpectedCheck";
 //Utils
@@ -18,7 +19,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 //Constants
-const BASE_BOX_PADDING_VERTICAL = 16;
+const BASE_BOX_PADDING_VERTICAL = 8;
 const BASE_BOX_PADDING_HORIZONTAL = 8;
 const MAX_RETRIES = 10;
 const RETRY_DELAY = 5000;
@@ -27,8 +28,11 @@ const BaseBox = ({ children }) => {
 	const theme = useTheme();
 
 	return (
-		<Box
+		<Stack
+			direction="row"
 			width={"25%"}
+			alignItems="center"
+			justifyContent="center"
 			sx={{
 				padding: `${theme.spacing(BASE_BOX_PADDING_VERTICAL)} ${theme.spacing(BASE_BOX_PADDING_HORIZONTAL)}`,
 				backgroundColor: theme.palette.background.main,
@@ -38,14 +42,26 @@ const BaseBox = ({ children }) => {
 			}}
 		>
 			{children}
-		</Box>
+		</Stack>
 	);
 };
-export const StatBox = ({ heading, value }) => {
+export const StatBox = ({ heading, value, img, altTxt }) => {
+	const theme = useTheme();
 	return (
 		<BaseBox>
-			<Typography variant="h2">{heading}</Typography>
-			<Typography>{value}</Typography>
+			{img && (
+				<img
+					style={{ marginRight: theme.spacing(8) }}
+					height={50}
+					width={50}
+					src={img}
+					alt={altTxt}
+				/>
+			)}
+			<Stack direction="column">
+				<Typography variant="h2">{heading}</Typography>
+				<Typography>{value}</Typography>
+			</Stack>
 		</BaseBox>
 	);
 };
@@ -115,6 +131,14 @@ const DistributedUptimeDetails = () => {
 				gap={theme.spacing(8)}
 			>
 				<Breadcrumbs list={BREADCRUMBS} />
+				<Box>
+					<Typography
+						component="h1"
+						variant="h1"
+					>
+						{monitor.name}
+					</Typography>
+				</Box>
 				<Stack
 					direction="row"
 					gap={theme.spacing(8)}
@@ -139,9 +163,12 @@ const DistributedUptimeDetails = () => {
 						trigger={lastUpdateTrigger}
 						suffix={"seconds ago"}
 					/>
+
 					<StatBox
-						heading="Total UPT Burned"
+						heading="UPT Burned"
 						value={monitor?.totalUptBurnt ?? 0}
+						img={UptLogo}
+						altTxt="Upt Logo"
 					/>
 				</Stack>
 				<NextExpectedCheck
@@ -204,7 +231,6 @@ const DistributedUptimeDetails = () => {
 				<Stack
 					direction="row"
 					gap={theme.spacing(8)}
-					minHeight={"50vh"}
 				>
 					<DistributedUptimeMap
 						checks={monitor?.groupedMapChecks ?? []}
