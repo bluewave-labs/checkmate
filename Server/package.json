@@ -47,7 +47,7 @@
 		"eslint-plugin-mocha": "^10.5.0",
 		"esm": "3.2.25",
 		"globals": "^15.14.0",
-		"mocha": "11.0.1",
+		"mocha": "11.1.0",
 		"ngrok": "5.0.0-beta.2",
 		"nodemon": "3.1.9",
 		"prettier": "^3.3.3",
