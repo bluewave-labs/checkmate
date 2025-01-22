@@ -1,8 +1,7 @@
 
-## **Announcing $5000 grant funding in partnership with [UpRock](https://uprock.com) to build distributed uptime monitoring - check [our web page](https://checkmate.so) for funding ideas** 
 
-![Frame 34](https://github.com/user-attachments/assets/4ecf2d6e-b3f9-47e9-9e31-b9cb8f3f00b9)
-
+<p align=center> <a href="https://trendshift.io/repositories/12443" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12443" alt="bluewave-labs%2Fcheckmate | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a></p>
+  
 ![](https://img.shields.io/github/license/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/repo-size/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/commit-activity/m/bluewave-labs/checkmate)
@@ -11,6 +10,7 @@
 ![](https://img.shields.io/github/issues/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/issues-pr/bluewave-labs/checkmate)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9901/badge)](https://www.bestpractices.dev/projects/9901)
+
 
 <h1 align="center"><a href="https://bluewavelabs.ca" target="_blank">Checkmate</a></h1>
 
