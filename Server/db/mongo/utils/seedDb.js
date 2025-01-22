@@ -1,8 +1,5 @@
 import Monitor from "../../models/Monitor.js";
 import Check from "../../models/Check.js";
-import { ObjectId } from "mongodb";
-const FAKE_TEAM_ID = "67034bceb4c4ea3e8f75fa93";
-const FAKE_USER_ID = "67034bceb4c4ea3e8f75fa95";
 
 const generateRandomUrl = () => {
 	const domains = ["example.com", "test.org", "demo.net", "sample.io", "mock.dev"];
@@ -10,7 +7,7 @@ const generateRandomUrl = () => {
 	return `https://${domains[Math.floor(Math.random() * domains.length)]}/${paths[Math.floor(Math.random() * paths.length)]}`;
 };
 
-const generateChecks = (monitorId, count) => {
+const generateChecks = (monitorId, teamId, count) => {
 	const checks = [];
 	const endTime = new Date(Date.now() - 10 * 60 * 1000); // 10 minutes ago
 	const startTime = new Date(endTime - count * 60 * 1000); // count minutes before endTime
@@ -21,7 +18,7 @@ const generateChecks = (monitorId, count) => {
 
 		checks.push({
 			monitorId,
-			teamId: FAKE_TEAM_ID,
+			teamId,
 			status,
 			responseTime: Math.floor(Math.random() * 1000), // Random response time between 0-1000ms
 			createdAt: timestamp,
@@ -32,7 +29,7 @@ const generateChecks = (monitorId, count) => {
 	return checks;
 };
 
-const seedDb = async () => {
+const seedDb = async (userId, teamId) => {
 	try {
 		console.log("Deleting all monitors and checks");
 		await Monitor.deleteMany({});
@@ -43,13 +40,13 @@ const seedDb = async () => {
 				name: `Monitor ${i}`,
 				url: generateRandomUrl(),
 				type: "http",
-				userId: FAKE_USER_ID,
-				teamId: FAKE_TEAM_ID,
+				userId,
+				teamId,
 				interval: 60000,
-				active: true,
+				active: false,
 			});
 			console.log(`Adding monitor and checks for monitor ${i}`);
-			const checks = generateChecks(monitor._id, 10000);
+			const checks = generateChecks(monitor._id, teamId, 10000);
 			await Check.insertMany(checks);
 		}
 	} catch (error) {

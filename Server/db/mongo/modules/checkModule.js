@@ -6,9 +6,11 @@ import { ObjectId } from "mongodb";
 
 const SERVICE_NAME = "checkModule";
 const dateRangeLookup = {
+	hour: new Date(new Date().setHours(new Date().getHours() - 1)),
 	day: new Date(new Date().setDate(new Date().getDate() - 1)),
 	week: new Date(new Date().setDate(new Date().getDate() - 7)),
 	month: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+	all: undefined,
 };
 
 /**
@@ -75,7 +77,7 @@ const getChecksByMonitor = async (req) => {
 		const matchStage = {
 			monitorId: ObjectId.createFromHexString(monitorId),
 			status: false,
-			...(dateRange && {
+			...(dateRangeLookup[dateRange] && {
 				createdAt: {
 					$gte: dateRangeLookup[dateRange],
 				},
@@ -140,18 +142,18 @@ const getChecksByTeam = async (req) => {
 		let { sortOrder, dateRange, filter, page, rowsPerPage } = req.query;
 		page = parseInt(page);
 		rowsPerPage = parseInt(rowsPerPage);
-		!dateRange && (dateRange = "day");
+		console.log(dateRangeLookup[dateRange]);
 		const { teamId } = req.params;
 		const matchStage = {
 			teamId: ObjectId.createFromHexString(teamId),
 			status: false,
-			...(dateRange && {
+			...(dateRangeLookup[dateRange] && {
 				createdAt: {
 					$gte: dateRangeLookup[dateRange],
 				},
 			}),
 		};
-
+		console.log(matchStage);
 		// Add filter to match stage
 		if (filter !== undefined) {
 			switch (filter) {
@@ -166,7 +168,7 @@ const getChecksByTeam = async (req) => {
 					logger.warn({
 						message: "invalid filter",
 						service: SERVICE_NAME,
-						method: "getTeamChecks",
+						method: "getChecksByTeam",
 					});
 					break;
 			}
@@ -198,23 +200,6 @@ const getChecksByTeam = async (req) => {
 			},
 		]);
 
-		const queryPlan = await Check.aggregate([
-			{ $match: matchStage },
-			{ $sort: { createdAt: sortOrder } },
-			{
-				$facet: {
-					summary: [{ $count: "checksCount" }],
-					checks: [{ $skip: skip }, { $limit: rowsPerPage }],
-				},
-			},
-			{
-				$project: {
-					checksCount: { $arrayElemAt: ["$summary.checksCount", 0] },
-					checks: "$checks",
-				},
-			},
-		]).explain("executionStats");
-		console.log(queryPlan);
 		return checks[0];
 	} catch (error) {
 		error.service = SERVICE_NAME;
