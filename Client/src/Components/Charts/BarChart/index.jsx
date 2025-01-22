@@ -46,7 +46,7 @@ const BarChart = ({ checks = [], barWidth, barMarginBottom }) => {
 					<Box
 						key={`${check}-${index}`}
 						position="relative"
-						width={theme.spacing(4.5)}
+						width={barWidth??theme.spacing(4.5)}
 						height="100%"
 						backgroundColor={theme.palette.primary.lowContrast}
 						sx={{
