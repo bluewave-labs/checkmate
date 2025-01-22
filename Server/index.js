@@ -74,6 +74,8 @@ import MongoDB from "./db/mongo/MongoDB.js";
 
 import IORedis from "ioredis";
 
+import seedDb from "./db/mongo/utils/seedDb.js";
+
 const SERVICE_NAME = "Server";
 const SHUTDOWN_TIMEOUT = 1000;
 let isShuttingDown = false;
@@ -262,6 +264,7 @@ const startApp = async () => {
 	);
 	// Init job queue
 	await jobQueue.initJobQueue();
+	// await seedDb();
 	// Middleware
 	app.use(
 		cors()

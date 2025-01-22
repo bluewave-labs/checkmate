@@ -68,10 +68,9 @@ const createCheck = async (checkData) => {
 const getChecksByMonitor = async (req) => {
 	try {
 		const { monitorId } = req.params;
-		let { sortOrder, limit, dateRange, filter, page, rowsPerPage } = req.query;
+		let { sortOrder, dateRange, filter, page, rowsPerPage } = req.query;
 		page = parseInt(page);
 		rowsPerPage = parseInt(rowsPerPage);
-
 		// Match
 		const matchStage = {
 			monitorId: ObjectId.createFromHexString(monitorId),
@@ -138,10 +137,10 @@ const getChecksByMonitor = async (req) => {
 
 const getChecksByTeam = async (req) => {
 	try {
-		let { sortOrder, limit, dateRange, filter, page, rowsPerPage } = req.query;
+		let { sortOrder, dateRange, filter, page, rowsPerPage } = req.query;
 		page = parseInt(page);
 		rowsPerPage = parseInt(rowsPerPage);
-
+		!dateRange && (dateRange = "day");
 		const { teamId } = req.params;
 		const matchStage = {
 			teamId: ObjectId.createFromHexString(teamId),
@@ -184,6 +183,7 @@ const getChecksByTeam = async (req) => {
 		const checks = await Check.aggregate([
 			{ $match: matchStage },
 			{ $sort: { createdAt: sortOrder } },
+
 			{
 				$facet: {
 					summary: [{ $count: "checksCount" }],
@@ -197,6 +197,24 @@ const getChecksByTeam = async (req) => {
 				},
 			},
 		]);
+
+		const queryPlan = await Check.aggregate([
+			{ $match: matchStage },
+			{ $sort: { createdAt: sortOrder } },
+			{
+				$facet: {
+					summary: [{ $count: "checksCount" }],
+					checks: [{ $skip: skip }, { $limit: rowsPerPage }],
+				},
+			},
+			{
+				$project: {
+					checksCount: { $arrayElemAt: ["$summary.checksCount", 0] },
+					checks: "$checks",
+				},
+			},
+		]).explain("executionStats");
+		console.log(queryPlan);
 		return checks[0];
 	} catch (error) {
 		error.service = SERVICE_NAME;

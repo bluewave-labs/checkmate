@@ -76,6 +76,7 @@ const CheckSchema = mongoose.Schema({ ...BaseCheckSchema.obj }, { timestamps: tr
 CheckSchema.index({ createdAt: 1 });
 CheckSchema.index({ monitorId: 1, createdAt: 1 });
 CheckSchema.index({ monitorId: 1, createdAt: -1 });
+CheckSchema.index({ teamId: 1, createdAt: -1 });
 
 export default mongoose.model("Check", CheckSchema);
 export { BaseCheckSchema };
