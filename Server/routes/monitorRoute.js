@@ -75,6 +75,8 @@ class MonitorRoutes {
 			isAllowed(["admin", "superadmin"]),
 			this.monitorController.addDemoMonitors
 		);
+
+		this.router.post("/seed", isAllowed(["superadmin"]), this.monitorController.seedDb);
 	}
 
 	getRouter() {

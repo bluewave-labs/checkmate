@@ -131,6 +131,7 @@ class NetworkService {
 
 			const httpResponse = {
 				monitorId: job.data._id,
+				teamId: job.data.teamId,
 				type: job.data.type,
 				responseTime,
 				payload: response?.data,

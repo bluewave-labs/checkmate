@@ -5,7 +5,7 @@ import SkeletonLayout from "./skeleton";
 import Fallback from "./fallback";
 import StatusBox from "./StatusBox";
 import UptimeDataTable from "./UptimeDataTable";
-import { Pagination } from "../../../Components/Table/TablePagination";
+import Pagination from "../../../Components/Table/TablePagination";
 
 // Utils
 import { useTheme } from "@emotion/react";
@@ -225,7 +225,8 @@ const UptimeMonitors = () => {
 									triggerUpdate={triggerUpdate}
 								/>
 								<Pagination
-									monitorCount={totalMonitors}
+									itemCount={totalMonitors}
+									paginationLabel="monitors"
 									page={page}
 									rowsPerPage={rowsPerPage}
 									handleChangePage={handleChangePage}
