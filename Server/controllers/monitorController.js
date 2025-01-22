@@ -498,7 +498,10 @@ class MonitorController {
 
 	seedDb = async (req, res, next) => {
 		try {
-			await seedDb(userId, teamId);
+			const token = getTokenFromHeaders(req.headers);
+			const { jwtSecret } = this.settingsService.getSettings();
+			const { _id, teamId } = jwt.verify(token, jwtSecret);
+			await seedDb(_id, teamId);
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "seedDb"));
 		}
