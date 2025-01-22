@@ -104,6 +104,14 @@ const Search = ({
 							"& .MuiOutlinedInput-root": {
 								paddingY: 0,
 							},
+							"& .MuiAutocomplete-tag": {
+								// CAIO_REVIEW
+								color: theme.palette.primary.contrastText,
+								backgroundColor: theme.palette.primary.lowContrast,
+							},
+							"& .MuiChip-deleteIcon": {
+								color: theme.palette.primary.contrastText, // CAIO_REVIEW
+							},
 						}}
 					/>
 					{error && (
@@ -165,6 +173,7 @@ const Search = ({
 						"& .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true'], & .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true'].Mui-focused, & .MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected='true']:hover":
 							{
 								backgroundColor: theme.palette.primary.lowContrast,
+								color: "red",
 							},
 						"& li.MuiAutocomplete-option:hover:not([aria-selected='true'])": {
 							color: theme.palette.primary.main,

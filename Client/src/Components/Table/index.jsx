@@ -87,7 +87,7 @@ const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
 								<TableRow
 									key={key}
 									sx={config?.rowSX ?? {}}
-									onClick={() => config?.onRowClick(row)}
+									onClick={config?.onRowClick ? () => config.onRowClick(row) : null}
 								>
 									{headers.map((header, index) => {
 										return (
