@@ -7,7 +7,7 @@ const nameSchema = joi
 	.string()
 	.max(50)
 	.trim()
-	.pattern(/^[\p{L}]+(?:[\p{L}\s]+)*$/u)
+	.pattern(/^[\p{L}]+(?:[\p{L}\s'\-]+)*$/u)
 	.messages({
 		"string.empty": "Name is required",
 		"string.max": "Name must be less than 50 characters long",
