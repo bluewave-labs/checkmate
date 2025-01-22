@@ -266,7 +266,7 @@ const Settings = () => {
 							open={isOpen.deleteStats}
 							theme={theme}
 							title="Do you want to clear all stats?"
-							description="Once deleted, this monitor cannot be retrieved."
+							description="Once deleted, your monitors cannot be retrieved."
 							onCancel={() => setIsOpen(deleteStatsMonitorsInitState)}
 							confirmationButtonLabel="Yes, clear all stats"
 							onConfirm={handleClearStats}
@@ -279,7 +279,7 @@ const Settings = () => {
 						<Box>
 							<Typography component="h1">Demo monitors</Typography>
 							<Typography sx={{ mt: theme.spacing(2) }}>
-								Here you can add and remove demo monitors
+								Here you can add and remove demo monitors.
 							</Typography>
 						</Box>
 						<Stack gap={theme.spacing(20)}>
