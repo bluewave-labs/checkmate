@@ -379,7 +379,14 @@ const CreateMonitor = () => {
 							)}
 							value={user?.email}
 							onChange={(event) => handleNotifications(event, "email")}
-						/>
+							/>
+						<Button
+							variant="contained"
+							color="accent"
+							onClick={() => console.log("Other notification options clicked")}
+						>
+							Other notification options
+						</Button>
 					</Stack>
 				</ConfigBox>
 				<ConfigBox>
