@@ -383,9 +383,10 @@ const CreateMonitor = () => {
 						<Button
 							variant="contained"
 							color="accent"
-							onClick={() => console.log("Other notification options clicked")}
+							style={{ width: 'fit-content' }}
+							onClick={() => console.log("Notification integrations clicked")}
 						>
-							Other notification options
+							Notification integrations
 						</Button>
 					</Stack>
 				</ConfigBox>
