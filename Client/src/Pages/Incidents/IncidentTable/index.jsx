@@ -15,7 +15,8 @@ import { Empty } from "./Empty/Empty";
 import { IncidentSkeleton } from "./Skeleton/Skeleton";
 import DataTable from "../../../Components/Table";
 import Pagination from "../../../Components/Table/TablePagination";
-const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
+
+const IncidentTable = ({ monitors, selectedMonitor, filter, dateRange }) => {
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 
 	const theme = useTheme();
@@ -25,7 +26,6 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 	const [checksCount, setChecksCount] = useState(0);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
-
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
@@ -42,7 +42,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 						teamId: user.teamId,
 						sortOrder: "desc",
 						limit: null,
-						dateRange: null,
+						dateRange,
 						filter: filter,
 						page: page,
 						rowsPerPage: rowsPerPage,
@@ -53,7 +53,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 						monitorId: selectedMonitor,
 						sortOrder: "desc",
 						limit: null,
-						dateRange: null,
+						dateRange,
 						filter: filter,
 						page,
 						rowsPerPage,
@@ -69,7 +69,7 @@ const IncidentTable = ({ monitors, selectedMonitor, filter }) => {
 			}
 		};
 		fetchPage();
-	}, [authToken, user, monitors, selectedMonitor, filter, page, rowsPerPage]);
+	}, [authToken, user, monitors, selectedMonitor, filter, page, rowsPerPage, dateRange]);
 
 	const handlePageChange = (_, newPage) => {
 		setPage(newPage);
