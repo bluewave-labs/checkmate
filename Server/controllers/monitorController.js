@@ -20,7 +20,7 @@ import { getTokenFromHeaders } from "../utils/utils.js";
 import logger from "../utils/logger.js";
 import { handleError, handleValidationError } from "./controllerUtils.js";
 import axios from "axios";
-
+import seedDb from "../db/mongo/utils/seedDb.js";
 const SERVICE_NAME = "monitorController";
 
 class MonitorController {
@@ -493,6 +493,17 @@ class MonitorController {
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "getMonitorsByTeamId"));
+		}
+	};
+
+	seedDb = async (req, res, next) => {
+		try {
+			const token = getTokenFromHeaders(req.headers);
+			const { jwtSecret } = this.settingsService.getSettings();
+			const { _id, teamId } = jwt.verify(token, jwtSecret);
+			await seedDb(_id, teamId);
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "seedDb"));
 		}
 	};
 }

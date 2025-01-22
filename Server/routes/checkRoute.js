@@ -11,7 +11,7 @@ class CheckRoutes {
 	}
 
 	initRoutes() {
-		this.router.get("/:monitorId", this.checkController.getChecks);
+		this.router.get("/:monitorId", this.checkController.getChecksByMonitor);
 		this.router.post(
 			"/:monitorId",
 			verifyOwnership(Monitor, "monitorId"),
@@ -23,7 +23,7 @@ class CheckRoutes {
 			this.checkController.deleteChecks
 		);
 
-		this.router.get("/team/:teamId", this.checkController.getTeamChecks);
+		this.router.get("/team/:teamId", this.checkController.getChecksByTeam);
 
 		this.router.delete(
 			"/team/:teamId",
