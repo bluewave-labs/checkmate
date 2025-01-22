@@ -179,6 +179,7 @@ IncidentTable.propTypes = {
 	monitors: PropTypes.object.isRequired,
 	selectedMonitor: PropTypes.string.isRequired,
 	filter: PropTypes.string.isRequired,
+	dateRange: PropTypes.string.isRequired,
 };
 
 export default IncidentTable;
