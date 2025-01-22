@@ -68,7 +68,6 @@ const Incidents = () => {
 	return (
 		<Stack
 			className="incidents"
-			justifyContent="space-between"
 			pt={theme.spacing(6)}
 			gap={theme.spacing(12)}
 		>
@@ -144,7 +143,7 @@ const Incidents = () => {
 									filled={(filter === "resolve").toString()}
 									onClick={() => setFilter("resolve")}
 								>
-									Cannot Resolve
+									Cannot resolve
 								</Button>
 							</ButtonGroup>
 						</Stack>
@@ -158,7 +157,7 @@ const Incidents = () => {
 								component="h1"
 								color={theme.palette.primary.contrastTextSecondary}
 							>
-								Limit by:
+								Show:
 							</Typography>
 							<ButtonGroup
 								sx={{
@@ -173,21 +172,21 @@ const Incidents = () => {
 									filled={(dateRange === "hour").toString()}
 									onClick={() => setDateRange("hour")}
 								>
-									Hour
+									Last hour
 								</Button>
 								<Button
 									variant="group"
 									filled={(dateRange === "day").toString()}
 									onClick={() => setDateRange("day")}
 								>
-									Day
+									Last day
 								</Button>
 								<Button
 									variant="group"
 									filled={(dateRange === "week").toString()}
 									onClick={() => setDateRange("week")}
 								>
-									Week
+									Last week
 								</Button>
 								<Button
 									variant="group"

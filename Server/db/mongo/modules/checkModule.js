@@ -142,7 +142,6 @@ const getChecksByTeam = async (req) => {
 		let { sortOrder, dateRange, filter, page, rowsPerPage } = req.query;
 		page = parseInt(page);
 		rowsPerPage = parseInt(rowsPerPage);
-		console.log(dateRangeLookup[dateRange]);
 		const { teamId } = req.params;
 		const matchStage = {
 			teamId: ObjectId.createFromHexString(teamId),
@@ -153,7 +152,6 @@ const getChecksByTeam = async (req) => {
 				},
 			}),
 		};
-		console.log(matchStage);
 		// Add filter to match stage
 		if (filter !== undefined) {
 			switch (filter) {
