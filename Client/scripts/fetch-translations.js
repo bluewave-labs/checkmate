@@ -13,7 +13,6 @@ const PROJECT_ID = process.env.VITE_POEDITOR_PROJECT_ID;
 const LOCALES_DIR = path.join(process.cwd(), './public/locales');
 
 async function fetchLanguages() {
-  console.log({ API_TOKEN, PROJECT_ID })
   const response = await fetch(`${POEDITOR_API_DOMAIN}/languages/list`, {
     method: 'POST',
     headers: {
@@ -27,7 +26,6 @@ async function fetchLanguages() {
 
   const data = await response.json();
 
-  console.log({ data })
   return data.result.languages;
 }
 
