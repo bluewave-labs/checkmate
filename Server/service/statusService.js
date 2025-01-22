@@ -83,10 +83,11 @@ class StatusService {
 	 * @returns {Object} The check object.
 	 */
 	buildCheck = (networkResponse) => {
-		const { monitorId, type, status, responseTime, code, message, payload } =
+		const { monitorId, teamId, type, status, responseTime, code, message, payload } =
 			networkResponse;
 		const check = {
 			monitorId,
+			teamId,
 			status,
 			statusCode: code,
 			responseTime,

@@ -18,7 +18,7 @@
 	"dependencies": {
 		"axios": "^1.7.2",
 		"bcrypt": "5.1.1",
-		"bullmq": "5.34.10",
+		"bullmq": "5.35.0",
 		"cors": "^2.8.5",
 		"dockerode": "4.0.4",
 		"dotenv": "^16.4.5",
@@ -47,7 +47,7 @@
 		"eslint-plugin-mocha": "^10.5.0",
 		"esm": "3.2.25",
 		"globals": "^15.14.0",
-		"mocha": "11.0.1",
+		"mocha": "11.1.0",
 		"ngrok": "5.0.0-beta.2",
 		"nodemon": "3.1.9",
 		"prettier": "^3.3.3",
