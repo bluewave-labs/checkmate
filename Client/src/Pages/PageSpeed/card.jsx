@@ -23,9 +23,9 @@ const CustomToolTip = ({ payload }) => {
 	return (
 		<Box
 			sx={{
-				backgroundColor: theme.palette.background.main,
+				backgroundColor: theme.palette.primary.main,
 				border: 1,
-				borderColor: theme.palette.border.dark,
+				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: theme.shape.borderRadius,
 				py: theme.spacing(2),
 				px: theme.spacing(4),
@@ -33,7 +33,7 @@ const CustomToolTip = ({ payload }) => {
 		>
 			<Typography
 				sx={{
-					color: theme.palette.text.tertiary,
+					color: theme.palette.primary.contrastTextTertiary,
 					fontSize: 12,
 					fontWeight: 500,
 				}}
@@ -52,7 +52,7 @@ const CustomToolTip = ({ payload }) => {
 				mt={theme.spacing(1)}
 				sx={{
 					"& span": {
-						color: theme.palette.text.tertiary,
+						color: theme.palette.primary.contrastTextTertiary,
 						fontSize: 11,
 						fontWeight: 500,
 					},
@@ -81,6 +81,7 @@ CustomToolTip.propTypes = {
 	payload: PropTypes.array,
 };
 
+/* TODO separate utils in folder*/
 /**
  * Processes the raw data to include a score for each entry.
  * @param {Array<Object>} data - The raw data array.
@@ -104,6 +105,7 @@ const processData = (data) => {
 	return formattedData;
 };
 
+/* TODO separate component*/
 /**
  * Renders an area chart displaying page speed scores.
  * @param {Object} props
@@ -114,7 +116,9 @@ const processData = (data) => {
 const PagespeedAreaChart = ({ data, status }) => {
 	const theme = useTheme();
 	const [isHovered, setIsHovered] = useState(false);
-	const { pagespeedStyles } = useUtils();
+	const { statusToTheme } = useUtils();
+
+	const themeColor = statusToTheme[status];
 
 	const formattedData = processData(data);
 
@@ -134,14 +138,14 @@ const PagespeedAreaChart = ({ data, status }) => {
 				onMouseLeave={() => setIsHovered(false)}
 			>
 				<CartesianGrid
-					stroke={theme.palette.border.light}
+					stroke={theme.palette.primary.lowContrast}
 					strokeWidth={1}
 					strokeOpacity={1}
 					fill="transparent"
 					vertical={false}
 				/>
 				<Tooltip
-					cursor={{ stroke: theme.palette.border.light }}
+					cursor={{ stroke: theme.palette.primary.lowContrast }}
 					content={<CustomToolTip />}
 				/>
 				<defs>
@@ -154,24 +158,24 @@ const PagespeedAreaChart = ({ data, status }) => {
 					>
 						<stop
 							offset="0%"
-							stopColor={pagespeedStyles[status].stroke}
+							stopColor={theme.palette[themeColor].lowContrast}
 							stopOpacity={0.8}
 						/>
 						<stop
 							offset="100%"
-							stopColor={pagespeedStyles[status].light}
+							stopColor={theme.palette[themeColor].main}
 							stopOpacity={0}
 						/>
 					</linearGradient>
 				</defs>
 				<Area
 					dataKey="score"
-					stroke={pagespeedStyles[status].stroke}
+					stroke={theme.palette[themeColor].lowContrast}
 					strokeWidth={isHovered ? 2.5 : 1.5}
 					fill={`url(#pagespeed-chart-${status})`}
 					activeDot={{
-						stroke: pagespeedStyles[status].light,
-						fill: pagespeedStyles[status].stroke,
+						stroke: theme.palette[themeColor].main,
+						fill: theme.palette[themeColor].lowContrast,
 						r: 4.5,
 					}}
 				/>
@@ -192,6 +196,7 @@ PagespeedAreaChart.propTypes = {
 	status: PropTypes.string.isRequired,
 };
 
+/* TODO separate component */
 /**
  * Renders a card displaying monitor details and an area chart.
  * @param {Object} props
@@ -215,9 +220,9 @@ const Card = ({ monitor }) => {
 				p={theme.spacing(8)}
 				onClick={() => navigate(`/pagespeed/${monitor._id}`)}
 				border={1}
-				borderColor={theme.palette.border.light}
+				borderColor={theme.palette.primary.lowContrast}
 				borderRadius={theme.shape.borderRadius}
-				backgroundColor={theme.palette.background.main}
+				backgroundColor={theme.palette.primary.main}
 				sx={{
 					display: "grid",
 					gridTemplateColumns: "34px 2fr 1fr",
@@ -225,7 +230,7 @@ const Card = ({ monitor }) => {
 					gridTemplateRows: "34px 1fr 3fr",
 					cursor: "pointer",
 					"&:hover": {
-						backgroundColor: theme.palette.background.accent,
+						backgroundColor: theme.palette.tertiary.main,
 					},
 					"& path": {
 						transition: "stroke-width 400ms ease",
@@ -278,8 +283,8 @@ const Card = ({ monitor }) => {
 					px={theme.spacing(4)}
 					borderTop={1}
 					borderRight={1}
-					borderColor={theme.palette.border.light}
-					backgroundColor={theme.palette.background.accent}
+					borderColor={theme.palette.primary.lowContrast}
+					backgroundColor={theme.palette.tertiary.main}
 					sx={{
 						pointerEvents: "none",
 						userSelect: "none",
@@ -289,7 +294,7 @@ const Card = ({ monitor }) => {
 				>
 					<Typography
 						fontSize={11}
-						color={theme.palette.text.accent}
+						color={theme.palette.primary.contrastTextSecondary}
 					>
 						Checking every{" "}
 						{(() => {
@@ -299,7 +304,7 @@ const Card = ({ monitor }) => {
 									<Typography
 										component="span"
 										fontSize={12}
-										color={theme.palette.text.primary}
+										color={theme.palette.primary.contrastText}
 									>
 										{time}{" "}
 									</Typography>

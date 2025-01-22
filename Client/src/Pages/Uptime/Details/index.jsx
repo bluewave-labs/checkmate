@@ -33,7 +33,7 @@ import ResponseGaugeChart from "./Charts/ResponseGaugeChart";
  */
 const DetailsPage = () => {
 	const theme = useTheme();
-	const { statusColor, statusStyles, statusMsg, determineState } = useUtils();
+	const { statusColor, statusMsg, determineState } = useUtils();
 	const isAdmin = useIsAdmin();
 	const [monitor, setMonitor] = useState({});
 	const { monitorId } = useParams();
@@ -136,6 +136,7 @@ const DetailsPage = () => {
 									height="fit-content"
 									gap={theme.spacing(2)}
 								>
+									{/* TODO there is  a tooltip at BarChart component. Wrap the Tooltip on our own component */}
 									<Tooltip
 										title={statusMsg[determineState(monitor)]}
 										disableInteractive
@@ -149,6 +150,21 @@ const DetailsPage = () => {
 														},
 													},
 												],
+												sx: {
+													"& .MuiTooltip-tooltip": {
+														backgroundColor: theme.palette.secondary.main,
+														color: theme.palette.secondary.contrastText,
+														px: theme.spacing(4),
+														py: theme.spacing(3),
+														border: 1,
+														borderColor: theme.palette.primary.lowContrast,
+														borderRadius: theme.shape.borderRadius,
+														boxShadow: theme.shape.boxShadow,
+														/* TODO Font size should point to theme */
+														fontSize: 12,
+														fontWeight: 500,
+													},
+												},
 											},
 										}}
 									>
@@ -174,7 +190,7 @@ const DetailsPage = () => {
 												width: 4,
 												height: 4,
 												borderRadius: "50%",
-												backgroundColor: theme.palette.text.tertiary,
+												backgroundColor: theme.palette.primary.contrastTextTertiary,
 												opacity: 0.8,
 												left: -9,
 												top: "50%",
@@ -204,7 +220,8 @@ const DetailsPage = () => {
 											"& svg": {
 												mr: theme.spacing(3),
 												"& path": {
-													stroke: theme.palette.text.tertiary,
+													/* Should always be contrastText for the button color */
+													stroke: theme.palette.secondary.contrastText,
 												},
 											},
 										}}
@@ -219,7 +236,10 @@ const DetailsPage = () => {
 							gap={theme.spacing(8)}
 						>
 							<StatBox
-								sx={statusStyles[determineState(monitor)]}
+								/* sx={getStatusStyles(determineState(monitor))} */
+								/* statusStyles[determineState(monitor)] */
+								gradient={true}
+								status={determineState(monitor)}
 								heading={"active for"}
 								subHeading={splitDuration(monitor?.uptimeStreak)}
 							/>
@@ -242,7 +262,7 @@ const DetailsPage = () => {
 									<Typography
 										component="span"
 										fontSize={13}
-										color={theme.palette.text.primary}
+										color={theme.palette.primary.contrastText}
 									>
 										{certificateExpiry}
 									</Typography>
@@ -318,7 +338,7 @@ const DetailsPage = () => {
 													position="absolute"
 													top="100%"
 													fontSize={11}
-													color={theme.palette.text.tertiary}
+													color={theme.palette.primary.contrastTextTertiary}
 												>
 													{formatDateWithTz(
 														hoveredUptimeData._id,
@@ -377,7 +397,7 @@ const DetailsPage = () => {
 													position="absolute"
 													top="100%"
 													fontSize={11}
-													color={theme.palette.text.tertiary}
+													color={theme.palette.primary.contrastTextTertiary}
 												>
 													{formatDateWithTz(
 														hoveredIncidentsData._id,
@@ -431,7 +451,7 @@ const DetailsPage = () => {
 										</IconBox>
 										<Typography
 											component="h2"
-											color={theme.palette.text.secondary}
+											color={theme.palette.primary.contrastTextSecondary}
 										>
 											History
 										</Typography>

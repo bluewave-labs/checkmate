@@ -13,7 +13,7 @@
 	font-weight: 600;
 }
 .settings button {
-	height: 34px;
+	min-height: 34px;
 }
 .settings span.MuiTypography-root {
 	opacity: 0.6;

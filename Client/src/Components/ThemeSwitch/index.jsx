@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMode } from "../../Features/UI/uiSlice";
 import "./index.css";
 
-const ThemeSwitch = ({ width = 48, height = 48 }) => {
+const ThemeSwitch = ({ width = 48, height = 48, color }) => {
 	const mode = useSelector((state) => state.ui.mode);
 	const dispatch = useDispatch();
 
@@ -37,6 +37,10 @@ const ThemeSwitch = ({ width = 48, height = 48 }) => {
 				display: "flex",
 				alignItems: "center",
 				justifyContent: "center",
+				"& svg >:is(circle, g)": {
+					fill: color,
+					stroke: color,
+				},
 			}}
 		>
 			<SunAndMoonIcon />

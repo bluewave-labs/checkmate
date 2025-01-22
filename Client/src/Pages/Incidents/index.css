@@ -7,5 +7,5 @@
 	font-size: var(--env-var-font-size-medium);
 }
 .incidents button.MuiButtonBase-root {
-	height: 34px;
+	min-height: 34px;
 }

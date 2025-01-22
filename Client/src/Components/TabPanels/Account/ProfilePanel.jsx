@@ -29,7 +29,7 @@ import Dialog from "../../Dialog";
 const ProfilePanel = () => {
 	const theme = useTheme();
 	const dispatch = useDispatch();
-	
+
 	const SPACING_GAP = theme.spacing(12);
 
 	//redux state
@@ -216,7 +216,7 @@ const ProfilePanel = () => {
 			value="profile"
 			sx={{
 				"& h1, & p, & input": {
-					color: theme.palette.text.tertiary,
+					color: theme.palette.primary.contrastTextTertiary,
 				},
 			}}
 		>
@@ -225,9 +225,13 @@ const ProfilePanel = () => {
 				className="edit-profile-form"
 				noValidate
 				spellCheck="false"
-				gap={SPACING_GAP} 
+				gap={SPACING_GAP}
 			>
-				<Stack direction="row" gap={SPACING_GAP}>
+				<Stack
+					direction="row"
+					gap={SPACING_GAP}
+				>
+					{/* This 0.9 is a bit magic numbering, refactor */}
 					<Box flex={0.9}>
 						<Typography component="h1">First name</Typography>
 					</Box>
@@ -242,7 +246,10 @@ const ProfilePanel = () => {
 						flex={1}
 					/>
 				</Stack>
-				<Stack direction="row" gap={SPACING_GAP}>
+				<Stack
+					direction="row"
+					gap={SPACING_GAP}
+				>
 					<Box flex={0.9}>
 						<Typography component="h1">Last name</Typography>
 					</Box>
@@ -257,7 +264,10 @@ const ProfilePanel = () => {
 						flex={1}
 					/>
 				</Stack>
-				<Stack direction="row" gap={SPACING_GAP}>
+				<Stack
+					direction="row"
+					gap={SPACING_GAP}
+				>
 					<Stack flex={0.9}>
 						<Typography component="h1">Email</Typography>
 						<Typography
@@ -277,7 +287,10 @@ const ProfilePanel = () => {
 						flex={1}
 					/>
 				</Stack>
-				<Stack direction="row" gap={SPACING_GAP}>
+				<Stack
+					direction="row"
+					gap={SPACING_GAP}
+				>
 					<Stack flex={0.9}>
 						<Typography component="h1">Your photo</Typography>
 						<Typography
@@ -291,6 +304,7 @@ const ProfilePanel = () => {
 						direction="row"
 						alignItems="center"
 						flex={1}
+						gap={"8px"}
 					>
 						<Avatar
 							src={
@@ -300,18 +314,18 @@ const ProfilePanel = () => {
 										? localData.file
 										: ""
 							}
-							sx={{ mr: "8px" }}
+							sx={{ marginRight: "8px" }}
 						/>
 						<Button
-							variant="text"
-							color="info"
+							variant="contained" // CAIO_REIVEW
+							color="error"
 							onClick={handleDeletePicture}
 						>
 							Delete
 						</Button>
 						<Button
-							variant="text"
-							color="primary"
+							variant="contained" // CAIO_REVIEW
+							color="accent"
 							onClick={openPictureModal}
 						>
 							Update
@@ -332,7 +346,7 @@ const ProfilePanel = () => {
 					<Box width="fit-content">
 						<LoadingButton
 							variant="contained"
-							color="primary"
+							color="accent"
 							onClick={handleSaveProfile}
 							loading={isLoading}
 							loadingIndicator="Saving..."
@@ -348,7 +362,7 @@ const ProfilePanel = () => {
 				aria-hidden="true"
 				sx={{
 					marginY: theme.spacing(20),
-					borderColor: theme.palette.border.light,
+					borderColor: theme.palette.primary.lowContrast,
 				}}
 			/>
 			{!user.role.includes("demo") && (
@@ -438,7 +452,7 @@ const ProfilePanel = () => {
 					</Button>
 					<Button
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={handleUpdatePicture}
 						disabled={
 							(Object.keys(errors).length !== 0 && errors?.picture) ||
