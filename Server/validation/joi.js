@@ -40,14 +40,14 @@ const registrationBodyValidation = joi.object({
 	firstName: joi
 		.string()
 		.required()
-		.pattern(/^[\p{L}]+(?:[\p{L}\s]+)*$/u)
+		.pattern(/^[\p{L}]+(?:[\p{L}\s'\-]+)*$/u)
 		.messages({
 			"string.pattern.base": "First name must contain only letters and spaces",
 		}),
 	lastName: joi
 		.string()
 		.required()
-		.pattern(/^[\p{L}]+(?:[\p{L}\s]+)*$/u)
+		.pattern(/^[\p{L}]+(?:[\p{L}\s'\-]+)*$/u)
 		.messages({
 			"string.pattern.base": "Last name must contain only letters and spaces",
 		}),
