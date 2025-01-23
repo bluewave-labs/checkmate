@@ -1,9 +1,9 @@
 
-# Contributing to Uptime Manager application
+# Contributing to Checkmate
 
 First off, thanks for taking the time to contribute! ❤️
 
-All types of contributions are encouraged and valued. See the [Table of Contents](#table-of-contents) for different ways to help and details about how the Uptime Manager project handles them. Please make sure to read the relevant section before making your contribution. It will make it much easier for us maintainers and smooth out the experience for all involved. The community looks forward to your contributions. 🎉
+All types of contributions are encouraged and valued. See the [Table of Contents](#table-of-contents) for different ways to help and details about how the Checkmate project handles them. Please make sure to read the relevant section before making your contribution. It will make it much easier for us maintainers and smooth out the experience for all involved. The community looks forward to your contributions. 🎉
 
 > And if you like the project, but don't have time to contribute, that's fine. There are other easy ways to support the project and show your appreciation, which we would also be very happy about:
 > - Star the project
@@ -77,7 +77,7 @@ Once it's filed:
 This section guides you through submitting an enhancement suggestion for the application, **including completely new features and minor improvements to existing functionality**. Following these guidelines will help maintainers and the community understand your enhancements and find related suggestions.
 
 - Make sure that you are using the latest version.
-- Make sure you run the code locally. The Uptime Manager [documentation](https://bluewavelabs.gitbook.io/uptime-manager) covers it.
+- Make sure you run the code locally. The Checkmate [documentation](https://bluewavelabs.gitbook.io/checkmate) covers it.
 - Find out if the functionality is already covered, maybe by an individual configuration.
 - Perform a [search](/issues) to see if the enhancement has already been suggested. If it has, add a comment to the existing issue instead of opening a new one.
 - Find out whether your idea fits with the scope and aims of the project. It's up to you to make a strong case to convince the project's developers of the merits of this feature. Keep in mind that we want features that will be useful to the majority of our users and not just a small subset. If you're just targeting a minority of users, consider writing an add-on/plugin library.
