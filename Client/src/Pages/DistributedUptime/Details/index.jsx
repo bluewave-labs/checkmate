@@ -19,7 +19,7 @@ import Footer from "../components/Footer";
 import { networkService } from "../../../main";
 import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
 
 //Constants
@@ -28,8 +28,51 @@ const BASE_BOX_PADDING_HORIZONTAL = 8;
 const MAX_RETRIES = 10;
 const RETRY_DELAY = 5000;
 
+function getRandomDevice() {
+	const manufacturers = {
+		Apple: ["iPhone 15 Pro Max", "iPhone 15", "iPhone 14 Pro", "iPhone 14", "iPhone 13"],
+		Samsung: [
+			"Galaxy S23 Ultra",
+			"Galaxy S23+",
+			"Galaxy S23",
+			"Galaxy Z Fold5",
+			"Galaxy Z Flip5",
+		],
+		Google: ["Pixel 8 Pro", "Pixel 8", "Pixel 7a", "Pixel 7", "Pixel 6a"],
+		OnePlus: [
+			"OnePlus 11",
+			"OnePlus 10T",
+			"OnePlus Nord 3",
+			"OnePlus 10 Pro",
+			"OnePlus Nord 2T",
+		],
+		Xiaomi: ["13 Pro", "13", "Redmi Note 12", "POCO F5", "Redmi 12"],
+		Huawei: ["P60 Pro", "Mate X3", "Nova 11", "P50 Pro", "Mate 50"],
+		Sony: ["Xperia 1 V", "Xperia 5 V", "Xperia 10 V", "Xperia Pro-I", "Xperia 1 IV"],
+		Motorola: ["Edge 40 Pro", "Edge 40", "G84", "G54", "Razr 40 Ultra"],
+		ASUS: [
+			"ROG Phone 7",
+			"Zenfone 10",
+			"ROG Phone 6",
+			"Zenfone 9",
+			"ROG Phone 7 Ultimate",
+		],
+	};
+
+	const manufacturerNames = Object.keys(manufacturers);
+	const randomManufacturer =
+		manufacturerNames[Math.floor(Math.random() * manufacturerNames.length)];
+
+	const models = manufacturers[randomManufacturer];
+	const randomModel = models[Math.floor(Math.random() * models.length)];
+
+	return {
+		manufacturer: randomManufacturer,
+		model: randomModel,
+	};
+}
+
 export const StatBox = ({ heading, value, img, altTxt }) => {
-	console.log("render");
 	const theme = useTheme();
 	return (
 		<Stack
@@ -74,6 +117,10 @@ const DistributedUptimeDetails = () => {
 	const [lastUpdateTrigger, setLastUpdateTrigger] = useState(Date.now());
 	const [dateRange, setDateRange] = useState("day");
 	const [monitor, setMonitor] = useState(null);
+	const [devices, setDevices] = useState([]);
+
+	// Refs
+	const prevDateRangeRef = useRef(dateRange);
 
 	// Utils
 	const theme = useTheme();
@@ -86,39 +133,58 @@ const DistributedUptimeDetails = () => {
 	];
 
 	useEffect(() => {
-		const connectToService = () => {
-			return networkService.subscribeToDistributedUptimeDetails({
-				authToken,
-				monitorId,
-				dateRange: dateRange,
-				normalize: true,
-				onUpdate: (data) => {
-					setLastUpdateTrigger(Date.now());
-					setMonitor(data.monitor);
-				},
-				onOpen: () => {
-					setConnectionStatus("up");
-					setRetryCount(0); // Reset retry count on successful connection
-				},
-				onError: () => {
-					setConnectionStatus("down");
-					console.log("Error, attempting reconnect...");
+		const hasDateRangeChanged = prevDateRangeRef.current !== dateRange;
+		prevDateRangeRef.current = dateRange; // Update the ref to the current dateRange
 
-					if (retryCount < MAX_RETRIES) {
-						setTimeout(() => {
-							setRetryCount((prev) => prev + 1);
-							connectToService();
-						}, RETRY_DELAY);
-					} else {
-						console.log("Max retries reached");
-					}
-				},
-			});
-		};
+		if (!hasDateRangeChanged) {
+			setDevices(Array.from({ length: 5 }, getRandomDevice));
+		}
+	}, [dateRange]);
 
-		const cleanup = connectToService();
+	const connectToService = useCallback(() => {
+		return networkService.subscribeToDistributedUptimeDetails({
+			authToken,
+			monitorId,
+			dateRange: dateRange,
+			normalize: true,
+			onUpdate: (data) => {
+				setLastUpdateTrigger(Date.now());
+				const latestChecksWithDevice = data?.monitor?.latestChecks.map((check, idx) => {
+					check.device = devices[idx];
+					return check;
+				});
+				const monitorWithDevice = {
+					...data.monitor,
+					latestChecks: latestChecksWithDevice,
+				};
+				setMonitor(monitorWithDevice);
+			},
+			onOpen: () => {
+				setConnectionStatus("up");
+				setRetryCount(0); // Reset retry count on successful connection
+			},
+			onError: () => {
+				setConnectionStatus("down");
+				console.log("Error, attempting reconnect...");
+
+				if (retryCount < MAX_RETRIES) {
+					setTimeout(() => {
+						setRetryCount((prev) => prev + 1);
+						connectToService();
+					}, RETRY_DELAY);
+				} else {
+					console.log("Max retries reached");
+				}
+			},
+		});
+	}, [authToken, monitorId, dateRange, retryCount, devices]);
+
+	useEffect(() => {
+		const devices = Array.from({ length: 5 }, getRandomDevice);
+		const cleanup = connectToService(devices);
 		return cleanup;
-	}, [authToken, monitorId, dateRange, retryCount]);
+	}, [connectToService]);
+
 	return (
 		monitor && (
 			<Stack
