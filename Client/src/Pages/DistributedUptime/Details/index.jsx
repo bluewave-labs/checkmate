@@ -10,9 +10,10 @@ import DistributedUptimeResponseChart from "../components/DistributedUptimeRespo
 import UptLogo from "../../../assets/icons/upt_logo.png";
 import LastUpdate from "../components/LastUpdate";
 import NextExpectedCheck from "../components/NextExpectedCheck";
-import JupiterLogoLight from "../../../assets/icons/jupiter_logo_banner_light.svg?react";
-import JupiterLogoDark from "../../../assets/icons/jupiter_logo_banner_dark.svg?react";
-import SolanaLogoBanner from "../../../assets/icons/solana_logo_banner.svg?react";
+import JupiterLogoLight from "../../../assets/Images/jupiter_logo_banner_light.svg?react";
+import JupiterLogoDark from "../../../assets/Images/jupiter_logo_banner_dark.svg?react";
+import SolanaLogoBannerLight from "../../../assets/Images/solana_logo_banner_light.svg?react";
+import SolanaLogoBannerDark from "../../../assets/Images/solana_logo_banner_dark.svg?react";
 import Footer from "../components/Footer";
 //Utils
 import { networkService } from "../../../main";
@@ -148,10 +149,17 @@ const DistributedUptimeDetails = () => {
 					{/* Solana */}
 					{monitor?.url === "https://explorer.solana.com/" && (
 						<Box>
-							<SolanaLogoBanner
-								height={30}
-								width={"auto"}
-							/>
+							{mode === "dark" ? (
+								<SolanaLogoBannerDark
+									height={20}
+									width={"auto"}
+								/>
+							) : (
+								<SolanaLogoBannerLight
+									height={20}
+									width={"auto"}
+								/>
+							)}
 						</Box>
 					)}
 
