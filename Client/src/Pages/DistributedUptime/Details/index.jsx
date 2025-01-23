@@ -7,10 +7,12 @@ import IconBox from "../../../Components/IconBox";
 import ResponseTimeIcon from "../../../assets/icons/response-time-icon.svg?react";
 import DeviceTicker from "../components/DeviceTicker";
 import DistributedUptimeResponseChart from "../components/DistributedUptimeResponseChart";
-import UptimeIcon from "../../../assets/icons/uptime-icon.svg?react";
 import UptLogo from "../../../assets/icons/upt_logo.png";
 import LastUpdate from "../components/LastUpdate";
 import NextExpectedCheck from "../components/NextExpectedCheck";
+import JupiterLogoLight from "../../../assets/icons/jupiter_logo_banner_light.svg?react";
+import JupiterLogoDark from "../../../assets/icons/jupiter_logo_banner_dark.svg?react";
+import SolanaLogoBanner from "../../../assets/icons/solana_logo_banner.svg?react";
 //Utils
 import { networkService } from "../../../main";
 import { useSelector } from "react-redux";
@@ -26,12 +28,10 @@ const RETRY_DELAY = 5000;
 
 const BaseBox = ({ children }) => {
 	const theme = useTheme();
-
 	return (
 		<Stack
 			direction="row"
 			width={"25%"}
-			alignItems="center"
 			justifyContent="center"
 			sx={{
 				padding: `${theme.spacing(BASE_BOX_PADDING_VERTICAL)} ${theme.spacing(BASE_BOX_PADDING_HORIZONTAL)}`,
@@ -45,6 +45,7 @@ const BaseBox = ({ children }) => {
 		</Stack>
 	);
 };
+
 export const StatBox = ({ heading, value, img, altTxt }) => {
 	const theme = useTheme();
 	return (
@@ -52,8 +53,8 @@ export const StatBox = ({ heading, value, img, altTxt }) => {
 			{img && (
 				<img
 					style={{ marginRight: theme.spacing(8) }}
-					height={50}
-					width={50}
+					height={30}
+					width={30}
 					src={img}
 					alt={altTxt}
 				/>
@@ -69,6 +70,7 @@ export const StatBox = ({ heading, value, img, altTxt }) => {
 const DistributedUptimeDetails = () => {
 	// Redux State
 	const { authToken } = useSelector((state) => state.auth);
+	const { mode } = useSelector((state) => state.ui);
 
 	// Local State
 	// const [hoveredUptimeData, setHoveredUptimeData] = useState(null);
@@ -123,7 +125,6 @@ const DistributedUptimeDetails = () => {
 		const cleanup = connectToService();
 		return cleanup;
 	}, [authToken, monitorId, dateRange, retryCount]);
-
 	return (
 		monitor && (
 			<Stack
@@ -131,14 +132,40 @@ const DistributedUptimeDetails = () => {
 				gap={theme.spacing(8)}
 			>
 				<Breadcrumbs list={BREADCRUMBS} />
-				<Box>
-					<Typography
-						component="h1"
-						variant="h1"
-					>
-						{monitor.name}
+				{monitor?.url !== "https://jup.ag/" &&
+					monitor?.url !== "https://explorer.solana.com/" && (
+						<Box>
+							<Typography
+								component="h1"
+								variant="h1"
+							>
+								{monitor.name}
+							</Typography>
+						</Box>
+					)}
+				<Stack
+					direction="row"
+					alignItems="center"
+					gap={theme.spacing(8)}
+				>
+					{/* Jupiter */}
+					{monitor?.url === "https://jup.ag/" && (
+						<Box>{mode === "dark" ? <JupiterLogoDark /> : <JupiterLogoLight />}</Box>
+					)}
+					{/* Solana */}
+					{monitor?.url === "https://explorer.solana.com/" && (
+						<Box>
+							<SolanaLogoBanner
+								height={30}
+								width={"auto"}
+							/>
+						</Box>
+					)}
+
+					<Typography variant="h2">
+						Distributed Uptime Monitoring powered by DePIN
 					</Typography>
-				</Box>
+				</Stack>
 				<Stack
 					direction="row"
 					gap={theme.spacing(8)}
