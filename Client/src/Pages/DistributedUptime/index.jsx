@@ -6,7 +6,6 @@ import Host from "../Uptime/Home/host";
 import BarChart from "../../Components/Charts/BarChart";
 import ActionsMenu from "../Uptime/Home/actionsMenu";
 import { StatusLabel } from "../../Components/Label";
-
 // Utils
 import { networkService } from "../../main";
 import { useTheme } from "@mui/material/styles";

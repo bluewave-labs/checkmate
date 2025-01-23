@@ -13,6 +13,7 @@ import NextExpectedCheck from "../components/NextExpectedCheck";
 import JupiterLogoLight from "../../../assets/icons/jupiter_logo_banner_light.svg?react";
 import JupiterLogoDark from "../../../assets/icons/jupiter_logo_banner_dark.svg?react";
 import SolanaLogoBanner from "../../../assets/icons/solana_logo_banner.svg?react";
+import Footer from "../components/Footer";
 //Utils
 import { networkService } from "../../../main";
 import { useSelector } from "react-redux";
@@ -26,7 +27,8 @@ const BASE_BOX_PADDING_HORIZONTAL = 8;
 const MAX_RETRIES = 10;
 const RETRY_DELAY = 5000;
 
-const BaseBox = ({ children }) => {
+export const StatBox = ({ heading, value, img, altTxt }) => {
+	console.log("render");
 	const theme = useTheme();
 	return (
 		<Stack
@@ -41,15 +43,6 @@ const BaseBox = ({ children }) => {
 				borderColor: theme.palette.border.light,
 			}}
 		>
-			{children}
-		</Stack>
-	);
-};
-
-export const StatBox = ({ heading, value, img, altTxt }) => {
-	const theme = useTheme();
-	return (
-		<BaseBox>
 			{img && (
 				<img
 					style={{ marginRight: theme.spacing(8) }}
@@ -63,7 +56,7 @@ export const StatBox = ({ heading, value, img, altTxt }) => {
 				<Typography variant="h2">{heading}</Typography>
 				<Typography>{value}</Typography>
 			</Stack>
-		</BaseBox>
+		</Stack>
 	);
 };
 
@@ -178,17 +171,24 @@ const DistributedUptimeDetails = () => {
 						heading="Checking every"
 						value={`${(monitor?.interval ?? 0) / 1000} seconds`}
 					/>
-					<LastUpdate
+					<StatBox
 						heading={"Last check"}
-						lastUpdateTime={monitor?.timeSinceLastCheck ?? 0}
-						suffix={"seconds ago"}
+						value={
+							<LastUpdate
+								lastUpdateTime={monitor?.timeSinceLastCheck ?? 0}
+								suffix={"seconds ago"}
+							/>
+						}
 					/>
-					<LastUpdate
-						key={Date.now}
-						heading={"Last server push"}
-						lastUpdateTime={0}
-						trigger={lastUpdateTrigger}
-						suffix={"seconds ago"}
+					<StatBox
+						heading="Last server push"
+						value={
+							<LastUpdate
+								suffix={"seconds ago"}
+								lastUpdateTime={0}
+								trigger={lastUpdateTrigger}
+							/>
+						}
 					/>
 
 					<StatBox
@@ -198,11 +198,13 @@ const DistributedUptimeDetails = () => {
 						altTxt="Upt Logo"
 					/>
 				</Stack>
-				<NextExpectedCheck
-					lastUpdateTime={monitor?.timeSinceLastCheck ?? 0}
-					interval={monitor?.interval ?? 0}
-					trigger={lastUpdateTrigger}
-				/>
+				<Box sx={{ width: "100%" }}>
+					<NextExpectedCheck
+						lastUpdateTime={monitor?.timeSinceLastCheck ?? 0}
+						interval={monitor?.interval ?? 0}
+						trigger={lastUpdateTrigger}
+					/>
+				</Box>
 				<Stack
 					direction="row"
 					justifyContent="space-between"
@@ -270,6 +272,7 @@ const DistributedUptimeDetails = () => {
 						connectionStatus={connectionStatus}
 					/>
 				</Stack>
+				<Footer />
 			</Stack>
 		)
 	);

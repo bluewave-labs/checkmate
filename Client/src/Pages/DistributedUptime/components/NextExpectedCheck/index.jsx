@@ -7,24 +7,22 @@ const NextExpectedCheck = ({ lastUpdateTime, interval, trigger }) => {
 	useEffect(() => {
 		setElapsedMs(lastUpdateTime);
 		const timer = setInterval(() => {
-			setElapsedMs((prev) => prev + 10);
-		}, 10);
+			setElapsedMs((prev) => {
+				const newElapsedMs = prev + 100;
+				return newElapsedMs;
+			});
+		}, 100);
 		return () => clearInterval(timer);
 	}, [interval, trigger]);
 
 	return (
-		<Stack
-			direction="row"
-			alignItems="center"
-			justifyContent="center"
-		>
-			<Box sx={{ width: "100%" }}>
-				<LinearProgress
-					variant="determinate"
-					value={Math.min((elapsedMs / interval) * 100, 100)}
-				/>
-			</Box>
-		</Stack>
+		<LinearProgress
+			variant="determinate"
+			value={Math.min((elapsedMs / interval) * 100, 100)}
+			sx={{
+				transition: "width 1s linear", // Smooth transition over 1 second
+			}}
+		/>
 	);
 };
 
