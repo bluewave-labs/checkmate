@@ -149,8 +149,9 @@ function Infrastructure() {
 	];
 
 	const monitorsAsRows = monitors.map((monitor) => {
+		console.log(monitor);
 		const processor =
-			((monitor.checks[0]?.cpu?.usage_frequency ?? 0) / 1000).toFixed(2) + " GHz";
+			((monitor.checks[0]?.cpu?.frequency ?? 0) / 1000).toFixed(2) + " GHz";
 		const cpu = (monitor?.checks[0]?.cpu.usage_percent ?? 0) * 100;
 		const mem = (monitor?.checks[0]?.memory.usage_percent ?? 0) * 100;
 		const disk = (monitor?.checks[0]?.disk[0]?.usage_percent ?? 0) * 100;
@@ -181,6 +182,7 @@ function Infrastructure() {
 	});
 
 	let isActuallyLoading = isLoading && monitors?.length === 0;
+	console.log(monitorsAsRows);
 	return (
 		<Box
 			className="infrastructure-monitor"
