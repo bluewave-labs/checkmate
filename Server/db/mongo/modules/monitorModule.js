@@ -497,7 +497,7 @@ const getMonitorById = async (monitorId) => {
 
 const getMonitorsByTeamId = async (req) => {
 	let { limit, type, page, rowsPerPage, filter, field, order } = req.query;
-
+	console.log("req.query", req.query);
 	limit = parseInt(limit);
 	page = parseInt(page);
 	rowsPerPage = parseInt(rowsPerPage);
@@ -512,8 +512,16 @@ const getMonitorsByTeamId = async (req) => {
 	}
 
 	const skip = page && rowsPerPage ? page * rowsPerPage : 0;
-
 	const sort = { [field]: order === "asc" ? 1 : -1 };
+
+	console.log("limit", limit);
+	console.log("page", page);
+	console.log("rowsPerPage", rowsPerPage);
+	console.log("filter", filter);
+	console.log("field", field);
+	console.log("order", order);
+	console.log("skip", skip);
+	console.log("sort", sort);
 	const results = await Monitor.aggregate([
 		{ $match: matchStage },
 		{
@@ -675,6 +683,7 @@ const getMonitorsByTeamId = async (req) => {
 	]);
 
 	let { monitors, filteredMonitors, summary } = results[0];
+	console.log("filteredMonitors", filteredMonitors);
 	filteredMonitors = filteredMonitors.map((monitor) => {
 		if (!monitor.checks) {
 			return monitor;
@@ -839,3 +848,22 @@ export {
 	groupChecksByTime,
 	calculateGroupStats,
 };
+
+// limit 25
+// page 1
+// rowsPerPage 25
+// filter undefined
+// field name
+// order asc
+// skip 25
+// sort { name: 1 }
+// filteredMonitors []
+
+// limit 25
+// page NaN
+// rowsPerPage 25
+// filter undefined
+// field name
+// order asc
+// skip 0
+// sort { name: 1 }

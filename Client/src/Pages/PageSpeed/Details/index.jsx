@@ -19,7 +19,7 @@ import PulseDot from "../../../Components/Animated/PulseDot";
 import PagespeedDetailsAreaChart from "./Charts/AreaChart";
 import Checkbox from "../../../Components/Inputs/Checkbox";
 import PieChart from "./Charts/PieChart";
-import useUtils from "../../Uptime/utils";
+import useUtils from "../../Uptime/Home/Hooks/useUtils";
 import "./index.css";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import StatBox from "../../../Components/StatBox";
