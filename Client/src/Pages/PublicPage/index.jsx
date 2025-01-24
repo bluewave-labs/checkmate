@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
@@ -6,7 +6,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import CheckSVG from "../../assets/icons/checkbox-filled.svg?react";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 
-import { useIsAdmin } from "../../Hooks/useIsAdmin";
+
 import { createToast } from "../../Utils/toastUtils";
 import useDebounce from "../../Utils/debounce";
 import { networkService } from "../../main";
@@ -22,6 +22,7 @@ const PublicPage = () => {
 	// Local state
 	const [search, setSearch] = useState("");
 	const [page, setPage] = useState(0);
+	const navigate = useNavigate();
 	const [filteredMonitors, setFilteredMonitors] = useState([]);
 
 	const { determineState } = useUtils();
@@ -29,10 +30,9 @@ const PublicPage = () => {
 	// Utils
 	const debouncedFilter = useDebounce(search, 500);
 	const theme = useTheme();
-	const isAdmin = useIsAdmin();
 	const authState = useSelector((state) => state.auth);
 
-	const fetchMonitorsWithPercentage = useCallback(getMonitorWithPercentage,[]);
+	const fetchMonitorsWithPercentage = useCallback(getMonitorWithPercentage, []);
 
 	const fetchParams = useMemo(
 		() => ({
@@ -55,7 +55,7 @@ const PublicPage = () => {
 				types: ["http"],
 				page: config.page,
 				rowsPerPage: config.rowsPerPage,
-				filter: config.filter
+				filter: config.filter,
 			});
 			const { filteredMonitors } = res.data.data;
 			const mappedMonitors = filteredMonitors.map((monitor) =>
@@ -73,17 +73,47 @@ const PublicPage = () => {
 		fetchMonitors();
 	}, [fetchMonitors]);
 
+	const adminLogin = () => {
+		navigate("/login");
+	};
+
 	const allServersUp = !filteredMonitors.some((m) => !m.monitor.status);
+	const BAR_GAP = 1.5;
+	const BARS_SHOWN = 25;
+	const BAR_WIDTH = 15;
+	const BAR_MARGIN_BOTTOM = 4;
+
 	return (
-		<Stack sx={{ alignItems: "center" }}>
-			<Stack>
+		<Box>
+			<Stack sx={{ alignItems: "center" }}>
 				<Stack
 					direction={"row"}
 					sx={{
 						alignItems: "center",
 						justifyContent: "center",
+					}}
+				>
+					<Typography
+						component={"h2"}
+						sx={{
+							mb: theme.spacing(4),
+							fontSize: "18px",
+							fontWeight: "600",
+						}}
+					>
+						{" "}
+						Service status
+					</Typography>
+				</Stack>
+				<Stack
+					direction={"row"}
+					sx={{
+						alignItems: "center",
+						justifyContent: "center",
+						width: theme.spacing(
+							BAR_WIDTH * BARS_SHOWN + BAR_GAP * (BARS_SHOWN - 1) + 50
+						),
 						height: theme.spacing(30),
-						width: "100%",
 						backgroundColor: allServersUp
 							? theme.palette.success.lowContrast
 							: theme.palette.warning.lowContrast,
@@ -96,10 +126,16 @@ const PublicPage = () => {
 						{allServersUp ? "All systems operational" : "Degraded Performance"}
 					</Typography>
 				</Stack>
-
+			</Stack>
+			<Stack
+				sx={{
+					overflowY: "auto",
+					alignItems: "center",
+					maxHeight: "750px",
+					width: "100%",
+				}}
+			>
 				{filteredMonitors.map((m, idx) => {
-					console.log("m");
-					console.log(m);
 					const status = determineState(m);
 					return (
 						<Box key={idx}>
@@ -109,7 +145,9 @@ const PublicPage = () => {
 							>
 								<Stack
 									direction="row"
-									sx={{ width: "35%", justifyContent: "space-between", flexWrap: "wrap" }}
+									sx={{
+										width: "35%",
+									}}
 								>
 									<Host
 										key={idx}
@@ -118,23 +156,33 @@ const PublicPage = () => {
 										percentageColor={m.percentageColor}
 										percentage={m.percentage}
 									/>
-
-									<StatusLabel
-										status={status}
-										text={status}
-										customStyles={{ textTransform: "capitalize" }}
-									/>
 								</Stack>
 							</Stack>
-							<BarChart
-								key={idx}
-								checks={m.monitor.checks.slice().reverse()}
-								barWidth={theme.spacing(15)}
-								barMarginBottom={theme.spacing(4)}
-							/>
+							<Stack
+								direction={"row"}
+								gap={theme.spacing(2)}
+								sx={{ alignItems: "center" }}
+							>
+								<BarChart
+									key={idx}
+									checks={m.monitor.checks.slice().reverse()}
+									barWidth={BAR_WIDTH}
+									barMarginBottom={BAR_MARGIN_BOTTOM}
+									barsShown={BARS_SHOWN}
+									barGap={BAR_GAP}
+								/>
+								<StatusLabel
+									status={status}
+									text={status}
+									customStyles={{
+										textTransform: "capitalize",
+										height: theme.spacing(20),
+									}}
+								/>
+							</Stack>
 							<Stack
 								direction="row"
-								justifyContent={"end"}
+								sx={{ alignSelf: "end" }}
 							>
 								<Typography>Last update at {m.monitor.updatedAt}</Typography>
 							</Stack>
@@ -142,7 +190,37 @@ const PublicPage = () => {
 					);
 				})}
 			</Stack>
-		</Stack>
+			<Stack
+				direction="row"
+				sx={{ alignItems: "center", justifyContent: "center" }}
+			>
+				<Typography
+					component={"p"}
+					sx={{
+						fontSize: "16px",
+						fontWeight: "500",
+						mt: theme.spacing(6),
+						mr: theme.spacing(2),
+					}}
+				>
+					Administrator?
+				</Typography>
+				<Button
+					variant="text"
+					color="info"
+					onClick={adminLogin}
+					sx={{
+						fontWeight: "600",
+						width: "fit-content",
+						mt: theme.spacing(4),
+						padding: 0,
+						minWidth: 0,
+					}}
+				>
+					Login here
+				</Button>
+			</Stack>
+		</Box>
 	);
 };
 

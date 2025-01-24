@@ -34,6 +34,10 @@ const Routes = () => {
 	return (
 		<LibRoutes>
 			<Route
+				path="public-page"
+				element={<PublicPage />}
+			/>
+			<Route
 				path="/"
 				element={
 					<ProtectedRoute>
@@ -98,11 +102,6 @@ const Routes = () => {
 				<Route
 					path="status"
 					element={<Status />}
-				/>
-
-				<Route
-					path="public-page"
-					element={<PublicPage />}
 				/>
 
 				<Route

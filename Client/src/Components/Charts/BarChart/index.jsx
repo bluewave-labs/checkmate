@@ -6,7 +6,7 @@ import "./index.css";
 import { useSelector } from "react-redux";
 
 /* TODO add prop validation and jsdocs */
-const BarChart = ({ checks = [], barWidth, barMarginBottom }) => {
+const BarChart = ({ checks = [], barWidth, barMarginBottom, barGap, barsShown = 25 }) => {
 	const theme = useTheme();
 	const [animate, setAnimate] = useState(false);
 	const uiTimezone = useSelector((state) => state.ui.timezone);
@@ -20,8 +20,8 @@ const BarChart = ({ checks = [], barWidth, barMarginBottom }) => {
 		checks[0] = { ...checks[0], responseTime: 50 };
 	}
 
-	if (checks.length !== 25) {
-		const placeholders = Array(25 - checks.length).fill("placeholder");
+	if (checks.length !== barsShown) {
+		const placeholders = Array(barsShown - checks.length).fill("placeholder");
 		checks = [...checks, ...placeholders];
 	}
 
@@ -29,13 +29,13 @@ const BarChart = ({ checks = [], barWidth, barMarginBottom }) => {
 		<Stack
 			direction="row"
 			flexWrap="nowrap"
-			gap={theme.spacing(1.5)}
+			gap={theme.spacing(barGap ?? 1.5)}
 			height="50px"
 			width="fit-content"
 			onClick={(event) => event.stopPropagation()}
 			sx={{
 				cursor: "default",
-				...(barMarginBottom && { mb: barMarginBottom }),
+				...(barMarginBottom && { mb: theme.spacing(barMarginBottom) }),
 			}}
 		>
 			{checks.map((check, index) =>
@@ -46,7 +46,7 @@ const BarChart = ({ checks = [], barWidth, barMarginBottom }) => {
 					<Box
 						key={`${check}-${index}`}
 						position="relative"
-						width={barWidth??theme.spacing(4.5)}
+						width={theme.spacing(barWidth ?? 4.5)}
 						height="100%"
 						backgroundColor={theme.palette.primary.lowContrast}
 						sx={{
@@ -144,7 +144,7 @@ const BarChart = ({ checks = [], barWidth, barMarginBottom }) => {
 					>
 						<Box
 							position="relative"
-							width={barWidth ?? "9px"}
+							width={barWidth ? theme.spacing(barWidth) : "9px"}
 							height="100%"
 							backgroundColor={theme.palette.primary.lowContrast} // CAIO_REVIEW
 							sx={{
