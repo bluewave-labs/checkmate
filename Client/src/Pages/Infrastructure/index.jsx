@@ -149,7 +149,6 @@ function Infrastructure() {
 	];
 
 	const monitorsAsRows = monitors.map((monitor) => {
-		console.log(monitor);
 		const processor =
 			((monitor.checks[0]?.cpu?.frequency ?? 0) / 1000).toFixed(2) + " GHz";
 		const cpu = (monitor?.checks[0]?.cpu.usage_percent ?? 0) * 100;
