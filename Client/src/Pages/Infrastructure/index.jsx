@@ -181,7 +181,6 @@ function Infrastructure() {
 	});
 
 	let isActuallyLoading = isLoading && monitors?.length === 0;
-	console.log(monitorsAsRows);
 	return (
 		<Box
 			className="infrastructure-monitor"
