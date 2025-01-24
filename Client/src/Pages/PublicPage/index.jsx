@@ -5,7 +5,7 @@ import { useTheme } from "@emotion/react";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import CheckSVG from "../../assets/icons/checkbox-filled.svg?react";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
-
+import Avatar from "../../Components/Avatar";
 
 import { createToast } from "../../Utils/toastUtils";
 import useDebounce from "../../Utils/debounce";
@@ -85,6 +85,15 @@ const PublicPage = () => {
 
 	return (
 		<Box>
+			<Stack direction={"row"} sx={{alignItems: "center", m: theme.spacing(4)}} gap={theme.spacing(4)}>
+				<Avatar
+					src={
+						"/static/images/avatar/2.jpg"						
+					}
+					sx={{ marginRight: theme.spacing(4) }}
+				/>
+				<Typography component={"h2"}> URL retrieved from status page </Typography>
+			</Stack>
 			<Stack sx={{ alignItems: "center" }}>
 				<Stack
 					direction={"row"}
@@ -131,7 +140,7 @@ const PublicPage = () => {
 				sx={{
 					overflowY: "auto",
 					alignItems: "center",
-					maxHeight: "750px",
+					maxHeight: "660px",
 					width: "100%",
 				}}
 			>
@@ -141,36 +150,47 @@ const PublicPage = () => {
 						<Box key={idx}>
 							<Stack
 								direction={"row"}
-								sx={{ mb: theme.spacing(4), justifyContent: "start" }}
-							>
-								<Stack
-									direction="row"
-									sx={{
-										width: "35%",
-									}}
-								>
-									<Host
-										key={idx}
-										url={m.url}
-										title={m.title}
-										percentageColor={m.percentageColor}
-										percentage={m.percentage}
-									/>
-								</Stack>
-							</Stack>
-							<Stack
-								direction={"row"}
 								gap={theme.spacing(2)}
 								sx={{ alignItems: "center" }}
 							>
-								<BarChart
-									key={idx}
-									checks={m.monitor.checks.slice().reverse()}
-									barWidth={BAR_WIDTH}
-									barMarginBottom={BAR_MARGIN_BOTTOM}
-									barsShown={BARS_SHOWN}
-									barGap={BAR_GAP}
-								/>
+								<Stack
+									gap={theme.spacing(2)}
+								>
+									<Stack
+										direction={"row"}
+										sx={{ mb: theme.spacing(4), justifyContent: "start" }}
+									>
+										<Stack
+											direction="row"
+											sx={{
+												width: "35%",
+											}}
+										>
+											<Host
+												key={idx}
+												url={m.title}
+												title={m.title}
+												percentageColor={m.percentageColor}
+												percentage={m.percentage}
+											/>
+										</Stack>
+									</Stack>
+									<BarChart
+										key={idx}
+										checks={m.monitor.checks.slice().reverse()}
+										barWidth={BAR_WIDTH}
+										barMarginBottom={BAR_MARGIN_BOTTOM}
+										barsShown={BARS_SHOWN}
+										barGap={BAR_GAP}
+									/>
+									<Stack
+										direction="row"
+										sx={{ alignSelf: "end" }}
+									>
+										<Typography>Last update at {m.monitor.updatedAt}</Typography>
+									</Stack>
+								</Stack>
+
 								<StatusLabel
 									status={status}
 									text={status}
@@ -179,12 +199,6 @@ const PublicPage = () => {
 										height: theme.spacing(20),
 									}}
 								/>
-							</Stack>
-							<Stack
-								direction="row"
-								sx={{ alignSelf: "end" }}
-							>
-								<Typography>Last update at {m.monitor.updatedAt}</Typography>
 							</Stack>
 						</Box>
 					);
