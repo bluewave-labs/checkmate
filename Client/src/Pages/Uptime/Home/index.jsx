@@ -95,7 +95,7 @@ const UptimeMonitors = () => {
 				authToken: config.authToken,
 				teamId: config.teamId,
 				limit: 25,
-				types: ["http", "ping", "docker", "port"],
+				types: ["http(s)", "ping", "docker", "port"],
 				page: config.page,
 				rowsPerPage: config.rowsPerPage,
 				filter: config.filter,
