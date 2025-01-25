@@ -1,5 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Stack, Box, Typography } from "@mui/material";
 import PropTypes from "prop-types";
+import { useTheme } from "@emotion/react";
 /**
  * Host component.
  * This subcomponent receives a params object and displays the host details.
@@ -13,44 +14,43 @@ import PropTypes from "prop-types";
  * @returns {React.ElementType} Returns a div element with the host details.
  */
 const Host = ({ url, title, percentageColor, percentage }) => {
-	const noTitle = title === undefined || title === url;
+	const theme = useTheme();
+	console.log(url, title);
 	return (
-		<Box className="host">
-			<Box
-				display="inline-block"
+		<Stack>
+			<Stack
+				direction="row"
 				position="relative"
-				sx={{
-					fontWeight: 500,
-					"&:before": {
-						position: "absolute",
-						content: `""`,
-						width: "4px",
-						height: "4px",
-						borderRadius: "50%",
-						backgroundColor: "gray",
-						opacity: 0.8,
-						right: "-10px",
-						top: "42%",
-					},
-				}}
+				alignItems="center"
+				gap={theme.spacing(4)}
 			>
 				{title}
-			</Box>
-			{percentageColor && percentage && (
-				<Typography
-					component="span"
-					sx={{
-						color: percentageColor,
-						fontWeight: 500,
-						/* TODO point font weight to theme */
-						ml: "15px",
-					}}
-				>
-					{percentage}%
-				</Typography>
-			)}
-			{!noTitle && <Box sx={{ opacity: 0.6 }}>{url}</Box>}
-		</Box>
+				{percentageColor && percentage && (
+					<>
+						<span
+							style={{
+								content: '""',
+								width: "4px",
+								height: "4px",
+								borderRadius: "50%",
+								backgroundColor: "gray",
+								opacity: 0.8,
+							}}
+						/>
+						<Typography
+							component="span"
+							sx={{
+								color: percentageColor,
+								fontWeight: 500,
+							}}
+						>
+							{percentage}%
+						</Typography>
+					</>
+				)}
+			</Stack>
+			<span style={{ opacity: 0.6 }}>{url}</span>
+		</Stack>
 	);
 };
 
