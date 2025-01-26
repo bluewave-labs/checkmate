@@ -234,7 +234,7 @@ const UptimeDataTable = ({
 					backgroundColor={theme.palette.tertiary.main}
 					sx={{
 						padding: ".25em .75em",
-						borderRadius: "50%",
+						borderRadius: "calc(infinity * 1px)",
 						fontSize: "12px",
 						fontWeight: 500,
 					}}
