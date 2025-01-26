@@ -1,4 +1,5 @@
 import { errorMessages, successMessages } from "../utils/messages.js";
+import runInSandbox, { TimeoutError, UserScriptError } from "../utils/sandbox.js";
 const SERVICE_NAME = "NetworkService";
 
 /**
@@ -135,6 +136,7 @@ class NetworkService {
 				type: job.data.type,
 				responseTime,
 				payload: response?.data,
+				code: response.status,
 			};
 
 			if (error) {
@@ -144,9 +146,42 @@ class NetworkService {
 				httpResponse.message = this.http.STATUS_CODES[code] || "Network Error";
 				return httpResponse;
 			}
-			httpResponse.status = true;
-			httpResponse.code = response.status;
-			httpResponse.message = this.http.STATUS_CODES[response.status];
+
+			const testScripts = job.data.testScripts;
+
+			if (testScripts) {
+				try {
+					const status = await runInSandbox(testScripts, response?.data);
+					httpResponse.status = !!status;
+
+					if (status) {
+						httpResponse.message = this.http.STATUS_CODES[response.status];
+					} else {
+						httpResponse.message = "User Scripts Return False";
+					}
+				} catch (error) {
+					httpResponse.status = false;
+
+					if (error instanceof TimeoutError) {
+						httpResponse.message = "User Scripts Timeout";
+					} else if (error instanceof UserScriptError) {
+						httpResponse.message = "User Scripts Runtime Error";
+					} else {
+						httpResponse.message = "System Error";
+					}
+					
+					this.logger.error({
+						message: error.message,
+						service: SERVICE_NAME,
+						method: "requestHttp",
+						stack: error.stack,
+					});
+				}
+			} else {
+				httpResponse.status = true;
+				httpResponse.message = this.http.STATUS_CODES[response.status];
+			}
+
 			return httpResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;

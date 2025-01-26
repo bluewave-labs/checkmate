@@ -38,6 +38,9 @@ const MonitorSchema = mongoose.Schema(
 				"distributed_http",
 			],
 		},
+		testScripts: {
+			type: String,
+		},
 		url: {
 			type: String,
 			required: true,
