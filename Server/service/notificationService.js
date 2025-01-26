@@ -57,6 +57,37 @@ class NotificationService {
         }
     }
 
+	async sendTelegramNotification(networkResponse, address) {
+		const { monitor, status } = networkResponse;
+		
+		const [botToken, chatId] = address.split('|').map(part => part?.trim());
+		
+		if (!botToken || !chatId) {
+			return false;
+		}
+		
+		const message = {
+			chat_id: chatId,
+			text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`,
+		};
+		
+		const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+		
+		try {
+			await axios.post(url, message, {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+	
+	
+	
+
 	/**
 	 * Sends an email notification for hardware infrastructure alerts
 	 *
@@ -97,25 +128,25 @@ class NotificationService {
 	}
 
 	async handleStatusNotifications(networkResponse) {
-        try {
-            // If status hasn't changed, we're done
-            if (networkResponse.statusChanged === false) return false;
-
-            // if prevStatus is undefined, monitor is resuming, we're done
-            if (networkResponse.prevStatus === undefined) return false;
-
-            const notifications = await this.db.getNotificationsByMonitorId(networkResponse.monitorId);
-
-            for (const notification of notifications) {
-                if (notification.type === "email") {
-                    this.sendEmail(networkResponse, notification.address);
-                } else if (notification.type === "discord") {
-                    this.sendDiscordNotification(networkResponse, notification.address);
-                } else if (notification.type === "slack") {
-                    this.sendSlackNotification(networkResponse, notification.address);
-                }
-                // Handle other types of notifications here
-            }
+		try {
+			if (networkResponse.statusChanged === false) return false;
+			if (networkResponse.prevStatus === undefined) return false;
+	
+			const notifications = await this.db.getNotificationsByMonitorId(networkResponse.monitorId);
+	
+			for (const notification of notifications) {
+				if (notification.type === "email") {
+					this.sendEmail(networkResponse, notification.address);
+				} else if (notification.type === "discord") {
+					this.sendDiscordNotification(networkResponse, notification.address);
+				} else if (notification.type === "slack") {
+					this.sendSlackNotification(networkResponse, notification.address);
+				} else if (notification.type === "telegram") {
+					this.sendTelegramNotification(networkResponse, notification.address);
+				}
+				
+				// Handle other types of notifications here
+			}
 			return true;
 		} catch (error) {
 			this.logger.warn({
