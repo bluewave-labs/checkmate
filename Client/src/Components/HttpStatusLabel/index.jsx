@@ -16,7 +16,7 @@ import { BaseLabel } from "../Label";
 const DEFAULT_CODE = 9999; // Default code for unknown status
 
 const handleStatusCode = (status) => {
-	if (status >= 100 && status < 600) {
+	if (status) {
 		return status;
 	}
 	return DEFAULT_CODE;

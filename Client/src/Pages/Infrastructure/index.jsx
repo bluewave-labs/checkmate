@@ -13,7 +13,7 @@ import { Box, Button, IconButton, Stack } from "@mui/material";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import { StatusLabel } from "../../Components/Label";
 import { Heading } from "../../Components/Heading";
-import { Pagination } from "../../Components/Table/TablePagination/index.jsx";
+import Pagination from "../../Components/Table/TablePagination/index.jsx";
 // import { getInfrastructureMonitorsByTeamId } from "../../Features/InfrastructureMonitors/infrastructureMonitorsSlice";
 import { networkService } from "../../Utils/NetworkService.js";
 import CustomGauge from "../../Components/Charts/CustomGauge/index.jsx";
@@ -150,7 +150,7 @@ function Infrastructure() {
 
 	const monitorsAsRows = monitors.map((monitor) => {
 		const processor =
-			((monitor.checks[0]?.cpu?.usage_frequency ?? 0) / 1000).toFixed(2) + " GHz";
+			((monitor.checks[0]?.cpu?.frequency ?? 0) / 1000).toFixed(2) + " GHz";
 		const cpu = (monitor?.checks[0]?.cpu.usage_percent ?? 0) * 100;
 		const mem = (monitor?.checks[0]?.memory.usage_percent ?? 0) * 100;
 		const disk = (monitor?.checks[0]?.disk[0]?.usage_percent ?? 0) * 100;
@@ -269,7 +269,8 @@ function Infrastructure() {
 						/>
 
 						<Pagination
-							monitorCount={summary?.totalMonitors ?? 0}
+							itemCount={summary?.totalMonitors ?? 0}
+							paginationLabel="monitors"
 							page={page}
 							rowsPerPage={rowsPerPage}
 							handleChangePage={handleChangePage}

@@ -44,7 +44,7 @@ class CheckController {
 		}
 	};
 
-	getChecks = async (req, res, next) => {
+	getChecksByMonitor = async (req, res, next) => {
 		try {
 			await getChecksParamValidation.validateAsync(req.params);
 			await getChecksQueryValidation.validateAsync(req.query);
@@ -54,19 +54,18 @@ class CheckController {
 		}
 
 		try {
-			const checks = await this.db.getChecks(req);
-			const checksCount = await this.db.getChecksCount(req);
+			const result = await this.db.getChecksByMonitor(req);
 
 			return res.success({
 				msg: successMessages.CHECK_GET,
-				data: { checksCount, checks },
+				data: result,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "getChecks"));
 		}
 	};
 
-	getTeamChecks = async (req, res, next) => {
+	getChecksByTeam = async (req, res, next) => {
 		try {
 			await getTeamChecksParamValidation.validateAsync(req.params);
 			await getTeamChecksQueryValidation.validateAsync(req.query);
@@ -75,7 +74,7 @@ class CheckController {
 			return;
 		}
 		try {
-			const checkData = await this.db.getTeamChecks(req);
+			const checkData = await this.db.getChecksByTeam(req);
 
 			return res.success({
 				msg: successMessages.CHECK_GET,
