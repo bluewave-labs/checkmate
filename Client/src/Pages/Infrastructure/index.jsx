@@ -137,13 +137,11 @@ function Infrastructure() {
 			id: "actions",
 			content: "Actions",
 			render: (row) => (
-				<IconButton>
-					<InfrastructureMenu
-						monitor={row}
-						isAdmin={isAdmin}
-						updateCallback={handleActionMenuDelete}
-					/>
-				</IconButton>
+				<InfrastructureMenu
+					monitor={row}
+					isAdmin={isAdmin}
+					updateCallback={handleActionMenuDelete}
+				/>
 			),
 		},
 	];
