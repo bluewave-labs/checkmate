@@ -17,75 +17,43 @@ class NotificationService {
 		this.logger = logger;
 	}
 
-	async sendDiscordNotification(networkResponse, webhookUrl) {
+	async sendWebhookNotification(networkResponse, address, platform) {
         const { monitor, status } = networkResponse;
-        const message = {
-            content: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`
-        };
+        let message;
+        let url = address;
+
+        if (platform === 'slack') {
+            message = { text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
+        } else if (platform === 'discord') {
+            message = { content: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
+        } else if (platform === 'telegram') {
+            const [botToken, chatId] = address.split('|').map(part => part?.trim());
+            if (!botToken || !chatId) {
+                console.error('Invalid Telegram address format');
+                return false;
+            }
+            message = {
+                chat_id: chatId,
+                text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`
+            };
+            url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        }
 
         try {
-            await axios.post(webhookUrl, message);
+            await axios.post(url, message, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             return true;
         } catch (error) {
-            this.logger.error({
-                message: error.message,
-                service: this.SERVICE_NAME,
-                method: "sendDiscordNotification",
-                stack: error.stack,
-            });
+
+            console.error(`Error sending ${platform} notification:`, error.toJSON());
+            console.error(`URL: ${url}`);
+            console.error(`Message:`, message);
             return false;
         }
     }
-
-	async sendSlackNotification(networkResponse, webhookUrl) {
-        const { monitor, status } = networkResponse;
-        const message = {
-            text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`
-        };
-
-        try {
-            await axios.post(webhookUrl, message);
-            return true;
-        } catch (error) {
-            this.logger.error({
-                message: error.message,
-                service: this.SERVICE_NAME,
-                method: "sendSlackNotification",
-                stack: error.stack,
-            });
-            return false;
-        }
-    }
-
-	async sendTelegramNotification(networkResponse, address) {
-		const { monitor, status } = networkResponse;
-		
-		const [botToken, chatId] = address.split('|').map(part => part?.trim());
-		
-		if (!botToken || !chatId) {
-			return false;
-		}
-		
-		const message = {
-			chat_id: chatId,
-			text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`,
-		};
-		
-		const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-		
-		try {
-			await axios.post(url, message, {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-			return true;
-		} catch (error) {
-			return false;
-		}
-	}
-	
-	
 	
 
 	/**
