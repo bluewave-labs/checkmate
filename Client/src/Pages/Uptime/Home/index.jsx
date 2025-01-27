@@ -71,9 +71,7 @@ const UptimeMonitors = () => {
 					? theme.palette.error.main
 					: monitor.uptimePercentage < 0.5
 						? theme.palette.warning.main
-						: monitor.uptimePercentage < 0.75
-							? theme.palette.success.main
-							: theme.palette.success.main;
+						: theme.palette.success.main;
 		}
 
 		return {

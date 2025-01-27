@@ -156,14 +156,12 @@ function Infrastructure() {
 		const uptimePercentage = ((monitor?.uptimePercentage ?? 0) * 100)
 			.toFixed(2)
 			.toString();
-		const percentageColor =
-			monitor.uptimePercentage < 0.25
-				? theme.palette.error.main
-				: monitor.uptimePercentage < 0.5
-					? theme.palette.percentage.uptimeFair
-					: monitor.uptimePercentage < 0.75
-						? theme.palette.percentage.uptimeGood
-						: theme.palette.success.lowContrast;
+		const percentageColor = monitor.uptimePercentage < 0.25
+			? theme.palette.error.main
+			: monitor.uptimePercentage < 0.5
+				? theme.palette.warning.main
+				: theme.palette.success.main;
+				
 		return {
 			id: monitor._id,
 			name: monitor.name,
