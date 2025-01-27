@@ -235,53 +235,6 @@ const CreateMonitor = () => {
 						monitor
 					</Typography>
 				</Typography>
-
-				<ConfigBox>
-					<Box>
-						<Typography component="h2">General settings</Typography>
-						<Typography component="p">
-							Here you can select the URL of the host, together with the type of monitor.
-						</Typography>
-					</Box>
-					<Stack gap={theme.spacing(15)}>
-						<TextInput
-							type={monitor.type === "http" ? "url" : "text"}
-							id="monitor-url"
-							startAdornment={
-								monitor.type === "http" ? <HttpAdornment https={https} /> : null
-							}
-							label={monitorTypeMaps[monitor.type].label || "URL to monitor"}
-							https={https}
-							placeholder={monitorTypeMaps[monitor.type].placeholder || ""}
-							value={monitor.url}
-							onChange={(event) => handleChange(event, "url")}
-							error={errors["url"] ? true : false}
-							helperText={errors["url"]}
-						/>
-						<TextInput
-							type="number"
-							id="monitor-port"
-							label="Port to monitor"
-							placeholder="5173"
-							value={monitor.port}
-							onChange={(event) => handleChange(event, "port")}
-							error={errors["port"] ? true : false}
-							helperText={errors["port"]}
-							hidden={monitor.type !== "port"}
-						/>
-						<TextInput
-							type="text"
-							id="monitor-name"
-							label="Display name"
-							isOptional={true}
-							placeholder={monitorTypeMaps[monitor.type].namePlaceholder || ""}
-							value={monitor.name}
-							onChange={(event) => handleChange(event, "name")}
-							error={errors["name"] ? true : false}
-							helperText={errors["name"]}
-						/>
-					</Stack>
-				</ConfigBox>
 				<ConfigBox>
 					<Box>
 						<Typography component="h2">Checks to perform</Typography>
@@ -361,6 +314,52 @@ const CreateMonitor = () => {
 						) : (
 							""
 						)}
+					</Stack>
+				</ConfigBox>
+				<ConfigBox>
+					<Box>
+						<Typography component="h2">General settings</Typography>
+						<Typography component="p">
+							Here you can select the URL of the host, together with the type of monitor.
+						</Typography>
+					</Box>
+					<Stack gap={theme.spacing(15)}>
+						<TextInput
+							type={monitor.type === "http" ? "url" : "text"}
+							id="monitor-url"
+							startAdornment={
+								monitor.type === "http" ? <HttpAdornment https={https} /> : null
+							}
+							label={monitorTypeMaps[monitor.type].label || "URL to monitor"}
+							https={https}
+							placeholder={monitorTypeMaps[monitor.type].placeholder || ""}
+							value={monitor.url}
+							onChange={(event) => handleChange(event, "url")}
+							error={errors["url"] ? true : false}
+							helperText={errors["url"]}
+						/>
+						<TextInput
+							type="number"
+							id="monitor-port"
+							label="Port to monitor"
+							placeholder="5173"
+							value={monitor.port}
+							onChange={(event) => handleChange(event, "port")}
+							error={errors["port"] ? true : false}
+							helperText={errors["port"]}
+							hidden={monitor.type !== "port"}
+						/>
+						<TextInput
+							type="text"
+							id="monitor-name"
+							label="Display name"
+							isOptional={true}
+							placeholder={monitorTypeMaps[monitor.type].namePlaceholder || ""}
+							value={monitor.name}
+							onChange={(event) => handleChange(event, "name")}
+							error={errors["name"] ? true : false}
+							helperText={errors["name"]}
+						/>
 					</Stack>
 				</ConfigBox>
 				<ConfigBox>
