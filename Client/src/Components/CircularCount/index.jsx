@@ -12,7 +12,7 @@ const CircularCount = ({ count }) => {
 			backgroundColor={theme.palette.tertiary.main}
 			sx={{
 				padding: ".25em .75em",
-				borderRadius: "50%",
+				borderRadius: "50rem",
 				fontSize: "12px",
 				fontWeight: 500,
 			}}
