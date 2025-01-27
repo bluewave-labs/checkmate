@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -6,6 +7,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
+dayjs.extend(duration);
 
 export const MS_PER_SECOND = 1000;
 export const MS_PER_MINUTE = 60 * MS_PER_SECOND;
@@ -73,6 +75,23 @@ export const formatDurationSplit = (ms) => {
 				: seconds > 0
 					? { time: seconds, format: seconds === 1 ? "second" : "seconds" }
 					: { time: 0, format: "seconds" };
+};
+
+export const getHumanReadableDuration = (ms) => {
+	const durationObj = dayjs.duration(ms);
+	if (durationObj.asDays() >= 1) {
+		const days = Math.floor(durationObj.asDays());
+		return { time: days, units: days === 1 ? "day" : "days" };
+	} else if (durationObj.asHours() >= 1) {
+		const hours = Math.floor(durationObj.asHours());
+		return { time: hours, units: hours === 1 ? "hour" : "hours" };
+	} else if (durationObj.asMinutes() >= 1) {
+		const minutes = Math.floor(durationObj.asMinutes());
+		return { time: minutes, units: minutes === 1 ? "minute" : "minutes" };
+	} else {
+		const seconds = Math.floor(durationObj.asSeconds());
+		return { time: seconds, units: seconds === 1 ? "second" : "seconds" };
+	}
 };
 
 export const formatDate = (date, customOptions) => {
