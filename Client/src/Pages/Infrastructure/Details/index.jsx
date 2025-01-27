@@ -625,7 +625,8 @@ const InfrastructureDetails = () => {
 						</ButtonGroup>
 					</Stack>
 					<Stack
-						direction="row"
+						direction={"row"}
+						// height={chartContainerHeight} // FE team HELP! Possibly no longer needed?
 						gap={theme.spacing(8)} // FE team HELP!
 						flexWrap="wrap" // //FE team HELP! Better way to do this?
 						sx={{

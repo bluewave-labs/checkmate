@@ -673,7 +673,6 @@ const getMonitorsByTeamId = async (req) => {
 	]);
 
 	let { monitors, filteredMonitors, summary } = results[0];
-	console.log("filteredMonitors", filteredMonitors);
 	filteredMonitors = filteredMonitors.map((monitor) => {
 		if (!monitor.checks) {
 			return monitor;
