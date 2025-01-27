@@ -8,7 +8,7 @@ import AreaChart from "../../../Components/Charts/AreaChart";
 import { useSelector } from "react-redux";
 import { networkService } from "../../../main";
 import PulseDot from "../../../Components/Animated/PulseDot";
-import useUtils from "../../Uptime/utils";
+import useUtils from "../../Uptime/Home/Hooks/useUtils";
 import { useNavigate } from "react-router-dom";
 import Empty from "./empty";
 import { logger } from "../../../Utils/Logger";
@@ -625,7 +625,8 @@ const InfrastructureDetails = () => {
 						</ButtonGroup>
 					</Stack>
 					<Stack
-						direction="row"
+						direction={"row"}
+						// height={chartContainerHeight} // FE team HELP! Possibly no longer needed?
 						gap={theme.spacing(8)} // FE team HELP!
 						flexWrap="wrap" // //FE team HELP! Better way to do this?
 						sx={{

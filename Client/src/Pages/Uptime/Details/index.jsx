@@ -19,7 +19,7 @@ import PulseDot from "../../../Components/Animated/PulseDot";
 import { ChartBox } from "./styled";
 import SkeletonLayout from "./skeleton";
 import "./index.css";
-import useUtils from "../utils";
+import useUtils from "../Home/Hooks/useUtils";
 import { formatDateWithTz, formatDurationSplit } from "../../../Utils/timeUtils";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import IconBox from "../../../Components/IconBox";
