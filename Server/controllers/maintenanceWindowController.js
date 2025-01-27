@@ -45,7 +45,7 @@ class MaintenanceWindowController {
 			await Promise.all(dbTransactions);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_CREATE,
+				msg: successMessages.MAINTENANCE_WINDOW_CREATE(req.language),
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "createMaintenanceWindow"));
@@ -63,7 +63,7 @@ class MaintenanceWindowController {
 			const maintenanceWindow = await this.db.getMaintenanceWindowById(req.params.id);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_ID,
+				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_ID(req.language),
 				data: maintenanceWindow,
 			});
 		} catch (error) {
@@ -89,7 +89,7 @@ class MaintenanceWindowController {
 			);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_TEAM,
+				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_TEAM(req.language),
 				data: maintenanceWindows,
 			});
 		} catch (error) {
@@ -111,7 +111,7 @@ class MaintenanceWindowController {
 			);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_USER,
+				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_USER(req.language),
 				data: maintenanceWindows,
 			});
 		} catch (error) {
@@ -129,7 +129,7 @@ class MaintenanceWindowController {
 		try {
 			await this.db.deleteMaintenanceWindowById(req.params.id);
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_DELETE,
+				msg: successMessages.MAINTENANCE_WINDOW_DELETE(req.language),
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "deleteMaintenanceWindow"));
@@ -150,7 +150,7 @@ class MaintenanceWindowController {
 				req.body
 			);
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_EDIT,
+				msg: successMessages.MAINTENANCE_WINDOW_EDIT(req.language),
 				data: editedMaintenanceWindow,
 			});
 		} catch (error) {

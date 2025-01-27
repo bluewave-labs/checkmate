@@ -43,7 +43,7 @@ class MonitorController {
 		try {
 			const monitors = await this.db.getAllMonitors();
 			return res.success({
-				msg: successMessages.MONITOR_GET_ALL,
+				msg: successMessages.MONITOR_GET_ALL(req.language),
 				data: monitors,
 			});
 		} catch (error) {
@@ -64,7 +64,7 @@ class MonitorController {
 		try {
 			const monitors = await this.db.getAllMonitorsWithUptimeStats();
 			return res.success({
-				msg: successMessages.MONITOR_GET_ALL,
+				msg: successMessages.MONITOR_GET_ALL(req.language),
 				data: monitors,
 			});
 		} catch (error) {
@@ -76,7 +76,7 @@ class MonitorController {
 		try {
 			const monitor = await this.db.getUptimeDetailsById(req);
 			return res.success({
-				msg: successMessages.MONITOR_GET_BY_ID,
+				msg: successMessages.MONITOR_GET_BY_ID(req.language),
 				data: monitor,
 			});
 		} catch (error) {
@@ -105,7 +105,7 @@ class MonitorController {
 		try {
 			const monitorStats = await this.db.getMonitorStatsById(req);
 			return res.success({
-				msg: successMessages.MONITOR_STATS_BY_ID,
+				msg: successMessages.MONITOR_STATS_BY_ID(req.language),
 				data: monitorStats,
 			});
 		} catch (error) {
@@ -133,7 +133,7 @@ class MonitorController {
 		try {
 			const monitor = await this.db.getHardwareDetailsById(req);
 			return res.success({
-				msg: successMessages.MONITOR_GET_BY_ID,
+				msg: successMessages.MONITOR_GET_BY_ID(req.language),
 				data: monitor,
 			});
 		} catch (error) {
@@ -154,7 +154,7 @@ class MonitorController {
 			const certificate = await fetchMonitorCertificate(sslChecker, monitor);
 
 			return res.success({
-				msg: successMessages.MONITOR_CERTIFICATE,
+				msg: successMessages.MONITOR_CERTIFICATE(req.language),
 				data: {
 					certificateDate: new Date(certificate.validTo),
 				},
@@ -187,7 +187,7 @@ class MonitorController {
 		try {
 			const monitor = await this.db.getMonitorById(req.params.monitorId);
 			return res.success({
-				msg: successMessages.MONITOR_GET_BY_ID,
+				msg: successMessages.MONITOR_GET_BY_ID(req.language),
 				data: monitor,
 			});
 		} catch (error) {
@@ -231,7 +231,7 @@ class MonitorController {
 			// Add monitor to job queue
 			this.jobQueue.addJob(monitor._id, monitor);
 			return res.success({
-				msg: successMessages.MONITOR_CREATE,
+				msg: successMessages.MONITOR_CREATE(req.language),
 				data: monitor,
 			});
 		} catch (error) {
@@ -309,7 +309,7 @@ class MonitorController {
 					stack: error.stack,
 				});
 			}
-			return res.success({ msg: successMessages.MONITOR_DELETE });
+			return res.success({ msg: successMessages.MONITOR_DELETE(req.language) });
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "deleteMonitor"));
 		}
@@ -390,10 +390,10 @@ class MonitorController {
 
 			await Promise.all(
 				notifications &&
-					notifications.map(async (notification) => {
-						notification.monitorId = editedMonitor._id;
-						await this.db.createNotification(notification);
-					})
+				notifications.map(async (notification) => {
+					notification.monitorId = editedMonitor._id;
+					await this.db.createNotification(notification);
+				})
 			);
 
 			// Delete the old job(editedMonitor has the same ID as the old monitor)
@@ -401,7 +401,7 @@ class MonitorController {
 			// Add the new job back to the queue
 			await this.jobQueue.addJob(editedMonitor._id, editedMonitor);
 			return res.success({
-				msg: successMessages.MONITOR_EDIT,
+				msg: successMessages.MONITOR_EDIT(req.language),
 				data: editedMonitor,
 			});
 		} catch (error) {
@@ -438,8 +438,8 @@ class MonitorController {
 			monitor.save();
 			return res.success({
 				msg: monitor.isActive
-					? successMessages.MONITOR_RESUME
-					: successMessages.MONITOR_PAUSE,
+					? successMessages.MONITOR_RESUME(req.language)
+					: successMessages.MONITOR_PAUSE(req.language),
 				data: monitor,
 			});
 		} catch (error) {
@@ -469,7 +469,7 @@ class MonitorController {
 			);
 
 			return res.success({
-				msg: successMessages.MONITOR_DEMO_ADDED,
+				msg: successMessages.MONITOR_DEMO_ADDED(req.language),
 				data: demoMonitors.length,
 			});
 		} catch (error) {
@@ -488,7 +488,7 @@ class MonitorController {
 		try {
 			const monitors = await this.db.getMonitorsByTeamId(req);
 			return res.success({
-				msg: successMessages.MONITOR_GET_BY_TEAM_ID,
+				msg: successMessages.MONITOR_GET_BY_TEAM_ID(req.language),
 				data: monitors,
 			});
 		} catch (error) {

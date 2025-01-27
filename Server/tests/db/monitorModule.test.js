@@ -31,7 +31,7 @@ import {
 	calculateGroupStats,
 } from "../../db/mongo/modules/monitorModule.js";
 
-describe("monitorModule", function() {
+describe("monitorModule", function () {
 	let monitorFindStub,
 		monitorFindByIdStub,
 		monitorFindByIdAndUpdateStub,
@@ -43,7 +43,7 @@ describe("monitorModule", function() {
 		pageSpeedCheckFindStub,
 		hardwareCheckFindStub;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		monitorFindStub = sinon.stub(Monitor, "find");
 		monitorFindByIdStub = sinon.stub(Monitor, "findById");
 		monitorFindByIdAndUpdateStub = sinon.stub(Monitor, "findByIdAndUpdate");
@@ -63,12 +63,12 @@ describe("monitorModule", function() {
 		});
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		sinon.restore();
 	});
 
-	describe("getAllMonitors", function() {
-		it("should return all monitors", async function() {
+	describe("getAllMonitors", function () {
+		it("should return all monitors", async function () {
 			const mockMonitors = [
 				{ _id: "1", name: "Monitor 1", url: "test1.com" },
 				{ _id: "2", name: "Monitor 2", url: "test2.com" },
@@ -81,13 +81,13 @@ describe("monitorModule", function() {
 			expect(monitorFindStub.firstCall.args).to.deep.equal([]);
 		});
 
-		it("should handle empty results", async function() {
+		it("should handle empty results", async function () {
 			monitorFindStub.returns([]);
 			const result = await getAllMonitors();
 			expect(result).to.be.an("array").that.is.empty;
 		});
 
-		it("should throw error when database fails", async function() {
+		it("should throw error when database fails", async function () {
 			// Arrange
 			const error = new Error("Database error");
 			error.service = "MonitorModule";
@@ -105,8 +105,8 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getAllMonitorsWithUptimeStats", function() {
-		it("should return monitors with uptime stats for different time periods", async function() {
+	describe("getAllMonitorsWithUptimeStats", function () {
+		it("should return monitors with uptime stats for different time periods", async function () {
 			// Mock data
 			const mockMonitors = [
 				{
@@ -152,7 +152,7 @@ describe("monitorModule", function() {
 			expect(monitor["90"]).to.equal(75);
 		});
 
-		it("should return monitors with stats for pagespeed type", async function() {
+		it("should return monitors with stats for pagespeed type", async function () {
 			// Mock data
 			const mockMonitors = [
 				{
@@ -198,7 +198,7 @@ describe("monitorModule", function() {
 			expect(monitor["90"]).to.equal(75);
 		});
 
-		it("should return monitors with stats for hardware type", async function() {
+		it("should return monitors with stats for hardware type", async function () {
 			// Mock data
 			const mockMonitors = [
 				{
@@ -244,7 +244,7 @@ describe("monitorModule", function() {
 			expect(monitor["90"]).to.equal(75);
 		});
 
-		it("should handle errors appropriately", async function() {
+		it("should handle errors appropriately", async function () {
 			// Setup stub to throw error
 			monitorFindStub.rejects(new Error("Database error"));
 
@@ -258,7 +258,7 @@ describe("monitorModule", function() {
 			}
 		});
 
-		it("should handle empty monitor list", async function() {
+		it("should handle empty monitor list", async function () {
 			monitorFindStub.resolves([]);
 
 			const result = await getAllMonitorsWithUptimeStats();
@@ -267,7 +267,7 @@ describe("monitorModule", function() {
 			expect(result).to.have.lengthOf(0);
 		});
 
-		it("should handle monitor with no checks", async function() {
+		it("should handle monitor with no checks", async function () {
 			const mockMonitors = [
 				{
 					_id: "monitor1",
@@ -292,28 +292,28 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("calculateUptimeDuration", function() {
+	describe("calculateUptimeDuration", function () {
 		let clock;
 		const NOW = new Date("2024-01-01T12:00:00Z").getTime();
 
-		beforeEach(function() {
+		beforeEach(function () {
 			// Fix the current time
 			clock = sinon.useFakeTimers(NOW);
 		});
 
-		afterEach(function() {
+		afterEach(function () {
 			clock.restore();
 		});
 
-		it("should return 0 when checks array is empty", function() {
+		it("should return 0 when checks array is empty", function () {
 			expect(calculateUptimeDuration([])).to.equal(0);
 		});
 
-		it("should return 0 when checks array is null", function() {
+		it("should return 0 when checks array is null", function () {
 			expect(calculateUptimeDuration(null)).to.equal(0);
 		});
 
-		it("should calculate uptime from last down check to most recent check", function() {
+		it("should calculate uptime from last down check to most recent check", function () {
 			const checks = [
 				{ status: true, createdAt: "2024-01-01T11:00:00Z" }, // Most recent
 				{ status: true, createdAt: "2024-01-01T10:00:00Z" },
@@ -325,7 +325,7 @@ describe("monitorModule", function() {
 			expect(calculateUptimeDuration(checks)).to.equal(7200000);
 		});
 
-		it("should calculate uptime from first check when no down checks exist", function() {
+		it("should calculate uptime from first check when no down checks exist", function () {
 			const checks = [
 				{ status: true, createdAt: "2024-01-01T11:00:00Z" },
 				{ status: true, createdAt: "2024-01-01T10:00:00Z" },
@@ -337,28 +337,28 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getLastChecked", function() {
+	describe("getLastChecked", function () {
 		let clock;
 		const NOW = new Date("2024-01-01T12:00:00Z").getTime();
 
-		beforeEach(function() {
+		beforeEach(function () {
 			// Fix the current time
 			clock = sinon.useFakeTimers(NOW);
 		});
 
-		afterEach(function() {
+		afterEach(function () {
 			clock.restore();
 		});
 
-		it("should return 0 when checks array is empty", function() {
+		it("should return 0 when checks array is empty", function () {
 			expect(getLastChecked([])).to.equal(0);
 		});
 
-		it("should return 0 when checks array is null", function() {
+		it("should return 0 when checks array is null", function () {
 			expect(getLastChecked(null)).to.equal(0);
 		});
 
-		it("should return time difference between now and most recent check", function() {
+		it("should return time difference between now and most recent check", function () {
 			const checks = [
 				{ createdAt: "2024-01-01T11:30:00Z" }, // 30 minutes ago
 				{ createdAt: "2024-01-01T11:00:00Z" },
@@ -369,7 +369,7 @@ describe("monitorModule", function() {
 			expect(getLastChecked(checks)).to.equal(1800000);
 		});
 
-		it("should handle checks from different days", function() {
+		it("should handle checks from different days", function () {
 			const checks = [
 				{ createdAt: "2023-12-31T12:00:00Z" }, // 24 hours ago
 				{ createdAt: "2023-12-30T12:00:00Z" },
@@ -380,16 +380,16 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getLatestResponseTime", function() {
-		it("should return 0 when checks array is empty", function() {
+	describe("getLatestResponseTime", function () {
+		it("should return 0 when checks array is empty", function () {
 			expect(getLatestResponseTime([])).to.equal(0);
 		});
 
-		it("should return 0 when checks array is null", function() {
+		it("should return 0 when checks array is null", function () {
 			expect(getLatestResponseTime(null)).to.equal(0);
 		});
 
-		it("should return response time from most recent check", function() {
+		it("should return response time from most recent check", function () {
 			const checks = [
 				{ responseTime: 150, createdAt: "2024-01-01T11:30:00Z" }, // Most recent
 				{ responseTime: 200, createdAt: "2024-01-01T11:00:00Z" },
@@ -399,7 +399,7 @@ describe("monitorModule", function() {
 			expect(getLatestResponseTime(checks)).to.equal(150);
 		});
 
-		it("should handle missing responseTime in checks", function() {
+		it("should handle missing responseTime in checks", function () {
 			const checks = [
 				{ createdAt: "2024-01-01T11:30:00Z" },
 				{ responseTime: 200, createdAt: "2024-01-01T11:00:00Z" },
@@ -409,16 +409,16 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getAverageResponseTime", function() {
-		it("should return 0 when checks array is empty", function() {
+	describe("getAverageResponseTime", function () {
+		it("should return 0 when checks array is empty", function () {
 			expect(getAverageResponseTime([])).to.equal(0);
 		});
 
-		it("should return 0 when checks array is null", function() {
+		it("should return 0 when checks array is null", function () {
 			expect(getAverageResponseTime(null)).to.equal(0);
 		});
 
-		it("should calculate average response time from all checks", function() {
+		it("should calculate average response time from all checks", function () {
 			const checks = [
 				{ responseTime: 100, createdAt: "2024-01-01T11:30:00Z" },
 				{ responseTime: 200, createdAt: "2024-01-01T11:00:00Z" },
@@ -429,7 +429,7 @@ describe("monitorModule", function() {
 			expect(getAverageResponseTime(checks)).to.equal(200);
 		});
 
-		it("should handle missing responseTime in some checks", function() {
+		it("should handle missing responseTime in some checks", function () {
 			const checks = [
 				{ responseTime: 100, createdAt: "2024-01-01T11:30:00Z" },
 				{ createdAt: "2024-01-01T11:00:00Z" },
@@ -440,7 +440,7 @@ describe("monitorModule", function() {
 			expect(getAverageResponseTime(checks)).to.equal(200);
 		});
 
-		it("should return 0 when no checks have responseTime", function() {
+		it("should return 0 when no checks have responseTime", function () {
 			const checks = [
 				{ createdAt: "2024-01-01T11:30:00Z" },
 				{ createdAt: "2024-01-01T11:00:00Z" },
@@ -450,26 +450,26 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getUptimePercentage", function() {
-		it("should return 0 when checks array is empty", function() {
+	describe("getUptimePercentage", function () {
+		it("should return 0 when checks array is empty", function () {
 			expect(getUptimePercentage([])).to.equal(0);
 		});
 
-		it("should return 0 when checks array is null", function() {
+		it("should return 0 when checks array is null", function () {
 			expect(getUptimePercentage(null)).to.equal(0);
 		});
 
-		it("should return 100 when all checks are up", function() {
+		it("should return 100 when all checks are up", function () {
 			const checks = [{ status: true }, { status: true }, { status: true }];
 			expect(getUptimePercentage(checks)).to.equal(100);
 		});
 
-		it("should return 0 when all checks are down", function() {
+		it("should return 0 when all checks are down", function () {
 			const checks = [{ status: false }, { status: false }, { status: false }];
 			expect(getUptimePercentage(checks)).to.equal(0);
 		});
 
-		it("should calculate correct percentage for mixed status checks", function() {
+		it("should calculate correct percentage for mixed status checks", function () {
 			const checks = [
 				{ status: true },
 				{ status: false },
@@ -480,33 +480,33 @@ describe("monitorModule", function() {
 			expect(getUptimePercentage(checks)).to.equal(75);
 		});
 
-		it("should handle undefined status values", function() {
+		it("should handle undefined status values", function () {
 			const checks = [{ status: true }, { status: undefined }, { status: true }];
 			// 2 up out of 3 total ≈ 66.67%
 			expect(getUptimePercentage(checks)).to.equal((2 / 3) * 100);
 		});
 	});
 
-	describe("getIncidents", function() {
-		it("should return 0 when checks array is empty", function() {
+	describe("getIncidents", function () {
+		it("should return 0 when checks array is empty", function () {
 			expect(getIncidents([])).to.equal(0);
 		});
 
-		it("should return 0 when checks array is null", function() {
+		it("should return 0 when checks array is null", function () {
 			expect(getIncidents(null)).to.equal(0);
 		});
 
-		it("should return 0 when all checks are up", function() {
+		it("should return 0 when all checks are up", function () {
 			const checks = [{ status: true }, { status: true }, { status: true }];
 			expect(getIncidents(checks)).to.equal(0);
 		});
 
-		it("should count all incidents when all checks are down", function() {
+		it("should count all incidents when all checks are down", function () {
 			const checks = [{ status: false }, { status: false }, { status: false }];
 			expect(getIncidents(checks)).to.equal(3);
 		});
 
-		it("should count correct number of incidents for mixed status checks", function() {
+		it("should count correct number of incidents for mixed status checks", function () {
 			const checks = [
 				{ status: true },
 				{ status: false },
@@ -517,7 +517,7 @@ describe("monitorModule", function() {
 			expect(getIncidents(checks)).to.equal(2);
 		});
 
-		it("should handle undefined status values", function() {
+		it("should handle undefined status values", function () {
 			const checks = [
 				{ status: true },
 				{ status: undefined },
@@ -529,10 +529,10 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getMonitorChecks", function() {
+	describe("getMonitorChecks", function () {
 		let mockModel;
 
-		beforeEach(function() {
+		beforeEach(function () {
 			// Create a mock model with chainable methods
 			const mockChecks = [
 				{ monitorId: "123", createdAt: new Date("2024-01-01") },
@@ -546,11 +546,11 @@ describe("monitorModule", function() {
 			};
 		});
 
-		afterEach(function() {
+		afterEach(function () {
 			sinon.restore();
 		});
 
-		it("should return all checks and date-ranged checks", async function() {
+		it("should return all checks and date-ranged checks", async function () {
 			// Arrange
 			const monitorId = "123";
 			const dateRange = {
@@ -579,7 +579,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should handle empty results", async function() {
+		it("should handle empty results", async function () {
 			// Arrange
 			const emptyModel = {
 				find: sinon.stub().returns({
@@ -603,7 +603,7 @@ describe("monitorModule", function() {
 			expect(result.checksForDateRange).to.be.an("array").that.is.empty;
 		});
 
-		it("should maintain sort order", async function() {
+		it("should maintain sort order", async function () {
 			// Arrange
 			const sortedChecks = [
 				{ monitorId: "123", createdAt: new Date("2024-01-02") },
@@ -637,39 +637,39 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("processChecksForDisplay", function() {
+	describe("processChecksForDisplay", function () {
 		let normalizeStub;
 
-		beforeEach(function() {
+		beforeEach(function () {
 			normalizeStub = sinon.stub();
 		});
 
-		it("should return original checks when numToDisplay is not provided", function() {
+		it("should return original checks when numToDisplay is not provided", function () {
 			const checks = [1, 2, 3, 4, 5];
 			const result = processChecksForDisplay(normalizeStub, checks);
 			expect(result).to.deep.equal(checks);
 		});
 
-		it("should return original checks when numToDisplay is greater than checks length", function() {
+		it("should return original checks when numToDisplay is greater than checks length", function () {
 			const checks = [1, 2, 3];
 			const result = processChecksForDisplay(normalizeStub, checks, 5);
 			expect(result).to.deep.equal(checks);
 		});
 
-		it("should filter checks based on numToDisplay", function() {
+		it("should filter checks based on numToDisplay", function () {
 			const checks = [1, 2, 3, 4, 5, 6];
 			const result = processChecksForDisplay(normalizeStub, checks, 3);
 			// Should return [1, 3, 5] as n = ceil(6/3) = 2
 			expect(result).to.deep.equal([1, 3, 5]);
 		});
 
-		it("should handle empty checks array", function() {
+		it("should handle empty checks array", function () {
 			const checks = [];
 			const result = processChecksForDisplay(normalizeStub, checks, 3);
 			expect(result).to.be.an("array").that.is.empty;
 		});
 
-		it("should call normalizeData when normalize is true", function() {
+		it("should call normalizeData when normalize is true", function () {
 			const checks = [1, 2, 3];
 			normalizeStub.returns([10, 20, 30]);
 
@@ -679,7 +679,7 @@ describe("monitorModule", function() {
 			expect(result).to.deep.equal([10, 20, 30]);
 		});
 
-		it("should handle both filtering and normalization", function() {
+		it("should handle both filtering and normalization", function () {
 			const checks = [1, 2, 3, 4, 5, 6];
 			normalizeStub.returns([10, 30, 50]);
 
@@ -690,7 +690,7 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("groupChecksByTime", function() {
+	describe("groupChecksByTime", function () {
 		const mockChecks = [
 			{ createdAt: "2024-01-15T10:30:45Z" },
 			{ createdAt: "2024-01-15T10:45:15Z" },
@@ -698,7 +698,7 @@ describe("monitorModule", function() {
 			{ createdAt: "2024-01-16T10:30:00Z" },
 		];
 
-		it("should group checks by hour when dateRange is 'day'", function() {
+		it("should group checks by hour when dateRange is 'day'", function () {
 			const result = groupChecksByTime(mockChecks, "day");
 
 			// Get timestamps for 10:00 and 11:00 on Jan 15
@@ -713,7 +713,7 @@ describe("monitorModule", function() {
 			expect(result[time3].checks).to.have.lengthOf(1);
 		});
 
-		it("should group checks by day when dateRange is not 'day'", function() {
+		it("should group checks by day when dateRange is not 'day'", function () {
 			const result = groupChecksByTime(mockChecks, "week");
 
 			expect(Object.keys(result)).to.have.lengthOf(2);
@@ -721,12 +721,12 @@ describe("monitorModule", function() {
 			expect(result["2024-01-16"].checks).to.have.lengthOf(1);
 		});
 
-		it("should handle empty checks array", function() {
+		it("should handle empty checks array", function () {
 			const result = groupChecksByTime([], "day");
 			expect(result).to.deep.equal({});
 		});
 
-		it("should handle single check", function() {
+		it("should handle single check", function () {
 			const singleCheck = [{ createdAt: "2024-01-15T10:30:45Z" }];
 			const result = groupChecksByTime(singleCheck, "day");
 
@@ -735,7 +735,7 @@ describe("monitorModule", function() {
 			expect(result[expectedTime].checks).to.have.lengthOf(1);
 		});
 
-		it("should skip invalid dates and process valid ones", function() {
+		it("should skip invalid dates and process valid ones", function () {
 			const checksWithInvalidDate = [
 				{ createdAt: "invalid-date" },
 				{ createdAt: "2024-01-15T10:30:45Z" },
@@ -752,7 +752,7 @@ describe("monitorModule", function() {
 			expect(result[expectedTime].checks[0].createdAt).to.equal("2024-01-15T10:30:45Z");
 		});
 
-		it("should handle checks in same time group", function() {
+		it("should handle checks in same time group", function () {
 			const checksInSameHour = [
 				{ createdAt: "2024-01-15T10:15:00Z" },
 				{ createdAt: "2024-01-15T10:45:00Z" },
@@ -766,16 +766,16 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("calculateGroupStats", function() {
+	describe("calculateGroupStats", function () {
 		// Mock getUptimePercentage function
 		let uptimePercentageStub;
 
-		beforeEach(function() {
+		beforeEach(function () {
 			uptimePercentageStub = sinon.stub();
 			uptimePercentageStub.returns(95); // Default return value
 		});
 
-		it("should calculate stats correctly for a group of checks", function() {
+		it("should calculate stats correctly for a group of checks", function () {
 			const mockGroup = {
 				time: "2024-01-15",
 				checks: [
@@ -796,7 +796,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should handle empty checks array", function() {
+		it("should handle empty checks array", function () {
 			const mockGroup = {
 				time: "2024-01-15",
 				checks: [],
@@ -813,7 +813,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should handle missing responseTime values", function() {
+		it("should handle missing responseTime values", function () {
 			const mockGroup = {
 				time: "2024-01-15",
 				checks: [
@@ -834,7 +834,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should handle all checks with status false", function() {
+		it("should handle all checks with status false", function () {
 			const mockGroup = {
 				time: "2024-01-15",
 				checks: [
@@ -855,7 +855,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should handle all checks with status true", function() {
+		it("should handle all checks with status true", function () {
 			const mockGroup = {
 				time: "2024-01-15",
 				checks: [
@@ -877,7 +877,7 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getMonitorStatsById", function() {
+	describe("getMonitorStatsById", function () {
 		const now = new Date();
 		const oneHourAgo = new Date(now - 3600000);
 		const twoHoursAgo = new Date(now - 7200000);
@@ -974,18 +974,18 @@ describe("monitorModule", function() {
 			},
 		};
 
-		beforeEach(function() {
+		beforeEach(function () {
 			checkFindStub.returns({
 				sort: () => checkDocs,
 			});
 			monitorFindByIdStub.returns(mockMonitor);
 		});
 
-		afterEach(function() {
+		afterEach(function () {
 			sinon.restore();
 		});
 
-		it("should return monitor stats with calculated values, sort order desc", async function() {
+		it("should return monitor stats with calculated values, sort order desc", async function () {
 			req.query.sortOrder = "desc";
 			const result = await getMonitorStatsById(req);
 			expect(result).to.include.keys([
@@ -1009,7 +1009,7 @@ describe("monitorModule", function() {
 			expect(result.aggregateData).to.be.an("array");
 		});
 
-		it("should return monitor stats with calculated values, ping type", async function() {
+		it("should return monitor stats with calculated values, ping type", async function () {
 			monitorFindByIdStub.returns(mockMonitorPing);
 			req.query.sortOrder = "desc";
 			const result = await getMonitorStatsById(req);
@@ -1034,7 +1034,7 @@ describe("monitorModule", function() {
 			expect(result.aggregateData).to.be.an("array");
 		});
 
-		it("should return monitor stats with calculated values, docker type", async function() {
+		it("should return monitor stats with calculated values, docker type", async function () {
 			monitorFindByIdStub.returns(mockMonitorDocker);
 			req.query.sortOrder = "desc";
 			const result = await getMonitorStatsById(req);
@@ -1059,7 +1059,7 @@ describe("monitorModule", function() {
 			expect(result.aggregateData).to.be.an("array");
 		});
 
-		it("should return monitor stats with calculated values", async function() {
+		it("should return monitor stats with calculated values", async function () {
 			req.query.sortOrder = "asc";
 			const result = await getMonitorStatsById(req);
 			expect(result).to.include.keys([
@@ -1083,7 +1083,7 @@ describe("monitorModule", function() {
 			expect(result.aggregateData).to.be.an("array");
 		});
 
-		it("should throw error when monitor is not found", async function() {
+		it("should throw error when monitor is not found", async function () {
 			monitorFindByIdStub.returns(Promise.resolve(null));
 
 			const req = {
@@ -1101,21 +1101,21 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getMonitorById", function() {
+	describe("getMonitorById", function () {
 		let notificationFindStub;
 		let monitorSaveStub;
 
-		beforeEach(function() {
+		beforeEach(function () {
 			// Create stubs
 			notificationFindStub = sinon.stub(Notification, "find");
 			monitorSaveStub = sinon.stub().resolves();
 		});
 
-		afterEach(function() {
+		afterEach(function () {
 			sinon.restore();
 		});
 
-		it("should return monitor with notifications when found", async function() {
+		it("should return monitor with notifications when found", async function () {
 			// Arrange
 			const monitorId = "123";
 			const mockMonitor = {
@@ -1139,9 +1139,10 @@ describe("monitorModule", function() {
 			expect(monitorSaveStub.calledOnce).to.be.true;
 		});
 
-		it("should throw 404 error when monitor not found", async function() {
+		it("should throw 404 error when monitor not found", async function () {
 			// Arrange
 			const monitorId = "nonexistent";
+			const mockLanguage = 'en';
 			monitorFindByIdStub.resolves(null);
 
 			// Act & Assert
@@ -1149,14 +1150,14 @@ describe("monitorModule", function() {
 				await getMonitorById(monitorId);
 				expect.fail("Should have thrown an error");
 			} catch (error) {
-				expect(error.message).to.equal(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId));
+				expect(error.message).to.equal(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId, mockLanguage));
 				expect(error.status).to.equal(404);
 				expect(error.service).to.equal("monitorModule");
 				expect(error.method).to.equal("getMonitorById");
 			}
 		});
 
-		it("should handle database errors properly", async function() {
+		it("should handle database errors properly", async function () {
 			// Arrange
 			const monitorId = "123";
 			const dbError = new Error("Database connection failed");
@@ -1173,7 +1174,7 @@ describe("monitorModule", function() {
 			}
 		});
 
-		it("should handle notification fetch errors", async function() {
+		it("should handle notification fetch errors", async function () {
 			// Arrange
 			const monitorId = "123";
 			const mockMonitor = {
@@ -1197,7 +1198,7 @@ describe("monitorModule", function() {
 			}
 		});
 
-		it("should handle monitor save errors", async function() {
+		it("should handle monitor save errors", async function () {
 			// Arrange
 			const monitorId = "123";
 			const mockMonitor = {
@@ -1222,8 +1223,8 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getMonitorsAndSummaryByTeamId", function() {
-		it("should return monitors and correct summary counts", async function() {
+	describe("getMonitorsAndSummaryByTeamId", function () {
+		it("should return monitors and correct summary counts", async function () {
 			// Arrange
 			const teamId = "team123";
 			const type = "http";
@@ -1249,7 +1250,7 @@ describe("monitorModule", function() {
 			expect(monitorFindStub.calledOnceWith({ teamId, type })).to.be.true;
 		});
 
-		it("should return empty results for non-existent team", async function() {
+		it("should return empty results for non-existent team", async function () {
 			// Arrange
 			monitorFindStub.resolves([]);
 
@@ -1266,7 +1267,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should handle database errors", async function() {
+		it("should handle database errors", async function () {
 			// Arrange
 			const error = new Error("Database error");
 			error.service = "MonitorModule";
@@ -1285,8 +1286,8 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("getMonitorsByTeamId", function() {
-		beforeEach(function() {
+	describe("getMonitorsByTeamId", function () {
+		beforeEach(function () {
 			// Chain stubs for Monitor.find().skip().limit().sort()
 
 			// Stub for CHECK_MODEL_LOOKUP model find
@@ -1297,11 +1298,11 @@ describe("monitorModule", function() {
 			});
 		});
 
-		afterEach(function() {
+		afterEach(function () {
 			sinon.restore();
 		});
 
-		it("should return monitors with basic query parameters", async function() {
+		it("should return monitors with basic query parameters", async function () {
 			const mockMonitors = [
 				{ _id: "1", type: "http", toObject: () => ({ _id: "1", type: "http" }) },
 				{ _id: "2", type: "ping", toObject: () => ({ _id: "2", type: "ping" }) },
@@ -1334,7 +1335,7 @@ describe("monitorModule", function() {
 			expect(result).to.have.property("monitorCount", 2);
 		});
 
-		it("should return monitors with basic query parameters", async function() {
+		it("should return monitors with basic query parameters", async function () {
 			const mockMonitors = [
 				{ _id: "1", type: "http", toObject: () => ({ _id: "1", type: "http" }) },
 				{ _id: "2", type: "ping", toObject: () => ({ _id: "2", type: "ping" }) },
@@ -1367,7 +1368,7 @@ describe("monitorModule", function() {
 			expect(result).to.have.property("monitorCount", 2);
 		});
 
-		it("should handle type filter with array input", async function() {
+		it("should handle type filter with array input", async function () {
 			const req = {
 				params: { teamId: "team123" },
 				query: {
@@ -1392,7 +1393,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should handle text search filter", async function() {
+		it("should handle text search filter", async function () {
 			const req = {
 				params: { teamId: "team123" },
 				query: {
@@ -1420,7 +1421,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should handle pagination parameters", async function() {
+		it("should handle pagination parameters", async function () {
 			const req = {
 				params: { teamId: "team123" },
 				query: {
@@ -1445,7 +1446,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should handle sorting parameters", async function() {
+		it("should handle sorting parameters", async function () {
 			const req = {
 				params: { teamId: "team123" },
 				query: {
@@ -1472,7 +1473,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should return early when limit is -1", async function() {
+		it("should return early when limit is -1", async function () {
 			// Arrange
 			const req = {
 				params: { teamId: "team123" },
@@ -1506,7 +1507,7 @@ describe("monitorModule", function() {
 			});
 		});
 
-		it("should normalize checks when normalize parameter is provided", async function() {
+		it("should normalize checks when normalize parameter is provided", async function () {
 			const req = {
 				params: { teamId: "team123" },
 				query: { normalize: "true" },
@@ -1531,7 +1532,7 @@ describe("monitorModule", function() {
 			expect(result.monitors).to.have.lengthOf(2);
 		});
 
-		it("should handle database errors", async function() {
+		it("should handle database errors", async function () {
 			const req = {
 				params: { teamId: "team123" },
 				query: {},
@@ -1557,8 +1558,8 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("createMonitor", function() {
-		it("should create a monitor without notifications", async function() {
+	describe("createMonitor", function () {
+		it("should create a monitor without notifications", async function () {
 			let monitorSaveStub = sinon.stub(Monitor.prototype, "save").resolves();
 
 			const req = {
@@ -1583,7 +1584,7 @@ describe("monitorModule", function() {
 			expect(result.url).to.equal(expectedMonitor.url);
 		});
 
-		it("should handle database errors", async function() {
+		it("should handle database errors", async function () {
 			const req = {
 				body: {
 					name: "Test Monitor",
@@ -1600,8 +1601,8 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("deleteMonitor", function() {
-		it("should delete a monitor successfully", async function() {
+	describe("deleteMonitor", function () {
+		it("should delete a monitor successfully", async function () {
 			const monitorId = "123456789";
 			const mockMonitor = {
 				_id: monitorId,
@@ -1621,10 +1622,11 @@ describe("monitorModule", function() {
 			sinon.assert.calledWith(monitorFindByIdAndDeleteStub, monitorId);
 		});
 
-		it("should throw error when monitor not found", async function() {
+		it("should throw error when monitor not found", async function () {
 			const monitorId = "nonexistent123";
 			const req = {
 				params: { monitorId },
+				language: 'en',
 			};
 
 			monitorFindByIdAndDeleteStub.resolves(null);
@@ -1633,13 +1635,13 @@ describe("monitorModule", function() {
 				await deleteMonitor(req);
 				expect.fail("Should have thrown an error");
 			} catch (err) {
-				expect(err.message).to.equal(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId));
+				expect(err.message).to.equal(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId, req.language));
 				expect(err.service).to.equal("monitorModule");
 				expect(err.method).to.equal("deleteMonitor");
 			}
 		});
 
-		it("should handle database errors", async function() {
+		it("should handle database errors", async function () {
 			const monitorId = "123456789";
 			const req = {
 				params: { monitorId },
@@ -1659,8 +1661,8 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("deleteAllMonitors", function() {
-		it("should delete all monitors for a team successfully", async function() {
+	describe("deleteAllMonitors", function () {
+		it("should delete all monitors for a team successfully", async function () {
 			const teamId = "team123";
 			const mockMonitors = [
 				{ _id: "1", name: "Monitor 1", teamId },
@@ -1680,7 +1682,7 @@ describe("monitorModule", function() {
 			sinon.assert.calledWith(monitorDeleteManyStub, { teamId });
 		});
 
-		it("should return empty array when no monitors found", async function() {
+		it("should return empty array when no monitors found", async function () {
 			const teamId = "emptyTeam";
 
 			monitorFindStub.resolves([]);
@@ -1696,7 +1698,7 @@ describe("monitorModule", function() {
 			sinon.assert.calledWith(monitorDeleteManyStub, { teamId });
 		});
 
-		it("should handle database errors", async function() {
+		it("should handle database errors", async function () {
 			const teamId = "team123";
 			const dbError = new Error("Database connection error");
 			monitorFindStub.rejects(dbError);
@@ -1710,7 +1712,7 @@ describe("monitorModule", function() {
 			}
 		});
 
-		it("should handle deleteMany errors", async function() {
+		it("should handle deleteMany errors", async function () {
 			const teamId = "team123";
 			monitorFindStub.resolves([{ _id: "1", name: "Monitor 1" }]);
 			monitorDeleteManyStub.rejects(new Error("Delete operation failed"));
@@ -1725,14 +1727,14 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("deleteMonitorsByUserId", function() {
-		beforeEach(function() {});
+	describe("deleteMonitorsByUserId", function () {
+		beforeEach(function () { });
 
-		afterEach(function() {
+		afterEach(function () {
 			sinon.restore();
 		});
 
-		it("should delete all monitors for a user successfully", async function() {
+		it("should delete all monitors for a user successfully", async function () {
 			// Arrange
 			const userId = "user123";
 			const mockResult = {
@@ -1750,7 +1752,7 @@ describe("monitorModule", function() {
 			sinon.assert.calledWith(monitorDeleteManyStub, { userId: userId });
 		});
 
-		it("should return zero deletedCount when no monitors found", async function() {
+		it("should return zero deletedCount when no monitors found", async function () {
 			// Arrange
 			const userId = "nonexistentUser";
 			const mockResult = {
@@ -1768,7 +1770,7 @@ describe("monitorModule", function() {
 			sinon.assert.calledWith(monitorDeleteManyStub, { userId: userId });
 		});
 
-		it("should handle database errors", async function() {
+		it("should handle database errors", async function () {
 			// Arrange
 			const userId = "user123";
 			const dbError = new Error("Database connection error");
@@ -1786,8 +1788,8 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("editMonitor", function() {
-		it("should edit a monitor successfully", async function() {
+	describe("editMonitor", function () {
+		it("should edit a monitor successfully", async function () {
 			// Arrange
 			const candidateId = "monitor123";
 			const candidateMonitor = {
@@ -1826,7 +1828,7 @@ describe("monitorModule", function() {
 			);
 		});
 
-		it("should return null when monitor not found", async function() {
+		it("should return null when monitor not found", async function () {
 			// Arrange
 			const candidateId = "nonexistent123";
 			const candidateMonitor = {
@@ -1848,7 +1850,7 @@ describe("monitorModule", function() {
 			);
 		});
 
-		it("should remove notifications from update data", async function() {
+		it("should remove notifications from update data", async function () {
 			// Arrange
 			const candidateId = "monitor123";
 			const candidateMonitor = {
@@ -1880,7 +1882,7 @@ describe("monitorModule", function() {
 			);
 		});
 
-		it("should handle database errors", async function() {
+		it("should handle database errors", async function () {
 			// Arrange
 			const candidateId = "monitor123";
 			const candidateMonitor = {
@@ -1902,8 +1904,8 @@ describe("monitorModule", function() {
 		});
 	});
 
-	describe("addDemoMonitors", function() {
-		it("should add demo monitors successfully", async function() {
+	describe("addDemoMonitors", function () {
+		it("should add demo monitors successfully", async function () {
 			// Arrange
 			const userId = "user123";
 			const teamId = "team123";
@@ -1912,7 +1914,7 @@ describe("monitorModule", function() {
 			expect(result).to.deep.equal([{ _id: "123" }]);
 		});
 
-		it("should handle database errors", async function() {
+		it("should handle database errors", async function () {
 			const userId = "user123";
 			const teamId = "team123";
 

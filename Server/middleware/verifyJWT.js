@@ -17,7 +17,7 @@ const verifyJWT = (req, res, next) => {
 	const token = req.headers["authorization"];
 	// Make sure a token is provided
 	if (!token) {
-		const error = new Error(errorMessages.NO_AUTH_TOKEN);
+		const error = new Error(errorMessages.NO_AUTH_TOKEN(req.language));
 		error.status = 401;
 		error.service = SERVICE_NAME;
 		next(error);
@@ -25,7 +25,7 @@ const verifyJWT = (req, res, next) => {
 	}
 	// Make sure it is properly formatted
 	if (!token.startsWith(TOKEN_PREFIX)) {
-		const error = new Error(errorMessages.INVALID_AUTH_TOKEN); // Instantiate a new Error object for improperly formatted token
+		const error = new Error(errorMessages.INVALID_AUTH_TOKEN(req.language)); // Instantiate a new Error object for improperly formatted token
 		error.status = 400;
 		error.service = SERVICE_NAME;
 		error.method = "verifyJWT";
@@ -43,7 +43,7 @@ const verifyJWT = (req, res, next) => {
 				handleExpiredJwtToken(req, res, next);
 			} else {
 				// Invalid token (signature or token altered or other issue)
-				const errorMessage = errorMessages.INVALID_AUTH_TOKEN;
+				const errorMessage = errorMessages.INVALID_AUTH_TOKEN(req.language);
 				return res.status(401).json({ success: false, msg: errorMessage });
 			}
 		} else {
@@ -60,7 +60,7 @@ function handleExpiredJwtToken(req, res, next) {
 
 	if (!refreshToken) {
 		// No refresh token provided
-		const error = new Error(errorMessages.NO_REFRESH_TOKEN);
+		const error = new Error(errorMessages.NO_REFRESH_TOKEN(req.language));
 		error.status = 401;
 		error.service = SERVICE_NAME;
 		error.method = "handleExpiredJwtToken";

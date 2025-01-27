@@ -14,7 +14,7 @@ class SettingsController {
 			const settings = { ...(await this.settingsService.getSettings()) };
 			delete settings.jwtSecret;
 			return res.success({
-				msg: successMessages.GET_APP_SETTINGS,
+				msg: successMessages.GET_APP_SETTINGS(req.language),
 				data: settings,
 			});
 		} catch (error) {
@@ -35,7 +35,7 @@ class SettingsController {
 			const updatedSettings = { ...(await this.settingsService.reloadSettings()) };
 			delete updatedSettings.jwtSecret;
 			return res.success({
-				msg: successMessages.UPDATE_APP_SETTINGS,
+				msg: successMessages.UPDATE_APP_SETTINGS(req.language),
 				data: updatedSettings,
 			});
 		} catch (error) {
