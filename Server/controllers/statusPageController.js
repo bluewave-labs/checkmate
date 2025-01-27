@@ -23,7 +23,7 @@ class StatusPageController {
 		try {
 			const statusPage = await this.db.createStatusPage(req.body);
 			return res.success({
-				msg: successMessages.STATUS_PAGE_CREATE,
+				msg: successMessages.STATUS_PAGE_CREATE(req.language),
 				data: statusPage,
 			});
 		} catch (error) {
@@ -40,9 +40,9 @@ class StatusPageController {
 
 		try {
 			const { url } = req.params;
-			const statusPage = await this.db.getStatusPageByUrl(url);
+			const statusPage = await this.db.getStatusPageByUrl(url, req.language);
 			return res.success({
-				msg: successMessages.STATUS_PAGE_BY_URL,
+				msg: successMessages.STATUS_PAGE_BY_URL(req.language),
 				data: statusPage,
 			});
 		} catch (error) {

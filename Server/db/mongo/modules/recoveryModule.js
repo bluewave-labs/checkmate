@@ -39,7 +39,7 @@ const validateRecoveryToken = async (req, res) => {
 		if (recoveryToken !== null) {
 			return recoveryToken;
 		} else {
-			throw new Error(errorMessages.DB_TOKEN_NOT_FOUND);
+			throw new Error(errorMessages.DB_TOKEN_NOT_FOUND(req.language));
 		}
 	} catch (error) {
 		error.service = SERVICE_NAME;
@@ -57,12 +57,12 @@ const resetPassword = async (req, res) => {
 		const user = await UserModel.findOne({ email: recoveryToken.email });
 
 		if (user === null) {
-			throw new Error(errorMessages.DB_USER_NOT_FOUND);
+			throw new Error(errorMessages.DB_USER_NOT_FOUND(req.language));
 		}
 
 		const match = await user.comparePassword(newPassword);
 		if (match === true) {
-			throw new Error(errorMessages.DB_RESET_PASSWORD_BAD_MATCH);
+			throw new Error(errorMessages.DB_RESET_PASSWORD_BAD_MATCH(req.language));
 		}
 
 		user.password = newPassword;

@@ -76,7 +76,7 @@ class AuthController {
 			// If superAdmin exists, a token should be attached to all further register requests
 			const superAdminExists = await this.db.checkSuperadmin(req, res);
 			if (superAdminExists) {
-				await this.db.getInviteTokenAndDelete(inviteToken);
+				await this.db.getInviteTokenAndDelete(inviteToken, req.language);
 			} else {
 				// This is the first account, create JWT secret to use if one is not supplied by env
 				const jwtSecret = crypto.randomBytes(64).toString("hex");
@@ -85,7 +85,7 @@ class AuthController {
 
 			const newUser = await this.db.insertUser({ ...req.body }, req.file);
 			logger.info({
-				message: successMessages.AUTH_CREATE_USER,
+				message: successMessages.AUTH_CREATE_USER(req.language),
 				service: SERVICE_NAME,
 				details: newUser._id,
 			});
@@ -116,7 +116,7 @@ class AuthController {
 				});
 
 			res.success({
-				msg: successMessages.AUTH_CREATE_USER,
+				msg: successMessages.AUTH_CREATE_USER(req.language),
 				data: { user: newUser, token: token, refreshToken: refreshToken },
 			});
 		} catch (error) {
@@ -148,12 +148,12 @@ class AuthController {
 			const { email, password } = req.body;
 
 			// Check if user exists
-			const user = await this.db.getUserByEmail(email);
+			const user = await this.db.getUserByEmail(email, req.language);
 
 			// Compare password
 			const match = await user.comparePassword(password);
 			if (match !== true) {
-				const error = new Error(errorMessages.AUTH_INCORRECT_PASSWORD);
+				const error = new Error(errorMessages.AUTH_INCORRECT_PASSWORD(req.language));
 				error.status = 401;
 				next(error);
 				return;
@@ -176,7 +176,7 @@ class AuthController {
 			userWithoutPassword.avatarImage = user.avatarImage;
 
 			return res.success({
-				msg: successMessages.AUTH_LOGIN_USER,
+				msg: successMessages.AUTH_LOGIN_USER(req.language),
 				data: {
 					user: userWithoutPassword,
 					token: token,
@@ -206,7 +206,7 @@ class AuthController {
 
 			if (!refreshToken) {
 				// No refresh token provided
-				const error = new Error(errorMessages.NO_REFRESH_TOKEN);
+				const error = new Error(errorMessages.NO_REFRESH_TOKEN(req.language));
 				error.status = 401;
 				error.service = SERVICE_NAME;
 				error.method = "refreshAuthToken";
@@ -243,7 +243,7 @@ class AuthController {
 			);
 
 			return res.success({
-				msg: successMessages.AUTH_TOKEN_REFRESHED,
+				msg: successMessages.AUTH_TOKEN_REFRESHED(req.language),
 				data: { user: payloadData, token: newAuthToken, refreshToken: refreshToken },
 			});
 		} catch (error) {
@@ -276,7 +276,7 @@ class AuthController {
 
 		// TODO is this neccessary any longer? Verify ownership middleware should handle this
 		if (req.params.userId !== req.user._id.toString()) {
-			const error = new Error(errorMessages.AUTH_UNAUTHORIZED);
+			const error = new Error(errorMessages.AUTH_UNAUTHORIZED(req.language));
 			error.status = 401;
 			error.service = SERVICE_NAME;
 			next(error);
@@ -294,13 +294,13 @@ class AuthController {
 				// Add user email to body for DB operation
 				req.body.email = email;
 				// Get user
-				const user = await this.db.getUserByEmail(email);
+				const user = await this.db.getUserByEmail(email, req.language);
 				// Compare passwords
 				const match = await user.comparePassword(req.body.password);
 				// If not a match, throw a 403
 				// 403 instead of 401 to avoid triggering axios interceptor
 				if (!match) {
-					const error = new Error(errorMessages.AUTH_INCORRECT_PASSWORD);
+					const error = new Error(errorMessages.AUTH_INCORRECT_PASSWORD(req.language));
 					error.status = 403;
 					next(error);
 					return;
@@ -311,7 +311,7 @@ class AuthController {
 
 			const updatedUser = await this.db.updateUser(req, res);
 			res.success({
-				msg: successMessages.AUTH_UPDATE_USER,
+				msg: successMessages.AUTH_UPDATE_USER(req.language),
 				data: updatedUser,
 			});
 		} catch (error) {
@@ -333,7 +333,7 @@ class AuthController {
 			const superAdminExists = await this.db.checkSuperadmin(req, res);
 
 			return res.success({
-				msg: successMessages.AUTH_ADMIN_EXISTS,
+				msg: successMessages.AUTH_ADMIN_EXISTS(req.language),
 				data: superAdminExists,
 			});
 		} catch (error) {
@@ -362,7 +362,7 @@ class AuthController {
 
 		try {
 			const { email } = req.body;
-			const user = await this.db.getUserByEmail(email);
+			const user = await this.db.getUserByEmail(email, req.language);
 			const recoveryToken = await this.db.requestRecoveryToken(req, res);
 			const name = user.firstName;
 			const { clientHost } = this.settingsService.getSettings();
@@ -379,7 +379,7 @@ class AuthController {
 			);
 
 			return res.success({
-				msg: successMessages.AUTH_CREATE_RECOVERY_TOKEN,
+				msg: successMessages.AUTH_CREATE_RECOVERY_TOKEN(req.language),
 				data: msgId,
 			});
 		} catch (error) {
@@ -410,7 +410,7 @@ class AuthController {
 			await this.db.validateRecoveryToken(req, res);
 
 			return res.success({
-				msg: successMessages.AUTH_VERIFY_RECOVERY_TOKEN,
+				msg: successMessages.AUTH_VERIFY_RECOVERY_TOKEN(req.language),
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "validateRecoveryTokenController"));
@@ -443,7 +443,7 @@ class AuthController {
 			const token = this.issueToken(user._doc, tokenType.ACCESS_TOKEN, appSettings);
 
 			return res.success({
-				msg: successMessages.AUTH_RESET_PASSWORD,
+				msg: successMessages.AUTH_RESET_PASSWORD(req.language),
 				data: { user, token },
 			});
 		} catch (error) {
@@ -467,7 +467,7 @@ class AuthController {
 			const { email } = decodedToken;
 
 			// Check if the user exists
-			const user = await this.db.getUserByEmail(email);
+			const user = await this.db.getUserByEmail(email, req.language);
 			// 1. Find all the monitors associated with the team ID if superadmin
 
 			const result = await this.db.getMonitorsByTeamId({
@@ -494,10 +494,10 @@ class AuthController {
 				await this.db.deleteMonitorsByUserId(user._id);
 			}
 			// 6. Delete the user by id
-			await this.db.deleteUser(user._id);
+			await this.db.deleteUser(user._id, req.language);
 
 			return res.success({
-				msg: successMessages.AUTH_DELETE_USER,
+				msg: successMessages.AUTH_DELETE_USER(req.language),
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "deleteUserController"));
@@ -509,7 +509,7 @@ class AuthController {
 			const allUsers = await this.db.getAllUsers(req, res);
 
 			return res.success({
-				msg: successMessages.AUTH_GET_ALL_USERS,
+				msg: successMessages.AUTH_GET_ALL_USERS(req.language),
 				data: allUsers,
 			});
 		} catch (error) {

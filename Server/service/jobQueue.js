@@ -497,7 +497,7 @@ class NewJobQueue {
 
 			if (wasDeleted === true) {
 				this.logger.info({
-					message: successMessages.JOB_QUEUE_DELETE_JOB,
+					message: successMessages.JOB_QUEUE_DELETE_JOB('en'),
 					service: SERVICE_NAME,
 					method: "deleteJob",
 					details: `Deleted job ${monitor._id}`,
@@ -629,7 +629,7 @@ class NewJobQueue {
 
 			const metrics = await this.getMetrics();
 			this.logger.info({
-				message: successMessages.JOB_QUEUE_OBLITERATE,
+				message: successMessages.JOB_QUEUE_OBLITERATE('en'),
 				service: SERVICE_NAME,
 				method: "obliterate",
 				details: metrics,

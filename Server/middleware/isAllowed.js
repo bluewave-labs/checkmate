@@ -12,7 +12,7 @@ const isAllowed = (allowedRoles) => {
 
 		// If no token is pressent, return an error
 		if (!token) {
-			const error = new Error(errorMessages.NO_AUTH_TOKEN);
+			const error = new Error(errorMessages.NO_AUTH_TOKEN(req.language));
 			error.status = 401;
 			error.service = SERVICE_NAME;
 			next(error);
@@ -21,7 +21,7 @@ const isAllowed = (allowedRoles) => {
 
 		// If the token is improperly formatted, return an error
 		if (!token.startsWith(TOKEN_PREFIX)) {
-			const error = new Error(errorMessages.INVALID_AUTH_TOKEN);
+			const error = new Error(errorMessages.INVALID_AUTH_TOKEN(req.language));
 			error.status = 400;
 			error.service = SERVICE_NAME;
 			next(error);
@@ -41,7 +41,7 @@ const isAllowed = (allowedRoles) => {
 				next();
 				return;
 			} else {
-				const error = new Error(errorMessages.INSUFFICIENT_PERMISSIONS);
+				const error = new Error(errorMessages.INSUFFICIENT_PERMISSIONS(req.language));
 				error.status = 401;
 				error.service = SERVICE_NAME;
 				next(error);

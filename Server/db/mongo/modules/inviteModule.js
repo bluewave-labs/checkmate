@@ -41,13 +41,13 @@ const requestInviteToken = async (userData) => {
  * @returns {Promise<InviteToken>} The invite token data.
  * @throws {Error} If the invite token is not found or there is another error.
  */
-const getInviteToken = async (token) => {
+const getInviteToken = async (token, language) => {
 	try {
 		const invite = await InviteToken.findOne({
 			token,
 		});
 		if (invite === null) {
-			throw new Error(errorMessages.AUTH_INVITE_NOT_FOUND);
+			throw new Error(errorMessages.AUTH_INVITE_NOT_FOUND(language));
 		}
 		return invite;
 	} catch (error) {
@@ -67,13 +67,13 @@ const getInviteToken = async (token) => {
  * @returns {Promise<InviteToken>} The invite token data.
  * @throws {Error} If the invite token is not found or there is another error.
  */
-const getInviteTokenAndDelete = async (token) => {
+const getInviteTokenAndDelete = async (token, language) => {
 	try {
 		const invite = await InviteToken.findOneAndDelete({
 			token,
 		});
 		if (invite === null) {
-			throw new Error(errorMessages.AUTH_INVITE_NOT_FOUND);
+			throw new Error(errorMessages.AUTH_INVITE_NOT_FOUND(language));
 		}
 		return invite;
 	} catch (error) {

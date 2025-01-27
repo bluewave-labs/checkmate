@@ -74,6 +74,9 @@ import MongoDB from "./db/mongo/MongoDB.js";
 
 import IORedis from "ioredis";
 
+import TranslationService from './service/translationService.js';
+import languageMiddleware from './middleware/languageMiddleware.js';
+
 const SERVICE_NAME = "Server";
 const SHUTDOWN_TIMEOUT = 1000;
 let isShuttingDown = false;
@@ -175,6 +178,7 @@ const startApp = async () => {
 	const networkService = new NetworkService(axios, ping, logger, http, Docker, net);
 	const statusService = new StatusService(db, logger);
 	const notificationService = new NotificationService(emailService, db, logger);
+	const translationService = new TranslationService(logger);
 
 	const jobQueue = new JobQueue(
 		db,
@@ -195,6 +199,11 @@ const startApp = async () => {
 	ServiceRegistry.register(NetworkService.SERVICE_NAME, networkService);
 	ServiceRegistry.register(StatusService.SERVICE_NAME, statusService);
 	ServiceRegistry.register(NotificationService.SERVICE_NAME, notificationService);
+	ServiceRegistry.register(TranslationService.SERVICE_NAME, translationService);
+
+
+	await translationService.initialize();
+
 	server = app.listen(PORT, () => {
 		logger.info({ message: `server started on port:${PORT}` });
 	});
@@ -263,12 +272,10 @@ const startApp = async () => {
 	// Init job queue
 	await jobQueue.initJobQueue();
 	// Middleware
-	app.use(
-		cors()
-		//We will add configuration later
-	);
+	app.use(cors());
 	app.use(express.json());
 	app.use(helmet());
+	app.use(languageMiddleware);
 	// Swagger UI
 	app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 

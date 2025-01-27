@@ -20,11 +20,11 @@ const createStatusPage = async (statusPageData) => {
 	}
 };
 
-const getStatusPageByUrl = async (url) => {
+const getStatusPageByUrl = async (url, language) => {
 	try {
 		const statusPage = await StatusPage.findOne({ url });
 		if (statusPage === null || statusPage === undefined) {
-			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND(language));
 			error.status = 404;
 
 			throw error;

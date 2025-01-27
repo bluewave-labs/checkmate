@@ -91,7 +91,7 @@ class NetworkService {
 
 			pingResponse.code = 200;
 			pingResponse.status = response.alive;
-			pingResponse.message = successMessages.PING_SUCCESS;
+			pingResponse.message = successMessages.PING_SUCCESS('en');
 			return pingResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -238,7 +238,7 @@ class NetworkService {
 			const containers = await docker.listContainers({ all: true });
 			const containerExists = containers.some((c) => c.Id.startsWith(job.data.url));
 			if (!containerExists) {
-				throw new Error(errorMessages.DOCKER_NOT_FOUND);
+				throw new Error(errorMessages.DOCKER_NOT_FOUND('en'));
 			}
 			const container = docker.getContainer(job.data.url);
 
@@ -260,7 +260,7 @@ class NetworkService {
 			}
 			dockerResponse.status = response?.State?.Status === "running" ? true : false;
 			dockerResponse.code = 200;
-			dockerResponse.message = successMessages.DOCKER_SUCCESS;
+			dockerResponse.message = successMessages.DOCKER_SUCCESS('en');
 			return dockerResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -314,7 +314,7 @@ class NetworkService {
 
 			portResponse.status = response.success;
 			portResponse.code = 200;
-			portResponse.message = successMessages.PORT_SUCCESS;
+			portResponse.message = successMessages.PORT_SUCCESS('en');
 			return portResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;

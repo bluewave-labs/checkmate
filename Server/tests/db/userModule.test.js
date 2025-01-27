@@ -27,7 +27,9 @@ const imageFile = {
 	image: 1,
 };
 
-describe("userModule", function() {
+const mockLanguage = 'en';
+
+describe("userModule", function () {
 	let teamSaveStub,
 		teamFindByIdAndDeleteStub,
 		userSaveStub,
@@ -40,7 +42,7 @@ describe("userModule", function() {
 		generateAvatarImageStub,
 		parseBooleanStub;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		teamSaveStub = sinon.stub(TeamModel.prototype, "save");
 		teamFindByIdAndDeleteStub = sinon.stub(TeamModel, "findByIdAndDelete");
 		userSaveStub = sinon.stub(UserModel.prototype, "save");
@@ -54,12 +56,12 @@ describe("userModule", function() {
 		parseBooleanStub = sinon.stub().returns(true);
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		sinon.restore();
 	});
 
-	describe("insertUser", function() {
-		it("should insert a regular user", async function() {
+	describe("insertUser", function () {
+		it("should insert a regular user", async function () {
 			userSaveStub.resolves(mockUser);
 			userFindOneStub.returns({
 				select: sinon.stub().returns({
@@ -70,7 +72,7 @@ describe("userModule", function() {
 			expect(result).to.deep.equal(mockUser);
 		});
 
-		it("should insert a superadmin user", async function() {
+		it("should insert a superadmin user", async function () {
 			userSaveStub.resolves(mockSuperUser);
 			userFindOneStub.returns({
 				select: sinon.stub().returns({
@@ -81,7 +83,7 @@ describe("userModule", function() {
 			expect(result).to.deep.equal(mockSuperUser);
 		});
 
-		it("should handle an error", async function() {
+		it("should handle an error", async function () {
 			const err = new Error("test error");
 			userSaveStub.rejects(err);
 			try {
@@ -92,7 +94,7 @@ describe("userModule", function() {
 			}
 		});
 
-		it("should handle a duplicate key error", async function() {
+		it("should handle a duplicate key error", async function () {
 			const err = new Error("test error");
 			err.code = 11000;
 			userSaveStub.rejects(err);
@@ -105,8 +107,8 @@ describe("userModule", function() {
 		});
 	});
 
-	describe("getUserByEmail", function() {
-		it("should return a user", async function() {
+	describe("getUserByEmail", function () {
+		it("should return a user", async function () {
 			userFindOneStub.returns({
 				select: sinon.stub().resolves(mockUser),
 			});
@@ -115,23 +117,23 @@ describe("userModule", function() {
 		});
 	});
 
-	describe("getUserByEmail", function() {
-		it("throw an error if a user is not found", async function() {
+	describe("getUserByEmail", function () {
+		it("throw an error if a user is not found", async function () {
 			userFindOneStub.returns({
 				select: sinon.stub().resolves(null),
 			});
 			try {
 				await getUserByEmail(mockUser.email);
 			} catch (error) {
-				expect(error.message).to.equal(errorMessages.DB_USER_NOT_FOUND);
+				expect(error.message).to.equal(errorMessages.DB_USER_NOT_FOUND(mockLanguage));
 			}
 		});
 	});
 
-	describe("updateUser", function() {
+	describe("updateUser", function () {
 		let req, res;
 
-		beforeEach(function() {
+		beforeEach(function () {
 			req = {
 				params: {
 					userId: "testId",
@@ -148,9 +150,9 @@ describe("userModule", function() {
 			res = {};
 		});
 
-		afterEach(function() {});
+		afterEach(function () { });
 
-		it("should update a user", async function() {
+		it("should update a user", async function () {
 			parseBooleanStub.returns(false);
 			userFindByIdAndUpdateStub.returns({
 				select: sinon.stub().returns({
@@ -166,7 +168,7 @@ describe("userModule", function() {
 			expect(result).to.deep.equal(mockUser);
 		});
 
-		it("should delete a user profile image", async function() {
+		it("should delete a user profile image", async function () {
 			req.body.deleteProfileImage = "true";
 			userFindByIdAndUpdateStub.returns({
 				select: sinon.stub().returns({
@@ -182,7 +184,7 @@ describe("userModule", function() {
 			expect(result).to.deep.equal(mockUser);
 		});
 
-		it("should handle an error", async function() {
+		it("should handle an error", async function () {
 			const err = new Error("test error");
 			userFindByIdAndUpdateStub.throws(err);
 			try {
@@ -194,23 +196,23 @@ describe("userModule", function() {
 		});
 	});
 
-	describe("deleteUser", function() {
-		it("should return a deleted user", async function() {
+	describe("deleteUser", function () {
+		it("should return a deleted user", async function () {
 			userFindByIdAndDeleteStub.resolves(mockUser);
 			const result = await deleteUser("testId");
 			expect(result).to.deep.equal(mockUser);
 		});
 
-		it("should throw an error if a user is not found", async function() {
+		it("should throw an error if a user is not found", async function () {
 			try {
 				await deleteUser("testId");
 			} catch (error) {
 				expect(error).to.exist;
-				expect(error.message).to.equal(errorMessages.DB_USER_NOT_FOUND);
+				expect(error.message).to.equal(errorMessages.DB_USER_NOT_FOUND(mockLanguage));
 			}
 		});
 
-		it("should handle an error", async function() {
+		it("should handle an error", async function () {
 			const err = new Error("test error");
 			userFindByIdAndDeleteStub.throws(err);
 			try {
@@ -222,14 +224,14 @@ describe("userModule", function() {
 		});
 	});
 
-	describe("deleteTeam", function() {
-		it("should return true if team deleted", async function() {
+	describe("deleteTeam", function () {
+		it("should return true if team deleted", async function () {
 			teamFindByIdAndDeleteStub.resolves();
 			const result = await deleteTeam("testId");
 			expect(result).to.equal(true);
 		});
 
-		it("should handle an error", async function() {
+		it("should handle an error", async function () {
 			const err = new Error("test error");
 			teamFindByIdAndDeleteStub.throws(err);
 			try {
@@ -241,14 +243,14 @@ describe("userModule", function() {
 		});
 	});
 
-	describe("deleteAllOtherUsers", function() {
-		it("should return true if all other users deleted", async function() {
+	describe("deleteAllOtherUsers", function () {
+		it("should return true if all other users deleted", async function () {
 			userDeleteManyStub.resolves(true);
 			const result = await deleteAllOtherUsers();
 			expect(result).to.equal(true);
 		});
 
-		it("should handle an error", async function() {
+		it("should handle an error", async function () {
 			const err = new Error("test error");
 			userDeleteManyStub.throws(err);
 			try {
@@ -260,8 +262,8 @@ describe("userModule", function() {
 		});
 	});
 
-	describe("getAllUsers", function() {
-		it("should return all users", async function() {
+	describe("getAllUsers", function () {
+		it("should return all users", async function () {
 			userFindStub.returns({
 				select: sinon.stub().returns({
 					select: sinon.stub().resolves([mockUser]),
@@ -271,7 +273,7 @@ describe("userModule", function() {
 			expect(result).to.deep.equal([mockUser]);
 		});
 
-		it("should handle an error", async function() {
+		it("should handle an error", async function () {
 			const err = new Error("test error");
 			userFindStub.throws(err);
 			try {
@@ -283,14 +285,14 @@ describe("userModule", function() {
 		});
 	});
 
-	describe("logoutUser", function() {
-		it("should return true if user logged out", async function() {
+	describe("logoutUser", function () {
+		it("should return true if user logged out", async function () {
 			userUpdateOneStub.resolves(true);
 			const result = await logoutUser("testId");
 			expect(result).to.equal(true);
 		});
 
-		it("should handle an error", async function() {
+		it("should handle an error", async function () {
 			const err = new Error("test error");
 			userUpdateOneStub.throws(err);
 			try {
