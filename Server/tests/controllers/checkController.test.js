@@ -9,11 +9,12 @@ import {
 import jwt from "jsonwebtoken";
 import { errorMessages, successMessages } from "../../utils/messages.js";
 import sinon from "sinon";
-describe("Check Controller - createCheck", function() {
+describe("Check Controller - createCheck", function () {
 	let req, res, next, handleError;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		req = {
+			language: 'en',
 			params: {},
 			body: {},
 			db: {
@@ -28,17 +29,17 @@ describe("Check Controller - createCheck", function() {
 		handleError = sinon.stub();
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		sinon.restore(); // Restore the original methods after each test
 	});
 
-	it("should reject with a validation if params are invalid", async function() {
+	it("should reject with a validation if params are invalid", async function () {
 		await createCheck(req, res, next);
 		expect(next.firstCall.args[0]).to.be.an("error");
 		expect(next.firstCall.args[0].status).to.equal(422);
 	});
 
-	it("should reject with a validation error if body is invalid", async function() {
+	it("should reject with a validation error if body is invalid", async function () {
 		req.params = {
 			monitorId: "monitorId",
 		};
@@ -47,7 +48,7 @@ describe("Check Controller - createCheck", function() {
 		expect(next.firstCall.args[0].status).to.equal(422);
 	});
 
-	it("should call next with error if data retrieval fails", async function() {
+	it("should call next with error if data retrieval fails", async function () {
 		req.params = {
 			monitorId: "monitorId",
 		};
@@ -63,7 +64,7 @@ describe("Check Controller - createCheck", function() {
 		expect(next.firstCall.args[0]).to.be.an("error");
 	});
 
-	it("should return a success message if check is created", async function() {
+	it("should return a success message if check is created", async function () {
 		req.params = {
 			monitorId: "monitorId",
 		};
@@ -80,7 +81,7 @@ describe("Check Controller - createCheck", function() {
 		expect(
 			res.json.calledWith({
 				success: true,
-				msg: successMessages.CHECK_CREATE,
+				msg: successMessages.CHECK_CREATE(req.language),
 				data: { id: "123" },
 			})
 		).to.be.true;
@@ -88,10 +89,10 @@ describe("Check Controller - createCheck", function() {
 	});
 });
 
-describe("Check Controller - getChecks", function() {
+describe("Check Controller - getChecks", function () {
 	let req, res, next;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		req = {
 			params: {},
 			query: {},
@@ -107,17 +108,17 @@ describe("Check Controller - getChecks", function() {
 		next = sinon.stub();
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		sinon.restore();
 	});
 
-	it("should reject with a validation error if params are invalid", async function() {
+	it("should reject with a validation error if params are invalid", async function () {
 		await getChecks(req, res, next);
 		expect(next.firstCall.args[0]).to.be.an("error");
 		expect(next.firstCall.args[0].status).to.equal(422);
 	});
 
-	it("should return a success message if checks are found", async function() {
+	it("should return a success message if checks are found", async function () {
 		req.params = {
 			monitorId: "monitorId",
 		};
@@ -128,14 +129,14 @@ describe("Check Controller - getChecks", function() {
 		expect(
 			res.json.calledWith({
 				success: true,
-				msg: successMessages.CHECK_GET,
+				msg: successMessages.CHECK_GET(req.language),
 				data: { checksCount: 1, checks: [{ id: "123" }] },
 			})
 		).to.be.true;
 		expect(next.notCalled).to.be.true;
 	});
 
-	it("should call next with error if data retrieval fails", async function() {
+	it("should call next with error if data retrieval fails", async function () {
 		req.params = {
 			monitorId: "monitorId",
 		};
@@ -145,10 +146,10 @@ describe("Check Controller - getChecks", function() {
 	});
 });
 
-describe("Check Controller - getTeamChecks", function() {
+describe("Check Controller - getTeamChecks", function () {
 	let req, res, next;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		req = {
 			params: {},
 			query: {},
@@ -163,17 +164,17 @@ describe("Check Controller - getTeamChecks", function() {
 		next = sinon.stub();
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		sinon.restore();
 	});
 
-	it("should reject with a validation error if params are invalid", async function() {
+	it("should reject with a validation error if params are invalid", async function () {
 		await getTeamChecks(req, res, next);
 		expect(next.firstCall.args[0]).to.be.an("error");
 		expect(next.firstCall.args[0].status).to.equal(422);
 	});
 
-	it("should return 200 and check data on successful validation and data retrieval", async function() {
+	it("should return 200 and check data on successful validation and data retrieval", async function () {
 		req.params = { teamId: "1" };
 		const checkData = [{ id: 1, name: "Check 1" }];
 		req.db.getTeamChecks.resolves(checkData);
@@ -184,13 +185,13 @@ describe("Check Controller - getTeamChecks", function() {
 		expect(
 			res.json.calledOnceWith({
 				success: true,
-				msg: successMessages.CHECK_GET,
+				msg: successMessages.CHECK_GET(req.language),
 				data: checkData,
 			})
 		).to.be.true;
 	});
 
-	it("should call next with error if data retrieval fails", async function() {
+	it("should call next with error if data retrieval fails", async function () {
 		req.params = { teamId: "1" };
 		req.db.getTeamChecks.rejects(new Error("Retrieval Error"));
 		await getTeamChecks(req, res, next);
@@ -201,10 +202,10 @@ describe("Check Controller - getTeamChecks", function() {
 	});
 });
 
-describe("Check Controller - deleteChecks", function() {
+describe("Check Controller - deleteChecks", function () {
 	let req, res, next;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		req = {
 			params: {},
 			db: {
@@ -218,17 +219,17 @@ describe("Check Controller - deleteChecks", function() {
 		next = sinon.stub();
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		sinon.restore();
 	});
 
-	it("should reject with an error if param validation fails", async function() {
+	it("should reject with an error if param validation fails", async function () {
 		await deleteChecks(req, res, next);
 		expect(next.firstCall.args[0]).to.be.an("error");
 		expect(next.firstCall.args[0].status).to.equal(422);
 	});
 
-	it("should call next with error if data retrieval fails", async function() {
+	it("should call next with error if data retrieval fails", async function () {
 		req.params = { monitorId: "1" };
 		req.db.deleteChecks.rejects(new Error("Deletion Error"));
 		await deleteChecks(req, res, next);
@@ -238,7 +239,7 @@ describe("Check Controller - deleteChecks", function() {
 		expect(res.json.notCalled).to.be.true;
 	});
 
-	it("should delete checks successfully", async function() {
+	it("should delete checks successfully", async function () {
 		req.params = { monitorId: "123" };
 		req.db.deleteChecks.resolves(1);
 		await deleteChecks(req, res, next);
@@ -247,17 +248,17 @@ describe("Check Controller - deleteChecks", function() {
 		expect(
 			res.json.calledOnceWith({
 				success: true,
-				msg: successMessages.CHECK_DELETE,
+				msg: successMessages.CHECK_DELETE(req.language),
 				data: { deletedCount: 1 },
 			})
 		).to.be.true;
 	});
 });
 
-describe("Check Controller - deleteChecksByTeamId", function() {
+describe("Check Controller - deleteChecksByTeamId", function () {
 	let req, res, next;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		req = {
 			params: {},
 			db: {
@@ -271,17 +272,17 @@ describe("Check Controller - deleteChecksByTeamId", function() {
 		next = sinon.stub();
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		sinon.restore();
 	});
 
-	it("should reject with an error if param validation fails", async function() {
+	it("should reject with an error if param validation fails", async function () {
 		await deleteChecksByTeamId(req, res, next);
 		expect(next.firstCall.args[0]).to.be.an("error");
 		expect(next.firstCall.args[0].status).to.equal(422);
 	});
 
-	it("should call next with error if data retrieval fails", async function() {
+	it("should call next with error if data retrieval fails", async function () {
 		req.params = { teamId: "1" };
 		req.db.deleteChecksByTeamId.rejects(new Error("Deletion Error"));
 		await deleteChecksByTeamId(req, res, next);
@@ -291,7 +292,7 @@ describe("Check Controller - deleteChecksByTeamId", function() {
 		expect(res.json.notCalled).to.be.true;
 	});
 
-	it("should delete checks successfully", async function() {
+	it("should delete checks successfully", async function () {
 		req.params = { teamId: "123" };
 		req.db.deleteChecksByTeamId.resolves(1);
 		await deleteChecksByTeamId(req, res, next);
@@ -300,17 +301,17 @@ describe("Check Controller - deleteChecksByTeamId", function() {
 		expect(
 			res.json.calledOnceWith({
 				success: true,
-				msg: successMessages.CHECK_DELETE,
+				msg: successMessages.CHECK_DELETE(req.language),
 				data: { deletedCount: 1 },
 			})
 		).to.be.true;
 	});
 });
 
-describe("Check Controller - updateCheckTTL", function() {
+describe("Check Controller - updateCheckTTL", function () {
 	let stub, req, res, next;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		stub = sinon.stub(jwt, "verify").callsFake(() => {
 			return { teamId: "123" };
 		});
@@ -332,18 +333,18 @@ describe("Check Controller - updateCheckTTL", function() {
 		next = sinon.stub();
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		sinon.restore();
 		stub.restore();
 	});
 
-	it("should reject if body validation fails", async function() {
+	it("should reject if body validation fails", async function () {
 		await updateChecksTTL(req, res, next);
 		expect(next.firstCall.args[0]).to.be.an("error");
 		expect(next.firstCall.args[0].status).to.equal(422);
 	});
 
-	it("should throw a JwtError if verification fails", async function() {
+	it("should throw a JwtError if verification fails", async function () {
 		stub.restore();
 		req.body = {
 			ttl: 1,
@@ -352,7 +353,7 @@ describe("Check Controller - updateCheckTTL", function() {
 		expect(next.firstCall.args[0]).to.be.instanceOf(jwt.JsonWebTokenError);
 	});
 
-	it("should call next with error if data retrieval fails", async function() {
+	it("should call next with error if data retrieval fails", async function () {
 		req.body = {
 			ttl: 1,
 		};
@@ -361,7 +362,7 @@ describe("Check Controller - updateCheckTTL", function() {
 		expect(next.firstCall.args[0]).to.be.an("error");
 	});
 
-	it("should update TTL successfully", async function() {
+	it("should update TTL successfully", async function () {
 		req.body = {
 			ttl: 1,
 		};
@@ -372,7 +373,7 @@ describe("Check Controller - updateCheckTTL", function() {
 		expect(
 			res.json.calledOnceWith({
 				success: true,
-				msg: successMessages.CHECK_UPDATE_TTL,
+				msg: successMessages.CHECK_UPDATE_TTL(req.language),
 			})
 		).to.be.true;
 	});

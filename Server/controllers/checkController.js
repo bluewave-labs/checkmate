@@ -36,7 +36,7 @@ class CheckController {
 			const check = await this.db.createCheck(checkData);
 
 			return res.success({
-				msg: successMessages.CHECK_CREATE,
+				msg: successMessages.CHECK_CREATE(req.language),
 				data: check,
 			});
 		} catch (error) {
@@ -57,7 +57,7 @@ class CheckController {
 			const result = await this.db.getChecksByMonitor(req);
 
 			return res.success({
-				msg: successMessages.CHECK_GET,
+				msg: successMessages.CHECK_GET(req.language),
 				data: result,
 			});
 		} catch (error) {
@@ -77,7 +77,7 @@ class CheckController {
 			const checkData = await this.db.getChecksByTeam(req);
 
 			return res.success({
-				msg: successMessages.CHECK_GET,
+				msg: successMessages.CHECK_GET(req.language),
 				data: checkData,
 			});
 		} catch (error) {
@@ -97,7 +97,7 @@ class CheckController {
 			const deletedCount = await this.db.deleteChecks(req.params.monitorId);
 
 			return res.success({
-				msg: successMessages.CHECK_DELETE,
+				msg: successMessages.CHECK_DELETE(req.language),
 				data: { deletedCount },
 			});
 		} catch (error) {
@@ -117,7 +117,7 @@ class CheckController {
 			const deletedCount = await this.db.deleteChecksByTeamId(req.params.teamId);
 
 			return res.success({
-				msg: successMessages.CHECK_DELETE,
+				msg: successMessages.CHECK_DELETE(req.language),
 				data: { deletedCount },
 			});
 		} catch (error) {
@@ -144,7 +144,7 @@ class CheckController {
 			await this.db.updateChecksTTL(teamId, ttl);
 
 			return res.success({
-				msg: successMessages.CHECK_UPDATE_TTL,
+				msg: successMessages.CHECK_UPDATE_TTL(req.language),
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "updateTTL"));

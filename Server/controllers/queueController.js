@@ -12,7 +12,7 @@ class JobQueueController {
 		try {
 			const metrics = await this.jobQueue.getMetrics();
 			res.success({
-				msg: successMessages.QUEUE_GET_METRICS,
+				msg: successMessages.QUEUE_GET_METRICS(req.language),
 				data: metrics,
 			});
 		} catch (error) {
@@ -25,7 +25,7 @@ class JobQueueController {
 		try {
 			const jobs = await this.jobQueue.getJobStats();
 			return res.success({
-				msg: successMessages.QUEUE_GET_METRICS,
+				msg: successMessages.QUEUE_GET_METRICS(req.language),
 				data: jobs,
 			});
 		} catch (error) {
@@ -38,7 +38,7 @@ class JobQueueController {
 		try {
 			await this.jobQueue.addJob(Math.random().toString(36).substring(7));
 			return res.success({
-				msg: successMessages.QUEUE_ADD_JOB,
+				msg: successMessages.QUEUE_ADD_JOB(req.language),
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "addJob"));
@@ -50,7 +50,7 @@ class JobQueueController {
 		try {
 			await this.jobQueue.obliterate();
 			return res.success({
-				msg: successMessages.QUEUE_OBLITERATE,
+				msg: successMessages.QUEUE_OBLITERATE(req.language),
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "obliterateQueue"));

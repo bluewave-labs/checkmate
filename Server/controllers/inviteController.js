@@ -66,7 +66,7 @@ class InviteController {
 				});
 
 			return res.success({
-				msg: successMessages.INVITE_ISSUED,
+				msg: successMessages.INVITE_ISSUED(req.language),
 				data: inviteToken,
 			});
 		} catch (error) {
@@ -83,10 +83,10 @@ class InviteController {
 		}
 
 		try {
-			const invite = await this.db.getInviteToken(req.body.token);
+			const invite = await this.db.getInviteToken(req.body.token, req.language);
 
 			return res.success({
-				msg: successMessages.INVITE_VERIFIED,
+				msg: successMessages.INVITE_VERIFIED(req.language),
 				data: invite,
 			});
 		} catch (error) {

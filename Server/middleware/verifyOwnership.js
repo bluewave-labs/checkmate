@@ -15,7 +15,7 @@ const verifyOwnership = (Model, paramName) => {
 					service: SERVICE_NAME,
 					method: "verifyOwnership",
 				});
-				const error = new Error(errorMessages.VERIFY_OWNER_NOT_FOUND);
+				const error = new Error(errorMessages.VERIFY_OWNER_NOT_FOUND(req.language));
 				error.status = 404;
 				throw error;
 			}
@@ -23,7 +23,7 @@ const verifyOwnership = (Model, paramName) => {
 			// Special case for User model, as it will not have a `userId` field as other docs will
 			if (Model.modelName === "User") {
 				if (userId.toString() !== doc._id.toString()) {
-					const error = new Error(errorMessages.VERIFY_OWNER_UNAUTHORIZED);
+					const error = new Error(errorMessages.VERIFY_OWNER_UNAUTHORIZED(req.language));
 					error.status = 403;
 					throw error;
 				}
@@ -33,7 +33,7 @@ const verifyOwnership = (Model, paramName) => {
 
 			// If the userID does not match the document's userID, return a 403 error
 			if (userId.toString() !== doc.userId.toString()) {
-				const error = new Error(errorMessages.VERIFY_OWNER_UNAUTHORIZED);
+				const error = new Error(errorMessages.VERIFY_OWNER_UNAUTHORIZED(req.language));
 				error.status = 403;
 				throw error;
 			}

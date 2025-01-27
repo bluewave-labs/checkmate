@@ -17,7 +17,7 @@ const verifySuperAdmin = (req, res, next) => {
 	const token = req.headers["authorization"];
 	// Make sure a token is provided
 	if (!token) {
-		const error = new Error(errorMessages.NO_AUTH_TOKEN);
+		const error = new Error(errorMessages.NO_AUTH_TOKEN(req.language));
 		error.status = 401;
 		error.service = SERVICE_NAME;
 		next(error);
@@ -25,7 +25,7 @@ const verifySuperAdmin = (req, res, next) => {
 	}
 	// Make sure it is properly formatted
 	if (!token.startsWith(TOKEN_PREFIX)) {
-		const error = new Error(errorMessages.INVALID_AUTH_TOKEN); // Instantiate a new Error object for improperly formatted token
+		const error = new Error(errorMessages.INVALID_AUTH_TOKEN(req.language)); // Instantiate a new Error object for improperly formatted token
 		error.status = 400;
 		error.service = SERVICE_NAME;
 		error.method = "verifySuperAdmin";

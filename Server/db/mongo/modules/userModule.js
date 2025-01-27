@@ -69,13 +69,13 @@ const insertUser = async (
  * @returns {Promise<UserModel>}
  * @throws {Error}
  */
-const getUserByEmail = async (email) => {
+const getUserByEmail = async (email, language) => {
 	try {
 		// Need the password to be able to compare, removed .select()
 		// We can strip the hash before returning the user
 		const user = await UserModel.findOne({ email: email }).select("-profileImage");
 		if (!user) {
-			throw new Error(errorMessages.DB_USER_NOT_FOUND);
+			throw new Error(errorMessages.DB_USER_NOT_FOUND(language));
 		}
 		return user;
 	} catch (error) {
@@ -149,11 +149,11 @@ const updateUser = async (
  * @returns {Promise<UserModel>}
  * @throws {Error}
  */
-const deleteUser = async (userId) => {
+const deleteUser = async (userId, language) => {
 	try {
 		const deletedUser = await UserModel.findByIdAndDelete(userId);
 		if (!deletedUser) {
-			throw new Error(errorMessages.DB_USER_NOT_FOUND);
+			throw new Error(errorMessages.DB_USER_NOT_FOUND(language));
 		}
 		return deletedUser;
 	} catch (error) {
