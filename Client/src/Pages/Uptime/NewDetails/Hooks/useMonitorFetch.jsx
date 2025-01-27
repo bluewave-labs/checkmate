@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export const useMonitorFetch = ({ authToken, monitorId, dateRange }) => {
 	const [monitorIsLoading, setMonitorsIsLoading] = useState(false);
-	const [monitor, setMonitor] = useState([]);
+	const [monitor, setMonitor] = useState({});
 	const navigate = useNavigate();
 
 	useEffect(() => {

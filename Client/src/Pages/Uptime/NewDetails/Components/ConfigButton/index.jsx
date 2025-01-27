@@ -1,0 +1,35 @@
+import { Button, Box } from "@mui/material";
+import { useTheme } from "@emotion/react";
+import { useNavigate } from "react-router-dom";
+import SettingsIcon from "../../../../../assets/icons/settings-bold.svg?react";
+
+const ConfigButton = ({ shouldRender, monitorId }) => {
+	const theme = useTheme();
+	const navigate = useNavigate();
+
+	if (!shouldRender) return null;
+
+	return (
+		<Box alignSelf="flex-end">
+			<Button
+				variant="contained"
+				color="secondary"
+				onClick={() => navigate(`/uptime/configure/${monitorId}`)}
+				sx={{
+					px: theme.spacing(5),
+					"& svg": {
+						mr: theme.spacing(3),
+						"& path": {
+							/* Should always be contrastText for the button color */
+							stroke: theme.palette.secondary.contrastText,
+						},
+					},
+				}}
+			>
+				<SettingsIcon /> Configure
+			</Button>
+		</Box>
+	);
+};
+
+export default ConfigButton;
