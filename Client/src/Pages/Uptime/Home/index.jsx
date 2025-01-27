@@ -102,7 +102,7 @@ const UptimeMonitors = () => {
 	return (
 		<Stack
 			className="monitors"
-			gap={theme.spacing(8)}
+			gap={theme.spacing(10)}
 		>
 			<Breadcrumbs list={BREADCRUMBS} />
 			<CreateMonitorButton shouldRender={true} />
