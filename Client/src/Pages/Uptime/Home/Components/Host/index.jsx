@@ -15,7 +15,6 @@ import { useTheme } from "@emotion/react";
  */
 const Host = ({ url, title, percentageColor, percentage }) => {
 	const theme = useTheme();
-	console.log(url, title);
 	return (
 		<Stack>
 			<Stack

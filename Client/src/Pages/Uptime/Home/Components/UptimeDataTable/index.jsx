@@ -207,7 +207,6 @@ const UptimeDataTable = (props) => {
 			),
 		},
 	];
-	console.log("rendering");
 	return (
 		<Box
 			flex={1}
