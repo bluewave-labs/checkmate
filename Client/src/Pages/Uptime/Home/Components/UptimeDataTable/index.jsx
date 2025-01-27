@@ -190,7 +190,9 @@ const UptimeDataTable = (props) => {
 			id: "type",
 			content: "Type",
 			render: (row) => (
-				<span style={{ textTransform: "uppercase" }}>{row.monitor.type}</span>
+				<span style={{ textTransform: "uppercase" }}>
+					{row.monitor.type === "http" ? "HTTP(s)" : row.monitor.type}
+				</span>
 			),
 		},
 		{
