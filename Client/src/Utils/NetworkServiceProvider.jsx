@@ -8,8 +8,7 @@ const NetworkServiceProvider = ({ children }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	if (!networkService) {
-		const networkService = new NetworkService(store, dispatch, navigate);
-		setNetworkService(networkService);
+		setNetworkService(new NetworkService(store, dispatch, navigate));
 	}
 	return children;
 };
