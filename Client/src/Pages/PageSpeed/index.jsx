@@ -106,9 +106,15 @@ const PageSpeed = () => {
 							component="span"
 							className="current-monitors-counter"
 							color={theme.palette.primary.contrastText}
-							border={1}
-							borderColor={theme.palette.primary.lowContrast}
+							border={2}
+							borderColor={theme.palette.accent.main}
 							backgroundColor={theme.palette.tertiary.main}
+							sx={{
+								padding: ".25em .75em",
+								borderRadius: "10000px",
+								fontSize: "12px",
+								fontWeight: 500,
+							}}
 						>
 							{summary?.totalMonitors ?? 0}
 						</Box>

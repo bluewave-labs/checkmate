@@ -137,20 +137,18 @@ function Infrastructure() {
 			id: "actions",
 			content: "Actions",
 			render: (row) => (
-				<IconButton>
-					<InfrastructureMenu
-						monitor={row}
-						isAdmin={isAdmin}
-						updateCallback={handleActionMenuDelete}
-					/>
-				</IconButton>
+				<InfrastructureMenu
+					monitor={row}
+					isAdmin={isAdmin}
+					updateCallback={handleActionMenuDelete}
+				/>
 			),
 		},
 	];
 
 	const monitorsAsRows = monitors.map((monitor) => {
 		const processor =
-			((monitor.checks[0]?.cpu?.usage_frequency ?? 0) / 1000).toFixed(2) + " GHz";
+			((monitor.checks[0]?.cpu?.frequency ?? 0) / 1000).toFixed(2) + " GHz";
 		const cpu = (monitor?.checks[0]?.cpu.usage_percent ?? 0) * 100;
 		const mem = (monitor?.checks[0]?.memory.usage_percent ?? 0) * 100;
 		const disk = (monitor?.checks[0]?.disk[0]?.usage_percent ?? 0) * 100;
@@ -158,14 +156,12 @@ function Infrastructure() {
 		const uptimePercentage = ((monitor?.uptimePercentage ?? 0) * 100)
 			.toFixed(2)
 			.toString();
-		const percentageColor =
-			monitor.uptimePercentage < 0.25
-				? theme.palette.error.main
-				: monitor.uptimePercentage < 0.5
-					? theme.palette.percentage.uptimeFair
-					: monitor.uptimePercentage < 0.75
-						? theme.palette.percentage.uptimeGood
-						: theme.palette.success.lowContrast;
+		const percentageColor = monitor.uptimePercentage < 0.25
+			? theme.palette.error.main
+			: monitor.uptimePercentage < 0.5
+				? theme.palette.warning.main
+				: theme.palette.success.main;
+				
 		return {
 			id: monitor._id,
 			name: monitor.name,
@@ -243,7 +239,7 @@ function Infrastructure() {
 								backgroundColor={theme.palette.tertiary.main}
 								sx={{
 									padding: ".25em .75em",
-									borderRadius: "50%",
+									borderRadius: "10000px",
 									fontSize: "12px",
 									fontWeight: 500,
 								}}
