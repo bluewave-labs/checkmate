@@ -1,6 +1,7 @@
-import { Stack, Box, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
+import Dot from "../../../../../Components/Dot";
 /**
  * Host component.
  * This subcomponent receives a params object and displays the host details.
@@ -26,16 +27,7 @@ const Host = ({ url, title, percentageColor, percentage }) => {
 				{title}
 				{percentageColor && percentage && (
 					<>
-						<span
-							style={{
-								content: '""',
-								width: "4px",
-								height: "4px",
-								borderRadius: "50%",
-								backgroundColor: "gray",
-								opacity: 0.8,
-							}}
-						/>
+						<Dot />
 						<Typography
 							component="span"
 							sx={{
