@@ -5,10 +5,11 @@ import Breadcrumbs from "../../../Components/Breadcrumbs";
 import { Stack } from "@mui/material";
 
 // Utils
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useMonitorFetch } from "./Hooks/useMonitorFetch";
+import useMonitorFetch from "./Hooks/useMonitorFetch";
+import useCertificateFetch from "./Hooks/useCertificateFetch";
 // Constants
 const BREADCRUMBS = [
 	{ name: "uptime", path: "/uptime" },
@@ -36,8 +37,16 @@ const UptimeDetails = () => {
 		dateRange,
 	});
 
-	console.log(monitor);
+	const { certificateExpiry, certificateIsLoading } = useCertificateFetch({
+		monitor,
+		authToken,
+		monitorId,
+		certificateDateFormat,
+		uiTimezone,
+	});
 
+	console.log(monitor);
+	console.log(certificateExpiry);
 	return (
 		<Stack>
 			<Breadcrumbs list={BREADCRUMBS} />

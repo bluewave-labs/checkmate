@@ -1,7 +1,7 @@
 import { logger } from "../../../../Utils/Logger";
 import { useEffect, useState } from "react";
 import { networkService } from "../../../../main";
-import { formatDateWithTz } from "../../../../Utils/DateUtils";
+import { formatDateWithTz } from "../../../../Utils/timeUtils";
 
 const useCertificateFetch = ({
 	monitor,
@@ -38,7 +38,8 @@ const useCertificateFetch = ({
 				setCertificateIsLoading(false);
 			}
 		};
-	}, [authToken, monitorId]);
+		fetchCertificate();
+	}, [authToken, monitorId, certificateDateFormat, uiTimezone, monitor]);
 	return { certificateExpiry, certificateIsLoading };
 };
 
