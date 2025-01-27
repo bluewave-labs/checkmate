@@ -6,7 +6,9 @@ import NotFound from "../Pages/NotFound";
 import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
 import Account from "../Pages/Account";
-import Monitors from "../Pages/Uptime/Home";
+import Uptime from "../Pages/Uptime/Home";
+import UptimeDetails from "../Pages/Uptime/Details";
+
 import CreateMonitor from "../Pages/Uptime/CreateUptime";
 import CreateInfrastructureMonitor from "../Pages/Infrastructure/CreateMonitor";
 import Incidents from "../Pages/Incidents";
@@ -18,9 +20,6 @@ import CheckEmail from "../Pages/Auth/CheckEmail";
 import SetNewPassword from "../Pages/Auth/SetNewPassword";
 import NewPasswordConfirmed from "../Pages/Auth/NewPasswordConfirmed";
 import ProtectedRoute from "../Components/ProtectedRoute";
-import Details from "../Pages/Uptime/Details";
-
-import UptimeDetails from "../Pages/Uptime/NewDetails";
 import Maintenance from "../Pages/Maintenance";
 import Configure from "../Pages/Uptime/Configure";
 import PageSpeed from "../Pages/PageSpeed";
@@ -48,7 +47,7 @@ const Routes = () => {
 				/>
 				<Route
 					path="/uptime"
-					element={<Monitors />}
+					element={<Uptime />}
 				/>
 
 				<Route

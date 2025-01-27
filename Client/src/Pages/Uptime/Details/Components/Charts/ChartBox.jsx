@@ -2,7 +2,7 @@ import { Stack, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import IconBox from "../../../../../Components/IconBox";
 import PropTypes from "prop-types";
-const ChartBox = ({ children, icon, header }) => {
+const ChartBox = ({ children, icon, header, height = "300px" }) => {
 	const theme = useTheme();
 	return (
 		<Stack
@@ -10,7 +10,7 @@ const ChartBox = ({ children, icon, header }) => {
 				justifyContent: "space-between",
 				flex: "1 30%",
 				gap: theme.spacing(8),
-				height: 300,
+				height,
 				minWidth: 250,
 				padding: theme.spacing(8),
 				border: 1,

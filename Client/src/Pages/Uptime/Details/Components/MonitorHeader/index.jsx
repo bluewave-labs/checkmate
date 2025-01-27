@@ -5,10 +5,16 @@ import { useTheme } from "@emotion/react";
 import useUtils from "../../../Home/Hooks/useUtils";
 import { formatDurationRounded } from "../../../../../Utils/timeUtils";
 import ConfigButton from "../ConfigButton";
+import SkeletonLayout from "./skeleton";
+import PropTypes from "prop-types";
 
-const MonitorHeader = ({ monitor }) => {
+const MonitorHeader = ({ shouldRender = true, isAdmin, monitor }) => {
 	const theme = useTheme();
 	const { statusColor, statusMsg, determineState } = useUtils();
+	console.log(shouldRender);
+	if (!shouldRender) {
+		return <SkeletonLayout />;
+	}
 
 	return (
 		<Stack
@@ -33,11 +39,17 @@ const MonitorHeader = ({ monitor }) => {
 				</Stack>
 			</Stack>
 			<ConfigButton
-				shouldRender={true}
+				shouldRender={isAdmin}
 				monitorId={monitor._id}
 			/>
 		</Stack>
 	);
+};
+
+MonitorHeader.propTypes = {
+	shouldRender: PropTypes.bool,
+	isAdmin: PropTypes.bool,
+	monitor: PropTypes.object,
 };
 
 export default MonitorHeader;

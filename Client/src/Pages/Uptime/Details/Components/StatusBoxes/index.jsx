@@ -1,13 +1,16 @@
 // Components
 import { Stack, Typography } from "@mui/material";
 import StatBox from "../../../../../Components/StatBox";
-
+import SkeletonLayout from "./skeleton";
 // Utils
 import { useTheme } from "@mui/material/styles";
 import useUtils from "../../../Home/Hooks/useUtils";
 import { getHumanReadableDuration } from "../../../../../Utils/timeUtils";
 
-const StatusBoxes = ({ monitor, certificateExpiry }) => {
+const StatusBoxes = ({ shouldRender, monitor, certificateExpiry }) => {
+	if (!shouldRender) {
+		return <SkeletonLayout />;
+	}
 	const theme = useTheme();
 	const { time: streakTime, units: streakUnits } = getHumanReadableDuration(
 		monitor?.uptimeStreak
@@ -18,6 +21,7 @@ const StatusBoxes = ({ monitor, certificateExpiry }) => {
 	);
 
 	const { determineState } = useUtils();
+
 	return (
 		<Stack
 			direction="row"

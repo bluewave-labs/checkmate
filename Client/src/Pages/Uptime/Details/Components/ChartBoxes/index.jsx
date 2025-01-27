@@ -7,13 +7,14 @@ import AverageResponseIcon from "../../../../../assets/icons/average-response-ic
 import UpBarChart from "../Charts/UpBarChart";
 import DownBarChart from "../Charts/DownBarChart";
 import ResponseGaugeChart from "../Charts/ResponseGaugeChart";
-
+import SkeletonLayout from "./skeleton";
 // Utils
 import { formatDateWithTz } from "../../../../../Utils/timeUtils";
 import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
 
 const ChartBoxes = ({
+	shouldRender = true,
 	monitor,
 	dateRange,
 	uiTimezone,
@@ -24,6 +25,11 @@ const ChartBoxes = ({
 	setHoveredIncidentsData,
 }) => {
 	const theme = useTheme();
+
+	if (!shouldRender) {
+		return <SkeletonLayout />;
+	}
+
 	return (
 		<Stack
 			direction="row"

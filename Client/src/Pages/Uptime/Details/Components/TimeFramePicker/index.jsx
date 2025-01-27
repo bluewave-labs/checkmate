@@ -1,7 +1,14 @@
 import { Stack, Typography, Button, ButtonGroup } from "@mui/material";
 import { useTheme } from "@emotion/react";
-const TimeFramePicker = ({ dateRange, setDateRange }) => {
+import SkeletonLayout from "./skeleton";
+
+const TimeFramePicker = ({ shouldRender = true, dateRange, setDateRange }) => {
 	const theme = useTheme();
+
+	if (!shouldRender) {
+		return <SkeletonLayout />;
+	}
+
 	return (
 		<Stack
 			direction="row"
