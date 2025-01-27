@@ -76,6 +76,7 @@ const ResponseTable = ({
 };
 
 ResponseTable.propTypes = {
+	shouldRender: PropTypes.bool,
 	checks: PropTypes.array.isRequired,
 	checksCount: PropTypes.number.isRequired,
 	uiTimezone: PropTypes.string.isRequired,

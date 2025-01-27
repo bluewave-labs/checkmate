@@ -1,6 +1,7 @@
 import { Stack, Typography, Button, ButtonGroup } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SkeletonLayout from "./skeleton";
+import PropTypes from "prop-types";
 
 const TimeFramePicker = ({ shouldRender = true, dateRange, setDateRange }) => {
 	const theme = useTheme();
@@ -46,6 +47,12 @@ const TimeFramePicker = ({ shouldRender = true, dateRange, setDateRange }) => {
 			</ButtonGroup>
 		</Stack>
 	);
+};
+
+TimeFramePicker.propTypes = {
+	shouldRender: PropTypes.bool,
+	dateRange: PropTypes.string,
+	setDateRange: PropTypes.func,
 };
 
 export default TimeFramePicker;

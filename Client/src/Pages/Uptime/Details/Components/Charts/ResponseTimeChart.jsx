@@ -2,6 +2,8 @@ import ChartBox from "./ChartBox";
 import MonitorDetailsAreaChart from "../../../../../Components/Charts/MonitorDetailsAreaChart";
 import ResponseTimeIcon from "../../../../../assets/icons/response-time-icon.svg?react";
 import SkeletonLayout from "./ResponseTimeChartSkeleton";
+import PropTypes from "prop-types";
+
 const ResponseTImeChart = ({ shouldRender = true, monitor, dateRange }) => {
 	if (!shouldRender) {
 		return <SkeletonLayout />;
@@ -18,6 +20,12 @@ const ResponseTImeChart = ({ shouldRender = true, monitor, dateRange }) => {
 			/>
 		</ChartBox>
 	);
+};
+
+ResponseTImeChart.propTypes = {
+	shouldRender: PropTypes.bool,
+	monitor: PropTypes.object,
+	dateRange: PropTypes.string,
 };
 
 export default ResponseTImeChart;

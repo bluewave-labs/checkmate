@@ -71,4 +71,5 @@ ChartBox.propTypes = {
 	children: PropTypes.node,
 	icon: PropTypes.node.isRequired,
 	header: PropTypes.string.isRequired,
+	height: PropTypes.string,
 };
