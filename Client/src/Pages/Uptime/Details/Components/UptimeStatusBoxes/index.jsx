@@ -1,20 +1,13 @@
-// Components
-import { Stack, Typography } from "@mui/material";
+import StatusBoxes from "../../../../../Components/StatusBoxes";
 import StatBox from "../../../../../Components/StatBox";
-import SkeletonLayout from "./skeleton";
-// Utils
-import { useTheme } from "@mui/material/styles";
-import useUtils from "../../../Monitors/Hooks/useUtils";
 import { getHumanReadableDuration } from "../../../../../Utils/timeUtils";
-import PropTypes from "prop-types";
-const StatusBoxes = ({ shouldRender, monitor, certificateExpiry }) => {
-	// Utils
+import { useTheme } from "@mui/material/styles";
+import { Typography } from "@mui/material";
+import useUtils from "../../../Monitors/Hooks/useUtils";
+
+const UptimeStatusBoxes = ({ shouldRender, monitor, certificateExpiry }) => {
 	const theme = useTheme();
 	const { determineState } = useUtils();
-
-	if (!shouldRender) {
-		return <SkeletonLayout />;
-	}
 	const { time: streakTime, units: streakUnits } = getHumanReadableDuration(
 		monitor?.uptimeStreak
 	);
@@ -22,12 +15,8 @@ const StatusBoxes = ({ shouldRender, monitor, certificateExpiry }) => {
 	const { time: lastCheckTime, units: lastCheckUnits } = getHumanReadableDuration(
 		monitor?.timeSinceLastCheck
 	);
-
 	return (
-		<Stack
-			direction="row"
-			gap={theme.spacing(8)}
-		>
+		<StatusBoxes shouldRender={shouldRender}>
 			<StatBox
 				gradient={true}
 				status={determineState(monitor)}
@@ -70,14 +59,8 @@ const StatusBoxes = ({ shouldRender, monitor, certificateExpiry }) => {
 					</Typography>
 				}
 			/>
-		</Stack>
+		</StatusBoxes>
 	);
 };
 
-StatusBoxes.propTypes = {
-	shouldRender: PropTypes.bool,
-	monitor: PropTypes.object,
-	certificateExpiry: PropTypes.string,
-};
-
-export default StatusBoxes;
+export default UptimeStatusBoxes;

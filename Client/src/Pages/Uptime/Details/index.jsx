@@ -1,11 +1,11 @@
 // Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
-import MonitorHeader from "./Components/MonitorHeader";
-import StatusBoxes from "./Components/StatusBoxes";
+import MonitorStatusHeader from "../../../Components/MonitorStatusHeader";
 import TimeFramePicker from "./Components/TimeFramePicker";
 import ChartBoxes from "./Components/ChartBoxes";
 import ResponseTimeChart from "./Components/Charts/ResponseTimeChart";
 import ResponseTable from "./Components/ResponseTable";
+import UptimeStatusBoxes from "./Components/UptimeStatusBoxes";
 // MUI Components
 import { Stack } from "@mui/material";
 
@@ -80,12 +80,12 @@ const UptimeDetails = () => {
 	return (
 		<Stack gap={theme.spacing(10)}>
 			<Breadcrumbs list={BREADCRUMBS} />
-			<MonitorHeader
+			<MonitorStatusHeader
 				isAdmin={isAdmin}
 				shouldRender={!monitorIsLoading}
 				monitor={monitor}
 			/>
-			<StatusBoxes
+			<UptimeStatusBoxes
 				shouldRender={!monitorIsLoading}
 				monitor={monitor}
 				certificateExpiry={certificateExpiry}

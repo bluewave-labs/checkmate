@@ -1,4 +1,4 @@
-import ChartBox from "../Charts/ChartBox";
+import ChartBox from "../../../../../Components/Charts/ChartBox";
 import PropTypes from "prop-types";
 import HistoryIcon from "../../../../../assets/icons/history-icon.svg?react";
 import Table from "../../../../../Components/Table";

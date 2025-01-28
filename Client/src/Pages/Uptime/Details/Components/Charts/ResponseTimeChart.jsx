@@ -1,4 +1,4 @@
-import ChartBox from "./ChartBox";
+import ChartBox from "../../../../../Components/Charts/ChartBox";
 import MonitorDetailsAreaChart from "../../../../../Components/Charts/MonitorDetailsAreaChart";
 import ResponseTimeIcon from "../../../../../assets/icons/response-time-icon.svg?react";
 import SkeletonLayout from "./ResponseTimeChartSkeleton";
