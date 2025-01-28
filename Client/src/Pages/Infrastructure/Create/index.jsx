@@ -22,7 +22,7 @@ import { HttpAdornment } from "../../../Components/Inputs/TextInput/Adornments";
 import { createToast } from "../../../Utils/toastUtils";
 import Checkbox from "../../../Components/Inputs/Checkbox";
 import Select from "../../../Components/Inputs/Select";
-import { CustomThreshold } from "./CustomThreshold";
+import { CustomThreshold } from "./Components/CustomThreshold";
 
 const SELECT_VALUES = [
 	{ _id: 0.25, name: "15 seconds" },

@@ -4,7 +4,7 @@ import StatBox from "../../../../../Components/StatBox";
 import SkeletonLayout from "./skeleton";
 // Utils
 import { useTheme } from "@mui/material/styles";
-import useUtils from "../../../Home/Hooks/useUtils";
+import useUtils from "../../../Monitors/Hooks/useUtils";
 import { getHumanReadableDuration } from "../../../../../Utils/timeUtils";
 import PropTypes from "prop-types";
 const StatusBoxes = ({ shouldRender, monitor, certificateExpiry }) => {

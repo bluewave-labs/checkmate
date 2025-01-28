@@ -2,7 +2,7 @@ import { Stack, Typography } from "@mui/material";
 import PulseDot from "../../../../../Components/Animated/PulseDot";
 import Dot from "../../../../../Components/Dot";
 import { useTheme } from "@emotion/react";
-import useUtils from "../../../Home/Hooks/useUtils";
+import useUtils from "../../../Monitors/Hooks/useUtils";
 import { formatDurationRounded } from "../../../../../Utils/timeUtils";
 import ConfigButton from "../ConfigButton";
 import SkeletonLayout from "./skeleton";

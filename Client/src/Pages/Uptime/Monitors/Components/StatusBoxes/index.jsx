@@ -30,7 +30,7 @@ const StatusBoxes = ({ shouldRender, monitorsSummary }) => {
 };
 
 StatusBoxes.propTypes = {
-	monitorsSummary: PropTypes.object.isRequired,
+	monitorsSummary: PropTypes.object,
 };
 
 export default StatusBoxes;

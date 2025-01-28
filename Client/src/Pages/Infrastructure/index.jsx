@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { /* useDispatch, */ useSelector } from "react-redux";
 import { useTheme } from "@emotion/react";
-import useUtils from "../Uptime/Home/Hooks/useUtils.jsx";
+import useUtils from "../Uptime/Monitors/Hooks/useUtils.jsx";
 import { jwtDecode } from "jwt-decode";
 import SkeletonLayout from "./skeleton";
 import Fallback from "../../Components/Fallback";
@@ -17,7 +17,7 @@ import Pagination from "../../Components/Table/TablePagination/index.jsx";
 // import { getInfrastructureMonitorsByTeamId } from "../../Features/InfrastructureMonitors/infrastructureMonitorsSlice";
 import { networkService } from "../../Utils/NetworkService.js";
 import CustomGauge from "../../Components/Charts/CustomGauge/index.jsx";
-import Host from "../Uptime/Home/Components/Host";
+import Host from "../Uptime/Monitors/Components/Host/index.jsx";
 import { useIsAdmin } from "../../Hooks/useIsAdmin.js";
 import { InfrastructureMenu } from "./components/Menu";
 
@@ -156,12 +156,13 @@ function Infrastructure() {
 		const uptimePercentage = ((monitor?.uptimePercentage ?? 0) * 100)
 			.toFixed(2)
 			.toString();
-		const percentageColor = monitor.uptimePercentage < 0.25
-			? theme.palette.error.main
-			: monitor.uptimePercentage < 0.5
-				? theme.palette.warning.main
-				: theme.palette.success.main;
-				
+		const percentageColor =
+			monitor.uptimePercentage < 0.25
+				? theme.palette.error.main
+				: monitor.uptimePercentage < 0.5
+					? theme.palette.warning.main
+					: theme.palette.success.main;
+
 		return {
 			id: monitor._id,
 			name: monitor.name,
