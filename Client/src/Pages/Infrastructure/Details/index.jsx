@@ -8,7 +8,7 @@ import AreaChart from "../../../Components/Charts/AreaChart";
 import { useSelector } from "react-redux";
 import { networkService } from "../../../main";
 import PulseDot from "../../../Components/Animated/PulseDot";
-import useUtils from "../../Uptime/Home/Hooks/useUtils";
+import useUtils from "../../Uptime/Monitors/Hooks/useUtils";
 import { useNavigate } from "react-router-dom";
 import Empty from "./empty";
 import { logger } from "../../../Utils/Logger";

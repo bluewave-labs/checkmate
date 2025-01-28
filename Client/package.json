@@ -31,7 +31,7 @@
 		"react-router": "^6.23.0",
 		"react-router-dom": "^6.23.1",
 		"react-toastify": "^10.0.5",
-		"recharts": "2.15.0",
+		"recharts": "2.15.1",
 		"redux-persist": "6.0.0",
 		"vite-plugin-svgr": "^4.2.0"
 	},
