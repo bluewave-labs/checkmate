@@ -16,11 +16,12 @@ import { handleValidationError, handleError } from "./controllerUtils.js";
 const SERVICE_NAME = "authController";
 
 class AuthController {
-	constructor(db, settingsService, emailService, jobQueue) {
+	constructor(db, settingsService, emailService, jobQueue, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
 		this.emailService = emailService;
 		this.jobQueue = jobQueue;
+		this.stringService = stringService;
 	}
 
 	/**
@@ -153,7 +154,7 @@ class AuthController {
 			// Compare password
 			const match = await user.comparePassword(password);
 			if (match !== true) {
-				const error = new Error(errorMessages.AUTH_INCORRECT_PASSWORD(req.language));
+				const error = new Error(this.stringService.authIncorrectPassword);
 				error.status = 401;
 				next(error);
 				return;
@@ -206,7 +207,7 @@ class AuthController {
 
 			if (!refreshToken) {
 				// No refresh token provided
-				const error = new Error(errorMessages.NO_REFRESH_TOKEN(req.language));
+				const error = new Error(this.stringService.noRefreshToken);
 				error.status = 401;
 				error.service = SERVICE_NAME;
 				error.method = "refreshAuthToken";
@@ -221,8 +222,8 @@ class AuthController {
 					// Invalid or expired refresh token, trigger logout
 					const errorMessage =
 						refreshErr.name === "TokenExpiredError"
-							? errorMessages.EXPIRED_REFRESH_TOKEN
-							: errorMessages.INVALID_REFRESH_TOKEN;
+							? this.stringService.expiredAuthToken
+							: this.stringService.invalidAuthToken;
 					const error = new Error(errorMessage);
 					error.status = 401;
 					error.service = SERVICE_NAME;
@@ -276,7 +277,7 @@ class AuthController {
 
 		// TODO is this neccessary any longer? Verify ownership middleware should handle this
 		if (req.params.userId !== req.user._id.toString()) {
-			const error = new Error(errorMessages.AUTH_UNAUTHORIZED(req.language));
+			const error = new Error(this.stringService.unauthorized);
 			error.status = 401;
 			error.service = SERVICE_NAME;
 			next(error);
@@ -300,7 +301,7 @@ class AuthController {
 				// If not a match, throw a 403
 				// 403 instead of 401 to avoid triggering axios interceptor
 				if (!match) {
-					const error = new Error(errorMessages.AUTH_INCORRECT_PASSWORD(req.language));
+					const error = new Error(this.stringService.authIncorrectPassword);
 					error.status = 403;
 					next(error);
 					return;
