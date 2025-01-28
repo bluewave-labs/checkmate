@@ -11,7 +11,7 @@ import {
 import { useTheme } from "@emotion/react";
 import { useMemo, useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
-import { formatDateWithTz } from "../../../../Utils/timeUtils";
+import { formatDateWithTz } from "../../../../../Utils/timeUtils";
 import { useSelector } from "react-redux";
 
 const config = {
@@ -211,10 +211,13 @@ CustomTick.propTypes = {
  * @returns {JSX.Element} The area chart component.
  */
 
-const PagespeedDetailsAreaChart = ({ data, interval, metrics }) => {
+const PageSpeedAreaChart = ({ data, monitor, metrics }) => {
 	const theme = useTheme();
 	const [isHovered, setIsHovered] = useState(false);
-	const memoizedData = useMemo(() => processDataWithGaps(data, interval), [data[0]]);
+	const memoizedData = useMemo(
+		() => processDataWithGaps(data, monitor.interval),
+		[data[0]]
+	);
 
 	const filteredConfig = Object.keys(config).reduce((result, key) => {
 		if (metrics[key]) {
@@ -310,7 +313,7 @@ const PagespeedDetailsAreaChart = ({ data, interval, metrics }) => {
 	);
 };
 
-PagespeedDetailsAreaChart.propTypes = {
+PageSpeedAreaChart.propTypes = {
 	data: PropTypes.arrayOf(
 		PropTypes.shape({
 			createdAt: PropTypes.string.isRequired,
@@ -320,8 +323,8 @@ PagespeedDetailsAreaChart.propTypes = {
 			seo: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 		})
 	).isRequired,
-	interval: PropTypes.number.isRequired,
+	monitor: PropTypes.object.isRequired,
 	metrics: PropTypes.object,
 };
 
-export default PagespeedDetailsAreaChart;
+export default PageSpeedAreaChart;
