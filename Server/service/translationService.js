@@ -1,27 +1,34 @@
-import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
-import { formattedKey } from '../utils/formattedKey.js';
 
 class TranslationService {
   static SERVICE_NAME = 'TranslationService';
 
-  constructor(logger) {
+  constructor(logger, networkService) {
     this.logger = logger;
+    this.networkService = networkService;
     this.translations = {};
-    this.apiToken = process.env.POEDITOR_API_TOKEN;
-    this.projectId = process.env.POEDITOR_PROJECT_ID;
-    this.baseUrl = 'https://api.poeditor.com/v2';
+    this._language = 'en';
     this.localesDir = path.join(process.cwd(), 'locales');
+  }
+
+  setLanguage(language) {
+    this._language = language;
+  }
+
+  get language() {
+    return this._language;
   }
 
   async initialize() {
     try {
       const loadedFromFiles = await this.loadFromFiles();
-
       if (!loadedFromFiles) {
         await this.loadTranslations();
       }
+
+      // Yeni eklenen terimleri POEditor'e gönder
+      await this.syncTermsWithPOEditor();
     } catch (error) {
       this.logger.error({
         message: error.message,
@@ -70,16 +77,47 @@ class TranslationService {
   }
 
   async loadTranslations() {
+    let hasError = false;
     try {
       const languages = await this.getLanguages();
 
       for (const language of languages) {
-        const translations = await this.exportTranslations(language);
-        this.translations[language] = translations;
+        try {
+          const translations = await this.exportTranslations(language);
+          this.translations[language] = translations;
+        } catch (error) {
+          hasError = true;
+          this.logger.error({
+            message: `Failed to fetch translations from POEditor for language ${language}: ${error.message}`,
+            service: 'TranslationService',
+            method: 'loadTranslations',
+            stack: error.stack
+          });
+        }
+      }
+
+      if (hasError || Object.keys(this.translations[this._language]).length === 0) {
+        this.logger.error({
+          message: 'Failed to fetch translations from POEditor, using locales_en.json',
+          service: 'TranslationService',
+          method: 'loadTranslations'
+        });
+
+
+        // Load translations from locales_en.json in utils directory
+        const utilsPath = path.join(process.cwd(), 'utils');
+        const utilsFilePath = path.join(utilsPath, 'locales_en.json');
+        if (fs.existsSync(utilsFilePath)) {
+          const content = fs.readFileSync(utilsFilePath, 'utf8');
+          this.translations['en'] = JSON.parse(content);
+        } else {
+          throw new Error('locales_en.json file not found');
+        }
       }
 
       await this.saveTranslations();
     } catch (error) {
+      hasError = true;
       this.logger.error({
         message: error.message,
         service: 'TranslationService',
@@ -91,17 +129,7 @@ class TranslationService {
 
   async getLanguages() {
     try {
-      const params = new URLSearchParams();
-      params.append('api_token', this.apiToken);
-      params.append('id', this.projectId);
-
-      const response = await axios.post(`${this.baseUrl}/languages/list`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-
-      return response.data.result.languages.map(lang => lang.code);
+      return await this.networkService.getPoEditorLanguages();
     } catch (error) {
       this.logger.error({
         message: error.message,
@@ -115,22 +143,7 @@ class TranslationService {
 
   async exportTranslations(language) {
     try {
-      const params = new URLSearchParams();
-      params.append('api_token', this.apiToken);
-      params.append('id', this.projectId);
-      params.append('language', language);
-      params.append('type', 'key_value_json');
-
-      const exportResponse = await axios.post(`${this.baseUrl}/projects/export`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-
-      const { url } = exportResponse.data.result;
-
-      const translationsResponse = await axios.get(url);
-      return translationsResponse.data;
+      return await this.networkService.exportPoEditorTranslations(language);
     } catch (error) {
       this.logger.error({
         message: error.message,
@@ -153,6 +166,11 @@ class TranslationService {
         fs.writeFileSync(filePath, JSON.stringify(translations, null, 2));
       }
 
+      const utilsPath = path.join(process.cwd(), 'utils');
+      const enTranslations = this.translations['en'] || {};
+      const utilsFilePath = path.join(utilsPath, 'locales_en.json');
+      fs.writeFileSync(utilsFilePath, JSON.stringify(enTranslations, null, 2));
+
       this.logger.info({
         message: 'Translations saved to files successfully',
         service: 'TranslationService',
@@ -168,10 +186,11 @@ class TranslationService {
     }
   }
 
-  getTranslation(key, language = 'en') {
-    const formattedKeyText = formattedKey(key);
+  getTranslation(key) {
+    let language = this._language;
+
     try {
-      return this.translations[language]?.[formattedKeyText] || this.translations['en']?.[formattedKeyText] || formattedKeyText;
+      return this.translations[language]?.[key] || this.translations['en']?.[key] || key;
     } catch (error) {
       this.logger.error({
         message: error.message,
@@ -180,6 +199,94 @@ class TranslationService {
         stack: error.stack
       });
       return key;
+    }
+  }
+
+  async getTermsFromPOEditor() {
+    try {
+      return await this.networkService.getPoEditorTerms();
+    } catch (error) {
+      this.logger.error({
+        message: error.message,
+        service: 'TranslationService',
+        method: 'getTermsFromPOEditor',
+        stack: error.stack
+      });
+      return [];
+    }
+  }
+
+  async addTermsToPOEditor(terms) {
+    try {
+      if (!terms.length) return;
+
+      const response = await this.networkService.addPoEditorTerms(terms);
+
+      if (response.response?.status === 'fail') {
+        throw new Error(response.response.message || 'Failed to add terms to POEditor');
+      }
+
+      this.logger.info({
+        message: `${terms.length} new terms added to POEditor`,
+        service: 'TranslationService',
+        method: 'addTermsToPOEditor',
+        response: response
+      });
+
+      return response;
+    } catch (error) {
+      this.logger.error({
+        message: `Failed to add terms to POEditor: ${error.message}`,
+        service: 'TranslationService',
+        method: 'addTermsToPOEditor',
+        stack: error.stack,
+        terms: terms
+      });
+      throw error;
+    }
+  }
+
+  async syncTermsWithPOEditor() {
+    try {
+      const utilsPath = path.join(process.cwd(), 'utils');
+      const utilsFilePath = path.join(utilsPath, 'locales_en.json');
+      const enTranslations = JSON.parse(fs.readFileSync(utilsFilePath, 'utf8'));
+      const localTerms = Object.keys(enTranslations)
+        .map(term => term);
+
+      const poeditorTerms = await this.getTermsFromPOEditor();
+
+      const newTerms = localTerms?.filter(term => !poeditorTerms?.includes(term));
+
+
+      this.logger.info({
+        message: `Comparison results - New terms found: ${newTerms.length}`,
+        sampleNewTerms: newTerms.slice(0, 5),
+        service: 'TranslationService',
+        method: 'syncTermsWithPOEditor'
+      });
+
+      if (newTerms.length > 0) {
+        const formattedTerms = newTerms.map(term => ({
+          [term]: enTranslations[term] || '',
+        }));
+
+        await this.addTermsToPOEditor(formattedTerms);
+
+      } else {
+        this.logger.info({
+          message: 'No new terms found to synchronize',
+          service: 'TranslationService',
+          method: 'syncTermsWithPOEditor'
+        });
+      }
+    } catch (error) {
+      this.logger.error({
+        message: error.message,
+        service: 'TranslationService',
+        method: 'syncTermsWithPOEditor',
+        stack: error.stack
+      });
     }
   }
 }
