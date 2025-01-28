@@ -12,6 +12,8 @@ const SERVICE_NAME = "NetworkService";
  */
 class NetworkService {
 	static SERVICE_NAME = SERVICE_NAME;
+	static POEDITOR_BASE_URL = 'https://api.poeditor.com/v2';
+
 	constructor(axios, ping, logger, http, Docker, net) {
 		this.TYPE_PING = "ping";
 		this.TYPE_HTTP = "http";
@@ -28,6 +30,17 @@ class NetworkService {
 		this.http = http;
 		this.Docker = Docker;
 		this.net = net;
+
+		this.apiToken = process.env.POEDITOR_API_TOKEN;
+		this.projectId = process.env.POEDITOR_PROJECT_ID;
+
+		if (!this.apiToken || !this.projectId) {
+			this.logger.error({
+				message: 'POEditor API token or project ID is missing in environment variables',
+				service: this.SERVICE_NAME,
+				method: 'constructor'
+			});
+		}
 	}
 
 	/**
@@ -363,6 +376,95 @@ class NetworkService {
 
 			default:
 				return this.handleUnsupportedType(type);
+		}
+	}
+
+	async getPoEditorLanguages() {
+		try {
+			const params = new URLSearchParams();
+			params.append('api_token', this.apiToken);
+			params.append('id', this.projectId);
+
+			const response = await this.axios.post(`${NetworkService.POEDITOR_BASE_URL}/languages/list`, params, {
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			});
+
+			return response.data.result.languages.map(lang => lang.code);
+		} catch (error) {
+			error.service = this.SERVICE_NAME;
+			error.method = "getPoEditorLanguages";
+			throw error;
+		}
+	}
+
+	async exportPoEditorTranslations(language) {
+		try {
+			const params = new URLSearchParams();
+			params.append('api_token', this.apiToken);
+			params.append('id', this.projectId);
+			params.append('language', language);
+			params.append('type', 'key_value_json');
+
+			const exportResponse = await this.axios.post(`${NetworkService.POEDITOR_BASE_URL}/projects/export`, params, {
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			});
+
+			const { url } = exportResponse.data.result;
+			const translationsResponse = await this.axios.get(url);
+			return translationsResponse.data;
+		} catch (error) {
+			error.service = this.SERVICE_NAME;
+			error.method = "exportPoEditorTranslations";
+			throw error;
+		}
+	}
+
+	async getPoEditorTerms() {
+		try {
+			const params = new URLSearchParams();
+			params.append('api_token', this.apiToken);
+			params.append('id', this.projectId);
+
+			const response = await this.axios.post(`${NetworkService.POEDITOR_BASE_URL}/terms/list`, params, {
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			});
+
+			return response.data.result?.terms?.map(term => term.term.trim()) || [];
+		} catch (error) {
+			error.service = this.SERVICE_NAME;
+			error.method = "getPoEditorTerms";
+			throw error;
+		}
+	}
+
+	async addPoEditorTerms(terms) {
+		try {
+			const formattedTerms = terms.map(termObj => ({
+				term: Object.keys(termObj)[0]
+			}));
+
+			const params = new URLSearchParams();
+			params.append('api_token', this.apiToken);
+			params.append('id', this.projectId);
+			params.append('data', JSON.stringify(formattedTerms));
+
+			const response = await this.axios.post(`${NetworkService.POEDITOR_BASE_URL}/terms/add`, params, {
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			});
+
+			return response.data;
+		} catch (error) {
+			error.service = this.SERVICE_NAME;
+			error.method = "addPoEditorTerms";
+			throw error;
 		}
 	}
 }

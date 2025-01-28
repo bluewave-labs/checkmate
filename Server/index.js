@@ -76,6 +76,7 @@ import IORedis from "ioredis";
 
 import TranslationService from './service/translationService.js';
 import languageMiddleware from './middleware/languageMiddleware.js';
+import StringService from './service/stringService.js';
 
 const SERVICE_NAME = "Server";
 const SHUTDOWN_TIMEOUT = 1000;
@@ -178,7 +179,8 @@ const startApp = async () => {
 	const networkService = new NetworkService(axios, ping, logger, http, Docker, net);
 	const statusService = new StatusService(db, logger);
 	const notificationService = new NotificationService(emailService, db, logger);
-	const translationService = new TranslationService(logger);
+	const translationService = new TranslationService(logger, networkService);
+	const stringService = new StringService(translationService);
 
 	const jobQueue = new JobQueue(
 		db,
@@ -200,7 +202,7 @@ const startApp = async () => {
 	ServiceRegistry.register(StatusService.SERVICE_NAME, statusService);
 	ServiceRegistry.register(NotificationService.SERVICE_NAME, notificationService);
 	ServiceRegistry.register(TranslationService.SERVICE_NAME, translationService);
-
+	ServiceRegistry.register(StringService.SERVICE_NAME, stringService);
 
 	await translationService.initialize();
 
@@ -217,7 +219,8 @@ const startApp = async () => {
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
 		ServiceRegistry.get(SettingsService.SERVICE_NAME),
 		ServiceRegistry.get(EmailService.SERVICE_NAME),
-		ServiceRegistry.get(JobQueue.SERVICE_NAME)
+		ServiceRegistry.get(JobQueue.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const monitorController = new MonitorController(
@@ -275,7 +278,7 @@ const startApp = async () => {
 	app.use(cors());
 	app.use(express.json());
 	app.use(helmet());
-	app.use(languageMiddleware);
+	app.use(languageMiddleware(stringService, translationService));
 	// Swagger UI
 	app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
