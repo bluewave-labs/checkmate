@@ -436,7 +436,7 @@ class MonitorController {
 			monitor.isActive = !monitor.isActive;
 			monitor.status = undefined;
 			monitor.save();
-			return res.ssuccess({
+			return res.success({
 				msg: monitor.isActive
 					? successMessages.MONITOR_RESUME
 					: successMessages.MONITOR_PAUSE,

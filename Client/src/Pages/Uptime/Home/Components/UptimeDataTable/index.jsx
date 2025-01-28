@@ -1,57 +1,51 @@
 // Components
 import { Box, Stack, CircularProgress } from "@mui/material";
-import Search from "../../../../Components/Inputs/Search";
-import { Heading } from "../../../../Components/Heading";
-import DataTable from "../../../../Components/Table";
+import { Heading } from "../../../../../Components/Heading";
+import DataTable from "../../../../../Components/Table";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
-import Host from "../host";
-import { StatusLabel } from "../../../../Components/Label";
-import BarChart from "../../../../Components/Charts/BarChart";
-import ActionsMenu from "../actionsMenu";
-
+import Host from "../Host";
+import { StatusLabel } from "../../../../../Components/Label";
+import BarChart from "../../../../../Components/Charts/BarChart";
+import ActionsMenu from "../ActionsMenu";
+import { useState } from "react";
+import SearchComponent from "../SearchComponent";
+import CircularCount from "../../../../../Components/CircularCount";
+import LoadingSpinner from "../LoadingSpinner";
+import UptimeDataTableSkeleton from "./skeleton";
 // Utils
 import { useTheme } from "@emotion/react";
-import useUtils from "../../utils";
-import { useState, memo, useCallback } from "react";
+import useUtils from "../../Hooks/useUtils";
 import { useNavigate } from "react-router-dom";
-import "../index.css";
 import PropTypes from "prop-types";
 
-const SearchComponent = memo(
-	({ monitors, debouncedSearch, onSearchChange, setIsSearching }) => {
-		const [localSearch, setLocalSearch] = useState(debouncedSearch);
-		const handleSearch = useCallback(
-			(value) => {
-				setIsSearching(true);
-				setLocalSearch(value);
-				onSearchChange(value);
-			},
-			[onSearchChange, setIsSearching]
-		);
+const MonitorDataTable = ({ shouldRender, isSearching, headers, filteredMonitors }) => {
+	const theme = useTheme();
+	const navigate = useNavigate();
 
-		return (
-			<Box
-				width="25%"
-				minWidth={150}
-				ml="auto"
-			>
-				<Search
-					options={monitors}
-					filteredBy="name"
-					inputValue={localSearch}
-					handleInputChange={handleSearch}
-				/>
-			</Box>
-		);
-	}
-);
-SearchComponent.displayName = "SearchComponent";
-SearchComponent.propTypes = {
-	monitors: PropTypes.array,
-	debouncedSearch: PropTypes.string,
-	onSearchChange: PropTypes.func,
-	setIsSearching: PropTypes.func,
+	if (!shouldRender) return null;
+	return (
+		<Box position="relative">
+			<LoadingSpinner shouldRender={isSearching} />
+			<DataTable
+				headers={headers}
+				data={filteredMonitors}
+				config={{
+					rowSX: {
+						cursor: "pointer",
+						"&:hover td": {
+							backgroundColor: theme.palette.tertiary.main,
+							transition: "background-color .3s ease",
+						},
+					},
+					onRowClick: (row) => {
+						navigate(`/uptime/${row.id}`);
+					},
+					emptyView: "No monitors found",
+				}}
+			/>
+		</Box>
+	);
 };
 
 /**
@@ -79,31 +73,32 @@ SearchComponent.propTypes = {
  * @param {string} props.search - Current search query
  * @param {Function} props.setSearch - Callback to update search query
  * @param {boolean} props.isSearching - Whether a search is in progress
- * @param {Function} props.setIsSearching - Callback to update search state
  * @param {Function} props.setIsLoading - Callback to update loading state
  * @param {Function} props.triggerUpdate - Callback to trigger a data refresh
  * @returns {JSX.Element} Rendered component
  */
-const UptimeDataTable = ({
-	isAdmin,
-	isLoading,
-	monitors,
-	filteredMonitors,
-	monitorCount,
-	sort,
-	setSort,
-	debouncedSearch,
-	setSearch,
-	isSearching,
-	setIsSearching,
-	setIsLoading,
-	triggerUpdate,
-}) => {
-	const { determineState } = useUtils();
+const UptimeDataTable = (props) => {
+	// Utils
 
+	const {
+		isAdmin,
+		setIsLoading,
+		monitors,
+		filteredMonitors,
+		monitorCount,
+		sort,
+		setSort,
+		setSearch,
+		triggerUpdate,
+		monitorsAreLoading,
+	} = props;
+	const { determineState } = useUtils();
 	const theme = useTheme();
 	const navigate = useNavigate();
 
+	// Local state
+	const [isSearching, setIsSearching] = useState(false);
+	// Handlers
 	const handleSort = (field) => {
 		let order = "";
 		if (sort.field !== field) {
@@ -195,7 +190,9 @@ const UptimeDataTable = ({
 			id: "type",
 			content: "Type",
 			render: (row) => (
-				<span style={{ textTransform: "uppercase" }}>{row.monitor.type}</span>
+				<span style={{ textTransform: "uppercase" }}>
+					{row.monitor.type === "http" ? "HTTP(s)" : row.monitor.type}
+				</span>
 			),
 		},
 		{
@@ -212,7 +209,6 @@ const UptimeDataTable = ({
 			),
 		},
 	];
-
 	return (
 		<Box
 			flex={1}
@@ -225,87 +221,35 @@ const UptimeDataTable = ({
 				gap={theme.spacing(2)}
 			>
 				<Heading component="h2">Uptime monitors</Heading>
-				{/* TODO Same as the one in Infrastructure. Create component */}
-				<Box
-					component="span"
-					color={theme.palette.tertiary.contrastText}
-					border={2}
-					borderColor={theme.palette.accent.main}
-					backgroundColor={theme.palette.tertiary.main}
-					sx={{
-						padding: ".25em .75em",
-						borderRadius: "50%",
-						fontSize: "12px",
-						fontWeight: 500,
-					}}
-				>
-					{monitorCount}
-				</Box>
-
+				<CircularCount count={monitorCount} />
 				<SearchComponent
+					monitorsAreLoading={monitorsAreLoading}
 					monitors={monitors}
-					debouncedSearch={debouncedSearch}
 					onSearchChange={setSearch}
 					setIsSearching={setIsSearching}
 				/>
 			</Stack>
-			<Box position="relative">
-				{(isSearching || isLoading) && (
-					<>
-						<Box
-							width="100%"
-							height="100%"
-							position="absolute"
-							sx={{
-								backgroundColor: theme.palette.primary.main,
-								opacity: 0.8,
-								zIndex: 100,
-							}}
-						/>
-						<Box
-							height="100%"
-							position="absolute"
-							top="50%"
-							left="50%"
-							sx={{
-								transform: "translateX(-50%)",
-								zIndex: 101,
-							}}
-						>
-							<CircularProgress
-								sx={{
-									color: theme.palette.accent.main,
-								}}
-							/>
-						</Box>
-					</>
-				)}
-				<DataTable
-					headers={headers}
-					data={filteredMonitors}
-					config={{
-						rowSX: {
-							cursor: "pointer",
-							"&:hover td": {
-								backgroundColor: theme.palette.tertiary.main,
-								transition: "background-color .3s ease",
-							},
-						},
-						onRowClick: (row) => {
-							navigate(`/uptime/${row.id}`);
-						},
-						emptyView: "No monitors found",
-					}}
-				/>
-			</Box>
+
+			<MonitorDataTable
+				shouldRender={!monitorsAreLoading}
+				isSearching={isSearching}
+				headers={headers}
+				filteredMonitors={filteredMonitors}
+			/>
+			<UptimeDataTableSkeleton shouldRender={monitorsAreLoading} />
 		</Box>
 	);
 };
 
-const MemoizedUptimeDataTable = memo(UptimeDataTable);
-export default MemoizedUptimeDataTable;
-
 UptimeDataTable.propTypes = {
+	isSearching: PropTypes.bool,
+	setIsSearching: PropTypes.func,
+	setSort: PropTypes.func,
+	setSearch: PropTypes.func,
+	setIsLoading: PropTypes.func,
+	triggerUpdate: PropTypes.func,
+	debouncedSearch: PropTypes.string,
+	onSearchChange: PropTypes.func,
 	isAdmin: PropTypes.bool,
 	isLoading: PropTypes.bool,
 	monitors: PropTypes.array,
@@ -315,11 +259,6 @@ UptimeDataTable.propTypes = {
 		field: PropTypes.string,
 		order: PropTypes.oneOf(["asc", "desc"]),
 	}),
-	setSort: PropTypes.func,
-	debouncedSearch: PropTypes.string,
-	setSearch: PropTypes.func,
-	isSearching: PropTypes.bool,
-	setIsSearching: PropTypes.func,
-	setIsLoading: PropTypes.func,
-	triggerUpdate: PropTypes.func,
 };
+
+export default UptimeDataTable;

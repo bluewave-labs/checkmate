@@ -7,7 +7,7 @@ import { useTheme } from "@emotion/react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip } from "recharts";
 import { useSelector } from "react-redux";
 import { formatDateWithTz, formatDurationSplit } from "../../Utils/timeUtils";
-import useUtils from "../Uptime/utils";
+import useUtils from "../Uptime/Home/Hooks/useUtils";
 import { useState } from "react";
 import IconBox from "../../Components/IconBox";
 /**

@@ -2,16 +2,16 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
-import { createToast } from "../../../Utils/toastUtils";
-import { logger } from "../../../Utils/Logger";
+import { createToast } from "../../../../../Utils/toastUtils";
+import { logger } from "../../../../../Utils/Logger";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import {
 	deleteUptimeMonitor,
 	pauseUptimeMonitor,
-} from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
-import Settings from "../../../assets/icons/settings-bold.svg?react";
+} from "../../../../../Features/UptimeMonitors/uptimeMonitorsSlice";
+import Settings from "../../../../../assets/icons/settings-bold.svg?react";
 import PropTypes from "prop-types";
-import Dialog from "../../../Components/Dialog";
+import Dialog from "../../../../../Components/Dialog";
 
 const ActionsMenu = ({
 	monitor,

@@ -614,6 +614,7 @@ class NetworkService {
 		if (config.filter) params.append("filter", config.filter);
 		if (config.page) params.append("page", config.page);
 		if (config.rowsPerPage) params.append("rowsPerPage", config.rowsPerPage);
+		if (config.status !== undefined) params.append("status", config.status);
 
 		return this.axiosInstance.get(`/checks/${config.monitorId}?${params.toString()}`, {
 			headers: { Authorization: `Bearer ${config.authToken}` },
@@ -646,6 +647,7 @@ class NetworkService {
 		if (config.filter) params.append("filter", config.filter);
 		if (config.page) params.append("page", config.page);
 		if (config.rowsPerPage) params.append("rowsPerPage", config.rowsPerPage);
+		if (config.status !== undefined) params.append("status", config.status);
 		return this.axiosInstance.get(`/checks/team/${config.teamId}?${params.toString()}`, {
 			headers: { Authorization: `Bearer ${config.authToken}` },
 		});
