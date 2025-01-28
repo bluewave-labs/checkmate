@@ -40,9 +40,9 @@ const DownBarChart = memo(({ monitor, type, onBarHover }) => {
 							y={0}
 							width="100%"
 							height="100%"
-							firstDataPoint={monitor.groupedDownChecks?.[0] ?? {}}
+							firstDataPoint={monitor?.groupedDownChecks?.[0] ?? {}}
 							lastDataPoint={
-								monitor.groupedDownChecks?.[monitor.groupedDownChecks.length - 1] ?? {}
+								monitor?.groupedDownChecks?.[monitor?.groupedDownChecks?.length - 1] ?? {}
 							}
 							type={type}
 						/>
@@ -53,7 +53,7 @@ const DownBarChart = memo(({ monitor, type, onBarHover }) => {
 					maxBarSize={7}
 					background={{ fill: "transparent" }}
 				>
-					{monitor.groupedDownChecks.map((entry, index) => {
+					{monitor?.groupedDownChecks?.map((entry, index) => {
 						return (
 							<Cell
 								key={`cell-${entry.time}`}

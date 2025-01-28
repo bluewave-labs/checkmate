@@ -13,7 +13,7 @@ import { useState, useCallback } from "react";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
-import useMonitorFetch from "./Hooks/useMonitorFetch";
+import useMonitorsFetch from "./Hooks/useMonitorsFetch";
 import { useSelector, useDispatch } from "react-redux";
 import { setRowsPerPage } from "../../../Features/UI/uiSlice";
 import PropTypes from "prop-types";
@@ -86,7 +86,7 @@ const UptimeMonitors = () => {
 	const teamId = user.teamId;
 
 	const { monitorsAreLoading, monitors, filteredMonitors, monitorsSummary } =
-		useMonitorFetch({
+		useMonitorsFetch({
 			authToken,
 			teamId,
 			limit: 25,
@@ -102,7 +102,7 @@ const UptimeMonitors = () => {
 	return (
 		<Stack
 			className="monitors"
-			gap={theme.spacing(8)}
+			gap={theme.spacing(10)}
 		>
 			<Breadcrumbs list={BREADCRUMBS} />
 			<CreateMonitorButton shouldRender={true} />

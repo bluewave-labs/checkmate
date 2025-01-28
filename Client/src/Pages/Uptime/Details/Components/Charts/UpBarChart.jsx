@@ -28,7 +28,7 @@ const UpBarChart = memo(({ monitor, type, onBarHover }) => {
 			<BarChart
 				width="100%"
 				height="100%"
-				data={monitor.groupedUpChecks}
+				data={monitor?.groupedUpChecks}
 				onMouseEnter={() => {
 					setChartHovered(true);
 					onBarHover({ time: null, totalChecks: 0, avgResponseTime: 0 });
@@ -49,8 +49,10 @@ const UpBarChart = memo(({ monitor, type, onBarHover }) => {
 							y={0}
 							width="100%"
 							height="100%"
-							firstDataPoint={monitor.groupedUpChecks[0]}
-							lastDataPoint={monitor.groupedUpChecks[monitor.groupedUpChecks.length - 1]}
+							firstDataPoint={monitor?.groupedUpChecks?.[0]}
+							lastDataPoint={
+								monitor?.groupedUpChecks?.[monitor?.groupedUpChecks?.length - 1]
+							}
 							type={type}
 						/>
 					}
@@ -60,7 +62,7 @@ const UpBarChart = memo(({ monitor, type, onBarHover }) => {
 					maxBarSize={7}
 					background={{ fill: "transparent" }}
 				>
-					{monitor.groupedUpChecks.map((entry, index) => {
+					{monitor?.groupedUpChecks?.map((entry, index) => {
 						const themeColor = getThemeColor(entry.avgResponseTime);
 						return (
 							<Cell

@@ -5,6 +5,7 @@ import { TablePaginationActions } from "./Actions";
 import SelectorVertical from "../../../assets/icons/selector-vertical.svg?react";
 
 Pagination.propTypes = {
+	paginationLabel: PropTypes.string, // Label for the pagination.
 	itemCount: PropTypes.number.isRequired, // Total number of items for pagination.
 	page: PropTypes.number.isRequired, // Current page index.
 	rowsPerPage: PropTypes.number.isRequired, // Number of rows displayed per page.
