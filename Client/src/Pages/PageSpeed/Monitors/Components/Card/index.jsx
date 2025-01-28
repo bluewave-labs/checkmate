@@ -1,15 +1,16 @@
 import PropTypes from "prop-types";
-import PageSpeedIcon from "../../assets/icons/page-speed.svg?react";
-import { StatusLabel } from "../../Components/Label";
+// import PageSpeedIcon from "../../../../assets/icons/page-speed.svg?react";
+import PageSpeedIcon from "../../../../../assets/icons/page-speed.svg?react";
+import { StatusLabel } from "../../../../../Components/Label";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useTheme } from "@emotion/react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip } from "recharts";
 import { useSelector } from "react-redux";
-import { formatDateWithTz, formatDurationSplit } from "../../Utils/timeUtils";
-import useUtils from "../Uptime/Home/Hooks/useUtils";
+import { formatDateWithTz, formatDurationSplit } from "../../../../../Utils/timeUtils";
+import useUtils from "../../../../Uptime/Home/Hooks/useUtils";
 import { useState } from "react";
-import IconBox from "../../Components/IconBox";
+import IconBox from "../../../../../Components/IconBox";
 /**
  * CustomToolTip displays a tooltip with formatted date and score information.
  * @param {Object} props
