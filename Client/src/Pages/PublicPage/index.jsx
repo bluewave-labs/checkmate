@@ -140,7 +140,7 @@ const PublicPage = () => {
 				sx={{
 					overflowY: "auto",
 					alignItems: "center",
-					maxHeight: "660px",
+					maxHeight: "430px",
 					width: "100%",
 				}}
 			>
