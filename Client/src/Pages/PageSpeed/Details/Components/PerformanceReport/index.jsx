@@ -4,9 +4,19 @@ import PieChart from "../Charts/PieChart";
 import { Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import PieChartLegend from "../Charts/PieChartLegend";
-
-const PerformanceReport = ({ audits }) => {
+import SkeletonLayout from "./skeleton";
+const PerformanceReport = ({ shouldRender, audits }) => {
+	console.log("shouldRender", shouldRender);
 	const theme = useTheme();
+
+	if (!shouldRender) {
+		return <SkeletonLayout />;
+	}
+
+	if (typeof audits === "undefined") {
+		return null;
+	}
+
 	return (
 		<ChartBox
 			icon={<PerformanceIcon />}

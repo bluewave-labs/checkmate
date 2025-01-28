@@ -44,14 +44,6 @@ const PageSpeedDetails = () => {
 		setMetrics((prev) => ({ ...prev, [id]: !prev[id] }));
 	};
 
-	if (isLoading) {
-		return "funk";
-	}
-
-	if (typeof audits === "undefined") {
-		return "No Data";
-	}
-
 	return (
 		<Stack gap={theme.spacing(10)}>
 			<Breadcrumbs list={BREADCRUMBS} />
@@ -76,7 +68,10 @@ const PageSpeedDetails = () => {
 				metrics={metrics}
 				handleMetrics={handleMetrics}
 			/>
-			<PerformanceReport audits={audits} />
+			<PerformanceReport
+				shouldRender={!isLoading}
+				audits={audits}
+			/>
 		</Stack>
 	);
 };
