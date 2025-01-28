@@ -5,11 +5,12 @@ import { TablePaginationActions } from "./Actions";
 import SelectorVertical from "../../../assets/icons/selector-vertical.svg?react";
 
 Pagination.propTypes = {
-	monitorCount: PropTypes.number.isRequired, // Total number of items for pagination.
+	paginationLabel: PropTypes.string, // Label for the pagination.
+	itemCount: PropTypes.number.isRequired, // Total number of items for pagination.
 	page: PropTypes.number.isRequired, // Current page index.
 	rowsPerPage: PropTypes.number.isRequired, // Number of rows displayed per page.
 	handleChangePage: PropTypes.func.isRequired, // Function to handle page changes.
-	handleChangeRowsPerPage: PropTypes.func.isRequired, // Function to handle changes in rows per page.
+	handleChangeRowsPerPage: PropTypes.func, // Function to handle changes in rows per page.
 };
 
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 25];
@@ -18,6 +19,7 @@ const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 25];
  * Pagination component for table navigation with customized styling and behavior.
  *
  * @param {object} props - Component properties.
+ * @param {string} props.paginationLabel - Label for the pagination.
  * @param {number} props.monitorCount - Total number of monitors to paginate.
  * @param {number} props.page - Current page index (0-based).
  * @param {number} props.rowsPerPage - Number of rows to display per page.
@@ -26,7 +28,8 @@ const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 25];
  * @returns {JSX.Element} The Pagination component.
  */
 function Pagination({
-	monitorCount,
+	paginationLabel,
+	itemCount,
 	page,
 	rowsPerPage,
 	handleChangePage,
@@ -35,7 +38,7 @@ function Pagination({
 	const theme = useTheme();
 
 	const start = page * rowsPerPage + 1;
-	const end = Math.min(page * rowsPerPage + rowsPerPage, monitorCount);
+	const end = Math.min(page * rowsPerPage + rowsPerPage, itemCount);
 	const range = `${start} - ${end}`;
 
 	return (
@@ -51,11 +54,11 @@ function Pagination({
 				variant="body2"
 				sx={{ opacity: 0.7 }}
 			>
-				Showing {range} of {monitorCount} monitor(s)
+				Showing {range} of {itemCount} {paginationLabel}
 			</Typography>
 			<TablePagination
 				component="div"
-				count={monitorCount}
+				count={itemCount}
 				page={page}
 				onPageChange={handleChangePage}
 				rowsPerPage={rowsPerPage}
@@ -121,4 +124,4 @@ function Pagination({
 	);
 }
 
-export { Pagination };
+export default Pagination;

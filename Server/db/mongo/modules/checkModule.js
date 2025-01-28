@@ -2,11 +2,15 @@ import Check from "../../models/Check.js";
 import Monitor from "../../models/Monitor.js";
 import User from "../../models/User.js";
 import logger from "../../../utils/logger.js";
+import { ObjectId } from "mongodb";
+
 const SERVICE_NAME = "checkModule";
 const dateRangeLookup = {
+	hour: new Date(new Date().setHours(new Date().getHours() - 1)),
 	day: new Date(new Date().setDate(new Date().getDate() - 1)),
 	week: new Date(new Date().setDate(new Date().getDate() - 7)),
 	month: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+	all: undefined,
 };
 
 /**
@@ -56,41 +60,6 @@ const createCheck = async (checkData) => {
 	}
 };
 
-const getChecksCount = async (req) => {
-	const monitorId = req.params.monitorId;
-	const dateRange = req.query.dateRange;
-	const filter = req.query.filter;
-	// Build query
-	const checksQuery = { monitorId: monitorId };
-	// Filter checks by "day", "week", or "month"
-	if (dateRange !== undefined) {
-		checksQuery.createdAt = { $gte: dateRangeLookup[dateRange] };
-	}
-
-	if (filter !== undefined) {
-		checksQuery.status = false;
-		switch (filter) {
-			case "all":
-				break;
-			case "down":
-				break;
-			case "resolve":
-				checksQuery.statusCode = 5000;
-				break;
-			default:
-				logger.warn({
-					message: "invalid filter",
-					service: SERVICE_NAME,
-					method: "getChecksCount",
-				});
-				break;
-		}
-	}
-
-	const count = await Check.countDocuments(checksQuery);
-	return count;
-};
-
 /**
  * Get all checks for a monitor
  * @async
@@ -98,33 +67,32 @@ const getChecksCount = async (req) => {
  * @returns {Promise<Array<Check>>}
  * @throws {Error}
  */
-
-const getChecks = async (req) => {
+const getChecksByMonitor = async (req) => {
 	try {
 		const { monitorId } = req.params;
-		let { sortOrder, limit, dateRange, filter, page, rowsPerPage } = req.query;
-		// Default limit to 0 if not provided
-		limit = limit === undefined ? 0 : limit;
+		let { sortOrder, dateRange, filter, page, rowsPerPage, status } = req.query;
+		status = typeof status !== "undefined" ? false : undefined;
+		page = parseInt(page);
+		rowsPerPage = parseInt(rowsPerPage);
+		// Match
+		const matchStage = {
+			monitorId: ObjectId.createFromHexString(monitorId),
+			...(typeof status !== "undefined" && { status }),
+			...(dateRangeLookup[dateRange] && {
+				createdAt: {
+					$gte: dateRangeLookup[dateRange],
+				},
+			}),
+		};
 
-		// Default sort order is newest -> oldest
-		sortOrder = sortOrder === "asc" ? 1 : -1;
-
-		// Build query
-		const checksQuery = { monitorId: monitorId };
-		// Filter checks by "day", "week", or "month"
-		if (dateRange !== undefined) {
-			checksQuery.createdAt = { $gte: dateRangeLookup[dateRange] };
-		}
-		// Filter checks by status
 		if (filter !== undefined) {
-			checksQuery.status = false;
 			switch (filter) {
 				case "all":
 					break;
 				case "down":
 					break;
 				case "resolve":
-					checksQuery.statusCode = 5000;
+					matchStage.statusCode = 5000;
 					break;
 				default:
 					logger.warn({
@@ -136,16 +104,32 @@ const getChecks = async (req) => {
 			}
 		}
 
-		// Need to skip and limit here
+		//Sort
+		sortOrder = sortOrder === "asc" ? 1 : -1;
+
+		// Pagination
 		let skip = 0;
 		if (page && rowsPerPage) {
 			skip = page * rowsPerPage;
 		}
-		const checks = await Check.find(checksQuery)
-			.skip(skip)
-			.limit(rowsPerPage)
-			.sort({ createdAt: sortOrder });
-		return checks;
+		const checks = await Check.aggregate([
+			{ $match: matchStage },
+			{ $sort: { createdAt: sortOrder } },
+			{
+				$facet: {
+					summary: [{ $count: "checksCount" }],
+					checks: [{ $skip: skip }, { $limit: rowsPerPage }],
+				},
+			},
+			{
+				$project: {
+					checksCount: { $arrayElemAt: ["$summary.checksCount", 0] },
+					checks: "$checks",
+				},
+			},
+		]);
+
+		return checks[0];
 	} catch (error) {
 		error.service = SERVICE_NAME;
 		error.method = "getChecks";
@@ -153,64 +137,71 @@ const getChecks = async (req) => {
 	}
 };
 
-const getTeamChecks = async (req) => {
+const getChecksByTeam = async (req) => {
 	try {
+		let { sortOrder, dateRange, filter, page, rowsPerPage } = req.query;
+		page = parseInt(page);
+		rowsPerPage = parseInt(rowsPerPage);
 		const { teamId } = req.params;
-		let { sortOrder, limit, dateRange, filter, page, rowsPerPage } = req.query;
-
-		// Get monitorIDs
-		const userMonitors = await Monitor.find({ teamId: teamId }).select("_id");
-
-		//Build check query
-		// Default limit to 0 if not provided
-		limit = limit === undefined ? 0 : limit;
-		// Default sort order is newest -> oldest
-		sortOrder = sortOrder === "asc" ? 1 : -1;
-
-		const checksQuery = { monitorId: { $in: userMonitors } };
-
+		const matchStage = {
+			teamId: ObjectId.createFromHexString(teamId),
+			status: false,
+			...(dateRangeLookup[dateRange] && {
+				createdAt: {
+					$gte: dateRangeLookup[dateRange],
+				},
+			}),
+		};
+		// Add filter to match stage
 		if (filter !== undefined) {
-			checksQuery.status = false;
 			switch (filter) {
 				case "all":
 					break;
 				case "down":
-					checksQuery.status = false;
 					break;
 				case "resolve":
-					checksQuery.statusCode = 5000;
+					matchStage.statusCode = 5000;
 					break;
 				default:
 					logger.warn({
 						message: "invalid filter",
 						service: SERVICE_NAME,
-						method: "getTeamChecks",
+						method: "getChecksByTeam",
 					});
 					break;
 			}
 		}
 
-		if (dateRange !== undefined) {
-			checksQuery.createdAt = { $gte: dateRangeLookup[dateRange] };
-		}
+		sortOrder = sortOrder === "asc" ? 1 : -1;
 
-		// Skip and limit for pagination
+		// pagination
 		let skip = 0;
 		if (page && rowsPerPage) {
 			skip = page * rowsPerPage;
 		}
 
-		const checksCount = await Check.countDocuments(checksQuery);
+		const checks = await Check.aggregate([
+			{ $match: matchStage },
+			{ $sort: { createdAt: sortOrder } },
 
-		const checks = await Check.find(checksQuery)
-			.skip(skip)
-			.limit(rowsPerPage)
-			.sort({ createdAt: sortOrder })
-			.select(["monitorId", "status", "responseTime", "statusCode", "message"]);
-		return { checksCount, checks };
+			{
+				$facet: {
+					summary: [{ $count: "checksCount" }],
+					checks: [{ $skip: skip }, { $limit: rowsPerPage }],
+				},
+			},
+			{
+				$project: {
+					checksCount: { $arrayElemAt: ["$summary.checksCount", 0] },
+					checks: "$checks",
+				},
+			},
+		]);
+
+		return checks[0];
 	} catch (error) {
 		error.service = SERVICE_NAME;
-		error.method = "getTeamChecks";
+		error.method = "getChecksByTeam";
 		throw error;
 	}
 };
@@ -298,9 +289,8 @@ const updateChecksTTL = async (teamId, ttl) => {
 
 export {
 	createCheck,
-	getChecksCount,
-	getChecks,
-	getTeamChecks,
+	getChecksByMonitor,
+	getChecksByTeam,
 	deleteChecks,
 	deleteChecksByTeamId,
 	updateChecksTTL,

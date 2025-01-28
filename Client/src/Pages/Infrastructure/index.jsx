@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { /* useDispatch, */ useSelector } from "react-redux";
 import { useTheme } from "@emotion/react";
-import useUtils from "../Uptime/utils.jsx";
+import useUtils from "../Uptime/Monitors/Hooks/useUtils.jsx";
 import { jwtDecode } from "jwt-decode";
 import SkeletonLayout from "./skeleton";
 import Fallback from "../../Components/Fallback";
@@ -13,11 +13,11 @@ import { Box, Button, IconButton, Stack } from "@mui/material";
 import Breadcrumbs from "../../Components/Breadcrumbs";
 import { StatusLabel } from "../../Components/Label";
 import { Heading } from "../../Components/Heading";
-import { Pagination } from "../../Components/Table/TablePagination/index.jsx";
+import Pagination from "../../Components/Table/TablePagination/index.jsx";
 // import { getInfrastructureMonitorsByTeamId } from "../../Features/InfrastructureMonitors/infrastructureMonitorsSlice";
 import { networkService } from "../../Utils/NetworkService.js";
 import CustomGauge from "../../Components/Charts/CustomGauge/index.jsx";
-import Host from "../Uptime/Home/host.jsx";
+import Host from "../Uptime/Monitors/Components/Host/index.jsx";
 import { useIsAdmin } from "../../Hooks/useIsAdmin.js";
 import { InfrastructureMenu } from "./components/Menu";
 
@@ -137,20 +137,18 @@ function Infrastructure() {
 			id: "actions",
 			content: "Actions",
 			render: (row) => (
-				<IconButton>
-					<InfrastructureMenu
-						monitor={row}
-						isAdmin={isAdmin}
-						updateCallback={handleActionMenuDelete}
-					/>
-				</IconButton>
+				<InfrastructureMenu
+					monitor={row}
+					isAdmin={isAdmin}
+					updateCallback={handleActionMenuDelete}
+				/>
 			),
 		},
 	];
 
 	const monitorsAsRows = monitors.map((monitor) => {
 		const processor =
-			((monitor.checks[0]?.cpu?.usage_frequency ?? 0) / 1000).toFixed(2) + " GHz";
+			((monitor.checks[0]?.cpu?.frequency ?? 0) / 1000).toFixed(2) + " GHz";
 		const cpu = (monitor?.checks[0]?.cpu.usage_percent ?? 0) * 100;
 		const mem = (monitor?.checks[0]?.memory.usage_percent ?? 0) * 100;
 		const disk = (monitor?.checks[0]?.disk[0]?.usage_percent ?? 0) * 100;
@@ -162,10 +160,9 @@ function Infrastructure() {
 			monitor.uptimePercentage < 0.25
 				? theme.palette.error.main
 				: monitor.uptimePercentage < 0.5
-					? theme.palette.percentage.uptimeFair
-					: monitor.uptimePercentage < 0.75
-						? theme.palette.percentage.uptimeGood
-						: theme.palette.success.lowContrast;
+					? theme.palette.warning.main
+					: theme.palette.success.main;
+
 		return {
 			id: monitor._id,
 			name: monitor.name,
@@ -243,7 +240,7 @@ function Infrastructure() {
 								backgroundColor={theme.palette.tertiary.main}
 								sx={{
 									padding: ".25em .75em",
-									borderRadius: "50%",
+									borderRadius: "10000px",
 									fontSize: "12px",
 									fontWeight: 500,
 								}}
@@ -269,7 +266,8 @@ function Infrastructure() {
 						/>
 
 						<Pagination
-							monitorCount={summary?.totalMonitors ?? 0}
+							itemCount={summary?.totalMonitors ?? 0}
+							paginationLabel="monitors"
 							page={page}
 							rowsPerPage={rowsPerPage}
 							handleChangePage={handleChangePage}

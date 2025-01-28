@@ -23,7 +23,7 @@ import PulseDot from "../../../Components/Animated/PulseDot";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
 import SkeletonLayout from "./skeleton";
-import useUtils from "../../Uptime/utils";
+import useUtils from "../../Uptime/Monitors/Hooks/useUtils";
 import "./index.css";
 import Dialog from "../../../Components/Dialog";
 

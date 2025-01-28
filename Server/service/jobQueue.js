@@ -5,6 +5,7 @@ const QUEUE_LOOKUP = {
 	hardware: "hardware",
 	http: "uptime",
 	ping: "uptime",
+	port: "uptime",
 	docker: "uptime",
 	pagespeed: "pagespeed",
 };

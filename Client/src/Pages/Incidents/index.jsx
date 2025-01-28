@@ -8,7 +8,6 @@ import { useTheme } from "@emotion/react";
 import Select from "../../Components/Inputs/Select";
 import IncidentTable from "./IncidentTable";
 import SkeletonLayout from "./skeleton";
-import "./index.css";
 
 const Incidents = () => {
 	const theme = useTheme();
@@ -21,6 +20,7 @@ const Incidents = () => {
 
 	// TODO do something with these filters
 	const [filter, setFilter] = useState("all");
+	const [dateRange, setDateRange] = useState("hour");
 
 	useEffect(() => {
 		const fetchMonitors = async () => {
@@ -77,62 +77,132 @@ const Incidents = () => {
 				<>
 					<Stack
 						direction="row"
-						alignItems="center"
+						justifyContent="space-between"
 						gap={theme.spacing(6)}
 					>
-						<Typography
-							display="inline-block"
-							component="h1"
-							color={theme.palette.primary.contrastTextSecondary}
+						<Stack
+							direction="row"
+							alignItems="center"
+							gap={theme.spacing(6)}
 						>
-							Incidents for
-						</Typography>
-						<Select
-							id="incidents-select-monitor"
-							placeholder="All servers"
-							value={selectedMonitor}
-							onChange={handleSelect}
-							items={Object.values(monitors)}
-							sx={{
-								backgroundColor: theme.palette.primary.main,
-								color: theme.palette.primary.contrastTextSecondary,
-							}}
-						/>
-						<ButtonGroup
-							sx={{
-								ml: "auto",
-								"& .MuiButtonBase-root, & .MuiButtonBase-root:hover": {
-									borderColor: theme.palette.primary.lowContrast,
-								},
-							}}
+							<Typography
+								display="inline-block"
+								component="h1"
+								color={theme.palette.primary.contrastTextSecondary}
+							>
+								Incidents for
+							</Typography>
+							<Select
+								id="incidents-select-monitor"
+								placeholder="All servers"
+								value={selectedMonitor}
+								onChange={handleSelect}
+								items={Object.values(monitors)}
+								sx={{
+									backgroundColor: theme.palette.primary.main,
+									color: theme.palette.primary.contrastTextSecondary,
+								}}
+							/>
+						</Stack>
+						<Stack
+							direction="row"
+							alignItems="center"
+							gap={theme.spacing(6)}
 						>
-							<Button
-								variant="group"
-								filled={(filter === "all").toString()}
-								onClick={() => setFilter("all")}
+							<Typography
+								display="inline-block"
+								component="h1"
+								color={theme.palette.primary.contrastTextSecondary}
 							>
-								All
-							</Button>
-							<Button
-								variant="group"
-								filled={(filter === "down").toString()}
-								onClick={() => setFilter("down")}
+								Filter by:
+							</Typography>
+							<ButtonGroup
+								sx={{
+									ml: "auto",
+									"& .MuiButtonBase-root, & .MuiButtonBase-root:hover": {
+										borderColor: theme.palette.primary.lowContrast,
+									},
+								}}
 							>
-								Down
-							</Button>
-							<Button
-								variant="group"
-								filled={(filter === "resolve").toString()}
-								onClick={() => setFilter("resolve")}
+								<Button
+									variant="group"
+									filled={(filter === "all").toString()}
+									onClick={() => setFilter("all")}
+								>
+									All
+								</Button>
+								<Button
+									variant="group"
+									filled={(filter === "down").toString()}
+									onClick={() => setFilter("down")}
+								>
+									Down
+								</Button>
+								<Button
+									variant="group"
+									filled={(filter === "resolve").toString()}
+									onClick={() => setFilter("resolve")}
+								>
+									Cannot resolve
+								</Button>
+							</ButtonGroup>
+						</Stack>
+						<Stack
+							direction="row"
+							alignItems="center"
+							gap={theme.spacing(6)}
+						>
+							<Typography
+								display="inline-block"
+								component="h1"
+								color={theme.palette.primary.contrastTextSecondary}
 							>
-								Cannot Resolve
-							</Button>
-						</ButtonGroup>
+								Show:
+							</Typography>
+							<ButtonGroup
+								sx={{
+									ml: "auto",
+									"& .MuiButtonBase-root, & .MuiButtonBase-root:hover": {
+										borderColor: theme.palette.primary.lowContrast,
+									},
+								}}
+							>
+								<Button
+									variant="group"
+									filled={(dateRange === "hour").toString()}
+									onClick={() => setDateRange("hour")}
+								>
+									Last hour
+								</Button>
+								<Button
+									variant="group"
+									filled={(dateRange === "day").toString()}
+									onClick={() => setDateRange("day")}
+								>
+									Last day
+								</Button>
+								<Button
+									variant="group"
+									filled={(dateRange === "week").toString()}
+									onClick={() => setDateRange("week")}
+								>
+									Last week
+								</Button>
+								<Button
+									variant="group"
+									filled={(dateRange === "all").toString()}
+									onClick={() => setDateRange("all")}
+								>
+									All
+								</Button>
+							</ButtonGroup>
+						</Stack>
 					</Stack>
 					<IncidentTable
 						monitors={monitors}
 						selectedMonitor={selectedMonitor}
 						filter={filter}
+						dateRange={dateRange}
 					/>
 				</>
 			)}

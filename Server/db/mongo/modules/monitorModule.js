@@ -497,7 +497,6 @@ const getMonitorById = async (monitorId) => {
 
 const getMonitorsByTeamId = async (req) => {
 	let { limit, type, page, rowsPerPage, filter, field, order } = req.query;
-
 	limit = parseInt(limit);
 	page = parseInt(page);
 	rowsPerPage = parseInt(rowsPerPage);
@@ -512,7 +511,6 @@ const getMonitorsByTeamId = async (req) => {
 	}
 
 	const skip = page && rowsPerPage ? page * rowsPerPage : 0;
-
 	const sort = { [field]: order === "asc" ? 1 : -1 };
 	const results = await Monitor.aggregate([
 		{ $match: matchStage },
@@ -839,3 +837,22 @@ export {
 	groupChecksByTime,
 	calculateGroupStats,
 };
+
+// limit 25
+// page 1
+// rowsPerPage 25
+// filter undefined
+// field name
+// order asc
+// skip 25
+// sort { name: 1 }
+// filteredMonitors []
+
+// limit 25
+// page NaN
+// rowsPerPage 25
+// filter undefined
+// field name
+// order asc
+// skip 0
+// sort { name: 1 }

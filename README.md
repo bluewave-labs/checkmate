@@ -1,8 +1,7 @@
 
-## **Announcing $5000 grant funding in partnership with [UpRock](https://uprock.com) to build distributed uptime monitoring - check [our web page](https://checkmate.so) for funding ideas** 
 
-![Frame 34](https://github.com/user-attachments/assets/4ecf2d6e-b3f9-47e9-9e31-b9cb8f3f00b9)
-
+<p align=center> <a href="https://trendshift.io/repositories/12443" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12443" alt="bluewave-labs%2Fcheckmate | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a></p>
+  
 ![](https://img.shields.io/github/license/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/repo-size/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/commit-activity/m/bluewave-labs/checkmate)
@@ -11,6 +10,7 @@
 ![](https://img.shields.io/github/issues/bluewave-labs/checkmate)
 ![](https://img.shields.io/github/issues-pr/bluewave-labs/checkmate)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9901/badge)](https://www.bestpractices.dev/projects/9901)
+
 
 <h1 align="center"><a href="https://bluewavelabs.ca" target="_blank">Checkmate</a></h1>
 
@@ -51,22 +51,21 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 - Docker monitoring
 - Ping monitoring
 - SSL monitoring
+- Port monitoring
 - Incidents at a glance
 - E-mail notifications
 - Scheduled maintenance
 
 **Short term roadmap:**
 
-- Port monitoring (**complete**, waiting to be deployed to stable version) https://github.com/bluewave-labs/Checkmate/issues/1476
-- Global (distributed) uptime checking on Solana network (**in progress**) 
+- Global (distributed) uptime checking on Solana network (**in progress**) https://github.com/bluewave-labs/Checkmate/issues/1593
 - Status pages (**in progress**) https://github.com/bluewave-labs/Checkmate/issues/1131 
 - Translations (i18n) (**in progress**)
-- Better notification options (Webhooks, Discord, Telegram, Slack) https://github.com/bluewave-labs/Checkmate/issues/1545
-- Server security monitoring 
-- Command line interface (CLI) https://github.com/bluewave-labs/Checkmate/issues/1558
+- Better notification options (Webhooks, Discord, Telegram, Slack) (**in progress**) https://github.com/bluewave-labs/Checkmate/issues/1545
+- Command line interface (CLI) (**in progress**) https://github.com/bluewave-labs/Checkmate/issues/1558
 - JSON query monitoring https://github.com/bluewave-labs/Checkmate/issues/1573
-- More configuration options
 - Tagging/grouping monitors https://github.com/bluewave-labs/Checkmate/issues/1546
+- More configuration options
 - DNS monitoring
 
 ## 🏗️ Screenshots
