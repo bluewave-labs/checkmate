@@ -4,7 +4,8 @@ import Greeting from "../../../Utils/greeting";
 import StatusBoxes from "./Components/StatusBoxes";
 import UptimeDataTable from "./Components/UptimeDataTable";
 import Pagination from "../../../Components/Table/TablePagination";
-
+import CreateMonitorHeader from "../../../Components/CreateMonitorHeader";
+import Fallback from "../../../Components/Fallback";
 // MUI Components
 import { Stack, Box, Button } from "@mui/material";
 
@@ -99,13 +100,29 @@ const UptimeMonitors = () => {
 		});
 	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
 
+	if (!isLoading && monitors?.length === 0) {
+		return (
+			<Fallback
+				vowelStart={true}
+				title="uptime monitor"
+				checks={["Check if a website or service is up and running"]}
+				link="/uptime/create"
+				isAdmin={isAdmin}
+			/>
+		);
+	}
+
 	return (
 		<Stack
 			className="monitors"
 			gap={theme.spacing(10)}
 		>
 			<Breadcrumbs list={BREADCRUMBS} />
-			<CreateMonitorButton shouldRender={true} />
+			<CreateMonitorHeader
+				isAdmin={isAdmin}
+				shouldRender={!isLoading}
+				path="/uptime/create"
+			/>
 			<Greeting type="uptime" />
 			<StatusBoxes
 				monitorsSummary={monitorsSummary}

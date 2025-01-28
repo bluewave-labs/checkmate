@@ -12,7 +12,9 @@ import { useState } from "react";
 import SearchComponent from "../SearchComponent";
 import CircularCount from "../../../../../Components/CircularCount";
 import LoadingSpinner from "../LoadingSpinner";
+import MonitorCountHeader from "../../../../../Components/MonitorCountHeader";
 import UptimeDataTableSkeleton from "./skeleton";
+
 // Utils
 import { useTheme } from "@emotion/react";
 import useUtils from "../../Hooks/useUtils";
@@ -214,21 +216,19 @@ const UptimeDataTable = (props) => {
 			flex={1}
 			py={theme.spacing(8)}
 		>
-			<Stack
-				direction="row"
-				alignItems="center"
-				mb={theme.spacing(8)}
-				gap={theme.spacing(2)}
+			<MonitorCountHeader
+				shouldRender={!monitorsAreLoading}
+				monitorCount={monitorCount}
+				heading="Uptime monitors"
+				sx={{ mb: theme.spacing(8) }}
 			>
-				<Heading component="h2">Uptime monitors</Heading>
-				<CircularCount count={monitorCount} />
 				<SearchComponent
 					monitorsAreLoading={monitorsAreLoading}
 					monitors={monitors}
 					onSearchChange={setSearch}
 					setIsSearching={setIsSearching}
 				/>
-			</Stack>
+			</MonitorCountHeader>
 
 			<MonitorDataTable
 				shouldRender={!monitorsAreLoading}
