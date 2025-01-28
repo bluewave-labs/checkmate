@@ -100,7 +100,7 @@ const UptimeMonitors = () => {
 		});
 	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
 
-	if (!isLoading && monitors?.length === 0) {
+	if (!isLoading && !monitorsAreLoading && monitors?.length === 0) {
 		return (
 			<Fallback
 				vowelStart={true}
