@@ -1,18 +1,19 @@
-import { Box, Stack, Typography, Button } from "@mui/material";
+import { Link, Box, Stack, Typography, Button } from "@mui/material";
+
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import { useEffect, useState, useCallback, useMemo } from "react";
-import CheckSVG from "../../assets/icons/checkbox-filled.svg?react";
-import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
+import SuccessSVG from "../../assets/icons/success.svg?react";
+import AlertIcon from "../../assets/icons/alert-circle.svg?react";
 import Avatar from "../../Components/Avatar";
 
 import { createToast } from "../../Utils/toastUtils";
 import useDebounce from "../../Utils/debounce";
 import { networkService } from "../../main";
 import BarChart from "../../Components/Charts/BarChart";
-import useUtils from "../Uptime/utils";
-import Host from "../Uptime/Home/host";
+import useUtils from "../Uptime/Home/Hooks/useUtils";
+import Host from "../Uptime/Home/Components/Host";
 import { StatusLabel } from "../../Components/Label";
 import { getMonitorWithPercentage } from "../../Utils/monitorUtils";
 
@@ -85,11 +86,13 @@ const PublicPage = () => {
 
 	return (
 		<Box>
-			<Stack direction={"row"} sx={{alignItems: "center", m: theme.spacing(4)}} gap={theme.spacing(4)}>
+			<Stack
+				direction={"row"}
+				sx={{ alignItems: "center", m: theme.spacing(4) }}
+				gap={theme.spacing(4)}
+			>
 				<Avatar
-					src={
-						"/static/images/avatar/2.jpg"						
-					}
+					src={"/static/images/avatar/2.jpg"}
 					sx={{ marginRight: theme.spacing(4) }}
 				/>
 				<Typography component={"h2"}> URL retrieved from status page </Typography>
@@ -130,7 +133,7 @@ const PublicPage = () => {
 						mb: theme.spacing(8),
 					}}
 				>
-					{allServersUp ? <CheckSVG /> : <WarningAmberOutlinedIcon />}
+					{allServersUp ? <SuccessSVG /> : <AlertIcon />}
 					<Typography sx={{ ml: theme.spacing(4), color: theme.palette.primary.main }}>
 						{allServersUp ? "All systems operational" : "Degraded Performance"}
 					</Typography>
@@ -138,9 +141,10 @@ const PublicPage = () => {
 			</Stack>
 			<Stack
 				sx={{
-					overflowY: "auto",
+					overflowY: "scroll",
 					alignItems: "center",
-					maxHeight: "430px",
+					minHeight: "500px",
+					maxHeight: "660px",
 					width: "100%",
 				}}
 			>
@@ -153,9 +157,7 @@ const PublicPage = () => {
 								gap={theme.spacing(2)}
 								sx={{ alignItems: "center" }}
 							>
-								<Stack
-									gap={theme.spacing(2)}
-								>
+								<Stack gap={theme.spacing(2)}>
 									<Stack
 										direction={"row"}
 										sx={{ mb: theme.spacing(4), justifyContent: "start" }}
@@ -211,27 +213,21 @@ const PublicPage = () => {
 				<Typography
 					component={"p"}
 					sx={{
-						fontSize: "16px",
-						fontWeight: "500",
-						mt: theme.spacing(6),
-						mr: theme.spacing(2),
+						color: "#067647", // value from figma, need to be added to global at some point
 					}}
 				>
-					Administrator?
+					Administrator? Login
 				</Typography>
 				<Button
 					variant="text"
-					color="info"
-					onClick={adminLogin}
 					sx={{
-						fontWeight: "600",
-						width: "fit-content",
-						mt: theme.spacing(4),
-						padding: 0,
-						minWidth: 0,
+						ml: theme.spacing(-6),
+						textDecoration: "underline",
+						color: "#067647", // value from figma, need to be added to global at some point
 					}}
+					onClick={adminLogin}
 				>
-					Login here
+					here
 				</Button>
 			</Stack>
 		</Box>

@@ -17,7 +17,6 @@ import useMonitorFetch from "./Hooks/useMonitorFetch";
 import { useSelector, useDispatch } from "react-redux";
 import { setRowsPerPage } from "../../../Features/UI/uiSlice";
 import PropTypes from "prop-types";
-import { getMonitorWithPercentage } from "../../../Utils/monitorUtils";
 
 const BREADCRUMBS = [{ name: `Uptime`, path: "/uptime" }];
 
@@ -138,4 +137,5 @@ const UptimeMonitors = () => {
 		</Stack>
 	);
 };
+
 export default UptimeMonitors;

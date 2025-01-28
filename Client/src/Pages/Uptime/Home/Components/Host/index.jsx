@@ -48,7 +48,7 @@ const Host = ({ url, title, percentageColor, percentage }) => {
 					</>
 				)}
 			</Stack>
-			<span style={{ opacity: 0.6 }}>{url}</span>
+			{url!==title? <span style={{ opacity: 0.6 }}>{url}</span>: null}
 		</Stack>
 	);
 };
