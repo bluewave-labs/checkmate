@@ -15,7 +15,7 @@ import useMonitorsFetch from "./Hooks/useMonitorsFetch";
 // Constants
 const BREADCRUMBS = [{ name: `pagespeed`, path: "/pagespeed" }];
 
-const NewPageSpeed = () => {
+const PageSpeed = () => {
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
 	const { user, authToken } = useSelector((state) => state.auth);
@@ -63,4 +63,4 @@ const NewPageSpeed = () => {
 	);
 };
 
-export default NewPageSpeed;
+export default PageSpeed;
