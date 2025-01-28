@@ -12,7 +12,7 @@ import AuthSetNewPassword from "../Pages/Auth/SetNewPassword";
 import AuthNewPasswordConfirmed from "../Pages/Auth/NewPasswordConfirmed";
 
 // Uptime
-import Uptime from "../Pages/Uptime/Home";
+import Uptime from "../Pages/Uptime/Monitors";
 import UptimeDetails from "../Pages/Uptime/Details";
 import UptimeCreate from "../Pages/Uptime/Create";
 import UptimeConfigure from "../Pages/Uptime/Configure";
