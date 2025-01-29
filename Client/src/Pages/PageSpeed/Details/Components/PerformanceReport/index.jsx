@@ -5,16 +5,12 @@ import { Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import PieChartLegend from "../Charts/PieChartLegend";
 import SkeletonLayout from "./skeleton";
+
 const PerformanceReport = ({ shouldRender, audits }) => {
-	console.log("shouldRender", shouldRender);
 	const theme = useTheme();
 
 	if (!shouldRender) {
 		return <SkeletonLayout />;
-	}
-
-	if (typeof audits === "undefined") {
-		return null;
 	}
 
 	return (

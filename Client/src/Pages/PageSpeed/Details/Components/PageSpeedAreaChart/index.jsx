@@ -15,10 +15,6 @@ const PageSpeedAreaChart = ({ shouldRender, monitor, metrics, handleMetrics }) =
 		return <SkeletonLayout />;
 	}
 
-	if (typeof monitor === "undefined") {
-		return null;
-	}
-
 	const data = monitor?.checks ? [...monitor.checks].reverse() : [];
 
 	return (
