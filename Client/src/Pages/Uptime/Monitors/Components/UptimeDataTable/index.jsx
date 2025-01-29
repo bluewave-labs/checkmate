@@ -1,6 +1,5 @@
 // Components
-import { Box, Stack, CircularProgress } from "@mui/material";
-import { Heading } from "../../../../../Components/Heading";
+import { Box, Stack } from "@mui/material";
 import DataTable from "../../../../../Components/Table";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
@@ -12,8 +11,8 @@ import { useState } from "react";
 import SearchComponent from "../SearchComponent";
 import CircularCount from "../../../../../Components/CircularCount";
 import LoadingSpinner from "../LoadingSpinner";
-import MonitorCountHeader from "../../../../../Components/MonitorCountHeader";
 import UptimeDataTableSkeleton from "./skeleton";
+import { Heading } from "../../../../../Components/Heading";
 
 // Utils
 import { useTheme } from "@emotion/react";
@@ -216,19 +215,21 @@ const UptimeDataTable = (props) => {
 			flex={1}
 			py={theme.spacing(8)}
 		>
-			<MonitorCountHeader
-				shouldRender={!monitorsAreLoading}
-				monitorCount={monitorCount}
-				heading="Uptime monitors"
-				sx={{ mb: theme.spacing(8) }}
+			<Stack
+				direction="row"
+				alignItems="center"
+				mb={theme.spacing(8)}
+				gap={theme.spacing(2)}
 			>
+				<Heading component="h2">Uptime monitors</Heading>
+				<CircularCount count={monitorCount} />
 				<SearchComponent
 					monitorsAreLoading={monitorsAreLoading}
 					monitors={monitors}
 					onSearchChange={setSearch}
 					setIsSearching={setIsSearching}
 				/>
-			</MonitorCountHeader>
+			</Stack>
 
 			<MonitorDataTable
 				shouldRender={!monitorsAreLoading}
@@ -255,6 +256,7 @@ UptimeDataTable.propTypes = {
 	monitors: PropTypes.array,
 	filteredMonitors: PropTypes.array,
 	monitorCount: PropTypes.number,
+	monitorsAreLoading: PropTypes.bool,
 	sort: PropTypes.shape({
 		field: PropTypes.string,
 		order: PropTypes.oneOf(["asc", "desc"]),

@@ -1,6 +1,6 @@
 // Components
 import { Stack, Typography, Box } from "@mui/material";
-import ChartBox from "../Charts/ChartBox";
+import ChartBox from "../../../../../Components/Charts/ChartBox";
 import UptimeIcon from "../../../../../assets/icons/uptime-icon.svg?react";
 import IncidentsIcon from "../../../../../assets/icons/incidents.svg?react";
 import AverageResponseIcon from "../../../../../assets/icons/average-response-icon.svg?react";
@@ -40,7 +40,10 @@ const ChartBoxes = ({
 				icon={<UptimeIcon />}
 				header="Uptime"
 			>
-				<Stack justifyContent="space-between">
+				<Stack
+					justifyContent="space-between"
+					direction="row"
+				>
 					<Box position="relative">
 						<Typography>Total Checks</Typography>
 						<Typography component="span">
@@ -129,6 +132,7 @@ const ChartBoxes = ({
 export default ChartBoxes;
 
 ChartBoxes.propTypes = {
+	shouldRender: PropTypes.bool,
 	monitor: PropTypes.object.isRequired,
 	dateRange: PropTypes.string.isRequired,
 	uiTimezone: PropTypes.string.isRequired,

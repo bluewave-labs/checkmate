@@ -1,7 +1,7 @@
 import { Button, Box } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
-import SettingsIcon from "../../../../../assets/icons/settings-bold.svg?react";
+import SettingsIcon from "../../../assets/icons/settings-bold.svg?react";
 import PropTypes from "prop-types";
 const ConfigButton = ({ shouldRender, monitorId }) => {
 	const theme = useTheme();

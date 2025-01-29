@@ -115,6 +115,10 @@ const weights = {
 
 const PieChart = ({ audits }) => {
 	const theme = useTheme();
+	const [highlightedItem, setHighLightedItem] = useState(null);
+	const [expand, setExpand] = useState(false);
+
+	if (typeof audits === "undefined") return null;
 
 	/**
 	 * Retrieves color properties based on the performance value.
@@ -216,8 +220,6 @@ const PieChart = ({ audits }) => {
 	const pieData = getPieData(audits);
 	const colorMap = getColors(performance);
 
-	const [highlightedItem, setHighLightedItem] = useState(null);
-	const [expand, setExpand] = useState(false);
 	return (
 		<Box onMouseLeave={() => setExpand(false)}>
 			{expand ? (

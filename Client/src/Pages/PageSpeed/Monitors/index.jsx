@@ -1,6 +1,6 @@
 // Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
-import { Stack, Box } from "@mui/material";
+import { Stack } from "@mui/material";
 import CreateMonitorHeader from "../../../Components/CreateMonitorHeader";
 import MonitorCountHeader from "../../../Components/MonitorCountHeader";
 import MonitorGrid from "./Components/MonitorGrid";

@@ -32,12 +32,14 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 			border={1}
 			borderColor={theme.palette.primary.lowContrast}
 			borderRadius={theme.shape.borderRadius}
-			borderStyle="dashed"
 			backgroundColor={theme.palette.primary.main}
 			overflow="hidden"
+			sx={{
+				borderStyle: "dashed",
+			}}
 		>
 			<Stack
-				className={`fallback__${title.trim().split(" ")[0]}`}
+				className={`fallback__${title?.trim().split(" ")[0]}`}
 				alignItems="center"
 				gap={theme.spacing(20)}
 			>
@@ -68,7 +70,7 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 					>
 						{vowelStart ? "An" : "A"} {title} is used to:
 					</Typography>
-					{checks.map((check, index) => (
+					{checks?.map((check, index) => (
 						<Check
 							text={check}
 							key={`${title.trim().split(" ")[0]}-${index}`}

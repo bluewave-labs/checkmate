@@ -1,17 +1,16 @@
 import { Stack, Typography } from "@mui/material";
-import PulseDot from "../../../../../Components/Animated/PulseDot";
-import Dot from "../../../../../Components/Dot";
+import PulseDot from "../Animated/PulseDot";
+import Dot from "../Dot";
 import { useTheme } from "@emotion/react";
-import useUtils from "../../../Monitors/Hooks/useUtils";
-import { formatDurationRounded } from "../../../../../Utils/timeUtils";
-import ConfigButton from "../ConfigButton";
+import useUtils from "../../Pages/Uptime/Monitors/Hooks/useUtils";
+import { formatDurationRounded } from "../../Utils/timeUtils";
+import ConfigButton from "./ConfigButton";
 import SkeletonLayout from "./skeleton";
 import PropTypes from "prop-types";
 
 const MonitorHeader = ({ shouldRender = true, isAdmin, monitor }) => {
 	const theme = useTheme();
 	const { statusColor, statusMsg, determineState } = useUtils();
-	console.log(shouldRender);
 	if (!shouldRender) {
 		return <SkeletonLayout />;
 	}
