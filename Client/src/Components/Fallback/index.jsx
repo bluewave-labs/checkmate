@@ -86,7 +86,7 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 						sx={{ alignSelf: "center" }}
 						onClick={() => navigate(link)}
 					>
-						Let's create your first{title}
+						Let's create your first {title}
 					</Button>
 				)}
 			</Stack>
