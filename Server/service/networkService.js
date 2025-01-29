@@ -1,6 +1,4 @@
 const SERVICE_NAME = "NetworkService";
-import ServiceRegistry from "../service/serviceRegistry.js";
-import StringService from "../service/stringService.js";
 /**
  * Constructs a new NetworkService instance.
  *
@@ -30,11 +28,9 @@ class NetworkService {
 		this.http = http;
 		this.Docker = Docker;
 		this.net = net;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 
 		this.apiToken = process.env.POEDITOR_API_TOKEN;
 		this.projectId = process.env.POEDITOR_PROJECT_ID;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 
 		if (!this.apiToken || !this.projectId) {
 			this.logger.error({
@@ -100,13 +96,13 @@ class NetworkService {
 			if (error) {
 				pingResponse.status = false;
 				pingResponse.code = this.PING_ERROR;
-				pingResponse.message = this.stringService.pingCannotResolve;
+				pingResponse.message = "No response";
 				return pingResponse;
 			}
 
 			pingResponse.code = 200;
 			pingResponse.status = response.alive;
-			pingResponse.message = this.stringService.pingSuccess;
+			pingResponse.message = "Success";
 			return pingResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -270,12 +266,12 @@ class NetworkService {
 			if (error) {
 				dockerResponse.status = false;
 				dockerResponse.code = error.statusCode || this.NETWORK_ERROR;
-				dockerResponse.message = error.reason || this.stringService.dockerFail;
+				dockerResponse.message = error.reason || "Failed to fetch Docker container information";
 				return dockerResponse;
 			}
 			dockerResponse.status = response?.State?.Status === "running" ? true : false;
 			dockerResponse.code = 200;
-			dockerResponse.message = this.stringService.dockerSuccess;
+			dockerResponse.message = "Docker container status fetched successfully";
 			return dockerResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
