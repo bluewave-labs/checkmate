@@ -22,10 +22,7 @@ class TranslationService {
 
   async initialize() {
     try {
-      const loadedFromFiles = await this.loadFromFiles();
-      if (!loadedFromFiles) {
-        await this.loadTranslations();
-      }
+      await this.loadTranslations();
 
       // Yeni eklenen terimleri POEditor'e gönder
       await this.syncTermsWithPOEditor();
