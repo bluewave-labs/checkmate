@@ -6,6 +6,10 @@ import UptimeDataTable from "./Components/UptimeDataTable";
 import Pagination from "../../../Components/Table/TablePagination";
 import CreateMonitorHeader from "../../../Components/CreateMonitorHeader";
 import Fallback from "../../../Components/Fallback";
+import SearchComponent from "./Components/SearchComponent";
+
+import MonitorCountHeader from "../../../Components/MonitorCountHeader";
+
 // MUI Components
 import { Stack, Box, Button } from "@mui/material";
 
@@ -53,9 +57,9 @@ const UptimeMonitors = () => {
 	const rowsPerPage = useSelector((state) => state.ui.monitors.rowsPerPage);
 
 	// Local state
-	const [search, setSearch] = useState("");
-	const [page, setPage] = useState(0);
-	const [sort, setSort] = useState({});
+	const [search, setSearch] = useState(undefined);
+	const [page, setPage] = useState(undefined);
+	const [sort, setSort] = useState(undefined);
 	const [isSearching, setIsSearching] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
@@ -85,21 +89,19 @@ const UptimeMonitors = () => {
 	}, []);
 
 	const teamId = user.teamId;
-
 	const { monitorsAreLoading, monitors, filteredMonitors, monitorsSummary } =
 		useMonitorsFetch({
 			authToken,
 			teamId,
 			limit: 25,
-			page,
+			page: page,
 			rowsPerPage: rowsPerPage,
 			filter: search,
-			field: sort.field,
-			order: sort.order,
+			field: sort?.field,
+			order: sort?.order,
 			triggerUpdate: monitorUpdateTrigger,
 		});
 	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
-
 	if (!isLoading && !monitorsAreLoading && monitors?.length === 0) {
 		return (
 			<Fallback
@@ -128,6 +130,19 @@ const UptimeMonitors = () => {
 				monitorsSummary={monitorsSummary}
 				shouldRender={!monitorsAreLoading}
 			/>
+
+			<Stack direction={"row"}>
+				<MonitorCountHeader
+					shouldRender={monitors?.length > 0 && !monitorsAreLoading}
+					monitorCount={totalMonitors}
+					heading={"Uptime monitors"}
+				></MonitorCountHeader>
+				<SearchComponent
+					monitors={monitors}
+					onSearchChange={setSearch}
+					setIsSearching={setIsSearching}
+				/>
+			</Stack>
 			<UptimeDataTable
 				isAdmin={isAdmin}
 				isLoading={isLoading}
@@ -139,7 +154,6 @@ const UptimeMonitors = () => {
 				setSort={setSort}
 				setSearch={setSearch}
 				isSearching={isSearching}
-				setIsSearching={setIsSearching}
 				monitorsAreLoading={monitorsAreLoading}
 				triggerUpdate={triggerUpdate}
 			/>
