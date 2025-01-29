@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import { errorMessages } from "../utils/messages.js";
 import ServiceRegistry from "../service/serviceRegistry.js";
 import SettingsService from "../service/settingsService.js";
+import StringService from "../service/stringService.js";
 const SERVICE_NAME = "verifyJWT";
 const TOKEN_PREFIX = "Bearer ";
 
@@ -14,10 +14,11 @@ const TOKEN_PREFIX = "Bearer ";
  * @returns {express.Response}
  */
 const verifyJWT = (req, res, next) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	const token = req.headers["authorization"];
 	// Make sure a token is provided
 	if (!token) {
-		const error = new Error(errorMessages.NO_AUTH_TOKEN(req.language));
+		const error = new Error(stringService.noAuthToken);
 		error.status = 401;
 		error.service = SERVICE_NAME;
 		next(error);
@@ -25,7 +26,7 @@ const verifyJWT = (req, res, next) => {
 	}
 	// Make sure it is properly formatted
 	if (!token.startsWith(TOKEN_PREFIX)) {
-		const error = new Error(errorMessages.INVALID_AUTH_TOKEN(req.language)); // Instantiate a new Error object for improperly formatted token
+		const error = new Error(stringService.invalidAuthToken); // Instantiate a new Error object for improperly formatted token
 		error.status = 400;
 		error.service = SERVICE_NAME;
 		error.method = "verifyJWT";
@@ -43,7 +44,7 @@ const verifyJWT = (req, res, next) => {
 				handleExpiredJwtToken(req, res, next);
 			} else {
 				// Invalid token (signature or token altered or other issue)
-				const errorMessage = errorMessages.INVALID_AUTH_TOKEN(req.language);
+				const errorMessage = stringService.invalidAuthToken;
 				return res.status(401).json({ success: false, msg: errorMessage });
 			}
 		} else {
@@ -55,12 +56,13 @@ const verifyJWT = (req, res, next) => {
 };
 
 function handleExpiredJwtToken(req, res, next) {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	// check for refreshToken
 	const refreshToken = req.headers["x-refresh-token"];
 
 	if (!refreshToken) {
 		// No refresh token provided
-		const error = new Error(errorMessages.NO_REFRESH_TOKEN(req.language));
+		const error = new Error(stringService.noRefreshToken);
 		error.status = 401;
 		error.service = SERVICE_NAME;
 		error.method = "handleExpiredJwtToken";
@@ -76,8 +78,8 @@ function handleExpiredJwtToken(req, res, next) {
 			// Invalid or expired refresh token, trigger logout
 			const errorMessage =
 				refreshErr.name === "TokenExpiredError"
-					? errorMessages.EXPIRED_REFRESH_TOKEN
-					: errorMessages.INVALID_REFRESH_TOKEN;
+					? stringService.expiredRefreshToken
+					: stringService.invalidRefreshToken;
 			const error = new Error(errorMessage);
 			error.status = 401;
 			error.service = SERVICE_NAME;
@@ -87,7 +89,7 @@ function handleExpiredJwtToken(req, res, next) {
 		// Refresh token is valid and unexpired, request for new access token
 		res.status(403).json({
 			success: false,
-			msg: errorMessages.REQUEST_NEW_ACCESS_TOKEN,
+			msg: stringService.requestNewAccessToken,
 		});
 	});
 }

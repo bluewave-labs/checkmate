@@ -1,12 +1,15 @@
-import { successMessages } from "../utils/messages.js";
+import ServiceRegistry from "../service/serviceRegistry.js";
+import StringService from "../service/stringService.js";
 import { updateAppSettingsBodyValidation } from "../validation/joi.js";
 import { handleValidationError, handleError } from "./controllerUtils.js";
+
 const SERVICE_NAME = "SettingsController";
 
 class SettingsController {
 	constructor(db, settingsService) {
 		this.db = db;
 		this.settingsService = settingsService;
+		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	}
 
 	getAppSettings = async (req, res, next) => {
@@ -14,7 +17,7 @@ class SettingsController {
 			const settings = { ...(await this.settingsService.getSettings()) };
 			delete settings.jwtSecret;
 			return res.success({
-				msg: successMessages.GET_APP_SETTINGS(req.language),
+				msg: this.stringService.getAppSettings,
 				data: settings,
 			});
 		} catch (error) {
@@ -35,7 +38,7 @@ class SettingsController {
 			const updatedSettings = { ...(await this.settingsService.reloadSettings()) };
 			delete updatedSettings.jwtSecret;
 			return res.success({
-				msg: successMessages.UPDATE_APP_SETTINGS(req.language),
+				msg: this.stringService.updateAppSettings,
 				data: updatedSettings,
 			});
 		} catch (error) {

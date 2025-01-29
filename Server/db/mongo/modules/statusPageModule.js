@@ -1,9 +1,11 @@
 import StatusPage from "../../models/StatusPage.js";
-import { errorMessages } from "../../../utils/messages.js";
+import ServiceRegistry from "../../../service/serviceRegistry.js";
+import StringService from "../../../service/stringService.js";
 
 const SERVICE_NAME = "statusPageModule";
 
 const createStatusPage = async (statusPageData) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		const statusPage = new StatusPage({ ...statusPageData });
 		await statusPage.save();
@@ -12,7 +14,7 @@ const createStatusPage = async (statusPageData) => {
 		if (error?.code === 11000) {
 			// Handle duplicate URL errors
 			error.status = 400;
-			error.message = errorMessages.STATUS_PAGE_URL_NOT_UNIQUE;
+			error.message = stringService.statusPageUrlNotUnique;
 		}
 		error.service = SERVICE_NAME;
 		error.method = "createStatusPage";
@@ -20,11 +22,12 @@ const createStatusPage = async (statusPageData) => {
 	}
 };
 
-const getStatusPageByUrl = async (url, language) => {
+const getStatusPageByUrl = async (url) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		const statusPage = await StatusPage.findOne({ url });
 		if (statusPage === null || statusPage === undefined) {
-			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND(language));
+			const error = new Error(stringService.statusPageNotFound);
 			error.status = 404;
 
 			throw error;

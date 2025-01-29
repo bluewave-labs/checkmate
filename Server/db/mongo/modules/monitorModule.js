@@ -2,9 +2,10 @@ import Monitor from "../../models/Monitor.js";
 import Check from "../../models/Check.js";
 import PageSpeedCheck from "../../models/PageSpeedCheck.js";
 import HardwareCheck from "../../models/HardwareCheck.js";
-import { errorMessages } from "../../../utils/messages.js";
 import Notification from "../../models/Notification.js";
 import { NormalizeData, NormalizeDataUptimeDetails } from "../../../utils/dataUtils.js";
+import ServiceRegistry from "../../../service/serviceRegistry.js";
+import StringService from "../../../service/stringService.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -324,11 +325,12 @@ const calculateGroupStats = (group) => {
  * @throws {Error}
  */
 const getUptimeDetailsById = async (req) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		const { monitorId } = req.params;
 		const monitor = await Monitor.findById(monitorId);
 		if (monitor === null || monitor === undefined) {
-			throw new Error(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId, req.language));
+			throw new Error(stringService.dbFindMonitorById(monitorId));
 		}
 
 		const { dateRange, normalize } = req.query;
@@ -374,13 +376,14 @@ const getUptimeDetailsById = async (req) => {
  * @throws {Error}
  */
 const getMonitorStatsById = async (req) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		const { monitorId } = req.params;
 
 		// Get monitor, if we can't find it, abort with error
 		const monitor = await Monitor.findById(monitorId);
 		if (monitor === null || monitor === undefined) {
-			throw new Error(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId));
+			throw new Error(stringService.getDbFindMonitorById(monitorId));
 		}
 
 		// Get query params
@@ -471,10 +474,11 @@ const getHardwareDetailsById = async (req) => {
  * @throws {Error}
  */
 const getMonitorById = async (monitorId) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		const monitor = await Monitor.findById(monitorId);
 		if (monitor === null || monitor === undefined) {
-			const error = new Error(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId));
+			const error = new Error(stringService.getDbFindMonitorById(monitorId));
 			error.status = 404;
 			throw error;
 		}
@@ -714,11 +718,13 @@ const createMonitor = async (req, res) => {
  * @throws {Error}
  */
 const deleteMonitor = async (req, res) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	const monitorId = req.params.monitorId;
 	try {
 		const monitor = await Monitor.findByIdAndDelete(monitorId);
 		if (!monitor) {
-			throw new Error(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId, req.language));
+			throw new Error(stringService.getDbFindMonitorById(monitorId));
 		}
 		return monitor;
 	} catch (error) {

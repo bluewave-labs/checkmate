@@ -1,6 +1,7 @@
 import InviteToken from "../../models/InviteToken.js";
 import crypto from "crypto";
-import { errorMessages } from "../../../utils/messages.js";
+import ServiceRegistry from "../../../service/serviceRegistry.js";
+import StringService from "../../../service/stringService.js";
 
 const SERVICE_NAME = "inviteModule";
 /**
@@ -41,13 +42,14 @@ const requestInviteToken = async (userData) => {
  * @returns {Promise<InviteToken>} The invite token data.
  * @throws {Error} If the invite token is not found or there is another error.
  */
-const getInviteToken = async (token, language) => {
+const getInviteToken = async (token) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		const invite = await InviteToken.findOne({
 			token,
 		});
 		if (invite === null) {
-			throw new Error(errorMessages.AUTH_INVITE_NOT_FOUND(language));
+			throw new Error(stringService.authInviteNotFound);
 		}
 		return invite;
 	} catch (error) {
@@ -67,13 +69,14 @@ const getInviteToken = async (token, language) => {
  * @returns {Promise<InviteToken>} The invite token data.
  * @throws {Error} If the invite token is not found or there is another error.
  */
-const getInviteTokenAndDelete = async (token, language) => {
+const getInviteTokenAndDelete = async (token) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		const invite = await InviteToken.findOneAndDelete({
 			token,
 		});
 		if (invite === null) {
-			throw new Error(errorMessages.AUTH_INVITE_NOT_FOUND(language));
+			throw new Error(stringService.authInviteNotFound);
 		}
 		return invite;
 	} catch (error) {

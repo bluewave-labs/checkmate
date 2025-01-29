@@ -3,13 +3,15 @@ import {
 	createStatusPageBodyValidation,
 	getStatusPageParamValidation,
 } from "../validation/joi.js";
-import { successMessages } from "../utils/messages.js";
+import ServiceRegistry from "../service/serviceRegistry.js";
+import StringService from "../service/stringService.js";
 
 const SERVICE_NAME = "statusPageController";
 
 class StatusPageController {
 	constructor(db) {
 		this.db = db;
+		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	}
 
 	createStatusPage = async (req, res, next) => {
@@ -23,7 +25,7 @@ class StatusPageController {
 		try {
 			const statusPage = await this.db.createStatusPage(req.body);
 			return res.success({
-				msg: successMessages.STATUS_PAGE_CREATE(req.language),
+				msg: this.stringService.statusPageCreate,
 				data: statusPage,
 			});
 		} catch (error) {
@@ -40,9 +42,9 @@ class StatusPageController {
 
 		try {
 			const { url } = req.params;
-			const statusPage = await this.db.getStatusPageByUrl(url, req.language);
+			const statusPage = await this.db.getStatusPageByUrl(url);
 			return res.success({
-				msg: successMessages.STATUS_PAGE_BY_URL(req.language),
+				msg: this.stringService.statusPageByUrl,
 				data: statusPage,
 			});
 		} catch (error) {

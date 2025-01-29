@@ -1,10 +1,11 @@
 import UserModel from "../../models/User.js";
 import TeamModel from "../../models/Team.js";
-import { errorMessages } from "../../../utils/messages.js";
 import { GenerateAvatarImage } from "../../../utils/imageProcessing.js";
 
 const DUPLICATE_KEY_CODE = 11000; // MongoDB error code for duplicate key
 import { ParseBoolean } from "../../../utils/utils.js";
+import ServiceRegistry from "../../../service/serviceRegistry.js";
+import StringService from "../../../service/stringService.js";
 const SERVICE_NAME = "userModule";
 
 /**
@@ -20,6 +21,7 @@ const insertUser = async (
 	imageFile,
 	generateAvatarImage = GenerateAvatarImage
 ) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		if (imageFile) {
 			// 1.  Save the full size image
@@ -50,7 +52,7 @@ const insertUser = async (
 			.select("-profileImage"); // .select() doesn't work with create, need to save then find
 	} catch (error) {
 		if (error.code === DUPLICATE_KEY_CODE) {
-			error.message = errorMessages.DB_USER_EXISTS;
+			error.message = stringService.dbUserExists;
 		}
 		error.service = SERVICE_NAME;
 		error.method = "insertUser";
@@ -69,13 +71,15 @@ const insertUser = async (
  * @returns {Promise<UserModel>}
  * @throws {Error}
  */
-const getUserByEmail = async (email, language) => {
+const getUserByEmail = async (email) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		// Need the password to be able to compare, removed .select()
 		// We can strip the hash before returning the user
 		const user = await UserModel.findOne({ email: email }).select("-profileImage");
 		if (!user) {
-			throw new Error(errorMessages.DB_USER_NOT_FOUND(language));
+			throw new Error(stringService.dbUserNotFound);
 		}
 		return user;
 	} catch (error) {
@@ -149,11 +153,13 @@ const updateUser = async (
  * @returns {Promise<UserModel>}
  * @throws {Error}
  */
-const deleteUser = async (userId, language) => {
+const deleteUser = async (userId) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const deletedUser = await UserModel.findByIdAndDelete(userId);
 		if (!deletedUser) {
-			throw new Error(errorMessages.DB_USER_NOT_FOUND(language));
+			throw new Error(stringService.dbUserNotFound);
 		}
 		return deletedUser;
 	} catch (error) {

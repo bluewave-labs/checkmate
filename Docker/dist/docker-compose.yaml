@@ -20,6 +20,8 @@ services:
     environment:
       - DB_CONNECTION_STRING=mongodb://mongodb:27017/uptime_db
       - REDIS_HOST=redis
+      - POEDITOR_API_TOKEN=
+      - POEDITOR_PROJECT_ID=
     # volumes:
     # - /var/run/docker.sock:/var/run/docker.sock:ro
   redis:

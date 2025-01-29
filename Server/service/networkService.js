@@ -1,6 +1,6 @@
-import { errorMessages, successMessages } from "../utils/messages.js";
 const SERVICE_NAME = "NetworkService";
-
+import ServiceRegistry from "../service/serviceRegistry.js";
+import StringService from "../service/stringService.js";
 /**
  * Constructs a new NetworkService instance.
  *
@@ -30,9 +30,11 @@ class NetworkService {
 		this.http = http;
 		this.Docker = Docker;
 		this.net = net;
+		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 
 		this.apiToken = process.env.POEDITOR_API_TOKEN;
 		this.projectId = process.env.POEDITOR_PROJECT_ID;
+		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 
 		if (!this.apiToken || !this.projectId) {
 			this.logger.error({
@@ -98,13 +100,13 @@ class NetworkService {
 			if (error) {
 				pingResponse.status = false;
 				pingResponse.code = this.PING_ERROR;
-				pingResponse.message = errorMessages.PING_CANNOT_RESOLVE;
+				pingResponse.message = this.stringService.pingCannotResolve;
 				return pingResponse;
 			}
 
 			pingResponse.code = 200;
 			pingResponse.status = response.alive;
-			pingResponse.message = successMessages.PING_SUCCESS('en');
+			pingResponse.message = this.stringService.pingSuccess;
 			return pingResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -251,7 +253,7 @@ class NetworkService {
 			const containers = await docker.listContainers({ all: true });
 			const containerExists = containers.some((c) => c.Id.startsWith(job.data.url));
 			if (!containerExists) {
-				throw new Error(errorMessages.DOCKER_NOT_FOUND('en'));
+				throw new Error(this.stringService.dockerNotFound);
 			}
 			const container = docker.getContainer(job.data.url);
 
@@ -268,12 +270,12 @@ class NetworkService {
 			if (error) {
 				dockerResponse.status = false;
 				dockerResponse.code = error.statusCode || this.NETWORK_ERROR;
-				dockerResponse.message = error.reason || errorMessages.DOCKER_FAIL;
+				dockerResponse.message = error.reason || this.stringService.dockerFail;
 				return dockerResponse;
 			}
 			dockerResponse.status = response?.State?.Status === "running" ? true : false;
 			dockerResponse.code = 200;
-			dockerResponse.message = successMessages.DOCKER_SUCCESS('en');
+			dockerResponse.message = this.stringService.dockerSuccess;
 			return dockerResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -321,13 +323,13 @@ class NetworkService {
 			if (error) {
 				portResponse.status = false;
 				portResponse.code = this.NETWORK_ERROR;
-				portResponse.message = errorMessages.PORT_FAIL;
+				portResponse.message = this.stringService.portFail;
 				return portResponse;
 			}
 
 			portResponse.status = response.success;
 			portResponse.code = 200;
-			portResponse.message = successMessages.PORT_SUCCESS('en');
+			portResponse.message = this.stringService.portSuccess;
 			return portResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;

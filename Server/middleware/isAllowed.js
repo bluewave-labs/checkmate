@@ -2,17 +2,17 @@ import jwt from "jsonwebtoken";
 const TOKEN_PREFIX = "Bearer ";
 const SERVICE_NAME = "allowedRoles";
 import ServiceRegistry from "../service/serviceRegistry.js";
+import StringService from "../service/stringService.js";
 import SettingsService from "../service/settingsService.js";
 
-import { errorMessages } from "../utils/messages.js";
 
 const isAllowed = (allowedRoles) => {
 	return (req, res, next) => {
 		const token = req.headers["authorization"];
-
+		const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 		// If no token is pressent, return an error
 		if (!token) {
-			const error = new Error(errorMessages.NO_AUTH_TOKEN(req.language));
+			const error = new Error(stringService.noAuthToken);
 			error.status = 401;
 			error.service = SERVICE_NAME;
 			next(error);
@@ -21,7 +21,7 @@ const isAllowed = (allowedRoles) => {
 
 		// If the token is improperly formatted, return an error
 		if (!token.startsWith(TOKEN_PREFIX)) {
-			const error = new Error(errorMessages.INVALID_AUTH_TOKEN(req.language));
+			const error = new Error(stringService.invalidAuthToken);
 			error.status = 400;
 			error.service = SERVICE_NAME;
 			next(error);
@@ -41,7 +41,7 @@ const isAllowed = (allowedRoles) => {
 				next();
 				return;
 			} else {
-				const error = new Error(errorMessages.INSUFFICIENT_PERMISSIONS(req.language));
+				const error = new Error(stringService.insufficientPermissions);
 				error.status = 401;
 				error.service = SERVICE_NAME;
 				next(error);

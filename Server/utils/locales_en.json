@@ -139,5 +139,7 @@
   "statusPageCreate": "Status page created successfully",
   "newTermsAdded": "New terms added to POEditor",
   "dockerSuccess": "Docker container status fetched successfully",
-  "portSuccess": "Port connected successfully"
+  "portSuccess": "Port connected successfully",
+  "monitorPause": "Monitor paused successfully",
+  "monitorResume": "Monitor resumed successfully"
 }
