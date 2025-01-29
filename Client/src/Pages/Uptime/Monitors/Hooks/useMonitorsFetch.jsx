@@ -43,9 +43,9 @@ export const useMonitorFetch = ({
 	triggerUpdate,
 }) => {
 	const [monitorsAreLoading, setMonitorsAreLoading] = useState(false);
-	const [monitors, setMonitors] = useState([]);
-	const [filteredMonitors, setFilteredMonitors] = useState([]);
-	const [monitorsSummary, setMonitorsSummary] = useState({});
+	const [monitors, setMonitors] = useState(undefined);
+	const [filteredMonitors, setFilteredMonitors] = useState(undefined);
+	const [monitorsSummary, setMonitorsSummary] = useState(undefined);
 
 	const theme = useTheme();
 
