@@ -445,7 +445,7 @@ const ProfilePanel = () => {
 				>
 					<Button
 						variant="text"
-						color="info"
+						color="accent"
 						onClick={removePicture}
 					>
 						Remove
@@ -460,6 +460,12 @@ const ProfilePanel = () => {
 								? true
 								: false
 						}
+						sx={{
+							"&.Mui-disabled": {
+								backgroundColor: theme.palette.primary.lowContrast,
+								color: theme.palette.primary.main,
+							},
+						}}
 					>
 						Update
 					</Button>
