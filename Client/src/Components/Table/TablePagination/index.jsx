@@ -6,8 +6,8 @@ import SelectorVertical from "../../../assets/icons/selector-vertical.svg?react"
 
 Pagination.propTypes = {
 	paginationLabel: PropTypes.string, // Label for the pagination.
-	itemCount: PropTypes.number.isRequired, // Total number of items for pagination.
-	page: PropTypes.number.isRequired, // Current page index.
+	itemCount: PropTypes.number, // Total number of items for pagination.
+	page: PropTypes.number, // Current page index.
 	rowsPerPage: PropTypes.number.isRequired, // Number of rows displayed per page.
 	handleChangePage: PropTypes.func.isRequired, // Function to handle page changes.
 	handleChangeRowsPerPage: PropTypes.func, // Function to handle changes in rows per page.
@@ -29,9 +29,9 @@ const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 25];
  */
 function Pagination({
 	paginationLabel,
-	itemCount,
-	page,
-	rowsPerPage,
+	itemCount = 0,
+	page = 0,
+	rowsPerPage = 5,
 	handleChangePage,
 	handleChangeRowsPerPage,
 }) {
