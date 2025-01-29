@@ -1,9 +1,6 @@
 import { Skeleton } from "@mui/material";
-import PropTypes from "prop-types";
 
-const UptimeDataTableSkeleton = ({ shouldRender }) => {
-	if (!shouldRender) return null;
-
+const UptimeDataTableSkeleton = () => {
 	return (
 		<Skeleton
 			variant="rounded"
@@ -12,10 +9,6 @@ const UptimeDataTableSkeleton = ({ shouldRender }) => {
 			flex={1}
 		/>
 	);
-};
-
-UptimeDataTableSkeleton.propTypes = {
-	shouldRender: PropTypes.bool.isRequired,
 };
 
 export default UptimeDataTableSkeleton;
