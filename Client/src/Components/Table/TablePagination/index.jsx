@@ -8,7 +8,7 @@ Pagination.propTypes = {
 	paginationLabel: PropTypes.string, // Label for the pagination.
 	itemCount: PropTypes.number, // Total number of items for pagination.
 	page: PropTypes.number, // Current page index.
-	rowsPerPage: PropTypes.number.isRequired, // Number of rows displayed per page.
+	rowsPerPage: PropTypes.number, // Number of rows displayed per page.
 	handleChangePage: PropTypes.func.isRequired, // Function to handle page changes.
 	handleChangeRowsPerPage: PropTypes.func, // Function to handle changes in rows per page.
 };
