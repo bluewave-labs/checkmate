@@ -11,6 +11,7 @@ const SERVICE_NAME = "statusPageController";
 class StatusPageController {
 	constructor(db) {
 		this.db = db;
+		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	}
 
 	createStatusPage = async (req, res, next) => {
@@ -25,7 +26,7 @@ class StatusPageController {
 		try {
 			const statusPage = await this.db.createStatusPage(req.body, req.file);
 			return res.success({
-				msg: successMessages.STATUS_PAGE_CREATE(req.language),
+				msg: this.stringService.statusPageCreate,
 				data: statusPage,
 			});
 		} catch (error) {
@@ -62,7 +63,7 @@ class StatusPageController {
 		try {
 			const statusPage = await this.db.getStatusPage();
 			return res.success({
-				msg: successMessages.STATUS_PAGE_BY_URL(req.language),
+				msg: this.stringService.statusPageByUrl,
 				data: statusPage,
 			});
 		} catch (error) {

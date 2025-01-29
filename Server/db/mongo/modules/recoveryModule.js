@@ -1,7 +1,8 @@
 import UserModel from "../../models/User.js";
 import RecoveryToken from "../../models/RecoveryToken.js";
 import crypto from "crypto";
-import { errorMessages } from "../../../utils/messages.js";
+import serviceRegistry from "../../../service/serviceRegistry.js";
+import StringService from "../../../service/stringService.js";
 
 const SERVICE_NAME = "recoveryModule";
 
@@ -31,6 +32,7 @@ const requestRecoveryToken = async (req, res) => {
 };
 
 const validateRecoveryToken = async (req, res) => {
+	const stringService = serviceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		const candidateToken = req.body.recoveryToken;
 		const recoveryToken = await RecoveryToken.findOne({
@@ -39,7 +41,7 @@ const validateRecoveryToken = async (req, res) => {
 		if (recoveryToken !== null) {
 			return recoveryToken;
 		} else {
-			throw new Error(errorMessages.DB_TOKEN_NOT_FOUND(req.language));
+			throw new Error(stringService.dbTokenNotFound);
 		}
 	} catch (error) {
 		error.service = SERVICE_NAME;
@@ -49,6 +51,7 @@ const validateRecoveryToken = async (req, res) => {
 };
 
 const resetPassword = async (req, res) => {
+	const stringService = serviceRegistry.get(StringService.SERVICE_NAME);
 	try {
 		const newPassword = req.body.password;
 
@@ -57,12 +60,12 @@ const resetPassword = async (req, res) => {
 		const user = await UserModel.findOne({ email: recoveryToken.email });
 
 		if (user === null) {
-			throw new Error(errorMessages.DB_USER_NOT_FOUND(req.language));
+			throw new Error(stringService.dbUserNotFound);
 		}
 
 		const match = await user.comparePassword(newPassword);
 		if (match === true) {
-			throw new Error(errorMessages.DB_RESET_PASSWORD_BAD_MATCH(req.language));
+			throw new Error(stringService.dbResetPasswordBadMatch);
 		}
 
 		user.password = newPassword;

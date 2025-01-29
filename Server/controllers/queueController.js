@@ -1,18 +1,20 @@
 import { handleError } from "./controllerUtils.js";
-import { successMessages } from "../utils/messages.js";
+import ServiceRegistry from "../service/serviceRegistry.js";
+import StringService from "../service/stringService.js";
 
 const SERVICE_NAME = "JobQueueController";
 
 class JobQueueController {
 	constructor(jobQueue) {
 		this.jobQueue = jobQueue;
+		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	}
 
 	getMetrics = async (req, res, next) => {
 		try {
 			const metrics = await this.jobQueue.getMetrics();
 			res.success({
-				msg: successMessages.QUEUE_GET_METRICS(req.language),
+				msg: this.stringService.queueGetMetrics,
 				data: metrics,
 			});
 		} catch (error) {
@@ -25,7 +27,7 @@ class JobQueueController {
 		try {
 			const jobs = await this.jobQueue.getJobStats();
 			return res.success({
-				msg: successMessages.QUEUE_GET_METRICS(req.language),
+				msg: this.stringService.queueGetMetrics,
 				data: jobs,
 			});
 		} catch (error) {
@@ -38,7 +40,7 @@ class JobQueueController {
 		try {
 			await this.jobQueue.addJob(Math.random().toString(36).substring(7));
 			return res.success({
-				msg: successMessages.QUEUE_ADD_JOB(req.language),
+				msg: this.stringService.queueAddJob,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "addJob"));
@@ -50,7 +52,7 @@ class JobQueueController {
 		try {
 			await this.jobQueue.obliterate();
 			return res.success({
-				msg: successMessages.QUEUE_OBLITERATE(req.language),
+				msg: this.stringService.queueObliterate,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "obliterateQueue"));
