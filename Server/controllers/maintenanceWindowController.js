@@ -9,14 +9,17 @@ import {
 } from "../validation/joi.js";
 import jwt from "jsonwebtoken";
 import { getTokenFromHeaders } from "../utils/utils.js";
-import { successMessages } from "../utils/messages.js";
 import { handleValidationError, handleError } from "./controllerUtils.js";
+import ServiceRegistry from "../service/serviceRegistry.js";
+import StringService from "../service/stringService.js";
+
 const SERVICE_NAME = "maintenanceWindowController";
 
 class MaintenanceWindowController {
 	constructor(db, settingsService) {
 		this.db = db;
 		this.settingsService = settingsService;
+		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	}
 
 	createMaintenanceWindows = async (req, res, next) => {
@@ -45,7 +48,7 @@ class MaintenanceWindowController {
 			await Promise.all(dbTransactions);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_CREATE(req.language),
+				msg: this.stringService.maintenanceWindowCreate,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "createMaintenanceWindow"));
@@ -63,7 +66,7 @@ class MaintenanceWindowController {
 			const maintenanceWindow = await this.db.getMaintenanceWindowById(req.params.id);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_ID(req.language),
+				msg: this.stringService.maintenanceWindowGetById,
 				data: maintenanceWindow,
 			});
 		} catch (error) {
@@ -89,7 +92,7 @@ class MaintenanceWindowController {
 			);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_TEAM(req.language),
+				msg: this.stringService.maintenanceWindowGetByTeam,
 				data: maintenanceWindows,
 			});
 		} catch (error) {
@@ -111,7 +114,7 @@ class MaintenanceWindowController {
 			);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_USER(req.language),
+				msg: this.stringService.maintenanceWindowGetByUser,
 				data: maintenanceWindows,
 			});
 		} catch (error) {
@@ -129,7 +132,7 @@ class MaintenanceWindowController {
 		try {
 			await this.db.deleteMaintenanceWindowById(req.params.id);
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_DELETE(req.language),
+				msg: this.stringService.maintenanceWindowDelete,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "deleteMaintenanceWindow"));
@@ -150,7 +153,7 @@ class MaintenanceWindowController {
 				req.body
 			);
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_EDIT(req.language),
+				msg: this.stringService.maintenanceWindowEdit,
 				data: editedMaintenanceWindow,
 			});
 		} catch (error) {

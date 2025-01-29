@@ -19,7 +19,7 @@ const createStatusPage = async (statusPageData, image) => {
 		if (error?.code === 11000) {
 			// Handle duplicate URL errors
 			error.status = 400;
-			error.message = errorMessages.STATUS_PAGE_URL_NOT_UNIQUE;
+			error.message = stringService.statusPageUrlNotUnique;
 		}
 		error.service = SERVICE_NAME;
 		error.method = "createStatusPage";
