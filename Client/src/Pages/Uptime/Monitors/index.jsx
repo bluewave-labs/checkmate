@@ -6,6 +6,7 @@ import UptimeDataTable from "./Components/UptimeDataTable";
 import Pagination from "../../../Components/Table/TablePagination";
 import CreateMonitorHeader from "../../../Components/CreateMonitorHeader";
 import Fallback from "../../../Components/Fallback";
+import NetworkErrorFallback from "../../../Components/NetworkErrorFallback";
 import SearchComponent from "./Components/SearchComponent";
 
 import MonitorCountHeader from "../../../Components/MonitorCountHeader";
@@ -89,20 +90,28 @@ const UptimeMonitors = () => {
 	}, []);
 
 	const teamId = user.teamId;
-	const { monitorsAreLoading, monitors, filteredMonitors, monitorsSummary } =
-		useMonitorsFetch({
-			authToken,
-			teamId,
-			limit: 25,
-			page: page,
-			rowsPerPage: rowsPerPage,
-			filter: search,
-			field: sort?.field,
-			order: sort?.order,
-			triggerUpdate: monitorUpdateTrigger,
-		});
+	const {
+		monitorsAreLoading,
+		monitors,
+		filteredMonitors,
+		monitorsSummary,
+		networkError,
+	} = useMonitorsFetch({
+		authToken,
+		teamId,
+		limit: 25,
+		page: page,
+		rowsPerPage: rowsPerPage,
+		filter: search,
+		field: sort?.field,
+		order: sort?.order,
+		triggerUpdate: monitorUpdateTrigger,
+	});
 	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
-	if (!isLoading && !monitorsAreLoading && monitors?.length === 0) {
+
+	if (networkError) return <NetworkErrorFallback />;
+
+	if (!isLoading && !monitorsAreLoading && totalMonitors === 0) {
 		return (
 			<Fallback
 				vowelStart={true}
