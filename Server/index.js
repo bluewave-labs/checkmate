@@ -160,6 +160,11 @@ const startApp = async () => {
 		}
 	}
 
+	const networkService = new NetworkService(axios, ping, logger, http, Docker, net);
+	const translationService = new TranslationService(logger, networkService);
+	const stringService = new StringService(translationService);
+	ServiceRegistry.register(StringService.SERVICE_NAME, stringService);
+
 	// Create DB
 	const db = new MongoDB();
 	await db.connect();
@@ -176,11 +181,9 @@ const startApp = async () => {
 		nodemailer,
 		logger
 	);
-	const networkService = new NetworkService(axios, ping, logger, http, Docker, net);
 	const statusService = new StatusService(db, logger);
 	const notificationService = new NotificationService(emailService, db, logger);
-	const translationService = new TranslationService(logger, networkService);
-	const stringService = new StringService(translationService);
+
 
 	const jobQueue = new JobQueue(
 		db,
@@ -202,7 +205,6 @@ const startApp = async () => {
 	ServiceRegistry.register(StatusService.SERVICE_NAME, statusService);
 	ServiceRegistry.register(NotificationService.SERVICE_NAME, notificationService);
 	ServiceRegistry.register(TranslationService.SERVICE_NAME, translationService);
-	ServiceRegistry.register(StringService.SERVICE_NAME, stringService);
 
 	await translationService.initialize();
 
