@@ -32,7 +32,14 @@ import { useTheme } from "@emotion/react";
  * @returns {JSX.Element} The rendered table component.
  */
 
-const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
+const DataTable = ({
+	headers = [],
+	data = [],
+	config = {
+		emptyView: "No data",
+		onRowClick: () => {},
+	},
+}) => {
 	const theme = useTheme();
 	if ((headers?.length ?? 0) === 0) {
 		return "No data";
@@ -117,9 +124,9 @@ DataTable.propTypes = {
 			render: PropTypes.func.isRequired,
 		})
 	).isRequired,
-	data: PropTypes.array.isRequired,
+	data: PropTypes.array,
 	config: PropTypes.shape({
-		onRowClick: PropTypes.func.isRequired,
+		onRowClick: PropTypes.func,
 		rowSX: PropTypes.object,
 		emptyView: PropTypes.node,
 	}),
