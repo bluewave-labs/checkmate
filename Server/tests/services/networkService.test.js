@@ -3,10 +3,10 @@ import NetworkService from "../../service/networkService.js";
 import { expect } from "chai";
 import http from "http";
 import { errorMessages } from "../../utils/messages.js";
-describe("Network Service", function () {
+describe("Network Service", function() {
 	let axios, ping, Docker, logger, networkService;
 
-	beforeEach(function () {
+	beforeEach(function() {
 		axios = {
 			get: sinon.stub().resolves({
 				data: { foo: "bar" },
@@ -35,22 +35,22 @@ describe("Network Service", function () {
 		networkService = new NetworkService(axios, ping, logger, http, Docker);
 	});
 
-	describe("constructor", function () {
-		it("should create a new NetworkService instance", function () {
+	describe("constructor", function() {
+		it("should create a new NetworkService instance", function() {
 			const networkService = new NetworkService();
 			expect(networkService).to.be.an.instanceOf(NetworkService);
 		});
 	});
 
-	describe("timeRequest", function () {
-		it("should time an asynchronous operation", async function () {
+	describe("timeRequest", function() {
+		it("should time an asynchronous operation", async function() {
 			const operation = sinon.stub().resolves("success");
 			const { response, responseTime } = await networkService.timeRequest(operation);
 			expect(response).to.equal("success");
 			expect(responseTime).to.be.a("number");
 		});
 
-		it("should handle errors if operation throws error", async function () {
+		it("should handle errors if operation throws error", async function() {
 			const error = new Error("Test error");
 			const operation = sinon.stub().throws(error);
 			const { response, responseTime } = await networkService.timeRequest(operation);
@@ -60,8 +60,8 @@ describe("Network Service", function () {
 		});
 	});
 
-	describe("requestPing", function () {
-		it("should return a response object if ping successful", async function () {
+	describe("requestPing", function() {
+		it("should return a response object if ping successful", async function() {
 			const pingResult = await networkService.requestPing({
 				data: { url: "http://test.com", _id: "123" },
 			});
@@ -71,7 +71,7 @@ describe("Network Service", function () {
 			expect(pingResult.status).to.be.true;
 		});
 
-		it("should return a response object if ping unsuccessful", async function () {
+		it("should return a response object if ping unsuccessful", async function() {
 			const error = new Error("Test error");
 			networkService.timeRequest = sinon
 				.stub()
@@ -86,7 +86,7 @@ describe("Network Service", function () {
 			expect(pingResult.code).to.equal(networkService.PING_ERROR);
 		});
 
-		it("should throw an error if ping cannot resolve", async function () {
+		it("should throw an error if ping cannot resolve", async function() {
 			const error = new Error("test error");
 			networkService.timeRequest = sinon.stub().throws(error);
 			try {
@@ -100,8 +100,8 @@ describe("Network Service", function () {
 		});
 	});
 
-	describe("requestHttp", function () {
-		it("should return a response object if http successful", async function () {
+	describe("requestHttp", function() {
+		it("should return a response object if http successful", async function() {
 			const job = { data: { url: "http://test.com", _id: "123", type: "http" } };
 			const httpResult = await networkService.requestHttp(job);
 			expect(httpResult.monitorId).to.equal("123");
@@ -110,7 +110,7 @@ describe("Network Service", function () {
 			expect(httpResult.status).to.be.true;
 		});
 
-		it("should return a response object if http unsuccessful", async function () {
+		it("should return a response object if http unsuccessful", async function() {
 			const error = new Error("Test error");
 			error.response = { status: 404 };
 			networkService.timeRequest = sinon
@@ -125,7 +125,7 @@ describe("Network Service", function () {
 			expect(httpResult.code).to.equal(404);
 		});
 
-		it("should return a response object if http unsuccessful with unknown code", async function () {
+		it("should return a response object if http unsuccessful with unknown code", async function() {
 			const error = new Error("Test error");
 			error.response = {};
 			networkService.timeRequest = sinon
@@ -140,7 +140,7 @@ describe("Network Service", function () {
 			expect(httpResult.code).to.equal(networkService.NETWORK_ERROR);
 		});
 
-		it("should throw an error if an error occurs", async function () {
+		it("should throw an error if an error occurs", async function() {
 			const error = new Error("test error");
 			networkService.timeRequest = sinon.stub().throws(error);
 			try {
@@ -154,8 +154,8 @@ describe("Network Service", function () {
 		});
 	});
 
-	describe("requestPagespeed", function () {
-		it("should return a response object if pagespeed successful", async function () {
+	describe("requestPagespeed", function() {
+		it("should return a response object if pagespeed successful", async function() {
 			const job = { data: { url: "http://test.com", _id: "123", type: "pagespeed" } };
 			const pagespeedResult = await networkService.requestPagespeed(job);
 			expect(pagespeedResult.monitorId).to.equal("123");
@@ -164,7 +164,7 @@ describe("Network Service", function () {
 			expect(pagespeedResult.status).to.be.true;
 		});
 
-		it("should return a response object if pagespeed unsuccessful", async function () {
+		it("should return a response object if pagespeed unsuccessful", async function() {
 			const error = new Error("Test error");
 			error.response = { status: 404 };
 			networkService.timeRequest = sinon
@@ -179,7 +179,7 @@ describe("Network Service", function () {
 			expect(pagespeedResult.code).to.equal(404);
 		});
 
-		it("should return a response object if pagespeed unsuccessful with an unknown code", async function () {
+		it("should return a response object if pagespeed unsuccessful with an unknown code", async function() {
 			const error = new Error("Test error");
 			error.response = {};
 			networkService.timeRequest = sinon
@@ -194,7 +194,7 @@ describe("Network Service", function () {
 			expect(pagespeedResult.code).to.equal(networkService.NETWORK_ERROR);
 		});
 
-		it("should throw an error if pagespeed cannot resolve", async function () {
+		it("should throw an error if pagespeed cannot resolve", async function() {
 			const error = new Error("test error");
 			networkService.timeRequest = sinon.stub().throws(error);
 			try {
@@ -208,8 +208,8 @@ describe("Network Service", function () {
 		});
 	});
 
-	describe("requestHardware", function () {
-		it("should return a response object if hardware successful", async function () {
+	describe("requestHardware", function() {
+		it("should return a response object if hardware successful", async function() {
 			const job = { data: { url: "http://test.com", _id: "123", type: "hardware" } };
 			const httpResult = await networkService.requestHardware(job);
 			expect(httpResult.monitorId).to.equal("123");
@@ -218,7 +218,7 @@ describe("Network Service", function () {
 			expect(httpResult.status).to.be.true;
 		});
 
-		it("should return a response object if hardware successful and job has a secret", async function () {
+		it("should return a response object if hardware successful and job has a secret", async function() {
 			const job = {
 				data: {
 					url: "http://test.com",
@@ -234,7 +234,7 @@ describe("Network Service", function () {
 			expect(httpResult.status).to.be.true;
 		});
 
-		it("should return a response object if hardware unsuccessful", async function () {
+		it("should return a response object if hardware unsuccessful", async function() {
 			const error = new Error("Test error");
 			error.response = { status: 404 };
 			networkService.timeRequest = sinon
@@ -249,7 +249,7 @@ describe("Network Service", function () {
 			expect(httpResult.code).to.equal(404);
 		});
 
-		it("should return a response object if hardware unsuccessful with unknown code", async function () {
+		it("should return a response object if hardware unsuccessful with unknown code", async function() {
 			const error = new Error("Test error");
 			error.response = {};
 			networkService.timeRequest = sinon
@@ -264,7 +264,7 @@ describe("Network Service", function () {
 			expect(httpResult.code).to.equal(networkService.NETWORK_ERROR);
 		});
 
-		it("should throw an error if hardware cannot resolve", async function () {
+		it("should throw an error if hardware cannot resolve", async function() {
 			const error = new Error("test error");
 			networkService.timeRequest = sinon.stub().throws(error);
 			try {
@@ -278,8 +278,8 @@ describe("Network Service", function () {
 		});
 	});
 
-	describe("requestDocker", function () {
-		it("should return a response object if docker successful", async function () {
+	describe("requestDocker", function() {
+		it("should return a response object if docker successful", async function() {
 			const job = { data: { url: "http://test.com", _id: "123", type: "docker" } };
 			const dockerResult = await networkService.requestDocker(job);
 			expect(dockerResult.monitorId).to.equal("123");
@@ -288,7 +288,7 @@ describe("Network Service", function () {
 			expect(dockerResult.status).to.be.true;
 		});
 
-		it("should return a response object with status false if container not running", async function () {
+		it("should return a response object with status false if container not running", async function() {
 			Docker = class {
 				listContainers = sinon.stub().resolves([
 					{
@@ -307,7 +307,7 @@ describe("Network Service", function () {
 			expect(dockerResult.code).to.equal(200);
 		});
 
-		it("should handle an error when fetching the container", async function () {
+		it("should handle an error when fetching the container", async function() {
 			Docker = class {
 				listContainers = sinon.stub().resolves([
 					{
@@ -326,7 +326,7 @@ describe("Network Service", function () {
 			expect(dockerResult.code).to.equal(networkService.NETWORK_ERROR);
 		});
 
-		it("should throw an error if operations fail", async function () {
+		it("should throw an error if operations fail", async function() {
 			Docker = class {
 				listContainers = sinon.stub().resolves([
 					{
@@ -345,7 +345,7 @@ describe("Network Service", function () {
 			}
 		});
 
-		it("should throw an error if no matching images found", async function () {
+		it("should throw an error if no matching images found", async function() {
 			Docker = class {
 				listContainers = sinon.stub().resolves([]);
 				getContainer = sinon.stub().throws(new Error("test error"));
@@ -355,13 +355,13 @@ describe("Network Service", function () {
 			try {
 				await networkService.requestDocker(job);
 			} catch (error) {
-				expect(error.message).to.equal(errorMessages.DOCKER_NOT_FOUND(mockLanguage));
+				expect(error.message).to.equal(errorMessages.DOCKER_NOT_FOUND);
 			}
 		});
 	});
 
-	describe("getStatus", function () {
-		beforeEach(function () {
+	describe("getStatus", function() {
+		beforeEach(function() {
 			networkService.requestPing = sinon.stub();
 			networkService.requestHttp = sinon.stub();
 			networkService.requestPagespeed = sinon.stub();
@@ -369,11 +369,11 @@ describe("Network Service", function () {
 			networkService.requestDocker = sinon.stub();
 		});
 
-		afterEach(function () {
+		afterEach(function() {
 			sinon.restore();
 		});
 
-		it("should call requestPing if type is ping", async function () {
+		it("should call requestPing if type is ping", async function() {
 			await networkService.getStatus({ data: { type: "ping" } });
 			expect(networkService.requestPing.calledOnce).to.be.true;
 			expect(networkService.requestDocker.notCalled).to.be.true;
@@ -381,7 +381,7 @@ describe("Network Service", function () {
 			expect(networkService.requestPagespeed.notCalled).to.be.true;
 		});
 
-		it("should call requestHttp if type is http", async function () {
+		it("should call requestHttp if type is http", async function() {
 			await networkService.getStatus({ data: { type: "http" } });
 			expect(networkService.requestPing.notCalled).to.be.true;
 			expect(networkService.requestDocker.notCalled).to.be.true;
@@ -389,7 +389,7 @@ describe("Network Service", function () {
 			expect(networkService.requestPagespeed.notCalled).to.be.true;
 		});
 
-		it("should call requestPagespeed if type is pagespeed", async function () {
+		it("should call requestPagespeed if type is pagespeed", async function() {
 			await networkService.getStatus({ data: { type: "pagespeed" } });
 			expect(networkService.requestPing.notCalled).to.be.true;
 			expect(networkService.requestDocker.notCalled).to.be.true;
@@ -397,7 +397,7 @@ describe("Network Service", function () {
 			expect(networkService.requestPagespeed.calledOnce).to.be.true;
 		});
 
-		it("should call requestHardware if type is hardware", async function () {
+		it("should call requestHardware if type is hardware", async function() {
 			await networkService.getStatus({ data: { type: "hardware" } });
 			expect(networkService.requestHardware.calledOnce).to.be.true;
 			expect(networkService.requestDocker.notCalled).to.be.true;
@@ -405,7 +405,7 @@ describe("Network Service", function () {
 			expect(networkService.requestPagespeed.notCalled).to.be.true;
 		});
 
-		it("should call requestDocker if type is Docker", async function () {
+		it("should call requestDocker if type is Docker", async function() {
 			await networkService.getStatus({ data: { type: "docker" } });
 			expect(networkService.requestDocker.calledOnce).to.be.true;
 			expect(networkService.requestHardware.notCalled).to.be.true;
@@ -413,7 +413,7 @@ describe("Network Service", function () {
 			expect(networkService.requestPagespeed.notCalled).to.be.true;
 		});
 
-		it("should throw an error if an unknown type is provided", async function () {
+		it("should throw an error if an unknown type is provided", async function() {
 			try {
 				await networkService.getStatus({ data: { type: "unknown" } });
 			} catch (error) {
@@ -423,7 +423,7 @@ describe("Network Service", function () {
 			}
 		});
 
-		it("should throw an error if job type is undefined", async function () {
+		it("should throw an error if job type is undefined", async function() {
 			try {
 				await networkService.getStatus({ data: { type: undefined } });
 			} catch (error) {
@@ -433,7 +433,7 @@ describe("Network Service", function () {
 			}
 		});
 
-		it("should throw an error if job is empty", async function () {
+		it("should throw an error if job is empty", async function() {
 			try {
 				await networkService.getStatus({});
 			} catch (error) {
@@ -442,7 +442,7 @@ describe("Network Service", function () {
 			}
 		});
 
-		it("should throw an error if job is null", async function () {
+		it("should throw an error if job is null", async function() {
 			try {
 				await networkService.getStatus(null);
 			} catch (error) {
