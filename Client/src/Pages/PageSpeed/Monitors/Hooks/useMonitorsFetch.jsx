@@ -6,6 +6,7 @@ const useMonitorsFetch = ({ authToken, teamId }) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [monitors, setMonitors] = useState([]);
 	const [summary, setSummary] = useState({});
+	const [networkError, setNetworkError] = useState(false);
 
 	useEffect(() => {
 		const fetchMonitors = async () => {
@@ -27,6 +28,7 @@ const useMonitorsFetch = ({ authToken, teamId }) => {
 					setSummary(res.data.data.summary);
 				}
 			} catch (error) {
+				setNetworkError(true);
 				createToast({
 					body: error.message,
 				});
@@ -37,7 +39,7 @@ const useMonitorsFetch = ({ authToken, teamId }) => {
 
 		fetchMonitors();
 	}, [authToken, teamId]);
-	return { isLoading, monitors, summary };
+	return { isLoading, monitors, summary, networkError };
 };
 
 export default useMonitorsFetch;

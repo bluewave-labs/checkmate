@@ -7,47 +7,15 @@ import Host from "../Host";
 import { StatusLabel } from "../../../../../Components/Label";
 import BarChart from "../../../../../Components/Charts/BarChart";
 import ActionsMenu from "../ActionsMenu";
-import { useState } from "react";
-import SearchComponent from "../SearchComponent";
-import CircularCount from "../../../../../Components/CircularCount";
+
 import LoadingSpinner from "../LoadingSpinner";
 import UptimeDataTableSkeleton from "./skeleton";
-import { Heading } from "../../../../../Components/Heading";
 
 // Utils
 import { useTheme } from "@emotion/react";
 import useUtils from "../../Hooks/useUtils";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-
-const MonitorDataTable = ({ shouldRender, isSearching, headers, filteredMonitors }) => {
-	const theme = useTheme();
-	const navigate = useNavigate();
-
-	if (!shouldRender) return null;
-	return (
-		<Box position="relative">
-			<LoadingSpinner shouldRender={isSearching} />
-			<DataTable
-				headers={headers}
-				data={filteredMonitors}
-				config={{
-					rowSX: {
-						cursor: "pointer",
-						"&:hover td": {
-							backgroundColor: theme.palette.tertiary.main,
-							transition: "background-color .3s ease",
-						},
-					},
-					onRowClick: (row) => {
-						navigate(`/uptime/${row.id}`);
-					},
-					emptyView: "No monitors found",
-				}}
-			/>
-		</Box>
-	);
-};
 
 /**
  * UptimeDataTable displays a table of uptime monitors with sorting, searching, and action capabilities
@@ -78,34 +46,29 @@ const MonitorDataTable = ({ shouldRender, isSearching, headers, filteredMonitors
  * @param {Function} props.triggerUpdate - Callback to trigger a data refresh
  * @returns {JSX.Element} Rendered component
  */
-const UptimeDataTable = (props) => {
+const UptimeDataTable = ({
+	isAdmin,
+	isSearching,
+	setIsLoading,
+	filteredMonitors,
+	sort,
+	setSort,
+	triggerUpdate,
+	monitorsAreLoading,
+}) => {
 	// Utils
-
-	const {
-		isAdmin,
-		setIsLoading,
-		monitors,
-		filteredMonitors,
-		monitorCount,
-		sort,
-		setSort,
-		setSearch,
-		triggerUpdate,
-		monitorsAreLoading,
-	} = props;
+	const navigate = useNavigate();
 	const { determineState } = useUtils();
 	const theme = useTheme();
-	const navigate = useNavigate();
 
 	// Local state
-	const [isSearching, setIsSearching] = useState(false);
 	// Handlers
 	const handleSort = (field) => {
 		let order = "";
-		if (sort.field !== field) {
+		if (sort?.field !== field) {
 			order = "desc";
 		} else {
-			order = sort.order === "asc" ? "desc" : "asc";
+			order = sort?.order === "asc" ? "desc" : "asc";
 		}
 		setSort({ field, order });
 	};
@@ -124,10 +87,10 @@ const UptimeDataTable = (props) => {
 					<Stack
 						justifyContent="center"
 						style={{
-							visibility: sort.field === "name" ? "visible" : "hidden",
+							visibility: sort?.field === "name" ? "visible" : "hidden",
 						}}
 					>
-						{sort.order === "asc" ? (
+						{sort?.order === "asc" ? (
 							<ArrowUpwardRoundedIcon />
 						) : (
 							<ArrowDownwardRoundedIcon />
@@ -160,10 +123,10 @@ const UptimeDataTable = (props) => {
 					<Stack
 						justifyContent="center"
 						style={{
-							visibility: sort.field === "status" ? "visible" : "hidden",
+							visibility: sort?.field === "status" ? "visible" : "hidden",
 						}}
 					>
-						{sort.order === "asc" ? (
+						{sort?.order === "asc" ? (
 							<ArrowUpwardRoundedIcon fontSize="18px" />
 						) : (
 							<ArrowDownwardRoundedIcon fontSize="18px" />
@@ -210,41 +173,37 @@ const UptimeDataTable = (props) => {
 			),
 		},
 	];
-	return (
-		<Box
-			flex={1}
-			py={theme.spacing(8)}
-		>
-			<Stack
-				direction="row"
-				alignItems="center"
-				mb={theme.spacing(8)}
-				gap={theme.spacing(2)}
-			>
-				<Heading component="h2">Uptime monitors</Heading>
-				<CircularCount count={monitorCount} />
-				<SearchComponent
-					monitorsAreLoading={monitorsAreLoading}
-					monitors={monitors}
-					onSearchChange={setSearch}
-					setIsSearching={setIsSearching}
-				/>
-			</Stack>
 
-			<MonitorDataTable
-				shouldRender={!monitorsAreLoading}
-				isSearching={isSearching}
+	if (monitorsAreLoading) {
+		return <UptimeDataTableSkeleton />;
+	}
+
+	return (
+		<Box position="relative">
+			<LoadingSpinner shouldRender={isSearching} />
+			<DataTable
 				headers={headers}
-				filteredMonitors={filteredMonitors}
+				data={filteredMonitors}
+				config={{
+					rowSX: {
+						cursor: "pointer",
+						"&:hover td": {
+							backgroundColor: theme.palette.tertiary.main,
+							transition: "background-color .3s ease",
+						},
+					},
+					onRowClick: (row) => {
+						navigate(`/uptime/${row.id}`);
+					},
+					emptyView: "No monitors found",
+				}}
 			/>
-			<UptimeDataTableSkeleton shouldRender={monitorsAreLoading} />
 		</Box>
 	);
 };
 
 UptimeDataTable.propTypes = {
 	isSearching: PropTypes.bool,
-	setIsSearching: PropTypes.func,
 	setSort: PropTypes.func,
 	setSearch: PropTypes.func,
 	setIsLoading: PropTypes.func,

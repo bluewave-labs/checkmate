@@ -118,8 +118,6 @@ const PieChart = ({ audits }) => {
 	const [highlightedItem, setHighLightedItem] = useState(null);
 	const [expand, setExpand] = useState(false);
 
-	if (typeof audits === "undefined") return null;
-
 	/**
 	 * Retrieves color properties based on the performance value.
 	 *
@@ -166,6 +164,8 @@ const PieChart = ({ audits }) => {
 	 */
 	let performance = 0;
 	const getPieData = (audits) => {
+		if (typeof audits === "undefined") return undefined;
+
 		let data = [];
 		let startAngle = 0;
 		const padding = 3; // padding between arcs

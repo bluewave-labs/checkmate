@@ -19,7 +19,7 @@ const DownBarChart = memo(({ monitor, type, onBarHover }) => {
 			<BarChart
 				width="100%"
 				height="100%"
-				data={monitor.groupedDownChecks}
+				data={monitor?.groupedDownChecks}
 				onMouseEnter={() => {
 					setChartHovered(true);
 					onBarHover({ time: null, totalChecks: 0 });

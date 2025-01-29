@@ -15,7 +15,7 @@ const ResponseTImeChart = ({ shouldRender = true, monitor, dateRange }) => {
 			header="Response Times"
 		>
 			<MonitorDetailsAreaChart
-				checks={monitor.groupedChecks ?? []}
+				checks={monitor?.groupedChecks ?? []}
 				dateRange={dateRange}
 			/>
 		</ChartBox>

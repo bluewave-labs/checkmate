@@ -8,6 +8,7 @@ import useUtils from "../../../Monitors/Hooks/useUtils";
 const UptimeStatusBoxes = ({ shouldRender, monitor, certificateExpiry }) => {
 	const theme = useTheme();
 	const { determineState } = useUtils();
+
 	const { time: streakTime, units: streakUnits } = getHumanReadableDuration(
 		monitor?.uptimeStreak
 	);

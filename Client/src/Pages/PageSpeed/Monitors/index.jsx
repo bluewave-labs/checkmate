@@ -11,6 +11,7 @@ import { useTheme } from "@emotion/react";
 import { useSelector } from "react-redux";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import useMonitorsFetch from "./Hooks/useMonitorsFetch";
+import NetworkErrorFallback from "../../../Components/NetworkErrorFallback";
 
 // Constants
 const BREADCRUMBS = [{ name: `pagespeed`, path: "/pagespeed" }];
@@ -20,10 +21,14 @@ const PageSpeed = () => {
 	const isAdmin = useIsAdmin();
 	const { user, authToken } = useSelector((state) => state.auth);
 
-	const { isLoading, monitors, summary } = useMonitorsFetch({
+	const { isLoading, monitors, summary, networkError } = useMonitorsFetch({
 		authToken: authToken,
 		teamId: user.teamId,
 	});
+
+	if (networkError === true) {
+		return <NetworkErrorFallback />;
+	}
 
 	if (!isLoading && monitors?.length === 0) {
 		return (
