@@ -8,20 +8,21 @@ import {
 	newPasswordValidation,
 } from "../validation/joi.js";
 import logger from "../utils/logger.js";
-import { errorMessages, successMessages } from "../utils/messages.js";
+import { successMessages } from "../utils/messages.js";
 import jwt from "jsonwebtoken";
 import { getTokenFromHeaders, tokenType } from "../utils/utils.js";
 import crypto from "crypto";
 import { handleValidationError, handleError } from "./controllerUtils.js";
 const SERVICE_NAME = "authController";
+import ServiceRegistry from "../service/serviceRegistry.js";
+import StringService from "../service/stringService.js";
 
 class AuthController {
-	constructor(db, settingsService, emailService, jobQueue, stringService) {
+	constructor(db, settingsService, emailService, jobQueue) {
 		this.db = db;
 		this.settingsService = settingsService;
 		this.emailService = emailService;
 		this.jobQueue = jobQueue;
-		this.stringService = stringService;
 	}
 
 	/**
@@ -138,6 +139,7 @@ class AuthController {
 	 * @throws {Error} If there is an error during the process, especially if there is a validation error (422) or the password is incorrect.
 	 */
 	loginUser = async (req, res, next) => {
+		const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 		try {
 			await loginValidation.validateAsync(req.body);
 		} catch (error) {
@@ -154,7 +156,7 @@ class AuthController {
 			// Compare password
 			const match = await user.comparePassword(password);
 			if (match !== true) {
-				const error = new Error(this.stringService.authIncorrectPassword);
+				const error = new Error(stringService.authIncorrectPassword);
 				error.status = 401;
 				next(error);
 				return;
@@ -201,13 +203,15 @@ class AuthController {
 	 * @throws {Error} If there is an error during the process such as any of the token is not received
 	 */
 	refreshAuthToken = async (req, res, next) => {
+		const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 		try {
 			// check for refreshToken
 			const refreshToken = req.headers["x-refresh-token"];
 
 			if (!refreshToken) {
 				// No refresh token provided
-				const error = new Error(this.stringService.noRefreshToken);
+				const error = new Error(stringService.noRefreshToken);
 				error.status = 401;
 				error.service = SERVICE_NAME;
 				error.method = "refreshAuthToken";
@@ -222,8 +226,8 @@ class AuthController {
 					// Invalid or expired refresh token, trigger logout
 					const errorMessage =
 						refreshErr.name === "TokenExpiredError"
-							? this.stringService.expiredAuthToken
-							: this.stringService.invalidAuthToken;
+							? stringService.expiredAuthToken
+							: stringService.invalidAuthToken;
 					const error = new Error(errorMessage);
 					error.status = 401;
 					error.service = SERVICE_NAME;
@@ -266,6 +270,8 @@ class AuthController {
 	 * @throws {Error} If there is an error during the process, especially if there is a validation error (422), the user is unauthorized (401), or the password is incorrect (403).
 	 */
 	editUser = async (req, res, next) => {
+		const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 		try {
 			await editUserParamValidation.validateAsync(req.params);
 			await editUserBodyValidation.validateAsync(req.body);
@@ -277,7 +283,7 @@ class AuthController {
 
 		// TODO is this neccessary any longer? Verify ownership middleware should handle this
 		if (req.params.userId !== req.user._id.toString()) {
-			const error = new Error(this.stringService.unauthorized);
+			const error = new Error(stringService.unauthorized);
 			error.status = 401;
 			error.service = SERVICE_NAME;
 			next(error);
@@ -301,7 +307,7 @@ class AuthController {
 				// If not a match, throw a 403
 				// 403 instead of 401 to avoid triggering axios interceptor
 				if (!match) {
-					const error = new Error(this.stringService.authIncorrectPassword);
+					const error = new Error(stringService.authIncorrectPassword);
 					error.status = 403;
 					next(error);
 					return;
