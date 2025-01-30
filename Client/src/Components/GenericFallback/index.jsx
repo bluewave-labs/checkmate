@@ -1,5 +1,5 @@
 import { useTheme } from "@emotion/react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Skeleton from "../../assets/Images/create-placeholder.svg?react";
 import SkeletonDark from "../../assets/Images/create-placeholder-dark.svg?react";
 import Background from "../../assets/Images/background-grid.svg?react";
@@ -11,13 +11,13 @@ import { useSelector } from "react-redux";
  * @returns {JSX.Element} The rendered fallback UI.
  */
 
-const NetworkErrorFallback = () => {
+const GenericFallback = ({ children }) => {
 	const theme = useTheme();
 	const mode = useSelector((state) => state.ui.mode);
 
 	return (
 		<Box
-			className="page-speed"
+			padding={theme.spacing(16)}
 			position="relative"
 			border={1}
 			borderColor={theme.palette.primary.lowContrast}
@@ -68,18 +68,11 @@ const NetworkErrorFallback = () => {
 					maxWidth={"300px"}
 					zIndex={1}
 				>
-					<Typography
-						variant="h1"
-						marginY={theme.spacing(4)}
-						color={theme.palette.primary.contrastTextTertiary}
-					>
-						Network error
-					</Typography>
-					<Typography>Please check your connection</Typography>
+					{children}
 				</Stack>
 			</Stack>
 		</Box>
 	);
 };
 
-export default NetworkErrorFallback;
+export default GenericFallback;

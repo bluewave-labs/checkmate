@@ -18,7 +18,6 @@ import UptimeCreate from "../Pages/Uptime/Create";
 import UptimeConfigure from "../Pages/Uptime/Configure";
 
 // PageSpeed
-// import PageSpeed from "../Pages/PageSpeed";
 import PageSpeed from "../Pages/PageSpeed/Monitors";
 import PageSpeedCreate from "../Pages/PageSpeed/Create";
 import PageSpeedDetails from "../Pages/PageSpeed/Details";
@@ -29,6 +28,7 @@ import InfrastructureCreate from "../Pages/Infrastructure/Create";
 import InfrastructureDetails from "../Pages/Infrastructure/Details";
 
 import Incidents from "../Pages/Incidents";
+
 import Status from "../Pages/Status";
 import Integrations from "../Pages/Integrations";
 

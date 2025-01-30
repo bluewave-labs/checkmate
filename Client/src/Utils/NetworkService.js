@@ -171,7 +171,6 @@ class NetworkService {
 	async getMonitorsByTeamId(config) {
 		const { authToken, teamId, limit, types, page, rowsPerPage, filter, field, order } =
 			config;
-
 		const params = new URLSearchParams();
 
 		if (limit) params.append("limit", limit);

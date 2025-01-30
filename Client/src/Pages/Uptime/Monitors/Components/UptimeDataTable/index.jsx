@@ -9,7 +9,7 @@ import BarChart from "../../../../../Components/Charts/BarChart";
 import ActionsMenu from "../ActionsMenu";
 
 import LoadingSpinner from "../LoadingSpinner";
-import UptimeDataTableSkeleton from "./skeleton";
+import TableSkeleton from "../../../../../Components/Table/skeleton";
 
 // Utils
 import { useTheme } from "@emotion/react";
@@ -175,7 +175,7 @@ const UptimeDataTable = ({
 	];
 
 	if (monitorsAreLoading) {
-		return <UptimeDataTableSkeleton />;
+		return <TableSkeleton />;
 	}
 
 	return (
