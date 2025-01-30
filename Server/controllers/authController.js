@@ -13,16 +13,14 @@ import { getTokenFromHeaders, tokenType } from "../utils/utils.js";
 import crypto from "crypto";
 import { handleValidationError, handleError } from "./controllerUtils.js";
 const SERVICE_NAME = "authController";
-import ServiceRegistry from "../service/serviceRegistry.js";
-import StringService from "../service/stringService.js";
 
 class AuthController {
-	constructor(db, settingsService, emailService, jobQueue) {
+	constructor(db, settingsService, emailService, jobQueue, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
 		this.emailService = emailService;
 		this.jobQueue = jobQueue;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+		this.stringService = stringService;
 	}
 
 	/**

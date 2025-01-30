@@ -7,17 +7,15 @@ import logger from "../utils/logger.js";
 import jwt from "jsonwebtoken";
 import { handleError, handleValidationError } from "./controllerUtils.js";
 import { getTokenFromHeaders } from "../utils/utils.js";
-import ServiceRegistry from "../service/serviceRegistry.js";
-import StringService from "../service/stringService.js";
 
 const SERVICE_NAME = "inviteController";
 
 class InviteController {
-	constructor(db, settingsService, emailService) {
+	constructor(db, settingsService, emailService, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
 		this.emailService = emailService;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+		this.stringService = stringService;
 	}
 
 	/**

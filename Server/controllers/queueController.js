@@ -1,13 +1,11 @@
 import { handleError } from "./controllerUtils.js";
-import ServiceRegistry from "../service/serviceRegistry.js";
-import StringService from "../service/stringService.js";
 
 const SERVICE_NAME = "JobQueueController";
 
 class JobQueueController {
-	constructor(jobQueue) {
+	constructor(jobQueue, stringService) {
 		this.jobQueue = jobQueue;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+		this.stringService = stringService;
 	}
 
 	getMetrics = async (req, res, next) => {

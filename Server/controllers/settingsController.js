@@ -1,15 +1,13 @@
-import ServiceRegistry from "../service/serviceRegistry.js";
-import StringService from "../service/stringService.js";
 import { updateAppSettingsBodyValidation } from "../validation/joi.js";
 import { handleValidationError, handleError } from "./controllerUtils.js";
 
 const SERVICE_NAME = "SettingsController";
 
 class SettingsController {
-	constructor(db, settingsService) {
+	constructor(db, settingsService, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+		this.stringService = stringService;
 	}
 
 	getAppSettings = async (req, res, next) => {
