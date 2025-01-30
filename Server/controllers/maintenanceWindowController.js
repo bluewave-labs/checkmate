@@ -10,16 +10,14 @@ import {
 import jwt from "jsonwebtoken";
 import { getTokenFromHeaders } from "../utils/utils.js";
 import { handleValidationError, handleError } from "./controllerUtils.js";
-import ServiceRegistry from "../service/serviceRegistry.js";
-import StringService from "../service/stringService.js";
 
 const SERVICE_NAME = "maintenanceWindowController";
 
 class MaintenanceWindowController {
-	constructor(db, settingsService) {
+	constructor(db, settingsService, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+		this.stringService = stringService;
 	}
 
 	createMaintenanceWindows = async (req, res, next) => {

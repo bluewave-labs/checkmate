@@ -222,39 +222,49 @@ const startApp = async () => {
 		ServiceRegistry.get(SettingsService.SERVICE_NAME),
 		ServiceRegistry.get(EmailService.SERVICE_NAME),
 		ServiceRegistry.get(JobQueue.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const monitorController = new MonitorController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
 		ServiceRegistry.get(SettingsService.SERVICE_NAME),
-		ServiceRegistry.get(JobQueue.SERVICE_NAME)
+		ServiceRegistry.get(JobQueue.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const settingsController = new SettingsController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
-		ServiceRegistry.get(SettingsService.SERVICE_NAME)
+		ServiceRegistry.get(SettingsService.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const checkController = new CheckController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
-		ServiceRegistry.get(SettingsService.SERVICE_NAME)
+		ServiceRegistry.get(SettingsService.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const inviteController = new InviteController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
 		ServiceRegistry.get(SettingsService.SERVICE_NAME),
-		ServiceRegistry.get(EmailService.SERVICE_NAME)
+		ServiceRegistry.get(EmailService.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const maintenanceWindowController = new MaintenanceWindowController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
-		ServiceRegistry.get(SettingsService.SERVICE_NAME)
+		ServiceRegistry.get(SettingsService.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
-	const queueController = new QueueController(ServiceRegistry.get(JobQueue.SERVICE_NAME));
+	const queueController = new QueueController(
+		ServiceRegistry.get(JobQueue.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
+	);
 
 	const statusPageController = new StatusPageController(
-		ServiceRegistry.get(MongoDB.SERVICE_NAME)
+		ServiceRegistry.get(MongoDB.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const distributedUptimeController = new DistributedUptimeController();

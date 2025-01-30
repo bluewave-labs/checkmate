@@ -20,16 +20,14 @@ import logger from "../utils/logger.js";
 import { handleError, handleValidationError } from "./controllerUtils.js";
 import axios from "axios";
 import seedDb from "../db/mongo/utils/seedDb.js";
-import ServiceRegistry from "../service/serviceRegistry.js";
-import StringService from "../service/stringService.js";
 const SERVICE_NAME = "monitorController";
 
 class MonitorController {
-	constructor(db, settingsService, jobQueue) {
+	constructor(db, settingsService, jobQueue, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
 		this.jobQueue = jobQueue;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+		this.stringService = stringService;
 	}
 
 	/**
