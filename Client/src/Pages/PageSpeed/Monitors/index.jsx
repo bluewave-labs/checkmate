@@ -1,7 +1,7 @@
 // Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import { Stack, Typography } from "@mui/material";
-import CreateMonitorHeader from "../../../Components/CreateMonitorHeader";
+import CreateMonitorHeader from "../../../Components/MonitorCreateHeader";
 import MonitorCountHeader from "../../../Components/MonitorCountHeader";
 import MonitorGrid from "./Components/MonitorGrid";
 import Fallback from "../../../Components/Fallback";

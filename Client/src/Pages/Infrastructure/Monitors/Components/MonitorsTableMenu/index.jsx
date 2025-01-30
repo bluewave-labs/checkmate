@@ -4,12 +4,12 @@ import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
-import { createToast } from "../../../../Utils/toastUtils";
+import { createToast } from "../../../../../Utils/toastUtils";
 import { IconButton, Menu, MenuItem } from "@mui/material";
-import Settings from "../../../../assets/icons/settings-bold.svg?react";
+import Settings from "../../../../../assets/icons/settings-bold.svg?react";
 import PropTypes from "prop-types";
-import Dialog from "../../../../Components/Dialog";
-import { networkService } from "../../../../Utils/NetworkService.js";
+import Dialog from "../../../../../Components/Dialog";
+import { networkService } from "../../../../../Utils/NetworkService.js";
 
 /**
  * InfrastructureMenu Component
