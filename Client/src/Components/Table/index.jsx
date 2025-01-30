@@ -7,6 +7,7 @@ import {
 	TableHead,
 	TableRow,
 } from "@mui/material";
+import SkeletonLayout from "./skeleton";
 import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
 
@@ -33,6 +34,7 @@ import { useTheme } from "@emotion/react";
  */
 
 const DataTable = ({
+	shouldRender = true,
 	headers = [],
 	data = [],
 	config = {
@@ -41,6 +43,10 @@ const DataTable = ({
 	},
 }) => {
 	const theme = useTheme();
+	if (!shouldRender) {
+		return <SkeletonLayout />;
+	}
+
 	if ((headers?.length ?? 0) === 0) {
 		return "No data";
 	}
@@ -117,6 +123,7 @@ const DataTable = ({
 };
 
 DataTable.propTypes = {
+	shouldRender: PropTypes.bool,
 	headers: PropTypes.arrayOf(
 		PropTypes.shape({
 			id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
