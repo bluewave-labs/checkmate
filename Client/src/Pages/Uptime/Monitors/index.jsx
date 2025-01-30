@@ -107,7 +107,7 @@ const UptimeMonitors = () => {
 		order: sort?.order,
 		triggerUpdate: monitorUpdateTrigger,
 	});
-	const totalMonitors = monitorsSummary?.totalMonitors;
+	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
 
 	if (networkError) {
 		return (
