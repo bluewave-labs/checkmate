@@ -7,7 +7,7 @@ const useChecksFetch = ({ selectedMonitor, filter, dateRange, page, rowsPerPage 
 	const { authToken, user } = useSelector((state) => state.auth);
 
 	//Local
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [networkError, setNetworkError] = useState(false);
 	const [checks, setChecks] = useState(undefined);
 	const [checksCount, setChecksCount] = useState(undefined);

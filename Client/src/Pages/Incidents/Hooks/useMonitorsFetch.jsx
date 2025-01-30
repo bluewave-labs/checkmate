@@ -3,7 +3,7 @@ import { networkService } from "../../../main";
 import { createToast } from "../../../Utils/toastUtils";
 const useMonitorsFetch = ({ authToken, teamId }) => {
 	//Local state
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [networkError, setNetworkError] = useState(false);
 
 	const [monitors, setMonitors] = useState(undefined);
