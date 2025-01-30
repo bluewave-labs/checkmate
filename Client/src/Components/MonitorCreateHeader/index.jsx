@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import SkeletonLayout from "./skeleton";
 
-const CreateMonitorHeader = ({ isAdmin, shouldRender, path }) => {
+const CreateMonitorHeader = ({ isAdmin, shouldRender = true, path }) => {
 	const navigate = useNavigate();
 	if (!isAdmin) return null;
 	if (!shouldRender) return <SkeletonLayout />;
