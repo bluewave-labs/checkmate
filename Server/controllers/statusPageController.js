@@ -10,9 +10,9 @@ import { successMessages, errorMessages } from "../utils/messages.js";
 const SERVICE_NAME = "statusPageController";
 
 class StatusPageController {
-	constructor(db) {
+	constructor(db, stringService) {
 		this.db = db;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+		this.stringService = stringService;
 	}
 
 	createStatusPage = async (req, res, next) => {
