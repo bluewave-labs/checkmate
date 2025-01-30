@@ -8,7 +8,7 @@ import ConfigButton from "./ConfigButton";
 import SkeletonLayout from "./skeleton";
 import PropTypes from "prop-types";
 
-const MonitorHeader = ({ shouldRender = true, isAdmin, monitor }) => {
+const MonitorStatusHeader = ({ shouldRender = true, isAdmin, monitor }) => {
 	const theme = useTheme();
 	const { statusColor, statusMsg, determineState } = useUtils();
 	if (!shouldRender) {
@@ -21,7 +21,7 @@ const MonitorHeader = ({ shouldRender = true, isAdmin, monitor }) => {
 			justifyContent="space-between"
 		>
 			<Stack>
-				<Typography variant="h1">{monitor.name}</Typography>
+				<Typography variant="h1">{monitor?.name}</Typography>
 				<Stack
 					direction="row"
 					alignItems={"center"}
@@ -39,16 +39,16 @@ const MonitorHeader = ({ shouldRender = true, isAdmin, monitor }) => {
 			</Stack>
 			<ConfigButton
 				shouldRender={isAdmin}
-				monitorId={monitor._id}
+				monitorId={monitor?._id}
 			/>
 		</Stack>
 	);
 };
 
-MonitorHeader.propTypes = {
+MonitorStatusHeader.propTypes = {
 	shouldRender: PropTypes.bool,
 	isAdmin: PropTypes.bool,
 	monitor: PropTypes.object,
 };
 
-export default MonitorHeader;
+export default MonitorStatusHeader;

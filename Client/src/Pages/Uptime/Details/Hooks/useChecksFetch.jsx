@@ -10,8 +10,8 @@ export const useChecksFetch = ({
 	page,
 	rowsPerPage,
 }) => {
-	const [checks, setChecks] = useState([]);
-	const [checksCount, setChecksCount] = useState(0);
+	const [checks, setChecks] = useState(undefined);
+	const [checksCount, setChecksCount] = useState(undefined);
 	const [checksAreLoading, setChecksAreLoading] = useState(false);
 
 	useEffect(() => {

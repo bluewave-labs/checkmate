@@ -3,7 +3,6 @@ const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 const FALLBACK_BASE_URL = "http://localhost:5000/api/v1";
 import { clearAuthState } from "../Features/Auth/authSlice";
 import { clearUptimeMonitorState } from "../Features/UptimeMonitors/uptimeMonitorsSlice";
-import { createToast } from "./toastUtils";
 
 class NetworkService {
 	constructor(store, dispatch, navigate) {

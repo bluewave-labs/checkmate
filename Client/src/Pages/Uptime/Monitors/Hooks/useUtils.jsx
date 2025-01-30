@@ -2,6 +2,7 @@ import { useTheme } from "@mui/material";
 
 const useUtils = () => {
 	const determineState = (monitor) => {
+		if (typeof monitor === "undefined") return "pending";
 		if (monitor.isActive === false) return "paused";
 		if (monitor?.status === undefined) return "pending";
 		return monitor?.status == true ? "up" : "down";

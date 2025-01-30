@@ -1,11 +1,10 @@
 // Components
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, Skeleton } from "@mui/material";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import MonitorStatusHeader from "../../../Components/MonitorStatusHeader";
 import PageSpeedStatusBoxes from "./Components/PageSpeedStatusBoxes";
 import PageSpeedAreaChart from "./Components/PageSpeedAreaChart";
 import PerformanceReport from "./Components/PerformanceReport";
-import Fallback from "../../../Components/Fallback";
 // Utils
 import { useTheme } from "@emotion/react";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
@@ -30,8 +29,6 @@ const PageSpeedDetails = () => {
 		authToken,
 		monitorId,
 	});
-
-	console.log(monitor, audits, isLoading);
 
 	const [metrics, setMetrics] = useState({
 		accessibility: true,

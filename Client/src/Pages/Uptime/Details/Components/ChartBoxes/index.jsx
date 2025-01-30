@@ -123,7 +123,7 @@ const ChartBoxes = ({
 				icon={<AverageResponseIcon />}
 				header="Average Response Time"
 			>
-				<ResponseGaugeChart avgResponseTime={monitor.avgResponseTime ?? 0} />
+				<ResponseGaugeChart avgResponseTime={monitor?.avgResponseTime ?? 0} />
 			</ChartBox>
 		</Stack>
 	);
@@ -133,7 +133,7 @@ export default ChartBoxes;
 
 ChartBoxes.propTypes = {
 	shouldRender: PropTypes.bool,
-	monitor: PropTypes.object.isRequired,
+	monitor: PropTypes.object,
 	dateRange: PropTypes.string.isRequired,
 	uiTimezone: PropTypes.string.isRequired,
 	dateFormat: PropTypes.string.isRequired,

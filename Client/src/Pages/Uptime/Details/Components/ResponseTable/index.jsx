@@ -8,7 +8,7 @@ import { formatDateWithTz } from "../../../../../Utils/timeUtils";
 import SkeletonLayout from "./skeleton";
 const ResponseTable = ({
 	shouldRender = true,
-	checks,
+	checks = [],
 	checksCount,
 	uiTimezone,
 	page,
@@ -77,8 +77,8 @@ const ResponseTable = ({
 
 ResponseTable.propTypes = {
 	shouldRender: PropTypes.bool,
-	checks: PropTypes.array.isRequired,
-	checksCount: PropTypes.number.isRequired,
+	checks: PropTypes.array,
+	checksCount: PropTypes.number,
 	uiTimezone: PropTypes.string.isRequired,
 	page: PropTypes.number.isRequired,
 	setPage: PropTypes.func.isRequired,

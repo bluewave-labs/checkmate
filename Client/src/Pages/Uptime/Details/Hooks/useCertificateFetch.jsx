@@ -10,7 +10,7 @@ const useCertificateFetch = ({
 	certificateDateFormat,
 	uiTimezone,
 }) => {
-	const [certificateExpiry, setCertificateExpiry] = useState("N/A");
+	const [certificateExpiry, setCertificateExpiry] = useState(undefined);
 	const [certificateIsLoading, setCertificateIsLoading] = useState(false);
 
 	useEffect(() => {

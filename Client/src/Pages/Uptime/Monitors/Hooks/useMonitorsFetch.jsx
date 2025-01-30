@@ -43,9 +43,10 @@ export const useMonitorFetch = ({
 	triggerUpdate,
 }) => {
 	const [monitorsAreLoading, setMonitorsAreLoading] = useState(false);
-	const [monitors, setMonitors] = useState([]);
-	const [filteredMonitors, setFilteredMonitors] = useState([]);
-	const [monitorsSummary, setMonitorsSummary] = useState({});
+	const [monitors, setMonitors] = useState(undefined);
+	const [filteredMonitors, setFilteredMonitors] = useState(undefined);
+	const [monitorsSummary, setMonitorsSummary] = useState(undefined);
+	const [networkError, setNetworkError] = useState(false);
 
 	const theme = useTheme();
 
@@ -72,6 +73,7 @@ export const useMonitorFetch = ({
 				setFilteredMonitors(mappedMonitors);
 				setMonitorsSummary(summary);
 			} catch (error) {
+				setNetworkError(true);
 				createToast({
 					body: error.message,
 				});
@@ -92,7 +94,13 @@ export const useMonitorFetch = ({
 		theme,
 		triggerUpdate,
 	]);
-	return { monitors, filteredMonitors, monitorsSummary, monitorsAreLoading };
+	return {
+		monitors,
+		filteredMonitors,
+		monitorsSummary,
+		monitorsAreLoading,
+		networkError,
+	};
 };
 
 export default useMonitorFetch;
