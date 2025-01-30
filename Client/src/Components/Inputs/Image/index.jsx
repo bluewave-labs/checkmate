@@ -99,7 +99,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 								<Typography
 									component="span"
 									fontSize="inherit"
-									color={theme.palette.accent.main}
+									color="info"
 									fontWeight={500}
 								>
 									Click to upload
