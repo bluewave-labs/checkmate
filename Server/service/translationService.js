@@ -95,20 +95,18 @@ class TranslationService {
 
       if (hasError || Object.keys(this.translations[this._language]).length === 0) {
         this.logger.error({
-          message: 'Failed to fetch translations from POEditor, using locales_en.json',
+          message: 'Failed to fetch translations from POEditor, using default.json',
           service: 'TranslationService',
           method: 'loadTranslations'
         });
 
-
-        // Load translations from locales_en.json in utils directory
-        const utilsPath = path.join(process.cwd(), 'utils');
-        const utilsFilePath = path.join(utilsPath, 'locales_en.json');
-        if (fs.existsSync(utilsFilePath)) {
-          const content = fs.readFileSync(utilsFilePath, 'utf8');
+        // Load translations from default.json in locales directory
+        const defaultFilePath = path.join(this.localesDir, 'default.json');
+        if (fs.existsSync(defaultFilePath)) {
+          const content = fs.readFileSync(defaultFilePath, 'utf8');
           this.translations['en'] = JSON.parse(content);
         } else {
-          throw new Error('locales_en.json file not found');
+          throw new Error('default.json file not found in locales directory');
         }
       }
 
@@ -163,10 +161,9 @@ class TranslationService {
         fs.writeFileSync(filePath, JSON.stringify(translations, null, 2));
       }
 
-      const utilsPath = path.join(process.cwd(), 'utils');
+      const defaultFilePath = path.join(this.localesDir, 'default.json');
       const enTranslations = this.translations['en'] || {};
-      const utilsFilePath = path.join(utilsPath, 'locales_en.json');
-      fs.writeFileSync(utilsFilePath, JSON.stringify(enTranslations, null, 2));
+      fs.writeFileSync(defaultFilePath, JSON.stringify(enTranslations, null, 2));
 
       this.logger.info({
         message: 'Translations saved to files successfully',
@@ -245,9 +242,8 @@ class TranslationService {
 
   async syncTermsWithPOEditor() {
     try {
-      const utilsPath = path.join(process.cwd(), 'utils');
-      const utilsFilePath = path.join(utilsPath, 'locales_en.json');
-      const enTranslations = JSON.parse(fs.readFileSync(utilsFilePath, 'utf8'));
+      const defaultFilePath = path.join(this.localesDir, 'default.json');
+      const enTranslations = JSON.parse(fs.readFileSync(defaultFilePath, 'utf8'));
       const localTerms = Object.keys(enTranslations)
         .map(term => term);
 
