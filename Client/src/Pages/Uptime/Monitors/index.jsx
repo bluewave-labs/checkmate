@@ -4,7 +4,7 @@ import Greeting from "../../../Utils/greeting";
 import StatusBoxes from "./Components/StatusBoxes";
 import UptimeDataTable from "./Components/UptimeDataTable";
 import Pagination from "../../../Components/Table/TablePagination";
-import CreateMonitorHeader from "../../../Components/CreateMonitorHeader";
+import CreateMonitorHeader from "../../../Components/MonitorCreateHeader";
 import Fallback from "../../../Components/Fallback";
 import GenericFallback from "../../../Components/GenericFallback";
 import SearchComponent from "./Components/SearchComponent";
@@ -135,6 +135,7 @@ const UptimeMonitors = () => {
 			/>
 		);
 	}
+	console.log({ isLoading });
 
 	return (
 		<Stack

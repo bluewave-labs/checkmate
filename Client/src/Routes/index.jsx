@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes as LibRoutes } from "react-router";
 import HomeLayout from "../Components/Layouts/HomeLayout";
-import { Infrastructure } from "../Pages/Infrastructure";
 import NotFound from "../Pages/NotFound";
 
 // Auth
@@ -24,6 +23,7 @@ import PageSpeedDetails from "../Pages/PageSpeed/Details";
 import PageSpeedConfigure from "../Pages/PageSpeed/Configure";
 
 // Infrastructure
+import Infrastructure from "../Pages/Infrastructure/Monitors";
 import InfrastructureCreate from "../Pages/Infrastructure/Create";
 import InfrastructureDetails from "../Pages/Infrastructure/Details";
 
