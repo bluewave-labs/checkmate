@@ -340,6 +340,7 @@ const getUptimeDetailsById = async (req) => {
 		};
 
 		const dateString = formatLookup[dateRange];
+
 		const results = await Check.aggregate(
 			buildUptimeDetailsPipeline(monitor, dates, dateString)
 		);
