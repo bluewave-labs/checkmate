@@ -1,7 +1,7 @@
 // Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import MonitorStatusHeader from "../../../Components/MonitorStatusHeader";
-import TimeFramePicker from "./Components/TimeFramePicker";
+import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import ChartBoxes from "./Components/ChartBoxes";
 import ResponseTimeChart from "./Components/Charts/ResponseTimeChart";
 import ResponseTable from "./Components/ResponseTable";
@@ -81,6 +81,7 @@ const UptimeDetails = () => {
 		<Stack gap={theme.spacing(10)}>
 			<Breadcrumbs list={BREADCRUMBS} />
 			<MonitorStatusHeader
+				path={"uptime"}
 				isAdmin={isAdmin}
 				shouldRender={!monitorIsLoading}
 				monitor={monitor}
@@ -90,8 +91,9 @@ const UptimeDetails = () => {
 				monitor={monitor}
 				certificateExpiry={certificateExpiry}
 			/>
-			<TimeFramePicker
+			<MonitorTimeFrameHeader
 				shouldRender={!monitorIsLoading}
+				hasDateRange={true}
 				dateRange={dateRange}
 				setDateRange={setDateRange}
 			/>
