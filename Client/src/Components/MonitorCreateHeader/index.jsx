@@ -28,6 +28,6 @@ export default CreateMonitorHeader;
 
 CreateMonitorHeader.propTypes = {
 	isAdmin: PropTypes.bool.isRequired,
-	shouldRender: PropTypes.bool.isRequired,
+	shouldRender: PropTypes.bool,
 	path: PropTypes.string.isRequired,
 };
