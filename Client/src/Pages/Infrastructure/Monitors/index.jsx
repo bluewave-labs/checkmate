@@ -75,7 +75,6 @@ const InfrastructureMonitors = () => {
 		);
 	}
 
-	console.log(isLoading);
 	return (
 		<Stack gap={theme.spacing(10)}>
 			<Breadcrumbs list={BREADCRUMBS} />

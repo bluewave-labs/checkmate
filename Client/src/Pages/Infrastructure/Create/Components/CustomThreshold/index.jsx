@@ -117,7 +117,7 @@ CustomThreshold.propTypes = {
 	fieldName: PropTypes.string,
 	fieldValue: PropTypes.string.isRequired,
 	onFieldChange: PropTypes.func.isRequired,
-	onFieldBlur: PropTypes.func.isRequired,
+	onFieldBlur: PropTypes.func,
 	alertUnit: PropTypes.string.isRequired,
 	infrastructureMonitor: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired,
