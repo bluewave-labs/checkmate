@@ -1,5 +1,4 @@
 import { handleError } from "./controllerUtils.js";
-import { successMessages } from "../utils/messages.js";
 
 const SERVICE_NAME = "DistributedUptimeQueueController";
 
