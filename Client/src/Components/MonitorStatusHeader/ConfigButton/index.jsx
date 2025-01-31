@@ -3,7 +3,7 @@ import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import SettingsIcon from "../../../assets/icons/settings-bold.svg?react";
 import PropTypes from "prop-types";
-const ConfigButton = ({ shouldRender, monitorId }) => {
+const ConfigButton = ({ shouldRender = true, monitorId, path }) => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ const ConfigButton = ({ shouldRender, monitorId }) => {
 			<Button
 				variant="contained"
 				color="secondary"
-				onClick={() => navigate(`/uptime/configure/${monitorId}`)}
+				onClick={() => navigate(`/${path}/configure/${monitorId}`)}
 				sx={{
 					px: theme.spacing(5),
 					"& svg": {
@@ -34,7 +34,8 @@ const ConfigButton = ({ shouldRender, monitorId }) => {
 
 ConfigButton.propTypes = {
 	shouldRender: PropTypes.bool,
-	monitorId: PropTypes.string,
+	monitorId: PropTypes.string.isRequired,
+	path: PropTypes.string.isRequired,
 };
 
 export default ConfigButton;
