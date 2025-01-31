@@ -160,6 +160,7 @@ const startApp = async () => {
 		}
 	}
 
+	// Create and Register Primary services
 	const networkService = new NetworkService(axios, ping, logger, http, Docker, net);
 	const translationService = new TranslationService(logger, networkService);
 	const stringService = new StringService(translationService);
