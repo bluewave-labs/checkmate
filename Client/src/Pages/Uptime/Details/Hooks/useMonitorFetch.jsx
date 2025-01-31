@@ -4,14 +4,13 @@ import { logger } from "../../../../Utils/Logger";
 import { useNavigate } from "react-router-dom";
 
 export const useMonitorFetch = ({ authToken, monitorId, dateRange }) => {
-	const [monitorIsLoading, setMonitorsIsLoading] = useState(false);
+	const [monitorIsLoading, setMonitorsIsLoading] = useState(true);
 	const [monitor, setMonitor] = useState(undefined);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchMonitors = async () => {
 			try {
-				setMonitorsIsLoading(true);
 				const res = await networkService.getUptimeDetailsById({
 					authToken: authToken,
 					monitorId: monitorId,
