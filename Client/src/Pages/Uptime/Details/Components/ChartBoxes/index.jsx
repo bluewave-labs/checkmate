@@ -41,6 +41,7 @@ const ChartBoxes = ({
 				header="Uptime"
 			>
 				<Stack
+					width={"100%"}
 					justifyContent="space-between"
 					direction="row"
 				>
@@ -93,26 +94,28 @@ const ChartBoxes = ({
 				icon={<IncidentsIcon />}
 				header="Incidents"
 			>
-				<Box position="relative">
-					<Typography component="span">
-						{hoveredIncidentsData !== null
-							? hoveredIncidentsData.totalChecks
-							: (monitor?.groupedDownChecks?.reduce((count, checkGroup) => {
-									return count + checkGroup.totalChecks;
-								}, 0) ?? 0)}
-					</Typography>
-					{hoveredIncidentsData !== null && hoveredIncidentsData.time !== null && (
-						<Typography
-							component="h5"
-							position="absolute"
-							top="100%"
-							fontSize={11}
-							color={theme.palette.primary.contrastTextTertiary}
-						>
-							{formatDateWithTz(hoveredIncidentsData._id, dateFormat, uiTimezone)}
+				<Stack width={"100%"}>
+					<Box position="relative">
+						<Typography component="span">
+							{hoveredIncidentsData !== null
+								? hoveredIncidentsData.totalChecks
+								: (monitor?.groupedDownChecks?.reduce((count, checkGroup) => {
+										return count + checkGroup.totalChecks;
+									}, 0) ?? 0)}
 						</Typography>
-					)}
-				</Box>
+						{hoveredIncidentsData !== null && hoveredIncidentsData.time !== null && (
+							<Typography
+								component="h5"
+								position="absolute"
+								top="100%"
+								fontSize={11}
+								color={theme.palette.primary.contrastTextTertiary}
+							>
+								{formatDateWithTz(hoveredIncidentsData._id, dateFormat, uiTimezone)}
+							</Typography>
+						)}
+					</Box>
+				</Stack>
 				<DownBarChart
 					monitor={monitor}
 					type={dateRange}

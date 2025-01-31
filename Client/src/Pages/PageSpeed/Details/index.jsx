@@ -27,7 +27,7 @@ const PageSpeedDetails = () => {
 	const { monitorId } = useParams();
 	const { authToken } = useSelector((state) => state.auth);
 
-	const { monitor, audits, isLoading } = useMonitorFetch({
+	const { monitor, audits, isLoading, networkError } = useMonitorFetch({
 		authToken,
 		monitorId,
 	});
@@ -39,9 +39,25 @@ const PageSpeedDetails = () => {
 		seo: true,
 	});
 
+	// Handlers
 	const handleMetrics = (id) => {
 		setMetrics((prev) => ({ ...prev, [id]: !prev[id] }));
 	};
+
+	if (networkError === true) {
+		return (
+			<GenericFallback>
+				<Typography
+					variant="h1"
+					marginY={theme.spacing(4)}
+					color={theme.palette.primary.contrastTextTertiary}
+				>
+					Network error
+				</Typography>
+				<Typography>Please check your connection</Typography>
+			</GenericFallback>
+		);
+	}
 
 	// Empty view, displayed when loading is complete and there are no checks
 	if (!isLoading && monitor?.checks?.length === 0) {
