@@ -6,8 +6,9 @@ import ChartBoxes from "./Components/ChartBoxes";
 import ResponseTimeChart from "./Components/Charts/ResponseTimeChart";
 import ResponseTable from "./Components/ResponseTable";
 import UptimeStatusBoxes from "./Components/UptimeStatusBoxes";
+import GenericFallback from "../../../Components/GenericFallback";
 // MUI Components
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 // Utils
 import { useState } from "react";
@@ -76,6 +77,14 @@ const UptimeDetails = () => {
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(event.target.value);
 	};
+
+	if (!monitorIsLoading && !checksAreLoading && checksCount === 0) {
+		return (
+			<GenericFallback>
+				<Typography>There is no history for this monitor yet.</Typography>
+			</GenericFallback>
+		);
+	}
 
 	return (
 		<Stack gap={theme.spacing(10)}>
