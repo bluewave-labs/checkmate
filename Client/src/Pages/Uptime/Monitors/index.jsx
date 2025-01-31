@@ -112,7 +112,6 @@ const UptimeMonitors = () => {
 	if (networkError) {
 		return (
 			<GenericFallback>
-				{" "}
 				<Typography
 					variant="h1"
 					marginY={theme.spacing(4)}
@@ -135,7 +134,6 @@ const UptimeMonitors = () => {
 			/>
 		);
 	}
-	console.log({ isLoading });
 
 	return (
 		<Stack
