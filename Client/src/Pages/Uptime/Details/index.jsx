@@ -78,11 +78,21 @@ const UptimeDetails = () => {
 		setRowsPerPage(event.target.value);
 	};
 
+	// Empty view, displayed when loading is complete and there are no checks
 	if (!monitorIsLoading && !checksAreLoading && checksCount === 0) {
 		return (
-			<GenericFallback>
-				<Typography>There is no history for this monitor yet.</Typography>
-			</GenericFallback>
+			<Stack gap={theme.spacing(10)}>
+				<Breadcrumbs list={BREADCRUMBS} />
+				<MonitorStatusHeader
+					path={"uptime"}
+					isAdmin={isAdmin}
+					shouldRender={!monitorIsLoading}
+					monitor={monitor}
+				/>
+				<GenericFallback>
+					<Typography>There is no history for this monitor yet.</Typography>
+				</GenericFallback>
+			</Stack>
 		);
 	}
 
@@ -90,6 +100,7 @@ const UptimeDetails = () => {
 		<Stack gap={theme.spacing(10)}>
 			<Breadcrumbs list={BREADCRUMBS} />
 			<MonitorStatusHeader
+				path={"uptime"}
 				isAdmin={isAdmin}
 				shouldRender={!monitorIsLoading}
 				monitor={monitor}
