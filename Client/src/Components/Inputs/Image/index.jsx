@@ -11,11 +11,12 @@ import { checkImage } from "../../../Utils/fileUtils";
  * @param {string} props.id - The unique identifier for the input field.
  * @param {string} props.src - The URL of the image to display.
  * @param {function} props.onChange - The function to handle file input change.
- * @param {string} props.isRound - The shape of the image to display.
+ * @param {boolean} props.isRound - Whether the shape of the image to display is round.
+ * @param {string} props.maxSize - Custom message for the max uploaded file size
  * @returns {JSX.Element} The rendered component.
  */
 
-const ImageField = ({ id, src, loading, onChange, error, isRound = true }) => {
+const ImageField = ({ id, src, loading, onChange, error, isRound = true, maxSize }) => {
 	const theme = useTheme();
 	const error_border_style = error ? { borderColor: theme.palette.error.main } : {};
 
@@ -32,7 +33,7 @@ const ImageField = ({ id, src, loading, onChange, error, isRound = true }) => {
 	return (
 		<>
 			{!checkImage(src) || loading ? (
-				<>	
+				<>
 					<Box
 						className="image-field-wrapper"
 						mt={theme.spacing(8)}
@@ -50,7 +51,7 @@ const ImageField = ({ id, src, loading, onChange, error, isRound = true }) => {
 								borderColor: theme.palette.primary.main,
 								backgroundColor: "hsl(215, 87%, 51%, 0.05)",
 							},
-							...error_border_style
+							...error_border_style,
 						}}
 						onDragEnter={handleDragEnter}
 						onDragLeave={handleDragLeave}
@@ -117,9 +118,9 @@ const ImageField = ({ id, src, loading, onChange, error, isRound = true }) => {
 								color={theme.palette.primary.contrastTextTertiary}
 								sx={{ opacity: 0.6 }}
 							>
-								(maximum size: 3MB)
+								(maximum size: {maxSize ?? "3MB"})
 							</Typography>
-						</Stack>								
+						</Stack>
 					</Box>
 					<Typography
 						component="p"
@@ -140,7 +141,7 @@ const ImageField = ({ id, src, loading, onChange, error, isRound = true }) => {
 						>
 							{error}
 						</Typography>
-					)}									
+					)}
 				</>
 			) : (
 				<Stack
@@ -168,6 +169,7 @@ ImageField.propTypes = {
 	src: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
 	isRound: PropTypes.bool,
+	maxSize: PropTypes.string,
 };
 
 export default ImageField;

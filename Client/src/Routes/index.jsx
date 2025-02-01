@@ -41,6 +41,7 @@ import Maintenance from "../Pages/Maintenance";
 import ProtectedRoute from "../Components/ProtectedRoute";
 import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
 import withAdminCheck from "../Components/HOC/withAdminCheck";
+import CreateStatus from "../Pages/Status/CreateStatus";
 
 const Routes = () => {
 	const AdminCheckedRegister = withAdminCheck(AuthRegister);
@@ -111,6 +112,11 @@ const Routes = () => {
 				<Route
 					path="status"
 					element={<Status />}
+				/>
+
+				<Route
+					path="status/create"
+					element={<CreateStatus/>}
 				/>
 				<Route
 					path="integrations"
