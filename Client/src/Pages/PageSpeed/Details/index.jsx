@@ -70,7 +70,7 @@ const PageSpeedDetails = () => {
 					monitor={monitor}
 				/>
 				<GenericFallback>
-					<Typography>There is no history for this monitor yet.</Typography>
+					<Typography>There is no check history for this monitor yet.</Typography>
 				</GenericFallback>
 			</Stack>
 		);
