@@ -51,22 +51,22 @@ const InfrastructureDetails = () => {
 		);
 	}
 
-	// if (!isLoading && monitor?.stats?.checks?.length === 0) {
-	// 	return (
-	// 		<Stack gap={theme.spacing(10)}>
-	// 			<Breadcrumbs list={BREADCRUMBS} />
-	// 			<MonitorStatusHeader
-	// 				path={"infrastructure"}
-	// 				isAdmin={false}
-	// 				shouldRender={!isLoading}
-	// 				monitor={monitor}
-	// 			/>
-	// 			<GenericFallback>
-	// 				<Typography>No data found for this monitor</Typography>
-	// 			</GenericFallback>
-	// 		</Stack>
-	// 	);
-	// }
+	if (!isLoading && monitor?.stats?.checks?.length === 0) {
+		return (
+			<Stack gap={theme.spacing(10)}>
+				<Breadcrumbs list={BREADCRUMBS} />
+				<MonitorStatusHeader
+					path={"infrastructure"}
+					isAdmin={false}
+					shouldRender={!isLoading}
+					monitor={monitor}
+				/>
+				<GenericFallback>
+					<Typography>No check history for htis monitor yet.</Typography>
+				</GenericFallback>
+			</Stack>
+		);
+	}
 
 	return (
 		<Stack gap={theme.spacing(10)}>
