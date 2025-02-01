@@ -91,13 +91,17 @@ const credentials = joi.object({
 });
 
 const monitorValidation = joi.object({
-	url: joi
-		.string()
-		.trim()
-		.custom((value, helpers) => {
-			// Regex from https://gist.github.com/dperini/729294
-			var urlRegex = new RegExp(
-				"^" +
+	url: joi.when('type', {
+		is: 'docker',
+		then: joi.string()
+			.trim().regex(/^[a-z0-9]{64}$/),
+		otherwise: joi
+			.string()
+			.trim()
+			.custom((value, helpers) => {
+				// Regex from https://gist.github.com/dperini/729294
+				var urlRegex = new RegExp(
+					"^" +
 					// protocol identifier (optional)
 					// short syntax // still required
 					"(?:(?:https?|ftp):\\/\\/)?" +
@@ -130,18 +134,20 @@ const monitorValidation = joi.object({
 					// resource path (optional)
 					"(?:[/?#]\\S*)?" +
 					"$",
-				"i"
-			);
-			if (!urlRegex.test(value)) {
-				return helpers.error("string.invalidUrl");
-			}
+					"i"
+				);
+				if (!urlRegex.test(value)) {
+					return helpers.error("string.invalidUrl");
+				}
 
-			return value;
-		})
+				return value;
+			})
+	})
 		.messages({
 			"string.empty": "This field is required.",
 			"string.uri": "The URL you provided is not valid.",
 			"string.invalidUrl": "Please enter a valid URL with optional port",
+			"string.pattern.base": "Please enter a valid container ID.",
 		}),
 	port: joi.number(),
 	name: joi.string().trim().max(50).allow("").messages({
