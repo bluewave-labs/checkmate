@@ -47,13 +47,13 @@ const UptimeDetails = () => {
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
 
-	const { monitor, monitorIsLoading } = useMonitorFetch({
+	const [monitor, monitorIsLoading, monitorNetworkError] = useMonitorFetch({
 		authToken,
 		monitorId,
 		dateRange,
 	});
 
-	const { certificateExpiry, certificateIsLoading } = useCertificateFetch({
+	const [certificateExpiry, certificateIsLoading] = useCertificateFetch({
 		monitor,
 		authToken,
 		monitorId,
@@ -61,7 +61,7 @@ const UptimeDetails = () => {
 		uiTimezone,
 	});
 
-	const { checks, checksCount, checksAreLoading } = useChecksFetch({
+	const [checks, checksCount, checksAreLoading, checksNetworkError] = useChecksFetch({
 		authToken,
 		monitorId,
 		dateRange,
@@ -77,6 +77,21 @@ const UptimeDetails = () => {
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(event.target.value);
 	};
+
+	if (monitorNetworkError || checksNetworkError) {
+		return (
+			<GenericFallback>
+				<Typography
+					variant="h1"
+					marginY={theme.spacing(4)}
+					color={theme.palette.primary.contrastTextTertiary}
+				>
+					Network error
+				</Typography>
+				<Typography>Please check your connection</Typography>
+			</GenericFallback>
+		);
+	}
 
 	// Empty view, displayed when loading is complete and there are no checks
 	if (!monitorIsLoading && !checksAreLoading && checksCount === 0) {
