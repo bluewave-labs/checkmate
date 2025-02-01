@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { networkService } from "../../../../main";
-import { logger } from "../../../../Utils/Logger";
 import { useNavigate } from "react-router-dom";
+import { createToast } from "../../../../Utils/toastUtils";
 
 export const useMonitorFetch = ({ authToken, monitorId, dateRange }) => {
-	const [monitorIsLoading, setMonitorsIsLoading] = useState(true);
+	const [networkError, setNetworkError] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [monitor, setMonitor] = useState(undefined);
 	const navigate = useNavigate();
 
@@ -19,15 +20,15 @@ export const useMonitorFetch = ({ authToken, monitorId, dateRange }) => {
 				});
 				setMonitor(res?.data?.data ?? {});
 			} catch (error) {
-				logger.error(error);
-				navigate("/not-found", { replace: true });
+				setNetworkError(true);
+				createToast({ body: error.message });
 			} finally {
-				setMonitorsIsLoading(false);
+				setIsLoading(false);
 			}
 		};
 		fetchMonitors();
 	}, [authToken, dateRange, monitorId, navigate]);
-	return { monitor, monitorIsLoading };
+	return [monitor, isLoading, networkError];
 };
 
 export default useMonitorFetch;
