@@ -1,5 +1,6 @@
 const SERVICE_NAME = "NotificationService";
-import axios from 'axios';
+import NetworkService from "./networkService.js";
+
 
 class NotificationService {
 	static SERVICE_NAME = SERVICE_NAME;
@@ -10,50 +11,53 @@ class NotificationService {
 	 * @param {Object} db - The database instance for storing notification data.
 	 * @param {Object} logger - The logger instance for logging activities.
 	 */
-	constructor(emailService, db, logger) {
+	constructor(emailService, db, logger, networkService) {
 		this.SERVICE_NAME = SERVICE_NAME;
 		this.emailService = emailService;
 		this.db = db;
 		this.logger = logger;
+		this.networkService = networkService;
 	}
 
 	async sendWebhookNotification(networkResponse, address, platform) {
-        const { monitor, status } = networkResponse;
-        let message;
-        let url = address;
-
-        if (platform === 'slack') {
-            message = { text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
-        } else if (platform === 'discord') {
-            message = { content: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
-        } else if (platform === 'telegram') {
-            const [botToken, chatId] = address.split('|').map(part => part?.trim());
-            if (!botToken || !chatId) {
-                console.error('Invalid Telegram address format');
-                return false;
-            }
-            message = {
-                chat_id: chatId,
-                text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`
-            };
-            url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-        }
-
-        try {
-            await axios.post(url, message, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            return true;
-        } catch (error) {
-
-            console.error(`Error sending ${platform} notification:`, error.toJSON());
-            console.error(`URL: ${url}`);
-            console.error(`Message:`, message);
-            return false;
-        }
-    }
+		const { monitor, status } = networkResponse;
+		let message;
+		let url = address;
+	
+		if (platform === 'slack') {
+			message = { text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
+		} else if (platform === 'discord') {
+			message = { content: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
+		} else if (platform === 'telegram') {
+			const [botToken, chatId] = address.split('|').map(part => part?.trim());
+			if (!botToken || !chatId) {
+				return false;
+			}
+			message = {
+				chat_id: chatId,
+				text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`
+			};
+			url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+		}
+	
+		try {
+			const response = await this.networkService.requestWebhook(platform, url, message);
+			return response.status;
+		} catch (error) {
+			this.logger.error({
+				message: `Error sending ${platform} notification`,
+				service: this.SERVICE_NAME,
+				method: 'sendWebhookNotification',
+				error: error.message,
+				stack: error.stack,
+				url,
+				platform,
+				requestPayload: message
+			});
+			return false;
+		}
+	}
+	
 	
 
 	/**
@@ -105,16 +109,12 @@ class NotificationService {
 			for (const notification of notifications) {
 				if (notification.type === "email") {
 					this.sendEmail(networkResponse, notification.address);
-				} else if (notification.type === "discord") {
-					this.sendDiscordNotification(networkResponse, notification.address);
-				} else if (notification.type === "slack") {
-					this.sendSlackNotification(networkResponse, notification.address);
-				} else if (notification.type === "telegram") {
-					this.sendTelegramNotification(networkResponse, notification.address);
-				}
+				} else if (["discord", "slack", "telegram"].includes(notification.type)) {
+					this.sendWebhookNotification(networkResponse, notification.address, notification.type);
 				
 				// Handle other types of notifications here
 			}
+		}
 			return true;
 		} catch (error) {
 			this.logger.warn({

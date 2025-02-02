@@ -38,6 +38,10 @@ import QueueController from "./controllers/queueController.js";
 import DistributedUptimeRoutes from "./routes/distributedUptimeRoute.js";
 import DistributedUptimeController from "./controllers/distributedUptimeController.js";
 
+import NotificationRoutes from "./routes/notificationRoute.js"; // Add this line
+
+import NotificationController from "./controllers/notificationController.js";
+
 //JobQueue service and dependencies
 import JobQueue from "./service/jobQueue.js";
 import { Queue, Worker } from "bullmq";
@@ -174,7 +178,7 @@ const startApp = async () => {
 	);
 	const networkService = new NetworkService(axios, ping, logger, http, Docker, net);
 	const statusService = new StatusService(db, logger);
-	const notificationService = new NotificationService(emailService, db, logger);
+	const notificationService = new NotificationService(emailService, db, logger, networkService);
 
 	const jobQueue = new JobQueue(
 		db,
@@ -244,6 +248,10 @@ const startApp = async () => {
 		ServiceRegistry.get(MongoDB.SERVICE_NAME)
 	);
 
+	const notificationController = new NotificationController(
+		ServiceRegistry.get(NotificationService.SERVICE_NAME)
+	);
+
 	const distributedUptimeController = new DistributedUptimeController();
 
 	//Create routes
@@ -260,6 +268,9 @@ const startApp = async () => {
 	const distributedUptimeRoutes = new DistributedUptimeRoutes(
 		distributedUptimeController
 	);
+
+	const notificationRoutes = new NotificationRoutes(notificationController);
+
 	// Init job queue
 	await jobQueue.initJobQueue();
 	// Middleware
@@ -284,6 +295,7 @@ const startApp = async () => {
 	app.use("/api/v1/queue", verifyJWT, queueRoutes.getRouter());
 	app.use("/api/v1/distributed-uptime", distributedUptimeRoutes.getRouter());
 	app.use("/api/v1/status-page", statusPageRoutes.getRouter());
+	app.use("/api/v1/notifications", notificationRoutes.getRouter()); // Add this line
 	app.use(handleErrors);
 };
 
