@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
-import useUtils from "../../Pages/Uptime/utils";
+import useUtils from "../../Pages/Uptime/Monitors/Hooks/useUtils";
 
 /**
  * StatBox Component

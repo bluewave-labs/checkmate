@@ -139,7 +139,9 @@ const Search = ({
 				}
 				return filtered;
 			}}
-			getOptionKey={(option) => option.id}
+			getOptionKey={(option) => {
+				return option._id;
+			}}
 			renderOption={(props, option) => {
 				const { key, ...optionProps } = props;
 				return (
@@ -196,6 +198,7 @@ const Search = ({
 };
 
 Search.propTypes = {
+	label: PropTypes.string,
 	id: PropTypes.string,
 	multiple: PropTypes.bool,
 	options: PropTypes.array.isRequired,

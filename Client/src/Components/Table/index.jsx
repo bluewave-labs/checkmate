@@ -7,6 +7,7 @@ import {
 	TableHead,
 	TableRow,
 } from "@mui/material";
+import SkeletonLayout from "./skeleton";
 import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
 
@@ -32,8 +33,20 @@ import { useTheme } from "@emotion/react";
  * @returns {JSX.Element} The rendered table component.
  */
 
-const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
+const DataTable = ({
+	shouldRender = true,
+	headers = [],
+	data = [],
+	config = {
+		emptyView: "No data",
+		onRowClick: () => {},
+	},
+}) => {
 	const theme = useTheme();
+	if (!shouldRender) {
+		return <SkeletonLayout />;
+	}
+
 	if ((headers?.length ?? 0) === 0) {
 		return "No data";
 	}
@@ -110,6 +123,7 @@ const DataTable = ({ headers, data, config = { emptyView: "No data" } }) => {
 };
 
 DataTable.propTypes = {
+	shouldRender: PropTypes.bool,
 	headers: PropTypes.arrayOf(
 		PropTypes.shape({
 			id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
@@ -117,9 +131,9 @@ DataTable.propTypes = {
 			render: PropTypes.func.isRequired,
 		})
 	).isRequired,
-	data: PropTypes.array.isRequired,
+	data: PropTypes.array,
 	config: PropTypes.shape({
-		onRowClick: PropTypes.func.isRequired,
+		onRowClick: PropTypes.func,
 		rowSX: PropTypes.object,
 		emptyView: PropTypes.node,
 	}),

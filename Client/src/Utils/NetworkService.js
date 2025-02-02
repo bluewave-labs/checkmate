@@ -3,7 +3,6 @@ const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 const FALLBACK_BASE_URL = "http://localhost:5000/api/v1";
 import { clearAuthState } from "../Features/Auth/authSlice";
 import { clearUptimeMonitorState } from "../Features/UptimeMonitors/uptimeMonitorsSlice";
-import { createToast } from "./toastUtils";
 
 class NetworkService {
 	constructor(store, dispatch, navigate) {
@@ -172,7 +171,6 @@ class NetworkService {
 	async getMonitorsByTeamId(config) {
 		const { authToken, teamId, limit, types, page, rowsPerPage, filter, field, order } =
 			config;
-
 		const params = new URLSearchParams();
 
 		if (limit) params.append("limit", limit);
@@ -614,6 +612,7 @@ class NetworkService {
 		if (config.filter) params.append("filter", config.filter);
 		if (config.page) params.append("page", config.page);
 		if (config.rowsPerPage) params.append("rowsPerPage", config.rowsPerPage);
+		if (config.status !== undefined) params.append("status", config.status);
 
 		return this.axiosInstance.get(`/checks/${config.monitorId}?${params.toString()}`, {
 			headers: { Authorization: `Bearer ${config.authToken}` },
@@ -646,6 +645,7 @@ class NetworkService {
 		if (config.filter) params.append("filter", config.filter);
 		if (config.page) params.append("page", config.page);
 		if (config.rowsPerPage) params.append("rowsPerPage", config.rowsPerPage);
+		if (config.status !== undefined) params.append("status", config.status);
 		return this.axiosInstance.get(`/checks/team/${config.teamId}?${params.toString()}`, {
 			headers: { Authorization: `Bearer ${config.authToken}` },
 		});

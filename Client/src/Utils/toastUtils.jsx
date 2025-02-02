@@ -12,7 +12,7 @@ import Alert from "../Components/Alert";
  */
 
 export const createToast = ({
-	variant = "secondary",
+	variant = "info",
 	title,
 	body,
 	hasIcon = false,

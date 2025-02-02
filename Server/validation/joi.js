@@ -292,6 +292,7 @@ const getChecksQueryValidation = joi.object({
 	filter: joi.string().valid("all", "down", "resolve"),
 	page: joi.number(),
 	rowsPerPage: joi.number(),
+	status: joi.boolean(),
 });
 
 const getTeamChecksParamValidation = joi.object({
@@ -305,6 +306,7 @@ const getTeamChecksQueryValidation = joi.object({
 	filter: joi.string().valid("all", "down", "resolve"),
 	page: joi.number(),
 	rowsPerPage: joi.number(),
+	status: joi.boolean(),
 });
 
 const deleteChecksParamValidation = joi.object({

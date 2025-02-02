@@ -70,13 +70,14 @@ const createCheck = async (checkData) => {
 const getChecksByMonitor = async (req) => {
 	try {
 		const { monitorId } = req.params;
-		let { sortOrder, dateRange, filter, page, rowsPerPage } = req.query;
+		let { sortOrder, dateRange, filter, page, rowsPerPage, status } = req.query;
+		status = typeof status !== "undefined" ? false : undefined;
 		page = parseInt(page);
 		rowsPerPage = parseInt(rowsPerPage);
 		// Match
 		const matchStage = {
 			monitorId: ObjectId.createFromHexString(monitorId),
-			status: false,
+			...(typeof status !== "undefined" && { status }),
 			...(dateRangeLookup[dateRange] && {
 				createdAt: {
 					$gte: dateRangeLookup[dateRange],
@@ -111,7 +112,6 @@ const getChecksByMonitor = async (req) => {
 		if (page && rowsPerPage) {
 			skip = page * rowsPerPage;
 		}
-
 		const checks = await Check.aggregate([
 			{ $match: matchStage },
 			{ $sort: { createdAt: sortOrder } },
@@ -123,8 +123,12 @@ const getChecksByMonitor = async (req) => {
 			},
 			{
 				$project: {
-					checksCount: { $arrayElemAt: ["$summary.checksCount", 0] },
-					checks: "$checks",
+					checksCount: {
+						$ifNull: [{ $arrayElemAt: ["$summary.checksCount", 0] }, 0],
+					},
+					checks: {
+						$ifNull: ["$checks", []],
+					},
 				},
 			},
 		]);
