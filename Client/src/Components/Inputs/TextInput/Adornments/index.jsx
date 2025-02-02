@@ -6,7 +6,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import ReorderRoundedIcon from "@mui/icons-material/ReorderRounded";
 import DeleteIcon from "../../../../assets/icons/trash-bin.svg?react";
 
-export const HttpAdornment = ({ https, prefix }) => {
+export const HttpAdornment = ({ https }) => {
 	const theme = useTheme();
 	return (
 		<Stack
@@ -25,7 +25,7 @@ export const HttpAdornment = ({ https, prefix }) => {
 				color={theme.palette.primary.contrastTextSecondary}
 				sx={{ lineHeight: 1, opacity: 0.8 }}
 			>
-				{prefix !== undefined ? prefix : https ? "https://" : "http://"}
+				{https ? "https" : "http"}
 			</Typography>
 		</Stack>
 	);

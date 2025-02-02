@@ -57,7 +57,7 @@ const Search = ({
 	disabled,
 	startAdornment,
 	endAdornment,
-	onBlur
+	onBlur,
 }) => {
 	const theme = useTheme();
 	return (
@@ -70,15 +70,15 @@ const Search = ({
 			onInputChange={(_, newValue) => {
 				handleInputChange(newValue);
 			}}
-			onChange={(e, newValue) => {
-				handleChange && handleChange(e, newValue);
+			onChange={(_, newValue) => {
+				handleChange(newValue);
 			}}
 			fullWidth
 			freeSolo
 			disabled={disabled}
 			disableClearable
 			options={options}
-			getOptionLabel={(option) => option[filteredBy]??""}
+			getOptionLabel={(option) => option[filteredBy]}
 			renderInput={(params) => (
 				<Stack>
 					<Typography
@@ -213,7 +213,7 @@ Search.propTypes = {
 	options: PropTypes.array.isRequired,
 	filteredBy: PropTypes.string.isRequired,
 	secondaryLabel: PropTypes.string,
-	value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+	value: PropTypes.array,
 	inputValue: PropTypes.string.isRequired,
 	handleInputChange: PropTypes.func.isRequired,
 	handleChange: PropTypes.func,
@@ -223,7 +223,7 @@ Search.propTypes = {
 	disabled: PropTypes.bool,
 	startAdornment: PropTypes.object,
 	endAdornment: PropTypes.object,
-	onBlur: PropTypes.func
+	onBlur: PropTypes.func,
 };
 
 export default Search;
