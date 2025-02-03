@@ -12,7 +12,6 @@ const PublicStatus = () => {
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
 	const [statusPage, isLoading, networkError] = useStatusPageFetch();
-
 	if (networkError === true) {
 		return (
 			<GenericFallback>

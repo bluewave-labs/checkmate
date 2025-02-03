@@ -862,9 +862,9 @@ class NetworkService {
 		);
 	}
 
-	async getStatusPageByUrl(config) {
-		const { url, authToken } = config;
-		return this.axiosInstance.get(`/status-page/${url}`, {
+	async getStatusPage(config) {
+		const { authToken } = config;
+		return this.axiosInstance.get(`/status-page`, {
 			headers: {
 				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
@@ -873,11 +873,28 @@ class NetworkService {
 	}
 
 	async createStatusPage(config) {
-		const { url, authToken, data } = config;
-		return this.axiosInstance.post(`/status-page/${url}`, data, {		
+		const { authToken, user, form } = config;
+		const fd = new FormData();
+		fd.append("isPublished", form.isPublished);
+		fd.append("companyName", form.companyName);
+		fd.append("url", form.url);
+		fd.append("timezone", form.timezone);
+		fd.append("color", form.color);
+		fd.append("showCharts", form.showCharts);
+		fd.append("showUptimePercentage", form.showUptimePercentage);
+		form.monitors.forEach((monitorId) => {
+			fd.append("monitors[]", monitorId);
+		});
+		if (form?.logo?.src && form?.logo?.src !== "") {
+			const imageResult = await axios.get(form.logo.src, {
+				responseType: "blob",
+			});
+			fd.append("logo", imageResult.data);
+		}
+
+		return this.axiosInstance.post(`/status-page`, fd, {
 			headers: {
 				Authorization: `Bearer ${authToken}`,
-				"Content-Type": "application/json",
 			},
 		});
 	}
