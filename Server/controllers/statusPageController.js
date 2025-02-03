@@ -2,6 +2,7 @@ import { handleError, handleValidationError } from "./controllerUtils.js";
 import {
 	createStatusPageBodyValidation,
 	getStatusPageParamValidation,
+	imageValidation,
 } from "../validation/joi.js";
 import { successMessages } from "../utils/messages.js";
 
@@ -15,13 +16,14 @@ class StatusPageController {
 	createStatusPage = async (req, res, next) => {
 		try {
 			await createStatusPageBodyValidation.validateAsync(req.body);
+			await imageValidation.validateAsync(req.file);
 		} catch (error) {
 			next(handleValidationError(error, SERVICE_NAME));
 			return;
 		}
 
 		try {
-			const statusPage = await this.db.createStatusPage(req.body);
+			const statusPage = await this.db.createStatusPage(req.body, req.file);
 			return res.success({
 				msg: successMessages.STATUS_PAGE_CREATE,
 				data: statusPage,
@@ -30,17 +32,9 @@ class StatusPageController {
 			next(handleError(error, SERVICE_NAME, "createStatusPage"));
 		}
 	};
-	getStatusPageByUrl = async (req, res, next) => {
+	getStatusPage = async (req, res, next) => {
 		try {
-			await getStatusPageParamValidation.validateAsync(req.params);
-		} catch (error) {
-			next(handleValidationError(error, SERVICE_NAME));
-			return;
-		}
-
-		try {
-			const { url } = req.params;
-			const statusPage = await this.db.getStatusPageByUrl(url);
+			const statusPage = await this.db.getStatusPage();
 			return res.success({
 				msg: successMessages.STATUS_PAGE_BY_URL,
 				data: statusPage,

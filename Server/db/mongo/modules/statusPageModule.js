@@ -3,9 +3,15 @@ import { errorMessages } from "../../../utils/messages.js";
 
 const SERVICE_NAME = "statusPageModule";
 
-const createStatusPage = async (statusPageData) => {
+const createStatusPage = async (statusPageData, image) => {
 	try {
 		const statusPage = new StatusPage({ ...statusPageData });
+		if (image) {
+			statusPage.logo = {
+				data: image.buffer,
+				contentType: image.mimetype,
+			};
+		}
 		await statusPage.save();
 		return statusPage;
 	} catch (error) {
@@ -20,9 +26,9 @@ const createStatusPage = async (statusPageData) => {
 	}
 };
 
-const getStatusPageByUrl = async (url) => {
+const getStatusPage = async () => {
 	try {
-		const statusPage = await StatusPage.findOne({ url });
+		const statusPage = await StatusPage.findOne();
 		if (statusPage === null || statusPage === undefined) {
 			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
 			error.status = 404;
@@ -37,4 +43,4 @@ const getStatusPageByUrl = async (url) => {
 	}
 };
 
-export { createStatusPage, getStatusPageByUrl };
+export { createStatusPage, getStatusPage };
