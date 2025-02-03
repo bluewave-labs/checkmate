@@ -178,20 +178,33 @@ const imageValidation = joi.object({
 		}),
 });
 
-const logoImageValidation = joi.object({
-	type: joi.string().valid("image/jpeg", "image/png").messages({
-		"any.only": "Invalid file format.",
-		"string.empty": "File type required.",
-	}),
-	size: joi.number().max(3000000).messages({
-		"number.base": "File size must be a number.",
-		"number.max": "File size must be less than 3MB.",
-		"number.empty": "File size required.",
-	}),
-});
+const logoImageValidation = joi
+	.object({
+		type: joi
+			.string()
+			.valid("image/jpeg", "image/png")
+			.allow(null) // Allow null and empty string
+			.messages({
+				"any.only": "Invalid file format.",
+				"string.empty": "File type required.",
+			})
+			.optional(),
+		size: joi
+			.number()
+			.max(3000000)
+			.allow(null) // Allow null and empty string
+			.messages({
+				"number.base": "File size must be a number.",
+				"number.max": "File size must be less than 3MB.",
+				"number.empty": "File size required.",
+			})
+			.optional(),
+	})
+	.allow(null)
+	.optional(); // Make entire object optional
 
 const publicPageSettingsValidation = joi.object({
-	publish: joi.bool(),
+	isPublished: joi.bool(),
 	companyName: joi
 		.string()
 		.trim()
@@ -208,7 +221,6 @@ const publicPageSettingsValidation = joi.object({
 	}),
 	logo: logoImageValidation,
 	showUptimePercentage: joi.boolean(),
-	showBarcode: joi.boolean(),
 	showBarcode: joi.boolean(),
 });
 const settingsValidation = joi.object({

@@ -9,34 +9,32 @@ import { useSelector } from "react-redux";
 import { logger } from "../../Utils/Logger";
 
 /**
- * The configuration page for public page that contains a general settings and 
+ * The configuration page for public page that contains a general settings and
  * content tabs, It will display a static page if there is no status page configured
  * or the status page if one is already configured
  */
 const Status = () => {
 	const theme = useTheme();
-	const navigate = useNavigate();	
-	const {authToken} = useSelector((state) => state.auth);
+	const navigate = useNavigate();
+	const { authToken } = useSelector((state) => state.auth);
 	const [initForm, setInitForm] = useState({});
-	const STATUS_PAGE = import.meta.env.VITE_STATU_PAGE_URL?? "status-page";					
+	const STATUS_PAGE = import.meta.env.VITE_STATU_PAGE_URL ?? "status-page";
 	useEffect(() => {
 		const getStatusPage = async () => {
 			let config = { authToken: authToken, url: STATUS_PAGE };
 			try {
-				let res = await networkService.getStatusPageByUrl(config);			
-				if(res && res.data)
-					setInitForm( res.data.data)
-			}catch (error) {
+				let res = await networkService.getStatusPageByUrl(config);
+				if (res && res.data) setInitForm(res.data.data);
+			} catch (error) {
 				logger.error("Failed to fetch status page", error);
-			} 
-			
+			}
 		};
 		getStatusPage();
 	}, []);
 
 	return (
 		<>
-			{Object.keys(initForm).length===0? (
+			{Object.keys(initForm).length === 0 ? (
 				<Box
 					className="status"
 					sx={{
@@ -46,7 +44,7 @@ const Status = () => {
 							borderColor: theme.palette.primary.lowContrast,
 							borderRadius: theme.shape.borderRadius,
 							borderStyle: "dashed",
-  					        backgroundColor: theme.palette.primary.main,
+							backgroundColor: theme.palette.primary.main,
 							overflow: "hidden",
 						},
 					}}
@@ -76,10 +74,10 @@ const Status = () => {
 					</Stack>
 				</Box>
 			) : (
-					<CreateStatus initForm={initForm}/>
-			 )}
+				<CreateStatus initForm={initForm} />
+			)}
 		</>
-	);	
+	);
 };
 
 export default Status;

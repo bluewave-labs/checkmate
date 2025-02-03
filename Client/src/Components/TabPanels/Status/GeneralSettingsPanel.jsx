@@ -12,7 +12,7 @@ import Select from "../../Inputs/Select";
 import { logoImageValidation } from "../../../Validation/validation";
 import { formatBytes } from "../../../Utils/fileUtils";
 import ProgressUpload from "../../ProgressBars";
-import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
+import { StatusFormContext } from "../../../Pages/StatusPage/CreateStatusContext";
 import ColorPicker from "../../Inputs/ColorPicker";
 import Checkbox from "../../Inputs/Checkbox";
 
@@ -22,8 +22,15 @@ import Checkbox from "../../Inputs/Checkbox";
  */
 const GeneralSettingsPanel = () => {
 	const theme = useTheme();
-	const { form, setForm, errors, setErrors, handleBlur, handleChange, handelCheckboxChange } =
-		useContext(StatusFormContext);
+	const {
+		form,
+		setForm,
+		errors,
+		setErrors,
+		handleBlur,
+		handleChange,
+		handelCheckboxChange,
+	} = useContext(StatusFormContext);
 	const [logo, setLogo] = useState(form.logo);
 
 	const [progress, setProgress] = useState({ value: 0, isLoading: false });
@@ -213,7 +220,7 @@ const GeneralSettingsPanel = () => {
 										width: "100%",
 										maxWidth: "200px",
 										alignSelf: "center",
-										mt: theme.spacing(4)
+										mt: theme.spacing(4),
 									}}
 								>
 									Remove Logo

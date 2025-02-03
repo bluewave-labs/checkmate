@@ -21,15 +21,17 @@ import { MuiColorInput } from "mui-color-input";
  *		>
  *	</ColorPicker>
  */
-const ColorPicker = ({ id, value, error, onChange, onBlur }) => {
+const ColorPicker = ({ id, name, value, error, onChange, onBlur }) => {
 	const theme = useTheme();
 	return (
 		<Stack gap={theme.spacing(4)}>
 			<MuiColorInput
 				format="hex"
+				name={name}
+				type="color-picker"
 				value={value}
 				id={id}
-				onChange={onChange}
+				onChange={(color) => onChange({ target: { name, value: color } })}
 				onBlur={onBlur}
 			/>
 			{error && (
@@ -54,7 +56,7 @@ ColorPicker.propTypes = {
 	value: PropTypes.string,
 	error: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
-	onBlur: PropTypes.func.isRequired,
+	onBlur: PropTypes.func,
 };
 
 export default ColorPicker;

@@ -29,7 +29,12 @@ import InfrastructureDetails from "../Pages/Infrastructure/Details";
 
 import Incidents from "../Pages/Incidents";
 
-import Status from "../Pages/Status";
+//Status pages
+import Status from "../Pages/StatusPage";
+import CreateStatus from "../Pages/StatusPage/Create";
+import OldCreateStatus from "../Pages/StatusPage/CreateStatus";
+import PublicStatus from "../Pages/StatusPage/PublicStatus";
+
 import Integrations from "../Pages/Integrations";
 
 // Settings
@@ -41,7 +46,6 @@ import Maintenance from "../Pages/Maintenance";
 import ProtectedRoute from "../Components/ProtectedRoute";
 import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
 import withAdminCheck from "../Components/HOC/withAdminCheck";
-import CreateStatus from "../Pages/Status/CreateStatus";
 
 const Routes = () => {
 	const AdminCheckedRegister = withAdminCheck(AuthRegister);
@@ -111,12 +115,16 @@ const Routes = () => {
 
 				<Route
 					path="status"
-					element={<Status />}
+					element={<PublicStatus />}
 				/>
 
 				<Route
 					path="status/create"
-					element={<CreateStatus/>}
+					element={<CreateStatus />}
+				/>
+				<Route
+					path="status/old-create"
+					element={<OldCreateStatus />}
 				/>
 				<Route
 					path="integrations"

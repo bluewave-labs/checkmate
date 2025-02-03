@@ -4,7 +4,7 @@ import { useTheme } from "@emotion/react";
 import TabPanel from "@mui/lab/TabPanel";
 
 import ConfigBox from "../../../Components/ConfigBox";
-import { StatusFormContext } from "../../../Pages/Status/CreateStatusContext";
+import { StatusFormContext } from "../../../Pages/StatusPage/CreateStatusContext";
 import { useSelector } from "react-redux";
 import { logger } from "../../../Utils/Logger";
 import { createToast } from "../../../Utils/toastUtils";
@@ -22,14 +22,8 @@ import { buildErrors } from "../../../Validation/error";
  */
 const ContentPanel = () => {
 	const theme = useTheme();
-	const {
-		form,
-		setForm,
-		errors,
-		setErrors,
-		handleBlur,
-		handelCheckboxChange,
-	} = useContext(StatusFormContext);
+	const { form, setForm, errors, setErrors, handleBlur, handelCheckboxChange } =
+		useContext(StatusFormContext);
 	const [cards, setCards] = useState([]);
 	const { user, authToken } = useSelector((state) => state.auth);
 	const [monitors, setMonitors] = useState([]);
@@ -80,7 +74,7 @@ const ContentPanel = () => {
 
 	const handleServersBlur = () => {
 		const { error } = publicPageSettingsValidation.validate(
-			{ "monitors": form.monitors },
+			{ monitors: form.monitors },
 			{
 				abortEarly: false,
 			}
@@ -88,7 +82,7 @@ const ContentPanel = () => {
 		setErrors((prev) => {
 			return buildErrors(prev, "monitors", error);
 		});
-	};			
+	};
 	return (
 		<TabPanel
 			value="Contents"
@@ -158,7 +152,7 @@ const ContentPanel = () => {
 							form={form}
 							setForm={setForm}
 							removeItem={removeCard}
-							onBlur= {handleServersBlur}
+							onBlur={handleServersBlur}
 						/>
 
 						{errors["monitors"] && (
