@@ -10,6 +10,15 @@ const NotificationSchema = mongoose.Schema(
 			type: String,
 			enum: ["email", "sms", "discord", "slack", "telegram"],
 		},
+		webhookUrl: {
+            type: String, 
+        },
+        botToken: {
+            type: String, 
+        },
+        chatId: {
+            type: String, 
+        },
 		address: {
 			type: String,
 		},
@@ -76,4 +85,5 @@ NotificationSchema.pre("findOneAndUpdate", function (next) {
 	}
 	next();
 });
+
 export default mongoose.model("Notification", NotificationSchema);

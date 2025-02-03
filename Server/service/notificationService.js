@@ -18,17 +18,16 @@ class NotificationService {
 		this.networkService = networkService;
 	}
 
-	async sendWebhookNotification(networkResponse, address, platform) {
+	async sendWebhookNotification(networkResponse, address, platform, botToken, chatId) {
 		const { monitor, status } = networkResponse;
 		let message;
 		let url = address;
-	
+
 		if (platform === 'slack') {
 			message = { text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
 		} else if (platform === 'discord') {
 			message = { content: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
 		} else if (platform === 'telegram') {
-			const [botToken, chatId] = address.split('|').map(part => part?.trim());
 			if (!botToken || !chatId) {
 				return false;
 			}
@@ -38,7 +37,7 @@ class NotificationService {
 			};
 			url = `${TELEGRAM_API_BASE_URL}${botToken}/sendMessage`;
 		}
-	
+
 		try {
 			const response = await this.networkService.requestWebhook(platform, url, message);
 			return response.status;
@@ -56,9 +55,8 @@ class NotificationService {
 			return false;
 		}
 	}
-	
-	
 
+	
 	/**
 	 * Sends an email notification for hardware infrastructure alerts
 	 *
