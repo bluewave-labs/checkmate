@@ -218,18 +218,20 @@ const buildUptimeDetailsPipeline = (monitor, dates, dateString) => {
 		{
 			$project: {
 				uptimeStreak: {
-					$cond: [
-						{ $eq: [{ $size: { $first: "$uptimeStreak.streak.checks" } }, 0] },
-						0,
-						{
-							$subtract: [
-								new Date(),
+					$let: {
+						vars: {
+							checks: { $ifNull: [{ $first: "$uptimeStreak.streak.checks" }, []] },
+						},
+						in: {
+							$cond: [
+								{ $eq: [{ $size: "$$checks" }, 0] },
+								0,
 								{
-									$last: { $first: "$uptimeStreak.streak.checks.createdAt" },
+									$subtract: [new Date(), { $last: "$$checks.createdAt" }],
 								},
 							],
 						},
-					],
+					},
 				},
 				avgResponseTime: {
 					$arrayElemAt: ["$aggregateData.avgResponseTime", 0],

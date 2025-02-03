@@ -123,8 +123,12 @@ const getChecksByMonitor = async (req) => {
 			},
 			{
 				$project: {
-					checksCount: { $arrayElemAt: ["$summary.checksCount", 0] },
-					checks: "$checks",
+					checksCount: {
+						$ifNull: [{ $arrayElemAt: ["$summary.checksCount", 0] }, 0],
+					},
+					checks: {
+						$ifNull: ["$checks", []],
+					},
 				},
 			},
 		]);

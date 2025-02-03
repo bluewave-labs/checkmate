@@ -1,36 +1,50 @@
 import { Navigate, Route, Routes as LibRoutes } from "react-router";
 import HomeLayout from "../Components/Layouts/HomeLayout";
-import { Infrastructure } from "../Pages/Infrastructure";
-import InfrastructureDetails from "../Pages/Infrastructure/Details";
 import NotFound from "../Pages/NotFound";
-import Login from "../Pages/Auth/Login/Login";
-import Register from "../Pages/Auth/Register/Register";
-import Account from "../Pages/Account";
-import Monitors from "../Pages/Uptime/Home";
-import CreateMonitor from "../Pages/Uptime/CreateUptime";
-import CreateInfrastructureMonitor from "../Pages/Infrastructure/CreateMonitor";
-import Incidents from "../Pages/Incidents";
-import Status from "../Pages/Status";
-import Integrations from "../Pages/Integrations";
-import Settings from "../Pages/Settings";
-import ForgotPassword from "../Pages/Auth/ForgotPassword";
-import CheckEmail from "../Pages/Auth/CheckEmail";
-import SetNewPassword from "../Pages/Auth/SetNewPassword";
-import NewPasswordConfirmed from "../Pages/Auth/NewPasswordConfirmed";
-import ProtectedRoute from "../Components/ProtectedRoute";
-import Details from "../Pages/Uptime/Details";
-import Maintenance from "../Pages/Maintenance";
-import Configure from "../Pages/Uptime/Configure";
-import PageSpeed from "../Pages/PageSpeed";
-import CreatePageSpeed from "../Pages/PageSpeed/CreatePageSpeed";
-import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
+
+// Auth
+import AuthLogin from "../Pages/Auth/Login/Login";
+import AuthRegister from "../Pages/Auth/Register/Register";
+import AuthForgotPassword from "../Pages/Auth/ForgotPassword";
+import AuthCheckEmail from "../Pages/Auth/CheckEmail";
+import AuthSetNewPassword from "../Pages/Auth/SetNewPassword";
+import AuthNewPasswordConfirmed from "../Pages/Auth/NewPasswordConfirmed";
+
+// Uptime
+import Uptime from "../Pages/Uptime/Monitors";
+import UptimeDetails from "../Pages/Uptime/Details";
+import UptimeCreate from "../Pages/Uptime/Create";
+import UptimeConfigure from "../Pages/Uptime/Configure";
+
+// PageSpeed
+import PageSpeed from "../Pages/PageSpeed/Monitors";
+import PageSpeedCreate from "../Pages/PageSpeed/Create";
 import PageSpeedDetails from "../Pages/PageSpeed/Details";
 import PageSpeedConfigure from "../Pages/PageSpeed/Configure";
+
+// Infrastructure
+import Infrastructure from "../Pages/Infrastructure/Monitors";
+import InfrastructureCreate from "../Pages/Infrastructure/Create";
+import InfrastructureDetails from "../Pages/Infrastructure/Details";
+
+import Incidents from "../Pages/Incidents";
+
+import Status from "../Pages/Status";
+import Integrations from "../Pages/Integrations";
+
+// Settings
+import Account from "../Pages/Account";
+import Settings from "../Pages/Settings";
+
+import Maintenance from "../Pages/Maintenance";
+
+import ProtectedRoute from "../Components/ProtectedRoute";
+import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
 import withAdminCheck from "../Components/HOC/withAdminCheck";
 import PublicPage from "../Pages/PublicPage";
 
 const Routes = () => {
-	const AdminCheckedRegister = withAdminCheck(Register);
+	const AdminCheckedRegister = withAdminCheck(AuthRegister);
 	return (
 		<LibRoutes>
 			<Route
@@ -51,20 +65,20 @@ const Routes = () => {
 				/>
 				<Route
 					path="/uptime"
-					element={<Monitors />}
+					element={<Uptime />}
 				/>
 
 				<Route
 					path="/uptime/create/:monitorId?"
-					element={<CreateMonitor />}
+					element={<UptimeCreate />}
 				/>
 				<Route
 					path="/uptime/:monitorId/"
-					element={<Details />}
+					element={<UptimeDetails />}
 				/>
 				<Route
 					path="/uptime/configure/:monitorId/"
-					element={<Configure />}
+					element={<UptimeConfigure />}
 				/>
 				<Route
 					path="pagespeed"
@@ -72,7 +86,7 @@ const Routes = () => {
 				/>
 				<Route
 					path="pagespeed/create"
-					element={<CreatePageSpeed />}
+					element={<PageSpeedCreate />}
 				/>
 				<Route
 					path="pagespeed/:monitorId"
@@ -88,7 +102,7 @@ const Routes = () => {
 				/>
 				<Route
 					path="infrastructure/create"
-					element={<CreateInfrastructureMonitor />}
+					element={<InfrastructureCreate />}
 				/>
 				<Route
 					path="infrastructure/:monitorId"
@@ -136,7 +150,7 @@ const Routes = () => {
 
 			<Route
 				path="/login"
-				element={<Login />}
+				element={<AuthLogin />}
 			/>
 
 			<Route
@@ -147,24 +161,24 @@ const Routes = () => {
 			<Route
 				exact
 				path="/register/:token"
-				element={<Register />}
+				element={<AuthRegister />}
 			/>
 
 			<Route
 				path="/forgot-password"
-				element={<ForgotPassword />}
+				element={<AuthForgotPassword />}
 			/>
 			<Route
 				path="/check-email"
-				element={<CheckEmail />}
+				element={<AuthCheckEmail />}
 			/>
 			<Route
 				path="/set-new-password/:token"
-				element={<SetNewPassword />}
+				element={<AuthSetNewPassword />}
 			/>
 			<Route
 				path="/new-password-confirmed"
-				element={<NewPasswordConfirmed />}
+				element={<AuthNewPasswordConfirmed />}
 			/>
 
 			<Route

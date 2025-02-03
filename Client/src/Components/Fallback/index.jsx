@@ -26,58 +26,71 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 	const mode = useSelector((state) => state.ui.mode);
 
 	return (
-		<Stack
-			className={`fallback__${title.trim().split(" ")[0]}`}
-			alignItems="center"
-			gap={theme.spacing(20)}
+		<Box
+			className="page-speed"
+			position="relative"
+			border={1}
+			borderColor={theme.palette.primary.lowContrast}
+			borderRadius={theme.shape.borderRadius}
+			backgroundColor={theme.palette.primary.main}
+			overflow="hidden"
+			sx={{
+				borderStyle: "dashed",
+			}}
 		>
-			{mode === "light" ? (
-				<Skeleton style={{ zIndex: 1 }} />
-			) : (
-				<SkeletonDark style={{ zIndex: 1 }} />
-			)}
-			<Box
-				className="background-pattern-svg"
-				sx={{
-					"& svg g g:last-of-type path": {
-						stroke: theme.palette.primary.lowContrast,
-					},
-				}}
-			>
-				<Background style={{ width: "100%" }} />
-			</Box>
 			<Stack
-				gap={theme.spacing(4)}
-				maxWidth={"300px"}
-				zIndex={1}
+				className={`fallback__${title?.trim().split(" ")[0]}`}
+				alignItems="center"
+				gap={theme.spacing(20)}
 			>
-				<Typography
-					component="h1"
-					marginY={theme.spacing(4)}
-					color={theme.palette.primary.contrastTextTertiary}
+				{mode === "light" ? (
+					<Skeleton style={{ zIndex: 1 }} />
+				) : (
+					<SkeletonDark style={{ zIndex: 1 }} />
+				)}
+				<Box
+					className="background-pattern-svg"
+					sx={{
+						"& svg g g:last-of-type path": {
+							stroke: theme.palette.primary.lowContrast,
+						},
+					}}
 				>
-					{vowelStart ? "An" : "A"} {title} is used to:
-				</Typography>
-				{checks.map((check, index) => (
-					<Check
-						text={check}
-						key={`${title.trim().split(" ")[0]}-${index}`}
-						outlined={true}
-					/>
-				))}
+					<Background style={{ width: "100%" }} />
+				</Box>
+				<Stack
+					gap={theme.spacing(4)}
+					maxWidth={"300px"}
+					zIndex={1}
+				>
+					<Typography
+						component="h1"
+						marginY={theme.spacing(4)}
+						color={theme.palette.primary.contrastTextTertiary}
+					>
+						{vowelStart ? "An" : "A"} {title} is used to:
+					</Typography>
+					{checks?.map((check, index) => (
+						<Check
+							text={check}
+							key={`${title.trim().split(" ")[0]}-${index}`}
+							outlined={true}
+						/>
+					))}
+				</Stack>
+				{/* TODO - display a different fallback if user is not an admin*/}
+				{isAdmin && (
+					<Button
+						variant="contained"
+						color="accent"
+						sx={{ alignSelf: "center" }}
+						onClick={() => navigate(link)}
+					>
+						Let's create your first {title}
+					</Button>
+				)}
 			</Stack>
-			{/* TODO - display a different fallback if user is not an admin*/}
-			{isAdmin && (
-				<Button
-					variant="contained"
-					color="accent"
-					sx={{ alignSelf: "center" }}
-					onClick={() => navigate(link)}
-				>
-					Let's create your {title}
-				</Button>
-			)}
-		</Stack>
+		</Box>
 	);
 };
 
