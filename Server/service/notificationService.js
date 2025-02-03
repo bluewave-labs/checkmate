@@ -1,4 +1,5 @@
 const SERVICE_NAME = "NotificationService";
+const TELEGRAM_API_BASE_URL = "https://api.telegram.org/bot";
 
 class NotificationService {
 	static SERVICE_NAME = SERVICE_NAME;
@@ -35,7 +36,7 @@ class NotificationService {
 				chat_id: chatId,
 				text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`
 			};
-			url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+			url = `${TELEGRAM_API_BASE_URL}${botToken}/sendMessage`;
 		}
 	
 		try {
