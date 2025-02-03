@@ -333,6 +333,13 @@ const baseTheme = (palette) => ({
 				}),
 			},
 		},
+		MuiSvgIcon: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					color: theme.palette.primary.contrastTextTertiary,
+				}),
+			},
+		},
 	},
 	shape: {
 		borderRadius: 2,
