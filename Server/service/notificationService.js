@@ -1,6 +1,4 @@
 const SERVICE_NAME = "NotificationService";
-import NetworkService from "./networkService.js";
-
 
 class NotificationService {
 	static SERVICE_NAME = SERVICE_NAME;
