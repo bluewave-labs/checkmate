@@ -1,21 +1,29 @@
 // Components
-import { Stack, Tab, Button } from "@mui/material";
-import { TabContext, TabList } from "@mui/lab";
-import Settings from "./Components/Tabs/Settings";
-import Content from "./Components/Tabs/Content";
-
+import { Stack, Button, Typography } from "@mui/material";
+import Tabs from "./Components/Tabs";
+import GenericFallback from "../../../Components/GenericFallback";
+import SkeletonLayout from "./Components/Skeleton";
 //Utils
 import { useTheme } from "@emotion/react";
 import { useState, useRef } from "react";
-import { publicPageSettingsValidation } from "../../../Validation/validation";
+import { statusPageValidation } from "../../../Validation/validation";
 import { buildErrors } from "../../../Validation/error";
+import { useSelector } from "react-redux";
+import { useMonitorsFetch } from "./Hooks/useMonitorsFetch";
+import { useCreateStatusPage } from "./Hooks/useCreateStatusPage";
+import { createToast } from "../../../Utils/toastUtils";
 
 //Constants
 const TAB_LIST = ["General settings", "Contents"];
 
+const ERROR_TAB_MAPPING = [
+	["companyName", "url", "timezone", "color", "isPublished", "logo"],
+	["monitors", "showUptimePercentage", "showCharts"],
+];
+
 const CreateStatusPage = () => {
 	//Redux state
-
+	const { authToken, user } = useSelector((state) => state.auth);
 	//Local state
 	const [tab, setTab] = useState(0);
 	const [progress, setProgress] = useState({ value: 0, isLoading: false });
@@ -26,21 +34,27 @@ const CreateStatusPage = () => {
 		logo: null,
 		timezone: "America/Toronto",
 		color: "#4169E1",
+		monitors: [],
+		showCharts: true,
+		showUptimePercentage: true,
 	});
 	const [errors, setErrors] = useState({});
+	const [selectedMonitors, setSelectedMonitors] = useState([]);
 
 	// Refs
 	const intervalRef = useRef(null);
 
 	//Utils
 	const theme = useTheme();
+	const [monitors, isLoading, networkError] = useMonitorsFetch();
+	const [createStatusPage, createSatusIsLoading, createStatusPageNetworkError] =
+		useCreateStatusPage();
 
 	// Handlers
 	const handleFormChange = (e) => {
 		let { type, name, value, checked } = e.target;
-
 		// Handle errors
-		const { error } = publicPageSettingsValidation.validate(
+		const { error } = statusPageValidation.validate(
 			{ [name]: value },
 			{ abortEarly: false }
 		);
@@ -98,54 +112,74 @@ const CreateStatusPage = () => {
 		setProgress({ value: 0, isLoading: false });
 	};
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		let toSubmit = {
 			...form,
 			logo: { type: form.logo?.type ?? null, size: form.logo?.size ?? null },
 		};
-		const { error } = publicPageSettingsValidation.validate(toSubmit, {
+		const { error } = statusPageValidation.validate(toSubmit, {
 			abortEarly: false,
 		});
-		console.log(error);
-		setErrors((prev) => {
-			return buildErrors(prev, name, error);
+
+		if (typeof error === "undefined") {
+			const success = await createStatusPage({ form });
+			if (success) {
+				createToast({ body: "Status page created successfully" });
+			}
+			return;
+		}
+
+		const newErrors = {};
+		error?.details?.forEach((err) => {
+			newErrors[err.path[0]] = err.message;
 		});
+		setErrors((prev) => ({ ...prev, ...newErrors }));
+
+		const errorTabs = Object.keys(newErrors).map((err) => {
+			return ERROR_TAB_MAPPING.findIndex((tab) => tab.includes(err));
+		});
+
+		// If there's an error in the current tab, don't change the tab
+		if (errorTabs.some((errorTab) => errorTab === tab)) {
+			return;
+		}
+		// Otherwise go to tab with error
+		setTab(errorTabs[0]);
 	};
+
+	if (networkError === true) {
+		return (
+			<GenericFallback>
+				<Typography
+					variant="h1"
+					marginY={theme.spacing(4)}
+					color={theme.palette.primary.contrastTextTertiary}
+				>
+					Network error
+				</Typography>
+				<Typography>Please check your connection</Typography>
+			</GenericFallback>
+		);
+	}
+
+	if (isLoading) return <SkeletonLayout />;
 
 	return (
 		<Stack gap={theme.spacing(10)}>
-			<TabContext value={TAB_LIST[tab]}>
-				<TabList
-					onChange={(_, tab) => {
-						setTab(TAB_LIST.indexOf(tab));
-					}}
-				>
-					{TAB_LIST.map((tab, idx) => (
-						<Tab
-							key={Math.random()}
-							label={TAB_LIST[idx]}
-							value={TAB_LIST[idx]}
-						/>
-					))}
-				</TabList>
-				{tab === 0 ? (
-					<Settings
-						tabValue={TAB_LIST[0]}
-						form={form}
-						handleFormChange={handleFormChange}
-						handleImageChange={handleImageChange}
-						progress={progress}
-						removeLogo={removeLogo}
-						errors={errors}
-					/>
-				) : (
-					<Content
-						tabValue={TAB_LIST[1]}
-						form={form}
-						handleFormChange={handleFormChange}
-					/>
-				)}
-			</TabContext>
+			<Tabs
+				form={form}
+				errors={errors}
+				monitors={monitors}
+				selectedMonitors={selectedMonitors}
+				setSelectedMonitors={setSelectedMonitors}
+				handleFormChange={handleFormChange}
+				handleImageChange={handleImageChange}
+				progress={progress}
+				removeLogo={removeLogo}
+				tab={tab}
+				setTab={setTab}
+				TAB_LIST={TAB_LIST}
+			/>
 			<Stack
 				direction="row"
 				justifyContent="flex-end"
