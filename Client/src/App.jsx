@@ -12,7 +12,6 @@ import { logger } from "./Utils/Logger"; // Import the logger
 import { networkService } from "./main";
 import { Routes } from "./Routes";
 
-import CreateStatus from "./Pages/StatusPage/CreateStatus";
 function App() {
 	const mode = useSelector((state) => state.ui.mode);
 	const { authToken } = useSelector((state) => state.auth);
