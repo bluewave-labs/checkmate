@@ -54,6 +54,18 @@ const baseTheme = (palette) => ({
 							},
 						},
 						{
+							props: (props) => props.color === "error",
+							style: {
+								"&.Mui-disabled": {
+									backgroundColor: theme.palette.error.lowContrast,
+								},
+								"& .MuiButton-loadingIndicator": {
+									// styles for error variant loading indicator
+									color: theme.palette.error.contrastText,
+								},
+							},
+						},
+						{
 							props: (props) => props.variant === "group",
 							style: {
 								/* color: theme.palette.secondary.contrastText, */
