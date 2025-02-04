@@ -18,34 +18,43 @@ class NotificationService {
 		this.networkService = networkService;
 	}
 
+	formatNotificationMessage(monitor, status, platform, chatId) {
+		const messageText = `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`;
+	
+		if (platform === 'telegram') {
+			return { chat_id: chatId, text: messageText };
+		}
+		if (platform === 'slack') {
+			return { text: messageText };
+		}
+		if (platform === 'discord') {
+			return { content: messageText };
+		}
+		return null;
+	}
+
 	async sendWebhookNotification(networkResponse, address, platform, botToken, chatId) {
 		const { monitor, status } = networkResponse;
-		let message;
 		let url = address;
-
-		if (platform === 'slack') {
-			message = { text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
-		} else if (platform === 'discord') {
-			message = { content: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}` };
-		} else if (platform === 'telegram') {
-			if (!botToken || !chatId) {
-				return false;
-			}
-			message = {
-				chat_id: chatId,
-				text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`
-			};
-			url = `${TELEGRAM_API_BASE_URL}${botToken}/sendMessage`;
-		} else {
+	
+		const message = this.formatNotificationMessage(monitor, status, platform, chatId);
+		if (!message) {
 			this.logger.warn({
 				message: `Unsupported platform: ${platform}`,
 				service: this.SERVICE_NAME,
 				method: 'sendWebhookNotification',
 				platform
 			});
-			return false; 
+			return false;
 		}
-
+	
+		if (platform === 'telegram') {
+			if (!botToken || !chatId) {
+				return false;
+			}
+			url = `${TELEGRAM_API_BASE_URL}${botToken}/sendMessage`;
+		}
+	
 		try {
 			const response = await this.networkService.requestWebhook(platform, url, message);
 			return response.status;
@@ -63,8 +72,7 @@ class NotificationService {
 			return false;
 		}
 	}
-
-	
+		
 	/**
 	 * Sends an email notification for hardware infrastructure alerts
 	 *
