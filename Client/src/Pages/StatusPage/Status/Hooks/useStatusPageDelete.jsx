@@ -13,7 +13,6 @@ const useStatusPageDelete = (fetchStatusPage) => {
 		try {
 			setIsLoading(true);
 			await networkService.deleteStatusPage({ authToken });
-			setIsLoading(false);
 			fetchStatusPage?.();
 			return true;
 		} catch (error) {
