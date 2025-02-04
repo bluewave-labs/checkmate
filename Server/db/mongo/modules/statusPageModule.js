@@ -29,19 +29,13 @@ const createStatusPage = async (statusPageData, image) => {
 
 const getStatusPage = async () => {
 	try {
-		// const statusPage = await StatusPage.findOne();
-		// if (statusPage === null || statusPage === undefined) {
-		// 	const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
-		// 	error.status = 404;
-
-		// 	throw error;
-		// }
-		// const ids = statusPage.monitors;
-		// const monitors = await Monitor.find({ _id: { $in: ids } }).lean();
-		// return { statusPage, monitors };
-
 		const statusPageQuery = await StatusPage.aggregate([
 			{ $limit: 1 },
+			{
+				$set: {
+					originalMonitors: "$monitors",
+				},
+			},
 			{
 				$lookup: {
 					from: "monitors",
@@ -70,6 +64,13 @@ const getStatusPage = async () => {
 				},
 			},
 			{
+				$addFields: {
+					"monitors.orderIndex": {
+						$indexOfArray: ["$originalMonitors", "$monitors._id"],
+					},
+				},
+			},
+			{
 				$group: {
 					_id: "$_id",
 					statusPage: { $first: "$$ROOT" },
@@ -79,7 +80,12 @@ const getStatusPage = async () => {
 			{
 				$project: {
 					statusPage: 1,
-					monitors: 1,
+					monitors: {
+						$sortArray: {
+							input: "$monitors",
+							sortBy: { orderIndex: 1 },
+						},
+					},
 				},
 			},
 		]);
@@ -90,6 +96,7 @@ const getStatusPage = async () => {
 		}
 
 		const { statusPage, monitors } = statusPageQuery[0];
+
 		const normalizedMonitors = monitors.map((monitor) => {
 			return {
 				...monitor,
