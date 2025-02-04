@@ -8,6 +8,8 @@ import Host from "../../Uptime/Monitors/Components/Host";
 import { StatusLabel } from "../../../Components/Label";
 import SettingsIcon from "../../../assets/icons/settings-bold.svg?react";
 import Image from "../../../Components/Image";
+import SkeletonLayout from "./Components/Skeleton";
+
 // Utils
 import { useState, useEffect } from "react";
 import { useStatusPageFetch } from "./Hooks/useStatusPageFetch";
@@ -17,6 +19,7 @@ import useUtils from "../../Uptime/Monitors/Hooks/useUtils";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useStatusPageDelete } from "./Hooks/useStatusPageDelete";
+
 const PublicStatus = () => {
 	// Local state
 	const [status, setStatus] = useState(undefined);
@@ -93,7 +96,9 @@ const PublicStatus = () => {
 		setStatus(monitorsStatus);
 	}, [monitors, theme]);
 
-	//Handlers
+	if (isLoading) {
+		return <SkeletonLayout />;
+	}
 
 	if (networkError === true) {
 		return (
@@ -110,6 +115,23 @@ const PublicStatus = () => {
 		);
 	}
 
+	if (!isLoading && typeof status === "undefined" && currentPath === "/status/public") {
+		return (
+			<Stack sx={sx}>
+				<GenericFallback>
+					<Typography
+						variant="h1"
+						marginY={theme.spacing(4)}
+						color={theme.palette.primary.contrastTextTertiary}
+					>
+						A public status page is not set up.
+					</Typography>
+					<Typography>Please contact to your administrator</Typography>
+				</GenericFallback>
+			</Stack>
+		);
+	}
+
 	if (!isLoading && typeof statusPage === "undefined") {
 		return (
 			<Fallback
@@ -121,6 +143,23 @@ const PublicStatus = () => {
 				link="/status/create"
 				isAdmin={isAdmin}
 			/>
+		);
+	}
+
+	if (!isLoading && statusPage.isPublic === false) {
+		return (
+			<Stack sx={sx}>
+				<GenericFallback>
+					<Typography
+						variant="h1"
+						marginY={theme.spacing(4)}
+						color={theme.palette.primary.contrastTextTertiary}
+					>
+						This status page is not public.
+					</Typography>
+					<Typography>Please contact to your administrator</Typography>
+				</GenericFallback>
+			</Stack>
 		);
 	}
 
@@ -163,6 +202,7 @@ const PublicStatus = () => {
 							variant="contained"
 							color="error"
 							onClick={deleteStatusPage}
+							loading={isDeleting}
 						>
 							Delete
 						</Button>
