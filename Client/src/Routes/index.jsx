@@ -31,7 +31,7 @@ import Incidents from "../Pages/Incidents";
 
 //Status pages
 import CreateStatus from "../Pages/StatusPage/Create";
-import PublicStatus from "../Pages/StatusPage/PublicStatus";
+import Status from "../Pages/StatusPage/Status";
 
 import Integrations from "../Pages/Integrations";
 
@@ -113,7 +113,7 @@ const Routes = () => {
 
 				<Route
 					path="status"
-					element={<PublicStatus />}
+					element={<Status />}
 				/>
 
 				<Route
@@ -185,7 +185,7 @@ const Routes = () => {
 			/>
 			<Route
 				path="/status/public"
-				element={<PublicStatus />}
+				element={<Status />}
 			/>
 
 			<Route
