@@ -183,6 +183,10 @@ const Routes = () => {
 				path="/new-password-confirmed"
 				element={<AuthNewPasswordConfirmed />}
 			/>
+			<Route
+				path="/status/public"
+				element={<PublicStatus />}
+			/>
 
 			<Route
 				path="*"

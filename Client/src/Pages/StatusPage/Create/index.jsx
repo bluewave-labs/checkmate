@@ -5,14 +5,13 @@ import GenericFallback from "../../../Components/GenericFallback";
 import SkeletonLayout from "./Components/Skeleton";
 //Utils
 import { useTheme } from "@emotion/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { statusPageValidation } from "../../../Validation/validation";
 import { buildErrors } from "../../../Validation/error";
-import { useSelector } from "react-redux";
 import { useMonitorsFetch } from "./Hooks/useMonitorsFetch";
 import { useCreateStatusPage } from "./Hooks/useCreateStatusPage";
 import { createToast } from "../../../Utils/toastUtils";
-
+import { useNavigate } from "react-router-dom";
 //Constants
 const TAB_LIST = ["General settings", "Contents"];
 
@@ -22,8 +21,6 @@ const ERROR_TAB_MAPPING = [
 ];
 
 const CreateStatusPage = () => {
-	//Redux state
-	const { authToken, user } = useSelector((state) => state.auth);
 	//Local state
 	const [tab, setTab] = useState(0);
 	const [progress, setProgress] = useState({ value: 0, isLoading: false });
@@ -31,7 +28,7 @@ const CreateStatusPage = () => {
 		isPublished: false,
 		companyName: "",
 		url: "/status/public",
-		logo: null,
+		logo: undefined,
 		timezone: "America/Toronto",
 		color: "#4169E1",
 		monitors: [],
@@ -40,7 +37,6 @@ const CreateStatusPage = () => {
 	});
 	const [errors, setErrors] = useState({});
 	const [selectedMonitors, setSelectedMonitors] = useState([]);
-
 	// Refs
 	const intervalRef = useRef(null);
 
@@ -49,6 +45,7 @@ const CreateStatusPage = () => {
 	const [monitors, isLoading, networkError] = useMonitorsFetch();
 	const [createStatusPage, createSatusIsLoading, createStatusPageNetworkError] =
 		useCreateStatusPage();
+	const navigate = useNavigate();
 
 	// Handlers
 	const handleFormChange = (e) => {
@@ -78,7 +75,7 @@ const CreateStatusPage = () => {
 		}));
 	};
 
-	const handleImageChange = (event) => {
+	const handleImageChange = useCallback((event) => {
 		const img = event.target?.files?.[0];
 		const newLogo = {
 			src: URL.createObjectURL(img),
@@ -100,7 +97,7 @@ const CreateStatusPage = () => {
 				return { ...prev, value: prev.value + buffer };
 			});
 		}, 120);
-	};
+	}, []);
 
 	const removeLogo = () => {
 		setForm((prev) => ({
@@ -125,6 +122,7 @@ const CreateStatusPage = () => {
 			const success = await createStatusPage({ form });
 			if (success) {
 				createToast({ body: "Status page created successfully" });
+				navigate("/status");
 			}
 			return;
 		}

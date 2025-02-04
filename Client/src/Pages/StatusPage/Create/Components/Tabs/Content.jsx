@@ -47,19 +47,6 @@ const Content = ({
 							direction="row"
 							justifyContent="space-between"
 						>
-							{/* <Typography
-								component="p"
-								alignSelf={"center"}
-							>
-								{" "}
-								Servers list{" "}
-							</Typography>
-							<Button
-								variant="contained"
-								color="accent"
-							>
-								Add new
-							</Button> */}
 							<Search
 								options={monitors}
 								multiple={true}

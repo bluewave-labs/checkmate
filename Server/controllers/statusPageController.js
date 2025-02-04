@@ -32,6 +32,7 @@ class StatusPageController {
 			next(handleError(error, SERVICE_NAME, "createStatusPage"));
 		}
 	};
+
 	getStatusPage = async (req, res, next) => {
 		try {
 			const statusPage = await this.db.getStatusPage();
@@ -41,6 +42,17 @@ class StatusPageController {
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "getStatusPage"));
+		}
+	};
+
+	deleteStatusPage = async (req, res, next) => {
+		try {
+			await this.db.deleteStatusPage();
+			return res.success({
+				msg: successMessages.STATUS_PAGE_DELETE,
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "deleteStatusPage"));
 		}
 	};
 }

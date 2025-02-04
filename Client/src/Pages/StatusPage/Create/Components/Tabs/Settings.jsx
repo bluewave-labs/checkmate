@@ -11,6 +11,7 @@ import Progress from "../Progress";
 // Utils
 import { useTheme } from "@emotion/react";
 import timezones from "../../../../../Utils/timezones.json";
+import { memo } from "react";
 
 const TabSettings = ({
 	tabValue,
@@ -101,7 +102,7 @@ const TabSettings = ({
 					<Stack gap={theme.spacing(6)}>
 						<ImageField
 							id="logo"
-							src={form.logo?.src}
+							src={form?.logo?.src}
 							isRound={false}
 							onChange={handleImageChange}
 						/>

@@ -18,6 +18,7 @@ class StatusPageRoutes {
 			verifyJWT,
 			this.statusPageController.createStatusPage
 		);
+		this.router.delete("/", verifyJWT, this.statusPageController.deleteStatusPage);
 	}
 
 	getRouter() {

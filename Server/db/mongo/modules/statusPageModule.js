@@ -1,5 +1,6 @@
 import StatusPage from "../../models/StatusPage.js";
 import { errorMessages } from "../../../utils/messages.js";
+import { NormalizeData } from "../../../utils/dataUtils.js";
 
 const SERVICE_NAME = "statusPageModule";
 
@@ -28,14 +29,75 @@ const createStatusPage = async (statusPageData, image) => {
 
 const getStatusPage = async () => {
 	try {
-		const statusPage = await StatusPage.findOne();
-		if (statusPage === null || statusPage === undefined) {
+		// const statusPage = await StatusPage.findOne();
+		// if (statusPage === null || statusPage === undefined) {
+		// 	const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+		// 	error.status = 404;
+
+		// 	throw error;
+		// }
+		// const ids = statusPage.monitors;
+		// const monitors = await Monitor.find({ _id: { $in: ids } }).lean();
+		// return { statusPage, monitors };
+
+		const statusPageQuery = await StatusPage.aggregate([
+			{ $limit: 1 },
+			{
+				$lookup: {
+					from: "monitors",
+					localField: "monitors",
+					foreignField: "_id",
+					as: "monitors",
+				},
+			},
+			{
+				$unwind: "$monitors",
+			},
+			{
+				$lookup: {
+					from: "checks",
+					let: { monitorId: "$monitors._id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: { $eq: ["$monitorId", "$$monitorId"] },
+							},
+						},
+						{ $sort: { createdAt: -1 } },
+						{ $limit: 25 },
+					],
+					as: "monitors.checks",
+				},
+			},
+			{
+				$group: {
+					_id: "$_id",
+					statusPage: { $first: "$$ROOT" },
+					monitors: { $push: "$monitors" },
+				},
+			},
+			{
+				$project: {
+					statusPage: 1,
+					monitors: 1,
+				},
+			},
+		]);
+		if (!statusPageQuery.length) {
 			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
 			error.status = 404;
-
 			throw error;
 		}
-		return statusPage;
+
+		const { statusPage, monitors } = statusPageQuery[0];
+		const normalizedMonitors = monitors.map((monitor) => {
+			return {
+				...monitor,
+				checks: NormalizeData(monitor.checks, 10, 100),
+			};
+		});
+
+		return { statusPage, monitors: normalizedMonitors };
 	} catch (error) {
 		error.service = SERVICE_NAME;
 		error.method = "getStatusPageByUrl";
@@ -43,4 +105,14 @@ const getStatusPage = async () => {
 	}
 };
 
-export { createStatusPage, getStatusPage };
+const deleteStatusPage = async () => {
+	try {
+		await StatusPage.deleteOne({});
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "createStatusPage";
+		throw error;
+	}
+};
+
+export { createStatusPage, getStatusPage, deleteStatusPage };

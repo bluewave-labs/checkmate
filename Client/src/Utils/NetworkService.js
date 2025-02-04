@@ -902,6 +902,15 @@ class NetworkService {
 			},
 		});
 	}
+
+	async deleteStatusPage(config) {
+		const { authToken } = config;
+		return this.axiosInstance.delete(`/status-page`, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+	}
 }
 
 export default NetworkService;

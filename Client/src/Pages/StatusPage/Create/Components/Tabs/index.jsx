@@ -6,6 +6,7 @@ import Content from "./Content";
 
 // Utils
 import PropTypes from "prop-types";
+
 const Tabs = ({
 	form,
 	errors,
@@ -70,7 +71,7 @@ Tabs.propTypes = {
 	setSelectedMonitors: PropTypes.func,
 	handleFormChange: PropTypes.func,
 	handleImageChange: PropTypes.func,
-	progress: PropTypes.number,
+	progress: PropTypes.object,
 	removeLogo: PropTypes.func,
 	tab: PropTypes.number,
 	setTab: PropTypes.func,
