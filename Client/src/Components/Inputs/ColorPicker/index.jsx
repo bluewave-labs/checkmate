@@ -57,6 +57,7 @@ ColorPicker.propTypes = {
 	error: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
 	onBlur: PropTypes.func,
+	name: PropTypes.string,
 };
 
 export default ColorPicker;
