@@ -3,6 +3,7 @@ import { Typography, Stack, Box } from "@mui/material";
 import GenericFallback from "../../../Components/GenericFallback";
 import Fallback from "../../../Components/Fallback";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import ControlsHeader from "./Components/ControlsHeader";
 import SkeletonLayout from "./Components/Skeleton";
 import StatusBar from "./Components/StatusBar";
@@ -12,7 +13,6 @@ import { useState, useEffect } from "react";
 import { useStatusPageFetch } from "./Hooks/useStatusPageFetch";
 import { useTheme } from "@emotion/react";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
-import useUtils from "../../Uptime/Monitors/Hooks/useUtils";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useStatusPageDelete } from "./Hooks/useStatusPageDelete";
@@ -27,10 +27,9 @@ const PublicStatus = () => {
 	const [statusPage, monitors, isLoading, networkError, fetchStatusPage] =
 		useStatusPageFetch();
 	const [deleteStatusPage, isDeleting] = useStatusPageDelete(fetchStatusPage);
-
-	const { determineState } = useUtils();
 	const location = useLocation();
 	const navigate = useNavigate();
+
 	// Setup
 	const currentPath = location.pathname;
 	let sx = { paddingLeft: theme.spacing(20), paddingRight: theme.spacing(20) };
@@ -68,7 +67,13 @@ const PublicStatus = () => {
 	// Effects
 	useEffect(() => {
 		if (typeof monitors === "undefined") return;
-		const monitorsStatus = {};
+		const monitorsStatus = {
+			icon: (
+				<ErrorOutlineIcon
+					sx={{ color: theme.palette.primary.contrastTextSecondaryDarkBg }}
+				/>
+			),
+		};
 		if (monitors.every((monitor) => monitor.status === true)) {
 			monitorsStatus.msg = "All systems operational";
 			monitorsStatus.color = theme.palette.success.lowContrast;
