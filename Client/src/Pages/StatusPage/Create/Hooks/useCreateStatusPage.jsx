@@ -10,6 +10,7 @@ const useCreateStatusPage = () => {
 	const [networkError, setNetworkError] = useState(false);
 
 	const createStatusPage = async ({ form }) => {
+		setIsLoading(true);
 		try {
 			await networkService.createStatusPage({ authToken, user, form });
 			return true;
