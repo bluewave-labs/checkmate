@@ -21,6 +21,12 @@ const baseTheme = (palette) => ({
 			color: palette.primary.contrastTextSecondary,
 			fontWeight: 400,
 		},
+		// CAIO_REVIEW, need a brighter color for dark bg
+		h2DarkBg: {
+			fontSize: typographyLevels.l,
+			color: palette.primary.contrastTextSecondaryDarkBg,
+			fontWeight: 400,
+		},
 		body1: {
 			fontSize: typographyLevels.m,
 			color: palette.primary.contrastTextTertiary,
