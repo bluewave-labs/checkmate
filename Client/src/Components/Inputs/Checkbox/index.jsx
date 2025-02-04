@@ -42,7 +42,6 @@ import "./index.css";
  *   isChecked={isAdvanced}
  *   isDisabled={!canModify}
  *   onChange={handleAdvancedToggle}
- *   alignSelf = {alignSelf}
  * />
  */
 const Checkbox = ({
