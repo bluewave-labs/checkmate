@@ -114,7 +114,9 @@ class NotificationService {
 
 	async handleStatusNotifications(networkResponse) {
 		try {
+			//If status hasn't changed, we're done
 			if (networkResponse.statusChanged === false) return false;
+			// if prevStatus is undefined, monitor is resuming, we're done
 			if (networkResponse.prevStatus === undefined) return false;
 	
 			const notifications = await this.db.getNotificationsByMonitorId(networkResponse.monitorId);
