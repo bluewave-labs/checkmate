@@ -8,7 +8,6 @@ const useCreateStatusPage = () => {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [networkError, setNetworkError] = useState(false);
-
 	const createStatusPage = async ({ form }) => {
 		setIsLoading(true);
 		try {

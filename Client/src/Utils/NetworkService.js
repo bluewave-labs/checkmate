@@ -890,6 +890,10 @@ class NetworkService {
 				responseType: "blob",
 			});
 			fd.append("logo", imageResult.data);
+			// Cleanup blob
+			if (form.logo.src.startsWith("blob:")) {
+				URL.revokeObjectURL(form.logo.src);
+			}
 		}
 
 		return this.axiosInstance.post(`/status-page`, fd, {
