@@ -861,6 +861,56 @@ class NetworkService {
 			"https://api.github.com/repos/bluewave-labs/bluewave-uptime/releases/latest"
 		);
 	}
+
+	async getStatusPage(config) {
+		const { authToken } = config;
+		return this.axiosInstance.get(`/status-page`, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+				"Content-Type": "application/json",
+			},
+		});
+	}
+
+	async createStatusPage(config) {
+		const { authToken, user, form } = config;
+		const fd = new FormData();
+		fd.append("isPublished", form.isPublished);
+		fd.append("companyName", form.companyName);
+		fd.append("url", form.url);
+		fd.append("timezone", form.timezone);
+		fd.append("color", form.color);
+		fd.append("showCharts", form.showCharts);
+		fd.append("showUptimePercentage", form.showUptimePercentage);
+		form.monitors.forEach((monitorId) => {
+			fd.append("monitors[]", monitorId);
+		});
+		if (form?.logo?.src && form?.logo?.src !== "") {
+			const imageResult = await axios.get(form.logo.src, {
+				responseType: "blob",
+			});
+			fd.append("logo", imageResult.data);
+			// Cleanup blob
+			if (form.logo.src.startsWith("blob:")) {
+				URL.revokeObjectURL(form.logo.src);
+			}
+		}
+
+		return this.axiosInstance.post(`/status-page`, fd, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+	}
+
+	async deleteStatusPage(config) {
+		const { authToken } = config;
+		return this.axiosInstance.delete(`/status-page`, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+	}
 }
 
 export default NetworkService;

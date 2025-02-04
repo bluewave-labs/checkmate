@@ -21,6 +21,12 @@ const baseTheme = (palette) => ({
 			color: palette.primary.contrastTextSecondary,
 			fontWeight: 400,
 		},
+		// CAIO_REVIEW, need a brighter color for dark bg
+		h2DarkBg: {
+			fontSize: typographyLevels.l,
+			color: palette.primary.contrastTextSecondaryDarkBg,
+			fontWeight: 400,
+		},
 		body1: {
 			fontSize: typographyLevels.m,
 			color: palette.primary.contrastTextTertiary,
@@ -50,6 +56,18 @@ const baseTheme = (palette) => ({
 							style: {
 								"&:hover": {
 									backgroundColor: theme.palette.accent.darker,
+								},
+							},
+						},
+						{
+							props: (props) => props.color === "error",
+							style: {
+								"&.Mui-disabled": {
+									backgroundColor: theme.palette.error.lowContrast,
+								},
+								"& .MuiButton-loadingIndicator": {
+									// styles for error variant loading indicator
+									color: theme.palette.error.contrastText,
 								},
 							},
 						},
@@ -300,6 +318,44 @@ const baseTheme = (palette) => ({
 						borderColor: palette.primary.contrastTextTertiary,
 					},
 				},
+			},
+		},
+		MuiTab: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					fontSize: 13,
+					color: theme.palette.tertiary.contrastText,
+					backgroundColor: theme.palette.tertiary.main,
+					textTransform: "none",
+					minWidth: "fit-content",
+					paddingY: theme.spacing(6),
+					fontWeight: 400,
+					borderBottom: "2px solid transparent",
+					borderRight: `1px solid ${theme.palette.primary.lowContrast}`,
+					"&:first-of-type": { borderTopLeftRadius: "8px" },
+					"&:last-child": { borderTopRightRadius: "8px", borderRight: 0 },
+					"&:focus-visible": {
+						color: theme.palette.primary.contrastText,
+						borderColor: theme.palette.tertiary.contrastText,
+						borderRightColor: theme.palette.primary.lowContrast,
+					},
+					"&.Mui-selected": {
+						backgroundColor: theme.palette.secondary.main,
+						color: theme.palette.secondary.contrastText,
+						borderColor: theme.palette.secondary.contrastText,
+						borderRightColor: theme.palette.primary.lowContrast,
+					},
+					"&:hover": {
+						borderColor: theme.palette.primary.lowContrast,
+					},
+				}),
+			},
+		},
+		MuiSvgIcon: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					color: theme.palette.primary.contrastTextTertiary,
+				}),
 			},
 		},
 	},

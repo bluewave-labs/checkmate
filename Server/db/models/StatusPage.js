@@ -23,11 +23,6 @@ const StatusPageSchema = mongoose.Schema(
 			required: true,
 			default: "#4169E1",
 		},
-		theme: {
-			type: String,
-			required: true,
-			default: "light",
-		},
 		monitors: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
@@ -35,6 +30,22 @@ const StatusPageSchema = mongoose.Schema(
 				required: true,
 			},
 		],
+		logo: {
+			data: Buffer,
+			contentType: String,
+		},
+		isPublished: {
+			type: Boolean,
+			default: false,
+		},
+		showCharts: {
+			type: Boolean,
+			default: true,
+		},
+		showUptimePercentage: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	{ timestamps: true }
 );

@@ -152,6 +152,11 @@ const newSemanticColors = {
 			light: newColors.blueGray600,
 			dark: newColors.gray200,
 		},
+		// CAIO_REVIEW, need a brighter color for dark bg
+		contrastTextSecondaryDarkBg: {
+			light: newColors.gray200,
+			dark: newColors.gray200,
+		},
 		contrastTextTertiary: {
 			light: newColors.blueGray500,
 			dark: newColors.gray500,

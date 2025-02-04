@@ -91,58 +91,61 @@ const credentials = joi.object({
 });
 
 const monitorValidation = joi.object({
-	url: joi.when('type', {
-		is: 'docker',
-		then: joi.string()
-			.trim().regex(/^[a-z0-9]{64}$/),
-		otherwise: joi
-			.string()
-			.trim()
-			.custom((value, helpers) => {
-				// Regex from https://gist.github.com/dperini/729294
-				var urlRegex = new RegExp(
-					"^" +
-					// protocol identifier (optional)
-					// short syntax // still required
-					"(?:(?:https?|ftp):\\/\\/)?" +
-					// user:pass BasicAuth (optional)
-					"(?:" +
-					// IP address dotted notation octets
-					// excludes loopback network 0.0.0.0
-					// excludes reserved space >= 224.0.0.0
-					// excludes network & broadcast addresses
-					// (first & last IP address of each class)
-					"(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-					"(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-					"(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
-					"|" +
-					// host & domain names, may end with dot
-					// can be replaced by a shortest alternative
-					// (?![-_])(?:[-\\w\\u00a1-\\uffff]{0,63}[^-_]\\.)+
-					"(?:" +
-					"(?:" +
-					"[a-z0-9\\u00a1-\\uffff]" +
-					"[a-z0-9\\u00a1-\\uffff_-]{0,62}" +
-					")?" +
-					"[a-z0-9\\u00a1-\\uffff]\\." +
-					")+" +
-					// TLD identifier name, may end with dot
-					"(?:[a-z\\u00a1-\\uffff]{2,}\\.?)" +
-					")" +
-					// port number (optional)
-					"(?::\\d{2,5})?" +
-					// resource path (optional)
-					"(?:[/?#]\\S*)?" +
-					"$",
-					"i"
-				);
-				if (!urlRegex.test(value)) {
-					return helpers.error("string.invalidUrl");
-				}
+	url: joi
+		.when("type", {
+			is: "docker",
+			then: joi
+				.string()
+				.trim()
+				.regex(/^[a-z0-9]{64}$/),
+			otherwise: joi
+				.string()
+				.trim()
+				.custom((value, helpers) => {
+					// Regex from https://gist.github.com/dperini/729294
+					var urlRegex = new RegExp(
+						"^" +
+							// protocol identifier (optional)
+							// short syntax // still required
+							"(?:(?:https?|ftp):\\/\\/)?" +
+							// user:pass BasicAuth (optional)
+							"(?:" +
+							// IP address dotted notation octets
+							// excludes loopback network 0.0.0.0
+							// excludes reserved space >= 224.0.0.0
+							// excludes network & broadcast addresses
+							// (first & last IP address of each class)
+							"(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
+							"(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
+							"(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
+							"|" +
+							// host & domain names, may end with dot
+							// can be replaced by a shortest alternative
+							// (?![-_])(?:[-\\w\\u00a1-\\uffff]{0,63}[^-_]\\.)+
+							"(?:" +
+							"(?:" +
+							"[a-z0-9\\u00a1-\\uffff]" +
+							"[a-z0-9\\u00a1-\\uffff_-]{0,62}" +
+							")?" +
+							"[a-z0-9\\u00a1-\\uffff]\\." +
+							")+" +
+							// TLD identifier name, may end with dot
+							"(?:[a-z\\u00a1-\\uffff]{2,}\\.?)" +
+							")" +
+							// port number (optional)
+							"(?::\\d{2,5})?" +
+							// resource path (optional)
+							"(?:[/?#]\\S*)?" +
+							"$",
+						"i"
+					);
+					if (!urlRegex.test(value)) {
+						return helpers.error("string.invalidUrl");
+					}
 
-				return value;
-			})
-	})
+					return value;
+				}),
+		})
 		.messages({
 			"string.empty": "This field is required.",
 			"string.uri": "The URL you provided is not valid.",
@@ -175,6 +178,52 @@ const imageValidation = joi.object({
 		}),
 });
 
+const logoImageValidation = joi
+	.object({
+		type: joi
+			.string()
+			.valid("image/jpeg", "image/png")
+			.allow(null) // Allow null and empty string
+			.messages({
+				"any.only": "Invalid file format.",
+				"string.empty": "File type required.",
+			})
+			.optional(),
+		size: joi
+			.number()
+			.max(3000000)
+			.allow(null) // Allow null and empty string
+			.messages({
+				"number.base": "File size must be a number.",
+				"number.max": "File size must be less than 3MB.",
+				"number.empty": "File size required.",
+			})
+			.optional(),
+	})
+	.allow(null)
+	.optional(); // Make entire object optional
+
+const statusPageValidation = joi.object({
+	isPublished: joi.bool(),
+	companyName: joi
+		.string()
+		.trim()
+		.messages({ "string.empty": "Company name is required." }),
+	url: joi.string().trim().messages({ "string.empty": "URL is required." }),
+	timezone: joi.string().trim().messages({ "string.empty": "Timezone is required." }),
+	color: joi.string().trim().messages({ "string.empty": "Color is required." }),
+	theme: joi.string(),
+	monitors: joi.array().min(1).required().messages({
+		"string.pattern.base": "Must be a valid monitor ID",
+		"array.base": "Monitors must be an array",
+		"array.min": "At least one monitor is required",
+		"array.empty": "At least one monitor is required",
+		"any.required": "At least one monitor is required",
+	}),
+	logo: logoImageValidation,
+	showUptimePercentage: joi.boolean(),
+	showCharts: joi.boolean(),
+});
 const settingsValidation = joi.object({
 	ttl: joi.number().required().messages({
 		"string.empty": "TTL is required",
@@ -289,4 +338,6 @@ export {
 	maintenanceWindowValidation,
 	advancedSettingsValidation,
 	infrastructureMonitorValidation,
+	statusPageValidation,
+	logoImageValidation,
 };

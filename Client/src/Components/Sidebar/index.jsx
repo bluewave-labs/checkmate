@@ -43,6 +43,7 @@ import DotsVertical from "../../assets/icons/dots-vertical.svg?react";
 import ChangeLog from "../../assets/icons/changeLog.svg?react";
 import Docs from "../../assets/icons/docs.svg?react";
 import Folder from "../../assets/icons/folder.svg?react";
+import StatusPages from "../../assets/icons/status-pages.svg?react";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 
 import "./index.css";
@@ -52,7 +53,8 @@ const menu = [
 	{ name: "Pagespeed", path: "pagespeed", icon: <PageSpeed /> },
 	{ name: "Infrastructure", path: "infrastructure", icon: <Integrations /> },
 	{ name: "Incidents", path: "incidents", icon: <Incidents /> },
-	// { name: "Status pages", path: "status", icon: <StatusPages /> },
+
+	{ name: "Status pages", path: "status", icon: <StatusPages /> },
 	{ name: "Maintenance", path: "maintenance", icon: <Maintenance /> },
 	// { name: "Integrations", path: "integrations", icon: <Integrations /> },
 	{

@@ -29,7 +29,10 @@ import InfrastructureDetails from "../Pages/Infrastructure/Details";
 
 import Incidents from "../Pages/Incidents";
 
-import Status from "../Pages/Status";
+//Status pages
+import CreateStatus from "../Pages/StatusPage/Create";
+import Status from "../Pages/StatusPage/Status";
+
 import Integrations from "../Pages/Integrations";
 
 // Settings
@@ -112,6 +115,12 @@ const Routes = () => {
 					path="status"
 					element={<Status />}
 				/>
+
+				<Route
+					path="status/create"
+					element={<CreateStatus />}
+				/>
+
 				<Route
 					path="integrations"
 					element={<Integrations />}
@@ -173,6 +182,10 @@ const Routes = () => {
 			<Route
 				path="/new-password-confirmed"
 				element={<AuthNewPasswordConfirmed />}
+			/>
+			<Route
+				path="/status/public"
+				element={<Status />}
 			/>
 
 			<Route
