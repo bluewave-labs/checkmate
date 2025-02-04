@@ -36,6 +36,14 @@ class NotificationService {
 				text: `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`
 			};
 			url = `${TELEGRAM_API_BASE_URL}${botToken}/sendMessage`;
+		} else {
+			this.logger.warn({
+				message: `Unsupported platform: ${platform}`,
+				service: this.SERVICE_NAME,
+				method: 'sendWebhookNotification',
+				platform
+			});
+			return false; 
 		}
 
 		try {
