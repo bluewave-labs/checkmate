@@ -1,15 +1,12 @@
 // Components
-import { Typography, Stack, Box, Button } from "@mui/material";
+import { Typography, Stack, Box } from "@mui/material";
 import GenericFallback from "../../../Components/GenericFallback";
 import Fallback from "../../../Components/Fallback";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import StatusPageBarChart from "../../../Components/Charts/StatusPageBarChart";
-import Host from "../../Uptime/Monitors/Components/Host";
-import { StatusLabel } from "../../../Components/Label";
-import SettingsIcon from "../../../assets/icons/settings-bold.svg?react";
-import Image from "../../../Components/Image";
+import ControlsHeader from "./Components/ControlsHeader";
 import SkeletonLayout from "./Components/Skeleton";
-
+import StatusBar from "./Components/StatusBar";
+import MonitorsList from "./Components/MonitorsList";
 // Utils
 import { useState, useEffect } from "react";
 import { useStatusPageFetch } from "./Hooks/useStatusPageFetch";
@@ -75,7 +72,11 @@ const PublicStatus = () => {
 		if (monitors.every((monitor) => monitor.status === true)) {
 			monitorsStatus.msg = "All systems operational";
 			monitorsStatus.color = theme.palette.success.lowContrast;
-			monitorsStatus.icon = <CheckCircleIcon />;
+			monitorsStatus.icon = (
+				<CheckCircleIcon
+					sx={{ color: theme.palette.primary.contrastTextSecondaryDarkBg }}
+				/>
+			);
 		}
 
 		if (monitors.every((monitor) => monitor.status === false)) {
@@ -169,110 +170,14 @@ const PublicStatus = () => {
 			alignItems="center"
 			sx={sx}
 		>
-			<Stack
-				alignSelf="flex-start"
-				direction="row"
-				width="100%"
-				gap={theme.spacing(2)}
-				justifyContent="space-between"
-				alignItems="flex-end"
-			>
-				<Stack
-					direction="row"
-					gap={theme.spacing(8)}
-					alignItems="flex-end"
-				>
-					<Image
-						src={
-							statusPage?.logo?.data
-								? `data:image/png;base64,${statusPage?.logo?.data}`
-								: undefined
-						}
-						alt={"Company logo"}
-						maxWidth={"100px"}
-					/>
-					<Typography variant="h2">{statusPage?.companyName}</Typography>
-				</Stack>
-				<Stack
-					direction="row"
-					gap={theme.spacing(2)}
-				>
-					<Box>
-						<Button
-							variant="contained"
-							color="error"
-							onClick={deleteStatusPage}
-							loading={isDeleting}
-						>
-							Delete
-						</Button>
-					</Box>
-					<Box>
-						<Button
-							variant="contained"
-							color="secondary"
-							onClick={() => navigate(`/status/create`)}
-							sx={{
-								px: theme.spacing(5),
-								"& svg": {
-									mr: theme.spacing(3),
-									"& path": {
-										stroke: theme.palette.secondary.contrastText,
-									},
-								},
-							}}
-						>
-							<SettingsIcon /> Configure
-						</Button>
-					</Box>
-				</Stack>
-			</Stack>
+			<ControlsHeader
+				statusPage={statusPage}
+				deleteStatusPage={deleteStatusPage}
+				isDeleting={isDeleting}
+			/>
 			<Typography variant="h2">Service status</Typography>
-			<Stack
-				direction="row"
-				alignItems="center"
-				justifyContent="center"
-				gap={theme.spacing(2)}
-				height={theme.spacing(30)}
-				width={"100%"}
-				backgroundColor={status?.color}
-				borderRadius={theme.spacing(2)}
-			>
-				{status?.icon}
-				<Typography>{status?.msg}</Typography>
-			</Stack>
-			{monitors?.map((monitor) => {
-				const status = determineState(monitor);
-				return (
-					<Stack
-						key={monitor._id}
-						width="100%"
-						gap={theme.spacing(2)}
-					>
-						<Host
-							key={monitor._id}
-							url={monitor.url}
-							title={monitor.title}
-							percentageColor={monitor.percentageColor}
-							percentage={monitor.percentage}
-						/>
-						<Stack
-							direction="row"
-							alignItems="center"
-							gap={theme.spacing(20)}
-						>
-							<StatusPageBarChart checks={monitor.checks.slice().reverse()} />
-							<Box>
-								<StatusLabel
-									status={status}
-									text={status}
-									customStyles={{ textTransform: "capitalize" }}
-								/>
-							</Box>
-						</Stack>
-					</Stack>
-				);
-			})}
+			<StatusBar status={status} />
+			<MonitorsList monitors={monitors} />
 			{AdminLink}
 		</Stack>
 	);
