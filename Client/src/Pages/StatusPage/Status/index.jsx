@@ -2,8 +2,7 @@
 import { Typography, Stack, Box } from "@mui/material";
 import GenericFallback from "../../../Components/GenericFallback";
 import Fallback from "../../../Components/Fallback";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import AdminLink from "./Components/AdminLink";
 import ControlsHeader from "./Components/ControlsHeader";
 import SkeletonLayout from "./Components/Skeleton";
 import StatusBar from "./Components/StatusBar";
@@ -19,7 +18,6 @@ import { useStatusPageDelete } from "./Hooks/useStatusPageDelete";
 
 const PublicStatus = () => {
 	// Local state
-	const [status, setStatus] = useState(undefined);
 
 	// Utils
 	const theme = useTheme();
@@ -28,13 +26,11 @@ const PublicStatus = () => {
 		useStatusPageFetch();
 	const [deleteStatusPage, isDeleting] = useStatusPageDelete(fetchStatusPage);
 	const location = useLocation();
-	const navigate = useNavigate();
 
 	// Setup
 	const currentPath = location.pathname;
 	let sx = { paddingLeft: theme.spacing(20), paddingRight: theme.spacing(20) };
-	let AdminLink = undefined;
-
+	let link = undefined;
 	// Public status page
 	if (currentPath === "/status/public") {
 		sx = {
@@ -42,70 +38,15 @@ const PublicStatus = () => {
 			paddingLeft: "20vw",
 			paddingRight: "20vw",
 		};
-		AdminLink = (
-			<Box>
-				<Typography
-					className="forgot-p"
-					display="inline-block"
-					color={theme.palette.primary.contrastText}
-				>
-					Administrator?
-				</Typography>
-				<Typography
-					component="span"
-					color={theme.palette.accent.main}
-					ml={theme.spacing(2)}
-					sx={{ cursor: "pointer" }}
-					onClick={() => navigate("/login")}
-				>
-					Login here
-				</Typography>
-			</Box>
-		);
+		link = <AdminLink />;
 	}
 
-	// Effects
-	useEffect(() => {
-		if (typeof monitors === "undefined") return;
-		const monitorsStatus = {
-			icon: (
-				<ErrorOutlineIcon
-					sx={{ color: theme.palette.primary.contrastTextSecondaryDarkBg }}
-				/>
-			),
-		};
-		if (monitors.every((monitor) => monitor.status === true)) {
-			monitorsStatus.msg = "All systems operational";
-			monitorsStatus.color = theme.palette.success.lowContrast;
-			monitorsStatus.icon = (
-				<CheckCircleIcon
-					sx={{ color: theme.palette.primary.contrastTextSecondaryDarkBg }}
-				/>
-			);
-		}
-
-		if (monitors.every((monitor) => monitor.status === false)) {
-			monitorsStatus.msg = "All systems down";
-			monitorsStatus.color = theme.palette.error.lowContrast;
-		}
-
-		if (monitors.some((monitor) => monitor.status === false)) {
-			monitorsStatus.msg = "Degraded performance";
-			monitorsStatus.color = theme.palette.warning.lowContrast;
-		}
-
-		// Paused or unknown
-		if (monitors.some((monitor) => typeof monitor.status === "undefined")) {
-			monitorsStatus.msg = "Unknown status";
-			monitorsStatus.color = theme.palette.warning.lowContrast;
-		}
-		setStatus(monitorsStatus);
-	}, [monitors, theme]);
-
+	// Loading
 	if (isLoading) {
 		return <SkeletonLayout />;
 	}
 
+	// Error fetching data
 	if (networkError === true) {
 		return (
 			<GenericFallback>
@@ -121,7 +62,12 @@ const PublicStatus = () => {
 		);
 	}
 
-	if (!isLoading && typeof status === "undefined" && currentPath === "/status/public") {
+	// Public status page fallback
+	if (
+		!isLoading &&
+		typeof statusPage === "undefined" &&
+		currentPath === "/status/public"
+	) {
 		return (
 			<Stack sx={sx}>
 				<GenericFallback>
@@ -138,21 +84,12 @@ const PublicStatus = () => {
 		);
 	}
 
-	if (!isLoading && typeof statusPage === "undefined") {
-		return (
-			<Fallback
-				title="status page"
-				checks={[
-					"Display a list of monitors to track",
-					"Share your monitors with the public",
-				]}
-				link="/status/create"
-				isAdmin={isAdmin}
-			/>
-		);
-	}
-
-	if (!isLoading && statusPage.isPublic === false) {
+	// Finished loading, but status page is not public
+	if (
+		!isLoading &&
+		currentPath === "/status/public" &&
+		statusPage.isPublished === false
+	) {
 		return (
 			<Stack sx={sx}>
 				<GenericFallback>
@@ -169,6 +106,21 @@ const PublicStatus = () => {
 		);
 	}
 
+	// Status page doesn't exist
+	if (!isLoading && typeof statusPage === "undefined") {
+		return (
+			<Fallback
+				title="status page"
+				checks={[
+					"Display a list of monitors to track",
+					"Share your monitors with the public",
+				]}
+				link="/status/create"
+				isAdmin={isAdmin}
+			/>
+		);
+	}
+
 	return (
 		<Stack
 			gap={theme.spacing(10)}
@@ -181,9 +133,9 @@ const PublicStatus = () => {
 				isDeleting={isDeleting}
 			/>
 			<Typography variant="h2">Service status</Typography>
-			<StatusBar status={status} />
+			<StatusBar monitors={monitors} />
 			<MonitorsList monitors={monitors} />
-			{AdminLink}
+			{link}
 		</Stack>
 	);
 };
