@@ -8,10 +8,11 @@ import Select from "../../../../../Components/Inputs/Select";
 import ImageField from "../../../../../Components/Inputs/Image";
 import ColorPicker from "../../../../../Components/Inputs/ColorPicker";
 import Progress from "../Progress";
+
 // Utils
 import { useTheme } from "@emotion/react";
 import timezones from "../../../../../Utils/timezones.json";
-import { memo } from "react";
+import PropTypes from "prop-types";
 
 const TabSettings = ({
 	tabValue,
@@ -124,6 +125,16 @@ const TabSettings = ({
 			</Stack>
 		</TabPanel>
 	);
+};
+
+TabSettings.propTypes = {
+	tabValue: PropTypes.string,
+	form: PropTypes.object,
+	handleFormChange: PropTypes.func,
+	handleImageChange: PropTypes.func,
+	progress: PropTypes.object,
+	removeLogo: PropTypes.func,
+	errors: PropTypes.object,
 };
 
 export default TabSettings;
