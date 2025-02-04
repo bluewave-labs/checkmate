@@ -1,7 +1,11 @@
+// Components
 import { TabContext, TabList } from "@mui/lab";
-import { Stack, Tab } from "@mui/material";
+import { Tab } from "@mui/material";
 import Settings from "./Settings";
 import Content from "./Content";
+
+// Utils
+import PropTypes from "prop-types";
 const Tabs = ({
 	form,
 	errors,
@@ -23,13 +27,15 @@ const Tabs = ({
 					setTab(TAB_LIST.indexOf(tab));
 				}}
 			>
-				{TAB_LIST.map((tab, idx) => (
-					<Tab
-						key={Math.random()}
-						label={TAB_LIST[idx]}
-						value={TAB_LIST[idx]}
-					/>
-				))}
+				{TAB_LIST.map((tab, idx) => {
+					return (
+						<Tab
+							key={tab}
+							label={TAB_LIST[idx]}
+							value={TAB_LIST[idx]}
+						/>
+					);
+				})}
 			</TabList>
 			{tab === 0 ? (
 				<Settings
@@ -54,6 +60,21 @@ const Tabs = ({
 			)}
 		</TabContext>
 	);
+};
+
+Tabs.propTypes = {
+	form: PropTypes.object,
+	errors: PropTypes.object,
+	monitors: PropTypes.array,
+	selectedMonitors: PropTypes.array,
+	setSelectedMonitors: PropTypes.func,
+	handleFormChange: PropTypes.func,
+	handleImageChange: PropTypes.func,
+	progress: PropTypes.number,
+	removeLogo: PropTypes.func,
+	tab: PropTypes.number,
+	setTab: PropTypes.func,
+	TAB_LIST: PropTypes.array,
 };
 
 export default Tabs;
