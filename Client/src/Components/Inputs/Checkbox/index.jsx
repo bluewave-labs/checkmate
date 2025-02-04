@@ -113,7 +113,6 @@ Checkbox.propTypes = {
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 	onChange: PropTypes.func,
 	isDisabled: PropTypes.bool,
-	alignSelf: PropTypes.bool,
 };
 
 export default Checkbox;
