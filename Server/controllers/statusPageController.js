@@ -33,6 +33,26 @@ class StatusPageController {
 		}
 	};
 
+	updateStatusPage = async (req, res, next) => {
+		try {
+			await createStatusPageBodyValidation.validateAsync(req.body);
+			await imageValidation.validateAsync(req.file);
+		} catch (error) {
+			next(handleValidationError(error, SERVICE_NAME));
+			return;
+		}
+
+		try {
+			const statusPage = await this.db.updateStatusPage(req.body, req.file);
+			return res.success({
+				msg: successMessages.STATUS_PAGE_UPDATE,
+				data: statusPage,
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "updateStatusPage"));
+		}
+	};
+
 	getStatusPage = async (req, res, next) => {
 		try {
 			const statusPage = await this.db.getStatusPage();

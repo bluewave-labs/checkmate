@@ -18,6 +18,12 @@ class StatusPageRoutes {
 			verifyJWT,
 			this.statusPageController.createStatusPage
 		);
+		this.router.put(
+			"/",
+			upload.single("logo"),
+			verifyJWT,
+			this.statusPageController.updateStatusPage
+		);
 		this.router.delete("/", verifyJWT, this.statusPageController.deleteStatusPage);
 	}
 

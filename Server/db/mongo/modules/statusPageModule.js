@@ -27,6 +27,26 @@ const createStatusPage = async (statusPageData, image) => {
 	}
 };
 
+const updateStatusPage = async (statusPageData, image) => {
+	try {
+		if (image) {
+			statusPageData.logo = {
+				data: image.buffer,
+				contentType: image.mimetype,
+			};
+		}
+		const statusPage = await StatusPage.findOneAndUpdate({}, statusPageData, {
+			new: true,
+		});
+
+		return statusPage;
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "updateStatusPage";
+		throw error;
+	}
+};
+
 const getStatusPage = async () => {
 	try {
 		const statusPageQuery = await StatusPage.aggregate([
@@ -79,7 +99,18 @@ const getStatusPage = async () => {
 			},
 			{
 				$project: {
-					statusPage: 1,
+					statusPage: {
+						_id: 1,
+						color: 1,
+						companyName: 1,
+						isPublished: 1,
+						logo: 1,
+						originalMonitors: 1,
+						showCharts: 1,
+						showUptimePercentage: 1,
+						timezone: 1,
+						url: 1,
+					},
 					monitors: {
 						$sortArray: {
 							input: "$monitors",
@@ -122,4 +153,4 @@ const deleteStatusPage = async () => {
 	}
 };
 
-export { createStatusPage, getStatusPage, deleteStatusPage };
+export { createStatusPage, updateStatusPage, getStatusPage, deleteStatusPage };
