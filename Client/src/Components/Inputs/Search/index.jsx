@@ -60,7 +60,6 @@ const Search = ({
 	onBlur,
 }) => {
 	const theme = useTheme();
-	console.log({ options });
 	return (
 		<Autocomplete
 			onBlur={onBlur}
