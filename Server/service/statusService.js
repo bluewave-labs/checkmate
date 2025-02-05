@@ -83,8 +83,22 @@ class StatusService {
 	 * @returns {Object} The check object.
 	 */
 	buildCheck = (networkResponse) => {
-		const { monitorId, teamId, type, status, responseTime, code, message, payload } =
-			networkResponse;
+		const {
+			monitorId,
+			teamId,
+			type,
+			status,
+			responseTime,
+			code,
+			message,
+			payload,
+			first_byte_took,
+			body_read_took,
+			dns_took,
+			conn_took,
+			connect_took,
+			tls_took,
+		} = networkResponse;
 
 		const check = {
 			monitorId,
@@ -93,6 +107,12 @@ class StatusService {
 			statusCode: code,
 			responseTime,
 			message,
+			first_byte_took,
+			body_read_took,
+			dns_took,
+			conn_took,
+			connect_took,
+			tls_took,
 		};
 
 		if (type === "distributed_http") {
@@ -101,6 +121,12 @@ class StatusService {
 			check.city = payload.city;
 			check.location = payload.location;
 			check.uptBurnt = payload.upt_burnt;
+			check.first_byte_took = payload.first_byte_took;
+			check.body_read_took = payload.body_read_took;
+			check.dns_took = payload.dns_took;
+			check.conn_took = payload.conn_took;
+			check.connect_took = payload.connect_took;
+			check.tls_took = payload.tls_took;
 		}
 
 		if (type === "pagespeed") {
