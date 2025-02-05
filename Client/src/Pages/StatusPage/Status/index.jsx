@@ -1,5 +1,5 @@
 // Components
-import { Typography, Stack, Box } from "@mui/material";
+import { Typography, Stack } from "@mui/material";
 import GenericFallback from "../../../Components/GenericFallback";
 import Fallback from "../../../Components/Fallback";
 import AdminLink from "./Components/AdminLink";
@@ -8,12 +8,10 @@ import SkeletonLayout from "./Components/Skeleton";
 import StatusBar from "./Components/StatusBar";
 import MonitorsList from "./Components/MonitorsList";
 // Utils
-import { useState, useEffect } from "react";
 import { useStatusPageFetch } from "./Hooks/useStatusPageFetch";
 import { useTheme } from "@emotion/react";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useStatusPageDelete } from "./Hooks/useStatusPageDelete";
 
 const PublicStatus = () => {

@@ -4,7 +4,7 @@ import {
 	getStatusPageParamValidation,
 	imageValidation,
 } from "../validation/joi.js";
-import { successMessages } from "../utils/messages.js";
+import { successMessages, errorMessages } from "../utils/messages.js";
 
 const SERVICE_NAME = "statusPageController";
 
@@ -30,6 +30,31 @@ class StatusPageController {
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "createStatusPage"));
+		}
+	};
+
+	updateStatusPage = async (req, res, next) => {
+		try {
+			await createStatusPageBodyValidation.validateAsync(req.body);
+			await imageValidation.validateAsync(req.file);
+		} catch (error) {
+			next(handleValidationError(error, SERVICE_NAME));
+			return;
+		}
+
+		try {
+			const statusPage = await this.db.updateStatusPage(req.body, req.file);
+			if (statusPage === null) {
+				const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+				error.status = 404;
+				throw error;
+			}
+			return res.success({
+				msg: successMessages.STATUS_PAGE_UPDATE,
+				data: statusPage,
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "updateStatusPage"));
 		}
 	};
 

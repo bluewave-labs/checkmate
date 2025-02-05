@@ -120,6 +120,10 @@ const Routes = () => {
 					path="status/create"
 					element={<CreateStatus />}
 				/>
+				<Route
+					path="status/configure"
+					element={<CreateStatus />}
+				/>
 
 				<Route
 					path="integrations"

@@ -873,7 +873,7 @@ class NetworkService {
 	}
 
 	async createStatusPage(config) {
-		const { authToken, user, form } = config;
+		const { authToken, user, form, isCreate } = config;
 		const fd = new FormData();
 		fd.append("isPublished", form.isPublished);
 		fd.append("companyName", form.companyName);
@@ -895,8 +895,15 @@ class NetworkService {
 				URL.revokeObjectURL(form.logo.src);
 			}
 		}
+		if (isCreate) {
+			return this.axiosInstance.post(`/status-page`, fd, {
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+				},
+			});
+		}
 
-		return this.axiosInstance.post(`/status-page`, fd, {
+		return this.axiosInstance.put(`/status-page`, fd, {
 			headers: {
 				Authorization: `Bearer ${authToken}`,
 			},

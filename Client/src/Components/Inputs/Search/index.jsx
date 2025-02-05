@@ -79,6 +79,7 @@ const Search = ({
 			disableClearable
 			options={options}
 			getOptionLabel={(option) => option[filteredBy]}
+			isOptionEqualToValue={(option, value) => option._id === value._id} // Compare by unique identifier
 			renderInput={(params) => (
 				<Stack>
 					<Typography
