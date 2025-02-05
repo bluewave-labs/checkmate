@@ -25,7 +25,7 @@ class StatusService {
 	 * @param {Object} networkResponse - The network response containing monitorId and status.
 	 * @param {string} networkResponse.monitorId - The ID of the monitor.
 	 * @param {string} networkResponse.status - The new status of the monitor.
-	 * @returns {Promise<Object>} - A promise that resolves to an object containing the monitor, statusChanged flag, and previous status if the status changed, or false if an error occurred.
+	 * @returns {Promise<Object>} - A promise that resolves to an object containinfg the monitor, statusChanged flag, and previous status if the status changed, or false if an error occurred.
 	 * @returns {Promise<Object>} returnObject - The object returned by the function.
 	 * @returns {Object} returnObject.monitor - The monitor object.
 	 * @returns {boolean} returnObject.statusChanged - Flag indicating if the status has changed.
@@ -85,6 +85,7 @@ class StatusService {
 	buildCheck = (networkResponse) => {
 		const { monitorId, teamId, type, status, responseTime, code, message, payload } =
 			networkResponse;
+
 		const check = {
 			monitorId,
 			teamId,
@@ -93,6 +94,14 @@ class StatusService {
 			responseTime,
 			message,
 		};
+
+		if (type === "distributed_http") {
+			check.continent = payload.continent;
+			check.countryCode = payload.country_code;
+			check.city = payload.city;
+			check.location = payload.location;
+			check.uptBurnt = payload.upt_burnt;
+		}
 
 		if (type === "pagespeed") {
 			const categories = payload.lighthouseResult?.categories;
@@ -145,6 +154,7 @@ class StatusService {
 				hardware: this.db.createHardwareCheck,
 				docker: this.db.createCheck,
 				port: this.db.createCheck,
+				distributed_http: this.db.createDistributedCheck,
 			};
 			const operation = operationMap[networkResponse.type];
 
