@@ -45,6 +45,7 @@ import Docs from "../../assets/icons/docs.svg?react";
 import Folder from "../../assets/icons/folder.svg?react";
 import StatusPages from "../../assets/icons/status-pages.svg?react";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
+import Groups from "../../assets/icons/groups.svg?react";
 
 import "./index.css";
 
@@ -52,6 +53,7 @@ const menu = [
 	{ name: "Uptime", path: "uptime", icon: <Monitors /> },
 	{ name: "Pagespeed", path: "pagespeed", icon: <PageSpeed /> },
 	{ name: "Infrastructure", path: "infrastructure", icon: <Integrations /> },
+	{ name: "Distributed Uptime", path: "distributed-uptime", icon: <Groups /> },
 	{ name: "Incidents", path: "incidents", icon: <Incidents /> },
 
 	{ name: "Status pages", path: "status", icon: <StatusPages /> },
@@ -99,6 +101,7 @@ const PATH_MAP = {
 	monitors: "Dashboard",
 	pagespeed: "Dashboard",
 	infrastructure: "Dashboard",
+	["distributed-uptime"]: "Dashboard",
 	account: "Account",
 	settings: "Settings",
 };
@@ -337,15 +340,13 @@ function Sidebar() {
 							disableInteractive
 						>
 							<ListItemButton
-								className={location.pathname.includes(item.path) ? "selected-path" : ""}
+								className={location.pathname === `/${item.path}` ? "selected-path" : ""}
 								onClick={() => navigate(`/${item.path}`)}
 								sx={{
-									/* 
-									TODO we do not need this height
-									minHeight: "37px", */
-									p: theme.spacing(5),
+									height: "37px",
 									gap: theme.spacing(4),
 									borderRadius: theme.shape.borderRadius,
+									px: theme.spacing(4),
 								}}
 							>
 								<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
