@@ -2,6 +2,7 @@ import Monitor from "../../models/Monitor.js";
 import Check from "../../models/Check.js";
 import PageSpeedCheck from "../../models/PageSpeedCheck.js";
 import HardwareCheck from "../../models/HardwareCheck.js";
+import DistributedUptimeCheck from "../../models/DistributedUptimeCheck.js";
 import { errorMessages } from "../../../utils/messages.js";
 import Notification from "../../models/Notification.js";
 import { NormalizeData, NormalizeDataUptimeDetails } from "../../../utils/dataUtils.js";
@@ -11,6 +12,7 @@ import { fileURLToPath } from "url";
 import {
 	buildUptimeDetailsPipeline,
 	buildHardwareDetailsPipeline,
+	buildDistributedUptimeDetailsPipeline,
 } from "./monitorModuleQueries.js";
 import { ObjectId } from "mongodb";
 const __filename = fileURLToPath(import.meta.url);
@@ -343,6 +345,48 @@ const getUptimeDetailsById = async (req) => {
 
 		const results = await Check.aggregate(
 			buildUptimeDetailsPipeline(monitor, dates, dateString)
+		);
+
+		const monitorData = results[0];
+		const normalizedGroupChecks = NormalizeDataUptimeDetails(
+			monitorData.groupedChecks,
+			10,
+			100
+		);
+
+		const monitorStats = {
+			...monitor.toObject(),
+			...monitorData,
+			groupedChecks: normalizedGroupChecks,
+		};
+
+		return monitorStats;
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "getUptimeDetailsById";
+		throw error;
+	}
+};
+
+const getDistributedUptimeDetailsById = async (req) => {
+	try {
+		const { monitorId } = req.params;
+		const monitor = await Monitor.findById(monitorId);
+		if (monitor === null || monitor === undefined) {
+			throw new Error(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId));
+		}
+
+		const { dateRange, normalize } = req.query;
+		const dates = getDateRange(dateRange);
+		const formatLookup = {
+			day: "%Y-%m-%dT%H:%M:00Z",
+			week: "%Y-%m-%dT%H:00:00Z",
+			month: "%Y-%m-%dT00:00:00Z",
+		};
+
+		const dateString = formatLookup[dateRange];
+		const results = await DistributedUptimeCheck.aggregate(
+			buildDistributedUptimeDetailsPipeline(monitor, dates, dateString)
 		);
 
 		const monitorData = results[0];
@@ -815,6 +859,7 @@ export {
 	getMonitorById,
 	getMonitorsByTeamId,
 	getUptimeDetailsById,
+	getDistributedUptimeDetailsById,
 	createMonitor,
 	deleteMonitor,
 	deleteAllMonitors,
