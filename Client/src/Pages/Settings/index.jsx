@@ -23,6 +23,8 @@ import { settingsValidation } from "../../Validation/validation";
 import Dialog from "../../Components/Dialog";
 import { useIsAdmin } from "../../Hooks/useIsAdmin";
 import ConfigBox from "../../Components/ConfigBox";
+import { version } from "../../../version";
+
 const SECONDS_PER_DAY = 86400;
 
 const Settings = () => {
@@ -38,30 +40,33 @@ const Settings = () => {
 	const [form, setForm] = useState({
 		ttl: checkTTL ? (checkTTL / SECONDS_PER_DAY).toString() : 0,
 	});
-	const [version, setVersion] = useState("unknown");
 	const [errors, setErrors] = useState({});
 	const deleteStatsMonitorsInitState = { deleteMonitors: false, deleteStats: false };
 	const [isOpen, setIsOpen] = useState(deleteStatsMonitorsInitState);
 	const dispatch = useDispatch();
 
 	//Fetching latest release version from github
-	useEffect(() => {
-		const fetchLatestVersion = async () => {
-			let version = "unknown";
-			try {
-				const response = await networkService.fetchGithubLatestRelease();
-				if (!response.status === 200) {
-					throw new Error("Failed to fetch latest version");
-				}
-				version = response.data.tag_name;
-			} catch (error) {
-				createToast({ body: error.message || "Error fetching latest version" }); // Set error message
-			} finally {
-				setVersion(version);
-			}
-		};
-		fetchLatestVersion();
-	}, []);
+  useEffect(() => {
+    const fetchLatestVersion = async () => {
+      let fetchedVersion = "unknown";
+      try {
+        const response = await networkService.fetchGithubLatestRelease();
+        if (!response.status === 200) {
+          throw new Error("Failed to fetch latest version");
+        }
+        fetchedVersion = response.data.tag_name;
+        if (fetchedVersion && version !== fetchedVersion) {
+          createToast({
+            body: `A new update is available! Current version: ${version}, New version: ${fetchedVersion}`,
+            type: "info",
+          });
+        }
+      } catch (error) {
+        createToast({ body: error.message || "Error fetching latest version" });
+      }
+    };
+    fetchLatestVersion();
+  }, []);
 
 	const handleChange = (event) => {
 		const { value, id } = event.target;
