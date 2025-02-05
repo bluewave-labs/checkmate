@@ -405,7 +405,7 @@ const getDistributedUptimeDetailsById = async (req) => {
 		return monitorStats;
 	} catch (error) {
 		error.service = SERVICE_NAME;
-		error.method = "getUptimeDetailsById";
+		error.method = "getDistributedUptimeDetailsById";
 		throw error;
 	}
 };
