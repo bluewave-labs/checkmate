@@ -70,5 +70,5 @@ const StatusBar = ({ monitors }) => {
 export default StatusBar;
 
 StatusBar.propTypes = {
-	status: PropTypes.object.isRequired,
+	status: PropTypes.object,
 };

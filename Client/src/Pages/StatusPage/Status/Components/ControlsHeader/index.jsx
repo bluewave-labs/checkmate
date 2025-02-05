@@ -6,10 +6,62 @@ import SettingsIcon from "../../../../../assets/icons/settings-bold.svg?react";
 //Utils
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
+
+const Controls = ({ deleteStatusPage, isDeleting }) => {
+	const theme = useTheme();
+	const location = useLocation();
+	const currentPath = location.pathname;
+	const navigate = useNavigate();
+	if (currentPath === "/status/public") {
+		return null;
+	}
+
+	return (
+		<Stack
+			direction="row"
+			gap={theme.spacing(2)}
+		>
+			<Box>
+				<Button
+					variant="contained"
+					color="error"
+					onClick={deleteStatusPage}
+					loading={isDeleting}
+				>
+					Delete
+				</Button>
+			</Box>
+			<Box>
+				<Button
+					variant="contained"
+					color="secondary"
+					onClick={() => navigate(`/status/create`)}
+					sx={{
+						px: theme.spacing(5),
+						"& svg": {
+							mr: theme.spacing(3),
+							"& path": {
+								stroke: theme.palette.secondary.contrastText,
+							},
+						},
+					}}
+				>
+					<SettingsIcon /> Configure
+				</Button>
+			</Box>
+		</Stack>
+	);
+};
+
+Controls.propTypes = {
+	deleteStatusPage: PropTypes.func,
+	isDeleting: PropTypes.bool,
+};
 
 const ControlsHeader = ({ statusPage, deleteStatusPage, isDeleting }) => {
 	const theme = useTheme();
-	const navigate = useNavigate();
 
 	return (
 		<Stack
@@ -33,41 +85,18 @@ const ControlsHeader = ({ statusPage, deleteStatusPage, isDeleting }) => {
 				/>
 				<Typography variant="h2">{statusPage?.companyName}</Typography>
 			</Stack>
-			<Stack
-				direction="row"
-				gap={theme.spacing(2)}
-			>
-				<Box>
-					<Button
-						variant="contained"
-						color="error"
-						onClick={deleteStatusPage}
-						loading={isDeleting}
-					>
-						Delete
-					</Button>
-				</Box>
-				<Box>
-					<Button
-						variant="contained"
-						color="secondary"
-						onClick={() => navigate(`/status/create`)}
-						sx={{
-							px: theme.spacing(5),
-							"& svg": {
-								mr: theme.spacing(3),
-								"& path": {
-									stroke: theme.palette.secondary.contrastText,
-								},
-							},
-						}}
-					>
-						<SettingsIcon /> Configure
-					</Button>
-				</Box>
-			</Stack>
+			<Controls
+				deleteStatusPage={deleteStatusPage}
+				isDeleting={isDeleting}
+			/>
 		</Stack>
 	);
+};
+
+ControlsHeader.propTypes = {
+	statusPage: PropTypes.object,
+	deleteStatusPage: PropTypes.func,
+	isDeleting: PropTypes.bool,
 };
 
 export default ControlsHeader;
