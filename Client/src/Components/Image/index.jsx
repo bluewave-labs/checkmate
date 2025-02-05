@@ -14,6 +14,7 @@ const Image = ({
 	maxWidth = "auto",
 	maxHeight = "auto",
 	base64,
+	sx,
 }) => {
 	if (shouldRender === false) {
 		return null;
@@ -36,6 +37,7 @@ const Image = ({
 			maxHeight={maxHeight}
 			width={width}
 			height={height}
+			sx={{ ...sx }}
 		/>
 	);
 };
@@ -49,6 +51,7 @@ Image.propTypes = {
 	maxWidth: PropTypes.string,
 	maxHeight: PropTypes.string,
 	base64: PropTypes.string,
+	sx: PropTypes.object,
 };
 
 export default Image;

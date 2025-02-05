@@ -27,9 +27,15 @@ import Infrastructure from "../Pages/Infrastructure/Monitors";
 import InfrastructureCreate from "../Pages/Infrastructure/Create";
 import InfrastructureDetails from "../Pages/Infrastructure/Details";
 
+// Distributed Uptime
+import DistributedUptimeMonitors from "../Pages/DistributedUptime/Monitors";
+import CreateDistributedUptime from "../Pages/DistributedUptime/Create";
+import DistributedUptimeDetails from "../Pages/DistributedUptime/Details";
+
+// Incidents
 import Incidents from "../Pages/Incidents";
 
-//Status pages
+// Status pages
 import CreateStatus from "../Pages/StatusPage/Create";
 import Status from "../Pages/StatusPage/Status";
 
@@ -77,6 +83,18 @@ const Routes = () => {
 				<Route
 					path="/uptime/configure/:monitorId/"
 					element={<UptimeConfigure />}
+				/>
+				<Route
+					path="/distributed-uptime"
+					element={<DistributedUptimeMonitors />}
+				/>
+				<Route
+					path="/distributed-uptime/create"
+					element={<CreateDistributedUptime />}
+				/>
+				<Route
+					path="/distributed-uptime/:monitorId"
+					element={<DistributedUptimeDetails />}
 				/>
 				<Route
 					path="pagespeed"

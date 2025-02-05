@@ -1,4 +1,5 @@
-import { Box, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
+import Image from "../Image";
 import { useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import useUtils from "../../Pages/Uptime/Monitors/Hooks/useUtils";
@@ -29,7 +30,15 @@ import useUtils from "../../Pages/Uptime/Monitors/Hooks/useUtils";
  * @returns {React.ReactElement} A styled box containing the statistic
  */
 
-const StatBox = ({ heading, subHeading, gradient = false, status = "", sx }) => {
+const StatBox = ({
+	img,
+	alt,
+	heading,
+	subHeading,
+	gradient = false,
+	status = "",
+	sx,
+}) => {
 	const theme = useTheme();
 	const { statusToTheme } = useUtils();
 	const themeColor = statusToTheme[status];
@@ -70,7 +79,8 @@ const StatBox = ({ heading, subHeading, gradient = false, status = "", sx }) => 
 			};
 
 	return (
-		<Box
+		<Stack
+			direction="row"
 			sx={{
 				padding: `${theme.spacing(4)} ${theme.spacing(8)}`,
 				/* TODO why are we using width and min width here? */
@@ -95,9 +105,20 @@ const StatBox = ({ heading, subHeading, gradient = false, status = "", sx }) => 
 				...sx,
 			}}
 		>
-			<Typography component="h2">{heading}</Typography>
-			<Typography>{subHeading}</Typography>
-		</Box>
+			{img && (
+				<Image
+					src={img}
+					height={"30px"}
+					width={"30px"}
+					alt={alt}
+					sx={{ marginRight: theme.spacing(8) }}
+				/>
+			)}
+			<Stack>
+				<Typography component="h2">{heading}</Typography>
+				<Typography>{subHeading}</Typography>
+			</Stack>
+		</Stack>
 	);
 };
 
