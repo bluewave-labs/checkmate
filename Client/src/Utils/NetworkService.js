@@ -932,6 +932,40 @@ class NetworkService {
 		};
 	}
 
+	subscribeToDistributedUptimeDetails(config) {
+		const params = new URLSearchParams();
+		const { authToken, monitorId, onUpdate, onOpen, onError, dateRange, normalize } =
+			config;
+		if (dateRange) params.append("dateRange", dateRange);
+		if (normalize) params.append("normalize", normalize);
+
+		const url = `${this.axiosInstance.defaults.baseURL}/distributed-uptime/monitors/details/${monitorId}?${params.toString()}`;
+		this.eventSource = new EventSource(url, {
+			headers: { Authorization: `Bearer ${authToken}` },
+		});
+
+		this.eventSource.onopen = (e) => {
+			onOpen?.();
+		};
+
+		this.eventSource.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			onUpdate(data);
+		};
+
+		this.eventSource.onerror = (error) => {
+			console.error("Monitor stream error:", error);
+			onError?.();
+			this.eventSource.close();
+		};
+		return () => {
+			if (this.eventSource) {
+				this.eventSource.close();
+				this.eventSource = null;
+			}
+		};
+	}
+
 	async getStatusPage(config) {
 		const { authToken } = config;
 		return this.axiosInstance.get(`/status-page`, {
