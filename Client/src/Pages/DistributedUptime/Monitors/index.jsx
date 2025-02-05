@@ -1,16 +1,16 @@
 // Components
 import { Stack, Box, Button } from "@mui/material";
-import DataTable from "../../Components/Table";
-import Breadcrumbs from "../../Components/Breadcrumbs";
-import Host from "../Uptime/Home/host";
-import BarChart from "../../Components/Charts/BarChart";
-import ActionsMenu from "../Uptime/Home/actionsMenu";
-import { StatusLabel } from "../../Components/Label";
+import DataTable from "../../../Components/Table";
+import Breadcrumbs from "../../../Components/Breadcrumbs";
+import Host from "../../Uptime/Monitors/Components/Host";
+import BarChart from "../../../Components/Charts/BarChart";
+import ActionsMenu from "../../Uptime/Monitors/Components/ActionsMenu";
+import { StatusLabel } from "../../../Components/Label";
 // Utils
-import { networkService } from "../../main";
+import { networkService } from "../../../main";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import useUtils from "../Uptime/utils";
+import useUtils from "../../Uptime/Monitors/Hooks/useUtils";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -84,7 +84,7 @@ const DistributedUptimeMonitors = () => {
 
 	const getMonitorWithPercentage = (monitor, theme) => {
 		let uptimePercentage = "";
-		let percentageColor = theme.palette.percentage.uptimeExcellent;
+		let percentageColor = "";
 
 		if (monitor.uptimePercentage !== undefined) {
 			uptimePercentage =
@@ -94,12 +94,12 @@ const DistributedUptimeMonitors = () => {
 
 			percentageColor =
 				monitor.uptimePercentage < 0.25
-					? theme.palette.percentage.uptimePoor
+					? theme.palette.error.main
 					: monitor.uptimePercentage < 0.5
-						? theme.palette.percentage.uptimeFair
+						? theme.palette.warning.main
 						: monitor.uptimePercentage < 0.75
-							? theme.palette.percentage.uptimeGood
-							: theme.palette.percentage.uptimeExcellent;
+							? theme.palette.success.main
+							: theme.palette.success.main;
 		}
 
 		return {
