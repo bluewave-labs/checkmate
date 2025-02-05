@@ -138,6 +138,7 @@ class DistributedUptimeController {
 				clearInterval(keepAlive);
 			});
 		} catch (error) {
+			console.log(error);
 			next(handleError(error, SERVICE_NAME, "getDistributedUptimeMonitors"));
 		}
 	}
