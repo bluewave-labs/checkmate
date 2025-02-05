@@ -37,7 +37,7 @@ const Controls = ({ deleteStatusPage, isDeleting }) => {
 				<Button
 					variant="contained"
 					color="secondary"
-					onClick={() => navigate(`/status/create`)}
+					onClick={() => navigate(`/status/configure`)}
 					sx={{
 						px: theme.spacing(5),
 						"& svg": {

@@ -5,13 +5,16 @@ import GenericFallback from "../../../Components/GenericFallback";
 import SkeletonLayout from "./Components/Skeleton";
 //Utils
 import { useTheme } from "@emotion/react";
-import { useState, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { statusPageValidation } from "../../../Validation/validation";
 import { buildErrors } from "../../../Validation/error";
 import { useMonitorsFetch } from "./Hooks/useMonitorsFetch";
 import { useCreateStatusPage } from "./Hooks/useCreateStatusPage";
 import { createToast } from "../../../Utils/toastUtils";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useStatusPageFetch } from "../Status/Hooks/useStatusPageFetch";
+
 //Constants
 const TAB_LIST = ["General settings", "Contents"];
 
@@ -40,12 +43,18 @@ const CreateStatusPage = () => {
 	// Refs
 	const intervalRef = useRef(null);
 
+	// Setup
+	const location = useLocation();
+	const isCreate = location.pathname === "/status/create";
+
 	//Utils
 	const theme = useTheme();
 	const [monitors, isLoading, networkError] = useMonitorsFetch();
-	const [createStatusPage, createSatusIsLoading, createStatusPageNetworkError] =
-		useCreateStatusPage();
+	const [createStatusPage, createStatusIsLoading, createStatusPageNetworkError] =
+		useCreateStatusPage(isCreate);
 	const navigate = useNavigate();
+	const [statusPage, statusPageMonitors, statusPageIsLoading, statusPageNetworkError] =
+		useStatusPageFetch(isCreate);
 
 	// Handlers
 	const handleFormChange = (e) => {
@@ -145,6 +154,37 @@ const CreateStatusPage = () => {
 		setTab(errorTabs[0]);
 	};
 
+	// If we are configuring, populate fields
+	useEffect(() => {
+		if (isCreate) return;
+		if (typeof statusPage === "undefined") {
+			return;
+		}
+
+		let newLogo = undefined;
+		if (statusPage.logo) {
+			newLogo = {
+				src: `data:${statusPage.logo.contentType};base64,${statusPage.logo.data}`,
+				name: "logo",
+				type: statusPage.logo.contentType,
+				size: null,
+			};
+		}
+
+		setForm((prev) => {
+			return {
+				...prev,
+				companyName: statusPage?.companyName,
+				isPublished: statusPage?.isPublished,
+				timezone: statusPage?.timezone,
+				monitors: statusPageMonitors.map((monitor) => monitor._id),
+				color: statusPage?.color,
+				logo: newLogo,
+			};
+		});
+		setSelectedMonitors(statusPageMonitors);
+	}, [isCreate, statusPage, statusPageMonitors]);
+
 	if (networkError === true) {
 		return (
 			<GenericFallback>
@@ -162,6 +202,7 @@ const CreateStatusPage = () => {
 
 	if (isLoading) return <SkeletonLayout />;
 
+	// Load fields
 	return (
 		<Stack gap={theme.spacing(10)}>
 			<Tabs

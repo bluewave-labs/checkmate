@@ -28,7 +28,7 @@ const getMonitorWithPercentage = (monitor, theme) => {
 	};
 };
 
-const useStatusPageFetch = () => {
+const useStatusPageFetch = (isCreate = false) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [networkError, setNetworkError] = useState(false);
 	const [statusPage, setStatusPage] = useState(undefined);
@@ -59,9 +59,13 @@ const useStatusPageFetch = () => {
 			setIsLoading(false);
 		}
 	}, [authToken, theme]);
+
 	useEffect(() => {
+		if (isCreate === true) {
+			return;
+		}
 		fetchStatusPage();
-	}, [fetchStatusPage]);
+	}, [isCreate, fetchStatusPage]);
 
 	return [statusPage, monitors, isLoading, networkError, fetchStatusPage];
 };
