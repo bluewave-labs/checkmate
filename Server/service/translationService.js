@@ -4,9 +4,8 @@ import path from 'path';
 class TranslationService {
   static SERVICE_NAME = 'TranslationService';
 
-  constructor(logger, networkService) {
+  constructor(logger) {
     this.logger = logger;
-    this.networkService = networkService;
     this.translations = {};
     this._language = 'en';
     this.localesDir = path.join(process.cwd(), 'locales');
@@ -22,10 +21,8 @@ class TranslationService {
 
   async initialize() {
     try {
-      await this.loadTranslations();
+      await this.loadFromFiles();
 
-      // Yeni eklenen terimleri POEditor'e gönder
-      await this.syncTermsWithPOEditor();
     } catch (error) {
       this.logger.error({
         message: error.message,
@@ -73,113 +70,6 @@ class TranslationService {
     }
   }
 
-  async loadTranslations() {
-    let hasError = false;
-    try {
-      const languages = await this.getLanguages();
-
-      for (const language of languages) {
-        try {
-          const translations = await this.exportTranslations(language);
-          this.translations[language] = translations;
-        } catch (error) {
-          hasError = true;
-          this.logger.error({
-            message: `Failed to fetch translations from POEditor for language ${language}: ${error.message}`,
-            service: 'TranslationService',
-            method: 'loadTranslations',
-            stack: error.stack
-          });
-        }
-      }
-
-      if (hasError || Object.keys(this.translations[this._language]).length === 0) {
-        this.logger.error({
-          message: 'Failed to fetch translations from POEditor, using default.json',
-          service: 'TranslationService',
-          method: 'loadTranslations'
-        });
-
-        // Load translations from default.json in locales directory
-        const defaultFilePath = path.join(this.localesDir, 'default.json');
-        if (fs.existsSync(defaultFilePath)) {
-          const content = fs.readFileSync(defaultFilePath, 'utf8');
-          this.translations['en'] = JSON.parse(content);
-        } else {
-          throw new Error('default.json file not found in locales directory');
-        }
-      }
-
-      await this.saveTranslations();
-    } catch (error) {
-      hasError = true;
-      this.logger.error({
-        message: error.message,
-        service: 'TranslationService',
-        method: 'loadTranslations',
-        stack: error.stack
-      });
-    }
-  }
-
-  async getLanguages() {
-    try {
-      return await this.networkService.getPoEditorLanguages();
-    } catch (error) {
-      this.logger.error({
-        message: error.message,
-        service: 'TranslationService',
-        method: 'getLanguages',
-        stack: error.stack
-      });
-      return ['en'];
-    }
-  }
-
-  async exportTranslations(language) {
-    try {
-      return await this.networkService.exportPoEditorTranslations(language);
-    } catch (error) {
-      this.logger.error({
-        message: error.message,
-        service: 'TranslationService',
-        method: 'exportTranslations',
-        stack: error.stack
-      });
-      return {};
-    }
-  }
-
-  async saveTranslations() {
-    try {
-      if (!fs.existsSync(this.localesDir)) {
-        fs.mkdirSync(this.localesDir);
-      }
-
-      for (const [language, translations] of Object.entries(this.translations)) {
-        const filePath = path.join(this.localesDir, `${language}.json`);
-        fs.writeFileSync(filePath, JSON.stringify(translations, null, 2));
-      }
-
-      const defaultFilePath = path.join(this.localesDir, 'default.json');
-      const enTranslations = this.translations['en'] || {};
-      fs.writeFileSync(defaultFilePath, JSON.stringify(enTranslations, null, 2));
-
-      this.logger.info({
-        message: 'Translations saved to files successfully',
-        service: 'TranslationService',
-        method: 'saveTranslations'
-      });
-    } catch (error) {
-      this.logger.error({
-        message: error.message,
-        service: 'TranslationService',
-        method: 'saveTranslations',
-        stack: error.stack
-      });
-    }
-  }
-
   getTranslation(key) {
     let language = this._language;
 
@@ -193,93 +83,6 @@ class TranslationService {
         stack: error.stack
       });
       return key;
-    }
-  }
-
-  async getTermsFromPOEditor() {
-    try {
-      return await this.networkService.getPoEditorTerms();
-    } catch (error) {
-      this.logger.error({
-        message: error.message,
-        service: 'TranslationService',
-        method: 'getTermsFromPOEditor',
-        stack: error.stack
-      });
-      return [];
-    }
-  }
-
-  async addTermsToPOEditor(terms) {
-    try {
-      if (!terms.length) return;
-
-      const response = await this.networkService.addPoEditorTerms(terms);
-
-      if (response.response?.status === 'fail') {
-        throw new Error(response.response.message || 'Failed to add terms to POEditor');
-      }
-
-      this.logger.info({
-        message: `${terms.length} new terms added to POEditor`,
-        service: 'TranslationService',
-        method: 'addTermsToPOEditor',
-        response: response
-      });
-
-      return response;
-    } catch (error) {
-      this.logger.error({
-        message: `Failed to add terms to POEditor: ${error.message}`,
-        service: 'TranslationService',
-        method: 'addTermsToPOEditor',
-        stack: error.stack,
-        terms: terms
-      });
-      throw error;
-    }
-  }
-
-  async syncTermsWithPOEditor() {
-    try {
-      const defaultFilePath = path.join(this.localesDir, 'default.json');
-      const enTranslations = JSON.parse(fs.readFileSync(defaultFilePath, 'utf8'));
-      const localTerms = Object.keys(enTranslations)
-        .map(term => term);
-
-      const poeditorTerms = await this.getTermsFromPOEditor();
-
-      const newTerms = localTerms?.filter(term => !poeditorTerms?.includes(term));
-
-
-      this.logger.info({
-        message: `Comparison results - New terms found: ${newTerms.length}`,
-        sampleNewTerms: newTerms.slice(0, 5),
-        service: 'TranslationService',
-        method: 'syncTermsWithPOEditor'
-      });
-
-      if (newTerms.length > 0) {
-        const formattedTerms = newTerms.map(term => ({
-          [term]: enTranslations[term] || '',
-        }));
-
-        await this.addTermsToPOEditor(formattedTerms);
-
-      } else {
-        this.logger.info({
-          message: 'No new terms found to synchronize',
-          service: 'TranslationService',
-          method: 'syncTermsWithPOEditor'
-        });
-      }
-    } catch (error) {
-      this.logger.error({
-        message: error.message,
-        service: 'TranslationService',
-        method: 'syncTermsWithPOEditor',
-        stack: error.stack
-      });
     }
   }
 }
