@@ -61,6 +61,30 @@ const LocationSchema = new mongoose.Schema(
 const DistributedUptimeCheckSchema = mongoose.Schema(
 	{
 		...BaseCheckSchema.obj,
+		first_byte_took: {
+			type: Number,
+			required: false,
+		},
+		body_read_took: {
+			type: Number,
+			required: false,
+		},
+		dns_took: {
+			type: Number,
+			required: false,
+		},
+		conn_took: {
+			type: Number,
+			required: false,
+		},
+		connect_took: {
+			type: Number,
+			required: false,
+		},
+		tls_took: {
+			type: Number,
+			required: false,
+		},
 		location: {
 			type: LocationSchema,
 			required: false,

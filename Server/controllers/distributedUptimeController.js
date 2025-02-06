@@ -54,8 +54,13 @@ class DistributedUptimeController {
 				status,
 				code: status_code,
 				responseTime,
+				first_byte_took,
+				body_read_took,
+				dns_took,
+				conn_took,
+				connect_took,
+				tls_took,
 			};
-
 			if (error) {
 				const code = status_code || this.NETWORK_ERROR;
 				distributedUptimeResponse.code = code;
