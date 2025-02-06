@@ -2,34 +2,7 @@ import { useEffect, useState } from "react";
 import { networkService } from "../../../../main";
 import { createToast } from "../../../../Utils/toastUtils";
 import { useTheme } from "@emotion/react";
-const getMonitorWithPercentage = (monitor, theme) => {
-	let uptimePercentage = "";
-	let percentageColor = "";
-
-	if (monitor.uptimePercentage !== undefined) {
-		uptimePercentage =
-			monitor.uptimePercentage === 0 ? "0" : (monitor.uptimePercentage * 100).toFixed(2);
-
-		percentageColor =
-			monitor.uptimePercentage < 0.25
-				? theme.palette.error.main
-				: monitor.uptimePercentage < 0.5
-					? theme.palette.warning.main
-					: monitor.uptimePercentage < 0.75
-						? theme.palette.success.main
-						: theme.palette.success.main;
-	}
-
-	return {
-		id: monitor._id,
-		name: monitor.name,
-		url: monitor.url,
-		title: monitor.name,
-		percentage: uptimePercentage,
-		percentageColor,
-		monitor: monitor,
-	};
-};
+import { useMonitorUtils } from "../../../../Hooks/useMonitorUtils";
 
 export const useMonitorFetch = ({
 	authToken,
@@ -49,7 +22,7 @@ export const useMonitorFetch = ({
 	const [networkError, setNetworkError] = useState(false);
 
 	const theme = useTheme();
-
+	const { getMonitorWithPercentage } = useMonitorUtils();
 	useEffect(() => {
 		const fetchMonitors = async () => {
 			try {
