@@ -45,7 +45,7 @@ import Docs from "../../assets/icons/docs.svg?react";
 import Folder from "../../assets/icons/folder.svg?react";
 import StatusPages from "../../assets/icons/status-pages.svg?react";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
-import Groups from "../../assets/icons/groups.svg?react";
+import DistributedUptimeIcon from "../../assets/icons/distributed-uptime.svg?react";
 
 import "./index.css";
 
@@ -53,7 +53,11 @@ const menu = [
 	{ name: "Uptime", path: "uptime", icon: <Monitors /> },
 	{ name: "Pagespeed", path: "pagespeed", icon: <PageSpeed /> },
 	{ name: "Infrastructure", path: "infrastructure", icon: <Integrations /> },
-	{ name: "Distributed Uptime", path: "distributed-uptime", icon: <Groups /> },
+	{
+		name: "Distributed Uptime",
+		path: "distributed-uptime",
+		icon: <DistributedUptimeIcon />,
+	},
 	{ name: "Incidents", path: "incidents", icon: <Incidents /> },
 
 	{ name: "Status pages", path: "status", icon: <StatusPages /> },
