@@ -161,8 +161,7 @@ const startApp = async () => {
 	}
 
 	// Create and Register Primary services
-	const networkService = new NetworkService(axios, ping, logger, http, Docker, net);
-	const translationService = new TranslationService(logger, networkService);
+	const translationService = new TranslationService(logger);
 	const stringService = new StringService(translationService);
 	ServiceRegistry.register(StringService.SERVICE_NAME, stringService);
 
@@ -171,6 +170,7 @@ const startApp = async () => {
 	await db.connect();
 
 	// Create services
+	const networkService = new NetworkService(axios, ping, logger, http, Docker, net, stringService);
 	const settingsService = new SettingsService(AppSettings);
 	await settingsService.loadSettings();
 	const emailService = new EmailService(
