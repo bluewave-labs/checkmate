@@ -905,9 +905,7 @@ class NetworkService {
 			onOpen?.();
 		};
 
-		this.eventSource.addEventListener("open", (e) => {
-			console.log("getDistributedUptimeMonitors connection opened:");
-		});
+		this.eventSource.addEventListener("open", (e) => {});
 
 		this.eventSource.onmessage = (event) => {
 			const data = JSON.parse(event.data);
