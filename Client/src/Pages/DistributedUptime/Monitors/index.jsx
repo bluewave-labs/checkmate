@@ -8,15 +8,12 @@ import GenericFallback from "../../../Components/GenericFallback";
 
 // Utils
 import { useTheme } from "@mui/material/styles";
-import { useSelector } from "react-redux";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useSubscribeToMonitors } from "./Hooks/useSubscribeToMonitors";
 // Constants
 const BREADCRUMBS = [{ name: `Distributed Uptime`, path: "/distributed-uptime" }];
 
 const DistributedUptimeMonitors = () => {
-	// Redux state
-	const { authToken, user } = useSelector((state) => state.auth);
 	// Local state
 	// Utils
 	const theme = useTheme();

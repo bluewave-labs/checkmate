@@ -1,14 +1,17 @@
+// Components
 import DataTable from "../../../../../Components/Table";
 import BarChart from "../../../../../Components/Charts/BarChart";
 import { Box } from "@mui/material";
 import { StatusLabel } from "../../../../../Components/Label";
+import Host from "../../../../../Components/Host";
 
-//REFACTOR
-import Host from "../../../../Uptime/Monitors/Components/Host";
-import ActionsMenu from "../../../../Uptime/Monitors/Components/ActionsMenu";
+// Utils
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useMonitorUtils } from "../../../../../Hooks/useMonitorUtils";
+import PropTypes from "prop-types";
+
+// Constants
 const TYPE_MAP = {
 	distributed_http: "Distributed HTTP",
 };
@@ -59,12 +62,7 @@ const MonitorTable = ({ isLoading, monitors }) => {
 		{
 			id: "actions",
 			content: "Actions",
-			render: (row) => (
-				<ActionsMenu
-					monitor={row.monitor}
-					isAdmin={true}
-				/>
-			),
+			render: (row) => <span>{"TODO"}</span>,
 		},
 	];
 
@@ -86,6 +84,11 @@ const MonitorTable = ({ isLoading, monitors }) => {
 			}}
 		/>
 	);
+};
+
+MonitorTable.propTypes = {
+	isLoading: PropTypes.bool,
+	monitors: PropTypes.array,
 };
 
 export default MonitorTable;

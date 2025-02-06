@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTheme } from "@emotion/react";
-import Dot from "../../../../../Components/Dot";
+import Dot from "../Dot";
 /**
  * Host component.
  * This subcomponent receives a params object and displays the host details.
