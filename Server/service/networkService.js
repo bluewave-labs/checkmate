@@ -1,3 +1,5 @@
+import jmespath from 'jmespath';
+import { errorMessages, successMessages } from "../utils/messages.js";
 const SERVICE_NAME = "NetworkService";
 const UPROCK_ENDPOINT = "https://api.uprock.com/checkmate/push";
 
@@ -146,8 +148,55 @@ class NetworkService {
 				httpResponse.message = this.http.STATUS_CODES[code] || "Network Error";
 				return httpResponse;
 			}
-			httpResponse.status = true;
+
 			httpResponse.code = response.status;
+
+			if (expectedValue) {
+				// validate if response data match expected value
+				let result = response?.data;
+
+				this.logger.info({
+					service: this.SERVICE_NAME,
+					method: "requestHttp",
+					message: "match result with expected value",
+					details: { expectedValue, result, jsonPath, matchMethod }
+				});
+				
+				if (jsonPath) {
+					const contentType = response.headers['content-type'];
+					
+					if (contentType && contentType.includes('application/json')) {
+						try {
+							result = jmespath.search(result, jsonPath).toString();
+						} catch (error) {
+							httpResponse.status = false;
+							httpResponse.message = "JSONPath Search Error";
+							return httpResponse;
+						}
+					} else {
+						httpResponse.status = false;
+						httpResponse.message = "Response Not JSON";
+						return httpResponse;
+					}
+				}
+
+				if (!result) {
+					httpResponse.status = false;
+					httpResponse.message = "Empty Result";
+					return httpResponse;
+				}
+
+				let match;
+				if (matchMethod === "include") match = result.includes(expectedValue);
+				else if (matchMethod === "regex") match = new RegExp(expectedValue).test(result);
+				else match = result === expectedValue;
+				
+				httpResponse.status = match;
+				httpResponse.message = match ? "Match" : "Not Match";
+				return httpResponse;
+			}
+
+			httpResponse.status = true;
 			httpResponse.message = this.http.STATUS_CODES[response.status];
 			return httpResponse;
 		} catch (error) {
