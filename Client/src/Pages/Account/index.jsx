@@ -73,11 +73,6 @@ const Account = ({ open = "profile" }) => {
 					<TabList
 						onChange={handleTabChange}
 						aria-label="account tabs"
-						sx={{
-							"& .MuiTabs-indicator": {
-								backgroundColor: theme.palette.tertiary.contrastText,
-							},
-						}}
 					>
 						{tabList.map((label, index) => (
 							<Tab
