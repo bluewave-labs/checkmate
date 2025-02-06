@@ -130,7 +130,7 @@ const baseTheme = (palette) => ({
 					},
 					"&.Mui-disabled": {
 						backgroundColor: theme.palette.secondary.main,
-						color: theme.palette.primary.main,
+						color: theme.palette.primary.contrastText,
 					},
 					"&.MuiLoadingButton-root": {
 						"&:disabled": {
