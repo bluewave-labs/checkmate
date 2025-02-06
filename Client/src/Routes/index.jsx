@@ -48,6 +48,7 @@ import Settings from "../Pages/Settings";
 import Maintenance from "../Pages/Maintenance";
 
 import ProtectedRoute from "../Components/ProtectedRoute";
+import ProtectedDistributedUptimeRoute from "../Components/ProtectedDistributedUptimeRoute";
 import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
 import withAdminCheck from "../Components/HOC/withAdminCheck";
 
@@ -86,15 +87,28 @@ const Routes = () => {
 				/>
 				<Route
 					path="/distributed-uptime"
-					element={<DistributedUptimeMonitors />}
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<DistributedUptimeMonitors />{" "}
+						</ProtectedDistributedUptimeRoute>
+					}
 				/>
+
 				<Route
 					path="/distributed-uptime/create"
-					element={<CreateDistributedUptime />}
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<CreateDistributedUptime />
+						</ProtectedDistributedUptimeRoute>
+					}
 				/>
 				<Route
 					path="/distributed-uptime/:monitorId"
-					element={<DistributedUptimeDetails />}
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<DistributedUptimeDetails />
+						</ProtectedDistributedUptimeRoute>
+					}
 				/>
 				<Route
 					path="pagespeed"
