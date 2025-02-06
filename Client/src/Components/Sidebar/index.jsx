@@ -15,12 +15,6 @@ import {
 	Tooltip,
 	Typography,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router";
-import { useTheme } from "@emotion/react";
-import { useDispatch, useSelector } from "react-redux";
-import { clearAuthState } from "../../Features/Auth/authSlice";
-import { toggleSidebar } from "../../Features/UI/uiSlice";
-import { clearUptimeMonitorState } from "../../Features/UptimeMonitors/uptimeMonitorsSlice";
 import ThemeSwitch from "../ThemeSwitch";
 import Avatar from "../Avatar";
 import LockSvg from "../../assets/icons/lock.svg?react";
@@ -46,8 +40,15 @@ import Folder from "../../assets/icons/folder.svg?react";
 import StatusPages from "../../assets/icons/status-pages.svg?react";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import DistributedUptimeIcon from "../../assets/icons/distributed-uptime.svg?react";
-
 import "./index.css";
+
+// Utils
+import { useLocation, useNavigate } from "react-router";
+import { useTheme } from "@emotion/react";
+import { useDispatch, useSelector } from "react-redux";
+import { clearAuthState } from "../../Features/Auth/authSlice";
+import { toggleSidebar } from "../../Features/UI/uiSlice";
+import { clearUptimeMonitorState } from "../../Features/UptimeMonitors/uptimeMonitorsSlice";
 
 const menu = [
 	{ name: "Uptime", path: "uptime", icon: <Monitors /> },
@@ -128,6 +129,9 @@ function Sidebar() {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [popup, setPopup] = useState();
 	const { user } = useSelector((state) => state.auth);
+	const distributedUptimeEnabled = useSelector(
+		(state) => state.ui.distributedUptimeEnabled
+	);
 
 	const accountMenuItem = menu.find((item) => item.name === "Account");
 	if (user.role?.includes("demo") && accountMenuItem) {
@@ -322,8 +326,11 @@ function Sidebar() {
 					/* overflow: "hidden", */
 				}}
 			>
-				{menu.map((item) =>
-					item.path ? (
+				{menu.map((item) => {
+					if (item.path === "distributed-uptime" && distributedUptimeEnabled === false) {
+						return null;
+					}
+					return item.path ? (
 						/* If item has a path */
 						<Tooltip
 							key={item.path}
@@ -556,8 +563,8 @@ function Sidebar() {
 								</List>
 							</Collapse>
 						</React.Fragment>
-					)
-				)}
+					);
+				})}
 			</List>
 			<Divider sx={{ mt: "auto" }} />
 

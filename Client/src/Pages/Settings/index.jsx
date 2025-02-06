@@ -1,10 +1,16 @@
-import { useTheme } from "@emotion/react";
-import { Box, Stack, Typography, Button } from "@mui/material";
+// Components
+import { Box, Stack, Typography, Button, Switch } from "@mui/material";
 import TextInput from "../../Components/Inputs/TextInput";
 import Link from "../../Components/Link";
 import Select from "../../Components/Inputs/Select";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useIsAdmin } from "../../Hooks/useIsAdmin";
+import Dialog from "../../Components/Dialog";
+import ConfigBox from "../../Components/ConfigBox";
+
+//Utils
+import { useTheme } from "@emotion/react";
 import { logger } from "../../Utils/Logger";
-import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { createToast } from "../../Utils/toastUtils";
 import {
@@ -14,15 +20,17 @@ import {
 } from "../../Features/UptimeMonitors/uptimeMonitorsSlice";
 import { update } from "../../Features/Auth/authSlice";
 import PropTypes from "prop-types";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { setTimezone, setMode } from "../../Features/UI/uiSlice";
+import {
+	setTimezone,
+	setMode,
+	setDistributedUptimeEnabled,
+} from "../../Features/UI/uiSlice";
 import timezones from "../../Utils/timezones.json";
 import { useState, useEffect } from "react";
 import { networkService } from "../../main";
 import { settingsValidation } from "../../Validation/validation";
-import Dialog from "../../Components/Dialog";
-import { useIsAdmin } from "../../Hooks/useIsAdmin";
-import ConfigBox from "../../Components/ConfigBox";
+
+// Constants
 const SECONDS_PER_DAY = 86400;
 
 const Settings = () => {
@@ -32,10 +40,11 @@ const Settings = () => {
 	const { checkTTL } = user;
 	const { isLoading } = useSelector((state) => state.uptimeMonitors);
 	const { isLoading: authIsLoading } = useSelector((state) => state.auth);
-	const { timezone } = useSelector((state) => state.ui);
+	const { timezone, distributedUptimeEnabled } = useSelector((state) => state.ui);
 	const { mode } = useSelector((state) => state.ui);
 	const [checksIsLoading, setChecksIsLoading] = useState(false);
 	const [form, setForm] = useState({
+		enableDistributedUptime: distributedUptimeEnabled,
 		ttl: checkTTL ? (checkTTL / SECONDS_PER_DAY).toString() : 0,
 	});
 	const [version, setVersion] = useState("unknown");
@@ -64,7 +73,16 @@ const Settings = () => {
 	}, []);
 
 	const handleChange = (event) => {
-		const { value, id } = event.target;
+		const { type, checked, value, id } = event.target;
+
+		if (type === "checkbox") {
+			setForm((prev) => ({
+				...prev,
+				[id]: checked,
+			}));
+			return;
+		}
+
 		const { error } = settingsValidation.validate(
 			{ [id]: value },
 			{
@@ -79,7 +97,6 @@ const Settings = () => {
 				newErrors[err.path[0]] = err.message;
 			});
 			setErrors(newErrors);
-			console.log(newErrors);
 			logger.error("Validation errors:", error.details);
 		}
 		let inputValue = value;
@@ -100,6 +117,7 @@ const Settings = () => {
 			});
 			const updatedUser = { ...user, checkTTL: form.ttl };
 			const action = await dispatch(update({ authToken, localData: updatedUser }));
+
 			if (action.payload.success) {
 				createToast({
 					body: "Settings saved successfully",
@@ -197,7 +215,7 @@ const Settings = () => {
 					</Box>
 					<Stack gap={theme.spacing(20)}>
 						<Select
-							id="display-timezone"
+							id="display-timezones"
 							label="Display timezone"
 							value={timezone}
 							onChange={(e) => {
@@ -229,6 +247,27 @@ const Settings = () => {
 						></Select>
 					</Stack>
 				</ConfigBox>
+				{isAdmin && (
+					<ConfigBox>
+						<Box>
+							<Typography component="h1">Distributed uptime</Typography>
+							<Typography sx={{ mt: theme.spacing(2), mb: theme.spacing(2) }}>
+								Enable/disable distributed uptime monitoring.
+							</Typography>
+						</Box>
+						<Box>
+							<Switch
+								id="enableDistributedUptime"
+								color="accent"
+								checked={distributedUptimeEnabled}
+								onChange={(e) => {
+									dispatch(setDistributedUptimeEnabled(e.target.checked));
+								}}
+							/>
+							{form.enableDistributedUptime === true ? "Enabled" : "Disabled"}
+						</Box>
+					</ConfigBox>
+				)}
 				{isAdmin && (
 					<ConfigBox>
 						<Box>

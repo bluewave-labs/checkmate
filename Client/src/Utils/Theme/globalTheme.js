@@ -367,6 +367,15 @@ const baseTheme = (palette) => ({
 				}),
 			},
 		},
+		MuiSwitch: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					"& .MuiSwitch-track": {
+						backgroundColor: theme.palette.primary.contrastText,
+					},
+				}),
+			},
+		},
 	},
 	shape: {
 		borderRadius: 2,

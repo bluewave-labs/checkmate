@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialMode = window?.matchMedia?.('(prefers-color-scheme: dark)')?.matches ? "dark" : "light";
+const initialMode = window?.matchMedia?.("(prefers-color-scheme: dark)")?.matches
+	? "dark"
+	: "light";
 
 // Initial state for UI settings.
 // Add more settings as needed (e.g., theme preferences, user settings)
@@ -20,12 +22,16 @@ const initialState = {
 	mode: initialMode,
 	greeting: { index: 0, lastUpdate: null },
 	timezone: "America/Toronto",
+	distributedUptimeEnabled: false,
 };
 
 const uiSlice = createSlice({
 	name: "ui",
 	initialState,
 	reducers: {
+		setDistributedUptimeEnabled: (state, action) => {
+			state.distributedUptimeEnabled = action.payload;
+		},
 		setRowsPerPage: (state, action) => {
 			const { table, value } = action.payload;
 			if (state[table]) {
@@ -49,5 +55,11 @@ const uiSlice = createSlice({
 });
 
 export default uiSlice.reducer;
-export const { setRowsPerPage, toggleSidebar, setMode, setGreeting, setTimezone } =
-	uiSlice.actions;
+export const {
+	setRowsPerPage,
+	toggleSidebar,
+	setMode,
+	setGreeting,
+	setTimezone,
+	setDistributedUptimeEnabled,
+} = uiSlice.actions;
