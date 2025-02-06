@@ -120,7 +120,7 @@ class NetworkService {
 	 */
 	async requestHttp(job) {
 		try {
-			const { url, secret, _id, teamId, type, jsonPath, matchMethod, expectedValue } = job.data;
+			const { url, secret, _id, name, teamId, type, jsonPath, matchMethod, expectedValue } = job.data;
 			const config = {};
 
 			secret !== undefined && (config.headers = { Authorization: `Bearer ${secret}` });
@@ -154,13 +154,13 @@ class NetworkService {
 				this.logger.info({
 					service: this.SERVICE_NAME,
 					method: "requestHttp",
-					message: "match result with expected value",
+					message: `Job: [${name}](${_id}) match result with expected value`,
 					details: { expectedValue, result, jsonPath, matchMethod }
 				});
-				
+
 				if (jsonPath) {
 					const contentType = response.headers['content-type'];
-					
+
 					if (contentType && contentType.includes('application/json')) {
 						try {
 							result = jmespath.search(result, jsonPath);
@@ -187,7 +187,7 @@ class NetworkService {
 				if (matchMethod === "include") match = result.includes(expectedValue);
 				else if (matchMethod === "regex") match = new RegExp(expectedValue).test(result);
 				else match = result === expectedValue;
-				
+
 				httpResponse.status = match;
 				httpResponse.message = match ? "Match" : "Not Match";
 				return httpResponse;
