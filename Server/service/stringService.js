@@ -241,6 +241,15 @@ class StringService {
     return this.translationService.getTranslation('statusPageCreate');
   }
 
+  get statusPageDelete() {
+    return this.translationService.getTranslation('statusPageDelete');
+  }
+
+  get statusPageUpdate() {
+    return this.translationService.getTranslation('statusPageUpdate');
+  }
+
+
   get statusPageNotFound() {
     return this.translationService.getTranslation('statusPageNotFound');
   }

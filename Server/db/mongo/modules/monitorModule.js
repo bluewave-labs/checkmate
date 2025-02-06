@@ -3,7 +3,6 @@ import Check from "../../models/Check.js";
 import PageSpeedCheck from "../../models/PageSpeedCheck.js";
 import HardwareCheck from "../../models/HardwareCheck.js";
 import DistributedUptimeCheck from "../../models/DistributedUptimeCheck.js";
-import { errorMessages } from "../../../utils/messages.js";
 import Notification from "../../models/Notification.js";
 import { NormalizeData, NormalizeDataUptimeDetails } from "../../../utils/dataUtils.js";
 import ServiceRegistry from "../../../service/serviceRegistry.js";
@@ -376,7 +375,7 @@ const getDistributedUptimeDetailsById = async (req) => {
 		const { monitorId } = req.params;
 		const monitor = await Monitor.findById(monitorId);
 		if (monitor === null || monitor === undefined) {
-			throw new Error(errorMessages.DB_FIND_MONITOR_BY_ID(monitorId));
+			throw new Error(this.stringService.dbFindMonitorById(monitorId));
 		}
 
 		const { dateRange, normalize } = req.query;

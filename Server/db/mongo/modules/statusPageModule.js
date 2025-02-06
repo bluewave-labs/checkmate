@@ -1,10 +1,13 @@
 import StatusPage from "../../models/StatusPage.js";
-import { errorMessages } from "../../../utils/messages.js";
 import { NormalizeData } from "../../../utils/dataUtils.js";
+import ServiceRegistry from "../../../service/serviceRegistry.js";
+import StringService from "../../../service/stringService.js";
 
 const SERVICE_NAME = "statusPageModule";
 
 const createStatusPage = async (statusPageData, image) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPage = new StatusPage({ ...statusPageData });
 		if (image) {
@@ -67,10 +70,12 @@ const getStatusPageByUrl = async (url, type) => {
 };
 
 const getStatusPagesByTeamId = async (teamId) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPages = await StatusPage.find({ teamId });
 		if (statusPages.length === 0) {
-			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+			const error = new Error(stringService.statusPageNotFound);
 			error.status = 404;
 			throw error;
 		}
@@ -83,6 +88,8 @@ const getStatusPagesByTeamId = async (teamId) => {
 };
 
 const getStatusPage = async (url) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPageQuery = await StatusPage.aggregate([
 			{ $match: { url: url } },
@@ -156,7 +163,7 @@ const getStatusPage = async (url) => {
 			},
 		]);
 		if (!statusPageQuery.length) {
-			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+			const error = new Error(stringService.statusPageNotFound);
 			error.status = 404;
 			throw error;
 		}
