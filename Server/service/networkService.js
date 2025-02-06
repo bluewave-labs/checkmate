@@ -167,7 +167,7 @@ class NetworkService {
 					
 					if (contentType && contentType.includes('application/json')) {
 						try {
-							result = jmespath.search(result, jsonPath).toString();
+							result = jmespath.search(result, jsonPath);
 						} catch (error) {
 							httpResponse.status = false;
 							httpResponse.message = "JSONPath Search Error";
@@ -180,13 +180,14 @@ class NetworkService {
 					}
 				}
 
-				if (!result) {
+				if (result === null || result === undefined) {
 					httpResponse.status = false;
 					httpResponse.message = "Empty Result";
 					return httpResponse;
 				}
 
 				let match;
+				result = result.toString();
 				if (matchMethod === "include") match = result.includes(expectedValue);
 				else if (matchMethod === "regex") match = new RegExp(expectedValue).test(result);
 				else match = result === expectedValue;
