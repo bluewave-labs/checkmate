@@ -122,20 +122,19 @@ class NetworkService {
 	 */
 	async requestHttp(job) {
 		try {
-			const url = job.data.url;
+			const { url, secret, _id, teamId, type, jsonPath, matchMethod, expectedValue } = job.data;
 			const config = {};
 
-			job.data.secret !== undefined &&
-				(config.headers = { Authorization: `Bearer ${job.data.secret}` });
+			secret !== undefined && (config.headers = { Authorization: `Bearer ${secret}` });
 
 			const { response, responseTime, error } = await this.timeRequest(() =>
 				this.axios.get(url, config)
 			);
 
 			const httpResponse = {
-				monitorId: job.data._id,
-				teamId: job.data.teamId,
-				type: job.data.type,
+				monitorId: _id,
+				teamId,
+				type,
 				responseTime,
 				payload: response?.data,
 			};
