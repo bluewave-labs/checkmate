@@ -13,7 +13,7 @@ const COUNTRY_CODES = {
 const LanguageSelector = () => {
 	const { i18n } = useTranslation();
 	const theme = useTheme();
-	const [language, setLanguage] = useState(i18n.language || "en");
+	const [language, setLanguage] = useState(i18n.language || "gb");
 
 	const handleChange = (event) => {
 		const newLang = event.target.value;
@@ -54,7 +54,7 @@ const LanguageSelector = () => {
 					top: "calc(50% - 8px)",
 				},
 				"& .MuiSelect-select": {
-					padding: "2px 20px 2px 6px",
+					padding: "2px 20px 2px 8px",
 					display: "flex",
 					alignItems: "center",
 					fontSize: 10,
@@ -68,7 +68,7 @@ const LanguageSelector = () => {
 						marginTop: 1,
 						width: 64,
 						"& .MuiMenuItem-root": {
-							padding: "2px 6px",
+							padding: "2px 8px",
 							minHeight: 28,
 							fontSize: 10,
 						},
@@ -105,6 +105,7 @@ const LanguageSelector = () => {
 						direction="row"
 						spacing={2}
 						alignItems="center"
+						ml={0.5}
 					>
 						<Box
 							component="span"
@@ -121,7 +122,7 @@ const LanguageSelector = () => {
 								},
 							}}
 						>
-							<Flag code={lang} />
+							<Flag code={lang.toUpperCase()} />
 						</Box>
 						<Box
 							component="span"
