@@ -358,6 +358,15 @@ const baseTheme = (palette) => ({
 				}),
 			},
 		},
+		MuiTabs: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					"& .MuiTabs-indicator": {
+						backgroundColor: theme.palette.tertiary.contrastText,
+					},
+				}),
+			},
+		},
 	},
 	shape: {
 		borderRadius: 2,
