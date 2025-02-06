@@ -15,7 +15,7 @@ import Background from "../../../assets/Images/background-grid.svg?react";
 import Logo from "../../../assets/icons/checkmate-icon.svg?react";
 import Mail from "../../../assets/icons/mail.svg?react";
 import "../index.css";
-
+import { useTranslation } from "react-i18next";
 /**
  * Displays the initial landing page.
  *
@@ -26,7 +26,7 @@ import "../index.css";
  */
 const LandingPage = ({ isSuperAdmin, onSignup }) => {
 	const theme = useTheme();
-
+	const { t } = useTranslation();
 	return (
 		<>
 			<Stack
@@ -37,7 +37,9 @@ const LandingPage = ({ isSuperAdmin, onSignup }) => {
 				<Box>
 					<Typography component="h1">Sign Up</Typography>
 					<Typography>
-						Create your {isSuperAdmin ? "Super admin " : ""}account to get started.
+						{isSuperAdmin
+							? t("authRegisterCreateSuperAdminAccount")
+							: t("authRegisterCreateAccount")}
 					</Typography>
 				</Box>
 				<Box width="100%">
@@ -60,12 +62,12 @@ const LandingPage = ({ isSuperAdmin, onSignup }) => {
 						}}
 					>
 						<Mail />
-						Sign up with Email
+						{t("authRegisterSignUpWithEmail")}
 					</Button>
 				</Box>
 				<Box maxWidth={400}>
 					<Typography className="tos-p">
-						By signing up, you agree to our{" "}
+						{t("authRegisterBySigningUp")}
 						<Typography
 							component="span"
 							onClick={() => {
@@ -118,6 +120,7 @@ const Register = ({ isSuperAdmin }) => {
 	const navigate = useNavigate();
 	const { token } = useParams();
 	const theme = useTheme();
+	const { t } = useTranslation();
 	// TODO If possible, change the IDs of these fields to match the backend
 	const idMap = {
 		"register-firstname-input": "firstName",
@@ -307,7 +310,7 @@ const Register = ({ isSuperAdmin }) => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>Checkmate</Typography>
+				<Typography sx={{ userSelect: "none" }}>{t("commonAppName")}</Typography>
 			</Stack>
 			<Stack
 				width="100%"
@@ -367,7 +370,9 @@ const Register = ({ isSuperAdmin }) => {
 				textAlign="center"
 				p={theme.spacing(12)}
 			>
-				<Typography display="inline-block">Already have an account? —</Typography>
+				<Typography display="inline-block">
+					{t("authRegisterAlreadyHaveAccount")} -
+				</Typography>
 				<Typography
 					component="span"
 					ml={theme.spacing(2)}
@@ -376,7 +381,7 @@ const Register = ({ isSuperAdmin }) => {
 					}}
 					sx={{ userSelect: "none", color: theme.palette.primary.main }}
 				>
-					Log In
+					{t("authLoginTitle")}
 				</Typography>
 			</Box>
 		</Stack>

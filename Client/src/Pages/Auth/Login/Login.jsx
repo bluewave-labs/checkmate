@@ -15,6 +15,7 @@ import EmailStep from "./Components/EmailStep";
 import PasswordStep from "./Components/PasswordStep";
 import ThemeSwitch from "../../../Components/ThemeSwitch";
 import ForgotPasswordLabel from "./Components/ForgotPasswordLabel";
+import LanguageSelector from "../../../Components/LanguageSelector";
 
 const DEMO = import.meta.env.VITE_APP_DEMO;
 
@@ -163,11 +164,26 @@ const Login = () => {
 			<Stack
 				direction="row"
 				alignItems="center"
+				justifyContent="space-between"
 				px={theme.spacing(12)}
 				gap={theme.spacing(4)}
 			>
-				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>Checkmate</Typography>
+				<Stack
+					direction="row"
+					alignItems="center"
+					gap={theme.spacing(4)}
+				>
+					<Logo style={{ borderRadius: theme.shape.borderRadius }} />
+					<Typography sx={{ userSelect: "none" }}>Checkmate</Typography>
+				</Stack>
+				<Stack
+					direction="row"
+					spacing={2}
+					alignItems="center"
+				>
+					<LanguageSelector />
+					<ThemeSwitch />
+				</Stack>
 			</Stack>
 			<Stack
 				width="100%"
@@ -213,9 +229,6 @@ const Login = () => {
 					email={form.email}
 					errorEmail={errors.email}
 				/>
-				<Box marginX={"auto"}>
-					<ThemeSwitch />
-				</Box>
 			</Stack>
 		</Stack>
 	);
