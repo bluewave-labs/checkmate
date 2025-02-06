@@ -4,12 +4,6 @@ import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import Flag from "react-world-flags";
 
-// Dil kodlarını ülke kodlarına eşleştirme
-const COUNTRY_CODES = {
-	en: "GB",
-	tr: "TR",
-};
-
 const LanguageSelector = () => {
 	const { i18n } = useTranslation();
 	const theme = useTheme();
