@@ -7,16 +7,19 @@ import ControlsHeader from "./Components/ControlsHeader";
 import SkeletonLayout from "./Components/Skeleton";
 import StatusBar from "./Components/StatusBar";
 import MonitorsList from "./Components/MonitorsList";
+import Dialog from "../../../Components/Dialog";
+
 // Utils
 import { useStatusPageFetch } from "./Hooks/useStatusPageFetch";
 import { useTheme } from "@emotion/react";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useLocation } from "react-router-dom";
 import { useStatusPageDelete } from "./Hooks/useStatusPageDelete";
+import { useState } from "react";
 
 const PublicStatus = () => {
 	// Local state
-
+	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 	// Utils
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
@@ -123,17 +126,33 @@ const PublicStatus = () => {
 		<Stack
 			gap={theme.spacing(10)}
 			alignItems="center"
-			sx={sx}
+			sx={{ ...sx, position: "relative" }}
 		>
 			<ControlsHeader
 				statusPage={statusPage}
-				deleteStatusPage={deleteStatusPage}
 				isDeleting={isDeleting}
+				isDeleteOpen={isDeleteOpen}
+				setIsDeleteOpen={setIsDeleteOpen}
 			/>
 			<Typography variant="h2">Service status</Typography>
 			<StatusBar monitors={monitors} />
 			<MonitorsList monitors={monitors} />
 			{link}
+			<Dialog
+				// open={isOpen.deleteStats}
+				title="Do you want to delete this status page?"
+				onConfirm={() => {
+					deleteStatusPage();
+					setIsDeleteOpen(false);
+				}}
+				onCancel={() => {
+					setIsDeleteOpen(false);
+				}}
+				open={isDeleteOpen}
+				confirmationButtonLabel="Yes, delete status page"
+				description="Once deleted, your status page cannot be retrieved."
+				isLoading={isDeleting || isLoading}
+			/>
 		</Stack>
 	);
 };

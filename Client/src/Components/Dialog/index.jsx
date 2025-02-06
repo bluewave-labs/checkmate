@@ -1,18 +1,19 @@
 import PropTypes from "prop-types";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { Button, Stack } from "@mui/material";
 import { GenericDialog } from "./genericDialog";
+import { useTheme } from "@emotion/react";
 
 const Dialog = ({
 	title,
 	description,
 	open,
-	theme,
 	onCancel,
 	confirmationButtonLabel,
 	onConfirm,
 	isLoading,
 }) => {
+	const theme = useTheme();
+
 	return (
 		<GenericDialog
 			title={title}
@@ -34,14 +35,14 @@ const Dialog = ({
 				>
 					Cancel
 				</Button>
-				<LoadingButton
+				<Button
 					variant="contained"
 					color="error"
 					loading={isLoading}
 					onClick={onConfirm}
 				>
 					{confirmationButtonLabel}
-				</LoadingButton>
+				</Button>
 			</Stack>
 		</GenericDialog>
 	);
@@ -51,7 +52,6 @@ Dialog.propTypes = {
 	title: PropTypes.string.isRequired,
 	description: PropTypes.string,
 	open: PropTypes.bool.isRequired,
-	theme: PropTypes.object.isRequired,
 	onCancel: PropTypes.func.isRequired,
 	confirmationButtonLabel: PropTypes.string.isRequired,
 	onConfirm: PropTypes.func.isRequired,

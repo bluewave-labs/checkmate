@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Controls = ({ deleteStatusPage, isDeleting }) => {
+const Controls = ({ isDeleteOpen, setIsDeleteOpen, isDeleting }) => {
 	const theme = useTheme();
 	const location = useLocation();
 	const currentPath = location.pathname;
@@ -17,7 +17,6 @@ const Controls = ({ deleteStatusPage, isDeleting }) => {
 	if (currentPath === "/status/public") {
 		return null;
 	}
-
 	return (
 		<Stack
 			direction="row"
@@ -27,7 +26,7 @@ const Controls = ({ deleteStatusPage, isDeleting }) => {
 				<Button
 					variant="contained"
 					color="error"
-					onClick={deleteStatusPage}
+					onClick={() => setIsDeleteOpen(!isDeleteOpen)}
 					loading={isDeleting}
 				>
 					Delete
@@ -56,11 +55,12 @@ const Controls = ({ deleteStatusPage, isDeleting }) => {
 };
 
 Controls.propTypes = {
-	deleteStatusPage: PropTypes.func,
 	isDeleting: PropTypes.bool,
+	isDeleteOpen: PropTypes.bool.isRequired,
+	setIsDeleteOpen: PropTypes.func.isRequired,
 };
 
-const ControlsHeader = ({ statusPage, deleteStatusPage, isDeleting }) => {
+const ControlsHeader = ({ statusPage, isDeleting, isDeleteOpen, setIsDeleteOpen }) => {
 	const theme = useTheme();
 
 	return (
@@ -86,8 +86,9 @@ const ControlsHeader = ({ statusPage, deleteStatusPage, isDeleting }) => {
 				<Typography variant="h2">{statusPage?.companyName}</Typography>
 			</Stack>
 			<Controls
-				deleteStatusPage={deleteStatusPage}
 				isDeleting={isDeleting}
+				isDeleteOpen={isDeleteOpen}
+				setIsDeleteOpen={setIsDeleteOpen}
 			/>
 		</Stack>
 	);
@@ -95,8 +96,9 @@ const ControlsHeader = ({ statusPage, deleteStatusPage, isDeleting }) => {
 
 ControlsHeader.propTypes = {
 	statusPage: PropTypes.object,
-	deleteStatusPage: PropTypes.func,
 	isDeleting: PropTypes.bool,
+	isDeleteOpen: PropTypes.bool.isRequired,
+	setIsDeleteOpen: PropTypes.func.isRequired,
 };
 
 export default ControlsHeader;
