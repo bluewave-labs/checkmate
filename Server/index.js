@@ -192,6 +192,7 @@ const startApp = async () => {
 		networkService,
 		notificationService,
 		settingsService,
+		stringService,
 		logger,
 		Queue,
 		Worker
