@@ -251,6 +251,21 @@ const newSemanticColors = {
 			dark: paletteColors.gray850,
 		},
 	},
+
+	map: {
+		main: {
+			light: newColors.offWhite,
+			dark: undefined,
+		},
+		lowContrast: {
+			light: newColors.gray200,
+			dark: undefined,
+		},
+		highContrast: {
+			light: newColors.gray500,
+			dark: undefined,
+		},
+	},
 };
 
 export { typographyLevels, semanticColors as colors, newSemanticColors };
