@@ -194,6 +194,9 @@ const createMonitorBodyValidation = joi.object({
 	}),
 	notifications: joi.array().items(joi.object()),
 	secret: joi.string(),
+	jsonPath: joi.string(),
+	expectedValue: joi.string(),
+	matchMethod: joi.string(),
 });
 
 const editMonitorBodyValidation = joi.object({
@@ -202,6 +205,9 @@ const editMonitorBodyValidation = joi.object({
 	interval: joi.number(),
 	notifications: joi.array().items(joi.object()),
 	secret: joi.string(),
+	jsonPath: joi.string(),
+	expectedValue: joi.string(),
+	matchMethod: joi.string(),
 });
 
 const pauseMonitorParamValidation = joi.object({
