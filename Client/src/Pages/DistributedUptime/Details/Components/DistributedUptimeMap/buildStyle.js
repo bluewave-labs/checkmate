@@ -8,7 +8,6 @@ const buildStyle = (theme, mode) => {
 	}
 
 	if (style.layers) {
-		console.log(style.layers);
 		const newLayers = style.layers.map((layer) => {
 			if (layer.id === "background") {
 				layer.paint["background-color"] = theme.palette.map.main;
