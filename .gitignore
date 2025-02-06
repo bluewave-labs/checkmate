@@ -3,3 +3,4 @@
 *.sh
 !uptime.sh
 *.idea
+*.notes
