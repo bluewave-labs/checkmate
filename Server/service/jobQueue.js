@@ -12,8 +12,6 @@ const QUEUE_LOOKUP = {
 };
 const getSchedulerId = (monitor) => `scheduler:${monitor.type}:${monitor._id}`;
 
-import ServiceRegistry from "../service/serviceRegistry.js";
-import StringService from "../service/stringService.js";
 
 class NewJobQueue {
 	static SERVICE_NAME = SERVICE_NAME;
@@ -24,6 +22,7 @@ class NewJobQueue {
 		networkService,
 		notificationService,
 		settingsService,
+		stringService,
 		logger,
 		Queue,
 		Worker
@@ -46,7 +45,7 @@ class NewJobQueue {
 		this.settingsService = settingsService;
 		this.logger = logger;
 		this.Worker = Worker;
-		this.stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+		this.stringService = stringService;
 
 		QUEUE_NAMES.forEach((name) => {
 			this.queues[name] = new Queue(name, { connection });
