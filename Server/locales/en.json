@@ -141,5 +141,7 @@
   "dockerSuccess": "Docker container status fetched successfully",
   "portSuccess": "Port connected successfully",
   "monitorPause": "Monitor paused successfully",
-  "monitorResume": "Monitor resumed successfully"
+  "monitorResume": "Monitor resumed successfully",
+  "statusPageDelete": "Status page deleted successfully",
+  "statusPageUpdate": "Status page updated successfully"
 }

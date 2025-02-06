@@ -1,10 +1,13 @@
 import StatusPage from "../../models/StatusPage.js";
-import { errorMessages } from "../../../utils/messages.js";
 import { NormalizeData } from "../../../utils/dataUtils.js";
+import ServiceRegistry from "../../../service/serviceRegistry.js";
+import StringService from "../../../service/stringService.js";
 
 const SERVICE_NAME = "statusPageModule";
 
 const createStatusPage = async (statusPageData, image) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPage = new StatusPage({ ...statusPageData });
 		if (image) {
@@ -48,6 +51,8 @@ const updateStatusPage = async (statusPageData, image) => {
 };
 
 const getStatusPage = async () => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPageQuery = await StatusPage.aggregate([
 			{ $limit: 1 },
@@ -121,7 +126,7 @@ const getStatusPage = async () => {
 			},
 		]);
 		if (!statusPageQuery.length) {
-			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+			const error = new Error(stringService.statusPageNotFound);
 			error.status = 404;
 			throw error;
 		}

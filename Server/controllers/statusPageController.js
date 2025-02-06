@@ -4,7 +4,6 @@ import {
 	getStatusPageParamValidation,
 	imageValidation,
 } from "../validation/joi.js";
-import { successMessages, errorMessages } from "../utils/messages.js";
 
 const SERVICE_NAME = "statusPageController";
 
@@ -46,12 +45,12 @@ class StatusPageController {
 		try {
 			const statusPage = await this.db.updateStatusPage(req.body, req.file);
 			if (statusPage === null) {
-				const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+				const error = new Error(this.stringService.statusPageNotFound);
 				error.status = 404;
 				throw error;
 			}
 			return res.success({
-				msg: successMessages.STATUS_PAGE_UPDATE,
+				msg: this.stringService.statusPageUpdate,
 				data: statusPage,
 			});
 		} catch (error) {
@@ -75,7 +74,7 @@ class StatusPageController {
 		try {
 			await this.db.deleteStatusPage();
 			return res.success({
-				msg: successMessages.STATUS_PAGE_DELETE,
+				msg: this.stringService.statusPageDelete,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "deleteStatusPage"));
