@@ -2,13 +2,18 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import PropTypes from "prop-types";
 import { useRef, useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
-import style from "./DistributedUptimeMapStyle.json";
 import maplibregl from "maplibre-gl";
+import { useSelector } from "react-redux";
+import buildStyle from "./buildStyle";
+
 const DistributedUptimeMap = ({ width = "100%", height = "100%", checks }) => {
 	const mapContainer = useRef(null);
 	const map = useRef(null);
 	const theme = useTheme();
 	const [mapLoaded, setMapLoaded] = useState(false);
+	const mode = useSelector((state) => state.ui.mode);
+	const initialTheme = useRef(theme);
+	const initialMode = useRef(mode);
 
 	const colorLookup = (avgResponseTime) => {
 		if (avgResponseTime <= 150) {
@@ -22,11 +27,13 @@ const DistributedUptimeMap = ({ width = "100%", height = "100%", checks }) => {
 
 	useEffect(() => {
 		if (mapContainer.current && !map.current) {
+			const initialStyle = buildStyle(initialTheme.current, initialMode.current);
 			map.current = new maplibregl.Map({
 				container: mapContainer.current,
-				style,
+				style: initialStyle,
 				center: [0, 20],
 				zoom: 0.8,
+				attributionControl: false,
 			});
 		}
 		map.current.on("load", () => {
@@ -40,6 +47,13 @@ const DistributedUptimeMap = ({ width = "100%", height = "100%", checks }) => {
 			}
 		};
 	}, []);
+
+	useEffect(() => {
+		const style = buildStyle(theme, mode);
+		if (map.current && mapLoaded) {
+			map.current.setStyle(style);
+		}
+	}, [theme, mode, mapLoaded]);
 
 	useEffect(() => {
 		if (map.current && checks?.length > 0) {
