@@ -46,7 +46,8 @@ services:
       start_period: 5s
   mongodb:
     image: uptime_database_mongo:latest
-    command: ["mongod", "--quiet", "--auth"]
+    restart: always
+    command: ["mongod", "--quiet", "--replSet", "rs0", "--bind_ip_all"]
     ports:
       - "27017:27017"
     volumes:
