@@ -183,7 +183,7 @@ class NetworkService {
 				}
 
 				let match;
-				result = result.toString();
+				result = typeof result === "object" ? JSON.stringify(result) : result.toString();
 				if (matchMethod === "include") match = result.includes(expectedValue);
 				else if (matchMethod === "regex") match = new RegExp(expectedValue).test(result);
 				else match = result === expectedValue;
