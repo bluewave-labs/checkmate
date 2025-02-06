@@ -1,9 +1,11 @@
 import { Stack, Typography, InputAdornment, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useState } from "react";
 import PropTypes from "prop-types";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
+import ReorderRoundedIcon from "@mui/icons-material/ReorderRounded";
+import DeleteIcon from "../../../../assets/icons/trash-bin.svg?react";
+
 export const HttpAdornment = ({ https }) => {
 	const theme = useTheme();
 	return (
@@ -23,7 +25,7 @@ export const HttpAdornment = ({ https }) => {
 				color={theme.palette.primary.contrastTextSecondary}
 				sx={{ lineHeight: 1, opacity: 0.8 }}
 			>
-				{https ? "https" : "http"}://
+				{https ? "https" : "http"}
 			</Typography>
 		</Stack>
 	);
@@ -31,6 +33,7 @@ export const HttpAdornment = ({ https }) => {
 
 HttpAdornment.propTypes = {
 	https: PropTypes.bool.isRequired,
+	prefix: PropTypes.string,
 };
 
 export const PasswordEndAdornment = ({ fieldType, setFieldType }) => {

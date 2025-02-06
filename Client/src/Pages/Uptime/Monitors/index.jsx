@@ -4,15 +4,15 @@ import Greeting from "../../../Utils/greeting";
 import StatusBoxes from "./Components/StatusBoxes";
 import UptimeDataTable from "./Components/UptimeDataTable";
 import Pagination from "../../../Components/Table/TablePagination";
-import CreateMonitorHeader from "../../../Components/CreateMonitorHeader";
+import CreateMonitorHeader from "../../../Components/MonitorCreateHeader";
 import Fallback from "../../../Components/Fallback";
-import NetworkErrorFallback from "../../../Components/NetworkErrorFallback";
+import GenericFallback from "../../../Components/GenericFallback";
 import SearchComponent from "./Components/SearchComponent";
 
 import MonitorCountHeader from "../../../Components/MonitorCountHeader";
 
 // MUI Components
-import { Stack, Box, Button } from "@mui/material";
+import { Stack, Box, Button, Typography } from "@mui/material";
 
 // Utils
 import { useState, useCallback } from "react";
@@ -109,8 +109,20 @@ const UptimeMonitors = () => {
 	});
 	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
 
-	if (networkError) return <NetworkErrorFallback />;
-
+	if (networkError) {
+		return (
+			<GenericFallback>
+				<Typography
+					variant="h1"
+					marginY={theme.spacing(4)}
+					color={theme.palette.primary.contrastTextTertiary}
+				>
+					Network error
+				</Typography>
+				<Typography>Please check your connection</Typography>
+			</GenericFallback>
+		);
+	}
 	if (!isLoading && !monitorsAreLoading && totalMonitors === 0) {
 		return (
 			<Fallback

@@ -1,10 +1,12 @@
 // Components
-import { Stack, Typography, Skeleton } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
+import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import MonitorStatusHeader from "../../../Components/MonitorStatusHeader";
 import PageSpeedStatusBoxes from "./Components/PageSpeedStatusBoxes";
 import PageSpeedAreaChart from "./Components/PageSpeedAreaChart";
 import PerformanceReport from "./Components/PerformanceReport";
+import GenericFallback from "../../../Components/GenericFallback";
 // Utils
 import { useTheme } from "@emotion/react";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
@@ -25,7 +27,7 @@ const PageSpeedDetails = () => {
 	const { monitorId } = useParams();
 	const { authToken } = useSelector((state) => state.auth);
 
-	const { monitor, audits, isLoading } = useMonitorFetch({
+	const { monitor, audits, isLoading, networkError } = useMonitorFetch({
 		authToken,
 		monitorId,
 	});
@@ -37,14 +39,48 @@ const PageSpeedDetails = () => {
 		seo: true,
 	});
 
+	// Handlers
 	const handleMetrics = (id) => {
 		setMetrics((prev) => ({ ...prev, [id]: !prev[id] }));
 	};
+
+	if (networkError === true) {
+		return (
+			<GenericFallback>
+				<Typography
+					variant="h1"
+					marginY={theme.spacing(4)}
+					color={theme.palette.primary.contrastTextTertiary}
+				>
+					Network error
+				</Typography>
+				<Typography>Please check your connection</Typography>
+			</GenericFallback>
+		);
+	}
+
+	// Empty view, displayed when loading is complete and there are no checks
+	if (!isLoading && monitor?.checks?.length === 0) {
+		return (
+			<Stack gap={theme.spacing(10)}>
+				<Breadcrumbs list={BREADCRUMBS} />
+				<MonitorStatusHeader
+					path={"pagespeed"}
+					isAdmin={isAdmin}
+					monitor={monitor}
+				/>
+				<GenericFallback>
+					<Typography>There is no check history for this monitor yet.</Typography>
+				</GenericFallback>
+			</Stack>
+		);
+	}
 
 	return (
 		<Stack gap={theme.spacing(10)}>
 			<Breadcrumbs list={BREADCRUMBS} />
 			<MonitorStatusHeader
+				path={"pagespeed"}
 				isAdmin={isAdmin}
 				shouldRender={!isLoading}
 				monitor={monitor}
@@ -53,12 +89,12 @@ const PageSpeedDetails = () => {
 				shouldRender={!isLoading}
 				monitor={monitor}
 			/>
-			<Typography
-				variant="body2"
-				my={theme.spacing(8)}
-			>
-				Showing statistics for past 24 hours.
-			</Typography>
+			<MonitorTimeFrameHeader
+				shouldRender={!isLoading}
+				dateRange={"day"}
+				hasDateRange={false}
+			/>
+
 			<PageSpeedAreaChart
 				shouldRender={!isLoading}
 				monitor={monitor}

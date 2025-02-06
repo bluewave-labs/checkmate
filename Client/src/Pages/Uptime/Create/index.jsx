@@ -88,7 +88,7 @@ const CreateMonitor = () => {
 					? `http${https ? "s" : ""}://` + monitor.url
 					: monitor.url,
 			port: monitor.type === "port" ? monitor.port : undefined,
-			name: monitor.name === "" ? monitor.url : monitor.name,
+			name: monitor.name || monitor.url.substring(0, 50),
 			type: monitor.type,
 			interval: monitor.interval * MS_PER_MINUTE,
 		};
@@ -122,7 +122,7 @@ const CreateMonitor = () => {
 
 		form = {
 			...form,
-			description: form.name,
+			description: monitor.name || monitor.url,
 			teamId: user.teamId,
 			userId: user._id,
 			notifications: monitor.notifications,
@@ -138,17 +138,23 @@ const CreateMonitor = () => {
 
 	const handleChange = (event, formName) => {
 		const { value } = event.target;
-		setMonitor({
+
+		const newMonitor = {
 			...monitor,
 			[formName]: value,
-		});
+		};
+		if (formName === 'type') {
+			newMonitor.url = '';
+		}
+		setMonitor(newMonitor);
 
 		const { error } = monitorValidation.validate(
-			{ [formName]: value },
+			{ type: monitor.type, [formName]: value },
 			{ abortEarly: false }
 		);
 		setErrors((prev) => ({
 			...prev,
+			url: undefined,
 			...(error ? { [formName]: error.details[0].message } : { [formName]: undefined }),
 		}));
 	};

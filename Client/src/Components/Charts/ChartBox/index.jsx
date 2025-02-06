@@ -11,6 +11,7 @@ const ChartBox = ({
 	justifyContent = "space-between",
 	Legend,
 	borderRadiusRight = 4,
+	sx,
 }) => {
 	const theme = useTheme();
 	return (
@@ -70,8 +71,8 @@ const ChartBox = ({
 					alignItems="center"
 					gap={theme.spacing(6)}
 				>
-					<IconBox>{icon}</IconBox>
-					<Typography component="h2">{header}</Typography>
+					{icon && <IconBox>{icon}</IconBox>}
+					{header && <Typography component="h2">{header}</Typography>}
 				</Stack>
 				{children}
 			</Stack>
@@ -84,7 +85,7 @@ export default ChartBox;
 
 ChartBox.propTypes = {
 	children: PropTypes.node,
-	icon: PropTypes.node.isRequired,
-	header: PropTypes.string.isRequired,
+	icon: PropTypes.node,
+	header: PropTypes.string,
 	height: PropTypes.string,
 };

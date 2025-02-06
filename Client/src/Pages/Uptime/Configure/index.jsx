@@ -347,7 +347,7 @@ const Configure = () => {
 								<TextInput
 									type={monitor?.type === "http" ? "url" : "text"}
 									https={protocol === "https"}
-									startAdornment={<HttpAdornment https={protocol === "https"} />}
+									startAdornment={monitor?.type === "http" && <HttpAdornment https={protocol === "https"} />}
 									id="monitor-url"
 									label="URL to monitor"
 									placeholder="google.com"

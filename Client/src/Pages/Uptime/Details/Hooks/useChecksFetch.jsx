@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { logger } from "../../../../Utils/Logger";
 import { networkService } from "../../../../main";
-
+import { createToast } from "../../../../Utils/toastUtils";
 export const useChecksFetch = ({
 	authToken,
 	monitorId,
@@ -12,12 +11,13 @@ export const useChecksFetch = ({
 }) => {
 	const [checks, setChecks] = useState(undefined);
 	const [checksCount, setChecksCount] = useState(undefined);
-	const [checksAreLoading, setChecksAreLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [networkError, setNetworkError] = useState(false);
 
 	useEffect(() => {
 		const fetchChecks = async () => {
 			try {
-				setChecksAreLoading(true);
+				setIsLoading(true);
 				const res = await networkService.getChecksByMonitor({
 					authToken: authToken,
 					monitorId: monitorId,
@@ -31,15 +31,16 @@ export const useChecksFetch = ({
 				setChecks(res.data.data.checks);
 				setChecksCount(res.data.data.checksCount);
 			} catch (error) {
-				logger.error(error);
+				setNetworkError(true);
+				createToast({ body: error.message });
 			} finally {
-				setChecksAreLoading(false);
+				setIsLoading(false);
 			}
 		};
 		fetchChecks();
 	}, [authToken, monitorId, dateRange, page, rowsPerPage]);
 
-	return { checks, checksCount, checksAreLoading };
+	return [checks, checksCount, isLoading, networkError];
 };
 
 export default useChecksFetch;

@@ -12,6 +12,7 @@ import SearchIcon from "../../../assets/icons/search.svg?react";
  * @param {string} props.filteredBy - Key to access the option label from the options
  * @param {string} props.value - Current input value for the Autocomplete
  * @param {Function} props.handleChange - Function to call when the input changes
+ * @param {Function} Prop.onBlur - Function to call when the input is blured
  * @param {Object} props.sx - Additional styles to apply to the component
  * @returns {JSX.Element} The rendered Search component
  */
@@ -54,10 +55,14 @@ const Search = ({
 	isAdorned = true,
 	error,
 	disabled,
+	startAdornment,
+	endAdornment,
+	onBlur,
 }) => {
 	const theme = useTheme();
 	return (
 		<Autocomplete
+			onBlur={onBlur}
 			multiple={multiple}
 			id={id}
 			value={value}
@@ -66,7 +71,7 @@ const Search = ({
 				handleInputChange(newValue);
 			}}
 			onChange={(_, newValue) => {
-				handleChange && handleChange(newValue);
+				handleChange(newValue);
 			}}
 			fullWidth
 			freeSolo
@@ -74,6 +79,7 @@ const Search = ({
 			disableClearable
 			options={options}
 			getOptionLabel={(option) => option[filteredBy]}
+			isOptionEqualToValue={(option, value) => option._id === value._id} // Compare by unique identifier
 			renderInput={(params) => (
 				<Stack>
 					<Typography
@@ -88,9 +94,13 @@ const Search = ({
 						{...params}
 						error={Boolean(error)}
 						placeholder="Type to search"
-						InputProps={{
-							...params.InputProps,
-							...(isAdorned && { startAdornment: <SearchAdornment /> }),
+						slotProps={{
+							input: {
+								...params.InputProps,
+								...(isAdorned && { startAdornment: <SearchAdornment /> }),
+								...(startAdornment && { startAdornment: startAdornment }),
+								...(endAdornment && { endAdornment: endAdornment }),
+							},
 						}}
 						sx={{
 							"& fieldset": {
@@ -212,6 +222,9 @@ Search.propTypes = {
 	sx: PropTypes.object,
 	error: PropTypes.string,
 	disabled: PropTypes.bool,
+	startAdornment: PropTypes.object,
+	endAdornment: PropTypes.object,
+	onBlur: PropTypes.func,
 };
 
 export default Search;

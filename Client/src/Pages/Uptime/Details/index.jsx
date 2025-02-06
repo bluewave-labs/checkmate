@@ -1,13 +1,14 @@
 // Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import MonitorStatusHeader from "../../../Components/MonitorStatusHeader";
-import TimeFramePicker from "./Components/TimeFramePicker";
+import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import ChartBoxes from "./Components/ChartBoxes";
 import ResponseTimeChart from "./Components/Charts/ResponseTimeChart";
 import ResponseTable from "./Components/ResponseTable";
 import UptimeStatusBoxes from "./Components/UptimeStatusBoxes";
+import GenericFallback from "../../../Components/GenericFallback";
 // MUI Components
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 // Utils
 import { useState } from "react";
@@ -46,13 +47,13 @@ const UptimeDetails = () => {
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
 
-	const { monitor, monitorIsLoading } = useMonitorFetch({
+	const [monitor, monitorIsLoading, monitorNetworkError] = useMonitorFetch({
 		authToken,
 		monitorId,
 		dateRange,
 	});
 
-	const { certificateExpiry, certificateIsLoading } = useCertificateFetch({
+	const [certificateExpiry, certificateIsLoading] = useCertificateFetch({
 		monitor,
 		authToken,
 		monitorId,
@@ -60,7 +61,7 @@ const UptimeDetails = () => {
 		uiTimezone,
 	});
 
-	const { checks, checksCount, checksAreLoading } = useChecksFetch({
+	const [checks, checksCount, checksAreLoading, checksNetworkError] = useChecksFetch({
 		authToken,
 		monitorId,
 		dateRange,
@@ -77,10 +78,44 @@ const UptimeDetails = () => {
 		setRowsPerPage(event.target.value);
 	};
 
+	if (monitorNetworkError || checksNetworkError) {
+		return (
+			<GenericFallback>
+				<Typography
+					variant="h1"
+					marginY={theme.spacing(4)}
+					color={theme.palette.primary.contrastTextTertiary}
+				>
+					Network error
+				</Typography>
+				<Typography>Please check your connection</Typography>
+			</GenericFallback>
+		);
+	}
+
+	// Empty view, displayed when loading is complete and there are no checks
+	if (!monitorIsLoading && !checksAreLoading && checksCount === 0) {
+		return (
+			<Stack gap={theme.spacing(10)}>
+				<Breadcrumbs list={BREADCRUMBS} />
+				<MonitorStatusHeader
+					path={"uptime"}
+					isAdmin={isAdmin}
+					shouldRender={!monitorIsLoading}
+					monitor={monitor}
+				/>
+				<GenericFallback>
+					<Typography>There is no check history for this monitor yet.</Typography>
+				</GenericFallback>
+			</Stack>
+		);
+	}
+
 	return (
 		<Stack gap={theme.spacing(10)}>
 			<Breadcrumbs list={BREADCRUMBS} />
 			<MonitorStatusHeader
+				path={"uptime"}
 				isAdmin={isAdmin}
 				shouldRender={!monitorIsLoading}
 				monitor={monitor}
@@ -90,8 +125,9 @@ const UptimeDetails = () => {
 				monitor={monitor}
 				certificateExpiry={certificateExpiry}
 			/>
-			<TimeFramePicker
+			<MonitorTimeFrameHeader
 				shouldRender={!monitorIsLoading}
+				hasDateRange={true}
 				dateRange={dateRange}
 				setDateRange={setDateRange}
 			/>

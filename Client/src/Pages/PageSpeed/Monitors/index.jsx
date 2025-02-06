@@ -1,7 +1,7 @@
 // Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
-import { Stack } from "@mui/material";
-import CreateMonitorHeader from "../../../Components/CreateMonitorHeader";
+import { Stack, Typography } from "@mui/material";
+import CreateMonitorHeader from "../../../Components/MonitorCreateHeader";
 import MonitorCountHeader from "../../../Components/MonitorCountHeader";
 import MonitorGrid from "./Components/MonitorGrid";
 import Fallback from "../../../Components/Fallback";
@@ -11,7 +11,7 @@ import { useTheme } from "@emotion/react";
 import { useSelector } from "react-redux";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import useMonitorsFetch from "./Hooks/useMonitorsFetch";
-import NetworkErrorFallback from "../../../Components/NetworkErrorFallback";
+import GenericFallback from "../../../Components/GenericFallback";
 
 // Constants
 const BREADCRUMBS = [{ name: `pagespeed`, path: "/pagespeed" }];
@@ -27,7 +27,18 @@ const PageSpeed = () => {
 	});
 
 	if (networkError === true) {
-		return <NetworkErrorFallback />;
+		return (
+			<GenericFallback>
+				<Typography
+					variant="h1"
+					marginY={theme.spacing(4)}
+					color={theme.palette.primary.contrastTextTertiary}
+				>
+					Network error
+				</Typography>
+				<Typography>Please check your connection</Typography>
+			</GenericFallback>
+		);
 	}
 
 	if (!isLoading && monitors?.length === 0) {

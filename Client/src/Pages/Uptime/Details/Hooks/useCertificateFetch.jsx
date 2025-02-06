@@ -11,7 +11,7 @@ const useCertificateFetch = ({
 	uiTimezone,
 }) => {
 	const [certificateExpiry, setCertificateExpiry] = useState(undefined);
-	const [certificateIsLoading, setCertificateIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchCertificate = async () => {
@@ -20,7 +20,7 @@ const useCertificateFetch = ({
 			}
 
 			try {
-				setCertificateIsLoading(true);
+				setIsLoading(true);
 				const res = await networkService.getCertificateExpiry({
 					authToken: authToken,
 					monitorId: monitorId,
@@ -35,12 +35,12 @@ const useCertificateFetch = ({
 				setCertificateExpiry("N/A");
 				logger.error(error);
 			} finally {
-				setCertificateIsLoading(false);
+				setIsLoading(false);
 			}
 		};
 		fetchCertificate();
 	}, [authToken, monitorId, certificateDateFormat, uiTimezone, monitor]);
-	return { certificateExpiry, certificateIsLoading };
+	return [certificateExpiry, isLoading];
 };
 
 export default useCertificateFetch;

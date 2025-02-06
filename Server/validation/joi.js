@@ -423,7 +423,6 @@ const createStatusPageBodyValidation = joi.object({
 	url: joi.string().required(),
 	timezone: joi.string().required(),
 	color: joi.string().required(),
-	theme: joi.string().required(),
 	monitors: joi
 		.array()
 		.items(joi.string().pattern(/^[0-9a-fA-F]{24}$/))
@@ -434,7 +433,34 @@ const createStatusPageBodyValidation = joi.object({
 			"array.empty": "At least one monitor is required",
 			"any.required": "Monitors are required",
 		}),
+	isPublished: joi.boolean(),
+	showCharts: joi.boolean(),
+	showUptimePercentage: joi.boolean(),
 });
+
+const imageValidation = joi
+	.object({
+		fieldname: joi.string().required(),
+		originalname: joi.string().required(),
+		encoding: joi.string().required(),
+		mimetype: joi
+			.string()
+			.valid("image/jpeg", "image/png", "image/jpg")
+			.required()
+			.messages({
+				"string.valid": "File must be a valid image (jpeg, jpg, or png)",
+			}),
+		size: joi.number().max(3145728).required().messages({
+			"number.max": "File size must be less than 3MB",
+		}),
+		buffer: joi.binary().required(),
+		destination: joi.string(),
+		filename: joi.string(),
+		path: joi.string(),
+	})
+	.messages({
+		"any.required": "Image file is required",
+	});
 
 export {
 	roleValidatior,
@@ -493,4 +519,5 @@ export {
 	updateAppSettingsBodyValidation,
 	createStatusPageBodyValidation,
 	getStatusPageParamValidation,
+	imageValidation,
 };

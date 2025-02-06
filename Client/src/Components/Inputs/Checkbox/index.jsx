@@ -75,7 +75,6 @@ const Checkbox = ({
 					sx={{
 						"&:hover": { backgroundColor: "transparent" },
 						"& svg": { width: sizes[size], height: sizes[size] },
-						alignSelf: "flex-start",
 					}}
 				/>
 			}
@@ -111,7 +110,7 @@ Checkbox.propTypes = {
 	label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
 	size: PropTypes.oneOf(["small", "medium", "large"]),
 	isChecked: PropTypes.bool.isRequired,
-	value: PropTypes.string,
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 	onChange: PropTypes.func,
 	isDisabled: PropTypes.bool,
 };
