@@ -264,7 +264,7 @@ const Settings = () => {
 									dispatch(setDistributedUptimeEnabled(e.target.checked));
 								}}
 							/>
-							{form.enableDistributedUptime === true ? "Enabled" : "Disabled"}
+							{distributedUptimeEnabled === true ? "Enabled" : "Disabled"}
 						</Box>
 					</ConfigBox>
 				)}
