@@ -139,7 +139,6 @@ const PublicStatus = () => {
 			<MonitorsList monitors={monitors} />
 			{link}
 			<Dialog
-				// open={isOpen.deleteStats}
 				title="Do you want to delete this status page?"
 				onConfirm={() => {
 					deleteStatusPage();
