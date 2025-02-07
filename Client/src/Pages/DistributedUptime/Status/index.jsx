@@ -20,8 +20,12 @@ import { useSubscribeToDetails } from "../Details/Hooks/useSubscribeToDetails";
 import { useStatusPageFetchByUrl } from "./Hooks/useStatusPageFetchByUrl";
 import { useStatusPageDelete } from "../../StatusPage/Status/Hooks/useStatusPageDelete";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const DistributedUptimeStatus = () => {
 	const { url } = useParams();
+	const location = useLocation();
+	const isPublic = location.pathname.startsWith("/distributed-uptime/status/public");
+
 	// Local State
 	const [dateRange, setDateRange] = useState("day");
 	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -44,6 +48,16 @@ const DistributedUptimeStatus = () => {
 		{ name: "Distributed Uptime", path: "/distributed-uptime" },
 		{ name: "status", path: `` },
 	];
+
+	let sx = {};
+	if (isPublic) {
+		sx = {
+			paddingTop: "10vh",
+			paddingRight: "10vw",
+			paddingBottom: "10vh",
+			paddingLeft: "10vw",
+		};
+	}
 
 	if (networkError) {
 		return (
@@ -75,8 +89,9 @@ const DistributedUptimeStatus = () => {
 		<Stack
 			direction="column"
 			gap={theme.spacing(10)}
+			sx={sx}
 		>
-			<Breadcrumbs list={BREADCRUMBS} />
+			{!isPublic && <Breadcrumbs list={BREADCRUMBS} />}
 			<ControlsHeader
 				statusPage={statusPage}
 				isDeleting={isDeleting}
