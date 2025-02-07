@@ -8,6 +8,8 @@ import {
 	ResponsiveContainer,
 	Text,
 } from "recharts";
+import ChartBox from "../../../../../Components/Charts/ChartBox";
+import ResponseTimeIcon from "../../../../../assets/icons/response-time-icon.svg?react";
 import { Box, Stack, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { useState } from "react";
@@ -22,67 +24,73 @@ const CustomToolTip = ({ active, payload, label }) => {
 			? payload[0]?.payload?.originalAvgResponseTime
 			: (payload[0]?.payload?.avgResponseTime ?? 0);
 		return (
-			<Box
-				className="area-tooltip"
-				sx={{
-					backgroundColor: theme.palette.background.main,
-					border: 1,
-					borderColor: theme.palette.primary.lowContrast,
-					borderRadius: theme.shape.borderRadius,
-					py: theme.spacing(2),
-					px: theme.spacing(4),
-				}}
+			<ChartBox
+				icon={<ResponseTimeIcon />}
+				header="Response Times"
+				sx={{ padding: 0 }}
 			>
-				<Typography
+				<Box
+					className="area-tooltip"
 					sx={{
-						color: theme.palette.text.tertiary,
-						fontSize: 12,
-						fontWeight: 500,
+						backgroundColor: theme.palette.background.main,
+						border: 1,
+						borderColor: theme.palette.primary.lowContrast,
+						borderRadius: theme.shape.borderRadius,
+						py: theme.spacing(2),
+						px: theme.spacing(4),
 					}}
 				>
-					{formatDateWithTz(label, "ddd, MMMM D, YYYY, h:mm A", uiTimezone)}
-				</Typography>
-				<Box mt={theme.spacing(1)}>
-					<Box
-						display="inline-block"
-						width={theme.spacing(4)}
-						height={theme.spacing(4)}
-						backgroundColor={theme.palette.primary.main}
-						sx={{ borderRadius: "50%" }}
-					/>
-					<Stack
-						display="inline-flex"
-						direction="row"
-						justifyContent="space-between"
-						ml={theme.spacing(3)}
+					<Typography
 						sx={{
-							"& span": {
-								color: theme.palette.text.tertiary,
-								fontSize: 11,
-								fontWeight: 500,
-							},
+							color: theme.palette.text.tertiary,
+							fontSize: 12,
+							fontWeight: 500,
 						}}
 					>
-						<Typography
-							component="span"
-							sx={{ opacity: 0.8 }}
+						{formatDateWithTz(label, "ddd, MMMM D, YYYY, h:mm A", uiTimezone)}
+					</Typography>
+					<Box mt={theme.spacing(1)}>
+						<Box
+							display="inline-block"
+							width={theme.spacing(4)}
+							height={theme.spacing(4)}
+							backgroundColor={theme.palette.primary.main}
+							sx={{ borderRadius: "50%" }}
+						/>
+						<Stack
+							display="inline-flex"
+							direction="row"
+							justifyContent="space-between"
+							ml={theme.spacing(3)}
+							sx={{
+								"& span": {
+									color: theme.palette.text.tertiary,
+									fontSize: 11,
+									fontWeight: 500,
+								},
+							}}
 						>
-							Response Time
-						</Typography>{" "}
-						<Typography component="span">
-							{Math.floor(responseTime)}
 							<Typography
 								component="span"
 								sx={{ opacity: 0.8 }}
 							>
-								{" "}
-								ms
+								Response Time
+							</Typography>{" "}
+							<Typography component="span">
+								{Math.floor(responseTime)}
+								<Typography
+									component="span"
+									sx={{ opacity: 0.8 }}
+								>
+									{" "}
+									ms
+								</Typography>
 							</Typography>
-						</Typography>
-					</Stack>
+						</Stack>
+					</Box>
+					{/* Display original value */}
 				</Box>
-				{/* Display original value */}
-			</Box>
+			</ChartBox>
 		);
 	}
 	return null;
