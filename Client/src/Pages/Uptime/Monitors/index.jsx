@@ -125,11 +125,17 @@ const UptimeMonitors = () => {
 		!monitorsAreLoading &&
 		(totalMonitors === 0 || typeof totalMonitors === "undefined")
 	) {
+
 		return (
 			<Fallback
 				vowelStart={true}
 				title="uptime monitor"
-				checks={["Check if a website or service is up and running"]}
+				checks={[
+					"Check if websites or servers are online & responsive",
+					"Alert teams about downtime or performance issues",
+					"Monitor HTTP endpoints, pings, containers & ports",
+					"Track historical uptime and reliability trends",
+				]}
 				link="/uptime/create"
 				isAdmin={isAdmin}
 			/>
