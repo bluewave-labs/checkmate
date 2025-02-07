@@ -123,15 +123,15 @@ const UptimeMonitors = () => {
 			</GenericFallback>
 		);
 	}
-	if (!isLoading && !monitorsAreLoading && totalMonitors === 0) {
+	if (true) {
 		return (
 			<Fallback
 				vowelStart={true}
 				title="uptime monitor"
 				checks={[
-					"Check if websites, servers, or services are online and responsive",
-					"Detect and alert teams about downtime or performance issues",
-					"Monitor HTTP(s) endpoints, ping responses, Docker containers and  ports",
+					"Check if websites or servers are online & responsive",
+					"Alert teams about downtime or performance issues",
+					"Monitor HTTP endpoints, pings, containers & ports",
 					"Track historical uptime and reliability trends",
 				]}
 				link="/uptime/create"
