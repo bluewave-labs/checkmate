@@ -12,6 +12,7 @@ class StatusPageRoutes {
 
 	initRoutes() {
 		this.router.get("/", this.statusPageController.getStatusPage);
+		this.router.get("/:url", this.statusPageController.getStatusPageByUrl);
 		this.router.post(
 			"/",
 			upload.single("logo"),
@@ -24,7 +25,7 @@ class StatusPageRoutes {
 			verifyJWT,
 			this.statusPageController.updateStatusPage
 		);
-		this.router.delete("/", verifyJWT, this.statusPageController.deleteStatusPage);
+		this.router.delete("/:url(*)", verifyJWT, this.statusPageController.deleteStatusPage);
 	}
 
 	getRouter() {
