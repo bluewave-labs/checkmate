@@ -31,6 +31,8 @@ import InfrastructureDetails from "../Pages/Infrastructure/Details";
 import DistributedUptimeMonitors from "../Pages/DistributedUptime/Monitors";
 import CreateDistributedUptime from "../Pages/DistributedUptime/Create";
 import DistributedUptimeDetails from "../Pages/DistributedUptime/Details";
+import DistributedUptimeStatus from "../Pages/DistributedUptime/Status";
+import CreateDistributedUptimeStatus from "../Pages/DistributedUptime/CreateStatus";
 
 // Incidents
 import Incidents from "../Pages/Incidents";
@@ -107,6 +109,22 @@ const Routes = () => {
 					element={
 						<ProtectedDistributedUptimeRoute>
 							<DistributedUptimeDetails />
+						</ProtectedDistributedUptimeRoute>
+					}
+				/>
+				<Route
+					path="/distributed-uptime/status/create/:monitorId"
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<CreateDistributedUptimeStatus />
+						</ProtectedDistributedUptimeRoute>
+					}
+				/>
+				<Route
+					path="/distributed-uptime/status/:url"
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<DistributedUptimeStatus />
 						</ProtectedDistributedUptimeRoute>
 					}
 				/>
