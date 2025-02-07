@@ -14,9 +14,15 @@ const Controls = ({ isDeleteOpen, setIsDeleteOpen, isDeleting }) => {
 	const location = useLocation();
 	const currentPath = location.pathname;
 	const navigate = useNavigate();
+
 	if (currentPath === "/status/public") {
 		return null;
 	}
+
+	if (currentPath.startsWith("/distributed-uptime/status/public")) {
+		return null;
+	}
+
 	return (
 		<Stack
 			direction="row"

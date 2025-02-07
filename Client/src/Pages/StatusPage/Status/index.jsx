@@ -32,6 +32,7 @@ const PublicStatus = () => {
 	const currentPath = location.pathname;
 	let sx = { paddingLeft: theme.spacing(20), paddingRight: theme.spacing(20) };
 	let link = undefined;
+
 	// Public status page
 	if (currentPath === "/status/public") {
 		sx = {
