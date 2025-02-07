@@ -62,7 +62,7 @@ class StatusPageController {
 		try {
 			const statusPage = await this.db.getStatusPage();
 			return res.success({
-				msg: successMessages.STATUS_PAGE_BY_URL,
+				msg: successMessages.STATUS_PAGE,
 				data: statusPage,
 			});
 		} catch (error) {
@@ -70,9 +70,21 @@ class StatusPageController {
 		}
 	};
 
+	getStatusPageByUrl = async (req, res, next) => {
+		try {
+			const statusPage = await this.db.getStatusPageByUrl(req.params.url);
+			return res.success({
+				msg: successMessages.STATUS_PAGE_BY_URL,
+				data: statusPage,
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "getStatusPageByUrl"));
+		}
+	};
+
 	deleteStatusPage = async (req, res, next) => {
 		try {
-			await this.db.deleteStatusPage();
+			await this.db.deleteStatusPage(req.params.url);
 			return res.success({
 				msg: successMessages.STATUS_PAGE_DELETE,
 			});
