@@ -62,7 +62,6 @@ const UptimeMonitors = () => {
 	const [page, setPage] = useState(undefined);
 	const [sort, setSort] = useState(undefined);
 	const [isSearching, setIsSearching] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
 	const [monitorUpdateTrigger, setMonitorUpdateTrigger] = useState(false);
 
 	// Utils
@@ -107,8 +106,7 @@ const UptimeMonitors = () => {
 		order: sort?.order,
 		triggerUpdate: monitorUpdateTrigger,
 	});
-	const totalMonitors = monitorsSummary?.totalMonitors ?? 0;
-
+	const totalMonitors = monitorsSummary?.totalMonitors;
 	if (networkError) {
 		return (
 			<GenericFallback>
@@ -123,7 +121,10 @@ const UptimeMonitors = () => {
 			</GenericFallback>
 		);
 	}
-	if (!isLoading && !monitorsAreLoading && totalMonitors === 0) {
+	if (
+		!monitorsAreLoading &&
+		(totalMonitors === 0 || typeof totalMonitors === "undefined")
+	) {
 		return (
 			<Fallback
 				vowelStart={true}
@@ -134,7 +135,6 @@ const UptimeMonitors = () => {
 			/>
 		);
 	}
-
 	return (
 		<Stack
 			className="monitors"
@@ -143,7 +143,7 @@ const UptimeMonitors = () => {
 			<Breadcrumbs list={BREADCRUMBS} />
 			<CreateMonitorHeader
 				isAdmin={isAdmin}
-				shouldRender={!isLoading}
+				shouldRender={!monitorsAreLoading}
 				path="/uptime/create"
 			/>
 			<Greeting type="uptime" />
@@ -166,8 +166,7 @@ const UptimeMonitors = () => {
 			</Stack>
 			<UptimeDataTable
 				isAdmin={isAdmin}
-				isLoading={isLoading}
-				setIsLoading={setIsLoading}
+				isLoading={monitorsAreLoading}
 				filteredMonitors={filteredMonitors}
 				monitors={monitors}
 				monitorCount={totalMonitors}

@@ -49,7 +49,6 @@ import PropTypes from "prop-types";
 const UptimeDataTable = ({
 	isAdmin,
 	isSearching,
-	setIsLoading,
 	filteredMonitors,
 	sort,
 	setSort,
@@ -167,7 +166,6 @@ const UptimeDataTable = ({
 					monitor={row.monitor}
 					isAdmin={isAdmin}
 					updateRowCallback={triggerUpdate}
-					setIsLoading={setIsLoading}
 					pauseCallback={triggerUpdate}
 				/>
 			),
@@ -206,12 +204,10 @@ UptimeDataTable.propTypes = {
 	isSearching: PropTypes.bool,
 	setSort: PropTypes.func,
 	setSearch: PropTypes.func,
-	setIsLoading: PropTypes.func,
 	triggerUpdate: PropTypes.func,
 	debouncedSearch: PropTypes.string,
 	onSearchChange: PropTypes.func,
 	isAdmin: PropTypes.bool,
-	isLoading: PropTypes.bool,
 	monitors: PropTypes.array,
 	filteredMonitors: PropTypes.array,
 	monitorCount: PropTypes.number,
