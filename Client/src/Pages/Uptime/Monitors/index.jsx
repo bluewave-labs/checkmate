@@ -128,7 +128,12 @@ const UptimeMonitors = () => {
 			<Fallback
 				vowelStart={true}
 				title="uptime monitor"
-				checks={["Check if a website or service is up and running"]}
+				checks={[
+					"Check if websites, servers, or services are online and responsive",
+					"Detect and alert teams about downtime or performance issues",
+					"Monitor HTTP(s) endpoints, ping responses, Docker containers and  ports",
+					"Track historical uptime and reliability trends",
+				]}
 				link="/uptime/create"
 				isAdmin={isAdmin}
 			/>
