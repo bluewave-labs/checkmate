@@ -55,7 +55,7 @@ const menu = [
 	{ name: "Pagespeed", path: "pagespeed", icon: <PageSpeed /> },
 	{ name: "Infrastructure", path: "infrastructure", icon: <Integrations /> },
 	{
-		name: "Distributed Uptime",
+		name: "Distributed uptime",
 		path: "distributed-uptime",
 		icon: <DistributedUptimeIcon />,
 	},
