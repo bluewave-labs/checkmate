@@ -128,6 +128,7 @@ const Routes = () => {
 						</ProtectedDistributedUptimeRoute>
 					}
 				/>
+
 				<Route
 					path="pagespeed"
 					element={<PageSpeed />}
@@ -240,6 +241,10 @@ const Routes = () => {
 			<Route
 				path="/status/public"
 				element={<Status />}
+			/>
+			<Route
+				path="/distributed-uptime/status/public/:url"
+				element={<DistributedUptimeStatus />}
 			/>
 
 			<Route
