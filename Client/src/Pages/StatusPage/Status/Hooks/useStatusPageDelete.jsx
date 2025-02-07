@@ -4,15 +4,14 @@ import { networkService } from "../../../../main";
 import { createToast } from "../../../../Utils/toastUtils";
 import { useNavigate } from "react-router-dom";
 
-const useStatusPageDelete = (fetchStatusPage) => {
+const useStatusPageDelete = (fetchStatusPage, url = "/status/public") => {
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 	const { authToken } = useSelector((state) => state.auth);
-
 	const deleteStatusPage = async () => {
 		try {
 			setIsLoading(true);
-			await networkService.deleteStatusPage({ authToken });
+			await networkService.deleteStatusPage({ authToken, url });
 			fetchStatusPage?.();
 			return true;
 		} catch (error) {
