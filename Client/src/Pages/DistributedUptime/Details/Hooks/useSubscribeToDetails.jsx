@@ -59,6 +59,9 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 
 	useEffect(() => {
 		try {
+			if (typeof monitorId === "undefined") {
+				return;
+			}
 			const cleanup = networkService.subscribeToDistributedUptimeDetails({
 				authToken,
 				monitorId,
@@ -116,4 +119,4 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 	return [isLoading, networkError, connectionStatus, monitor, lastUpdateTrigger];
 };
 
-export default useSubscribeToDetails;
+export { useSubscribeToDetails };
