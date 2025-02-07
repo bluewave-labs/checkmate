@@ -3,30 +3,7 @@ import { networkService } from "../../../../main";
 import { useSelector } from "react-redux";
 import { createToast } from "../../../../Utils/toastUtils";
 import { useTheme } from "@emotion/react";
-const getMonitorWithPercentage = (monitor, theme) => {
-	let uptimePercentage = "";
-	let percentageColor = "";
-
-	if (monitor.uptimePercentage !== undefined) {
-		uptimePercentage =
-			monitor.uptimePercentage === 0 ? "0" : (monitor.uptimePercentage * 100).toFixed(2);
-
-		percentageColor =
-			monitor.uptimePercentage < 0.25
-				? theme.palette.error.main
-				: monitor.uptimePercentage < 0.5
-					? theme.palette.warning.main
-					: monitor.uptimePercentage < 0.75
-						? theme.palette.success.main
-						: theme.palette.success.main;
-	}
-
-	return {
-		...monitor,
-		percentage: uptimePercentage,
-		percentageColor,
-	};
-};
+import { useMonitorUtils } from "../../../../Hooks/useMonitorUtils";
 
 const useStatusPageFetch = (isCreate = false) => {
 	const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +12,7 @@ const useStatusPageFetch = (isCreate = false) => {
 	const [monitors, setMonitors] = useState(undefined);
 	const { authToken } = useSelector((state) => state.auth);
 	const theme = useTheme();
-
+	const { getMonitorWithPercentage } = useMonitorUtils();
 	const fetchStatusPage = useCallback(async () => {
 		try {
 			const response = await networkService.getStatusPage({ authToken });

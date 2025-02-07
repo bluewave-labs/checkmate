@@ -1,6 +1,6 @@
 // Components
 import { Stack, Box } from "@mui/material";
-import Host from "../../../../Uptime/Monitors/Components/Host";
+import Host from "../../../../../Components/Host";
 import StatusPageBarChart from "../../../../../Components/Charts/StatusPageBarChart";
 import { StatusLabel } from "../../../../../Components/Label";
 

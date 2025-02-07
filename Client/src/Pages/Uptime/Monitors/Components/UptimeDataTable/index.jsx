@@ -3,10 +3,10 @@ import { Box, Stack } from "@mui/material";
 import DataTable from "../../../../../Components/Table";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
-import Host from "../Host";
+import Host from "../../../../../Components/Host";
 import { StatusLabel } from "../../../../../Components/Label";
 import BarChart from "../../../../../Components/Charts/BarChart";
-import ActionsMenu from "../ActionsMenu";
+import ActionsMenu from "../../../../../Components/ActionsMenu";
 
 import LoadingSpinner from "../LoadingSpinner";
 import TableSkeleton from "../../../../../Components/Table/skeleton";
