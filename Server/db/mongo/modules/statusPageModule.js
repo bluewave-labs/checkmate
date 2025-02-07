@@ -47,10 +47,21 @@ const updateStatusPage = async (statusPageData, image) => {
 	}
 };
 
+const getStatusPageByUrl = async (url) => {
+	try {
+		const statusPage = await StatusPage.aggregate([{ $match: { url } }]);
+		return statusPage[0];
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "getStatusPageByUrl";
+		throw error;
+	}
+};
+
 const getStatusPage = async () => {
 	try {
 		const statusPageQuery = await StatusPage.aggregate([
-			{ $limit: 1 },
+			{ $match: { url: "/status/public" } },
 			{
 				$set: {
 					originalMonitors: "$monitors",
@@ -143,9 +154,9 @@ const getStatusPage = async () => {
 	}
 };
 
-const deleteStatusPage = async () => {
+const deleteStatusPage = async (url) => {
 	try {
-		await StatusPage.deleteOne({});
+		await StatusPage.deleteOne({ url });
 	} catch (error) {
 		error.service = SERVICE_NAME;
 		error.method = "createStatusPage";
@@ -153,4 +164,10 @@ const deleteStatusPage = async () => {
 	}
 };
 
-export { createStatusPage, updateStatusPage, getStatusPage, deleteStatusPage };
+export {
+	createStatusPage,
+	updateStatusPage,
+	getStatusPage,
+	getStatusPageByUrl,
+	deleteStatusPage,
+};
