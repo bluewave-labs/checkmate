@@ -80,7 +80,7 @@ const ControlsHeader = ({ statusPage, isDeleting, isDeleteOpen, setIsDeleteOpen 
 				<Image
 					shouldRender={statusPage?.logo?.data ? true : false}
 					alt={"Company logo"}
-					maxWidth={"100px"}
+					maxWidth={"300px"}
 					base64={statusPage?.logo?.data}
 				/>
 				<Typography variant="h2">{statusPage?.companyName}</Typography>
