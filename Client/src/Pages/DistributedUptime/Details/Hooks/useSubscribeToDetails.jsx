@@ -68,6 +68,9 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 				dateRange: dateRange,
 				normalize: true,
 				onUpdate: (data) => {
+					if (isLoading === true) {
+						setIsLoading(false);
+					}
 					if (networkError === true) {
 						setNetworkError(false);
 					}
@@ -87,6 +90,7 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 					setRetryCount(0); // Reset retry count on successful connection
 				},
 				onError: () => {
+					setIsLoading(false);
 					setNetworkError(true);
 					setConnectionStatus("down");
 				},
@@ -94,8 +98,6 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 			return cleanup;
 		} catch (error) {
 			setNetworkError(true);
-		} finally {
-			setIsLoading(false);
 		}
 	}, [
 		authToken,
@@ -105,6 +107,7 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 		setConnectionStatus,
 		networkError,
 		devices,
+		isLoading,
 	]);
 
 	useEffect(() => {

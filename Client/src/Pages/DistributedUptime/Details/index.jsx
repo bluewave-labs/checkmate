@@ -11,7 +11,7 @@ import MonitorHeader from "./Components/MonitorHeader";
 import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import GenericFallback from "../../../Components/GenericFallback";
 import MonitorCreateHeader from "../../../Components/MonitorCreateHeader";
-
+import SkeletonLayout from "./Components/Skeleton";
 //Utils
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
@@ -34,6 +34,10 @@ const DistributedUptimeDetails = () => {
 		{ name: "Distributed Uptime", path: "/distributed-uptime" },
 		{ name: "Details", path: `/distributed-uptime/${monitorId}` },
 	];
+
+	if (isLoading) {
+		return <SkeletonLayout />;
+	}
 
 	if (networkError) {
 		return (

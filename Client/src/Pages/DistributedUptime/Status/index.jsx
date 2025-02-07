@@ -11,6 +11,7 @@ import ControlsHeader from "../../StatusPage/Status/Components/ControlsHeader";
 import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import GenericFallback from "../../../Components/GenericFallback";
 import Dialog from "../../../Components/Dialog";
+import SkeletonLayout from "./Components/Skeleton";
 //Utils
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
@@ -46,6 +47,7 @@ const DistributedUptimeStatus = () => {
 	// Constants
 	const BREADCRUMBS = [
 		{ name: "Distributed Uptime", path: "/distributed-uptime" },
+		{ name: "details", path: `/distributed-uptime/${monitorId}` },
 		{ name: "status", path: `` },
 	];
 
@@ -59,7 +61,11 @@ const DistributedUptimeStatus = () => {
 		};
 	}
 
-	if (networkError) {
+	if (isLoading || statusPageIsLoading) {
+		return <SkeletonLayout />;
+	}
+
+	if (networkError || statusPageNetworkError) {
 		return (
 			<GenericFallback>
 				<Typography
@@ -74,7 +80,11 @@ const DistributedUptimeStatus = () => {
 		);
 	}
 
-	if (typeof monitor === "undefined" || monitor.totalChecks === 0) {
+	if (
+		typeof statusPage === "undefined" ||
+		typeof monitor === "undefined" ||
+		monitor.totalChecks === 0
+	) {
 		return (
 			<Stack gap={theme.spacing(10)}>
 				<Breadcrumbs list={BREADCRUMBS} />
@@ -93,6 +103,7 @@ const DistributedUptimeStatus = () => {
 		>
 			{!isPublic && <Breadcrumbs list={BREADCRUMBS} />}
 			<ControlsHeader
+				shouldShow={!isPublic}
 				statusPage={statusPage}
 				isDeleting={isDeleting}
 				isDeleteOpen={isDeleteOpen}

@@ -10,6 +10,7 @@ import GenericFallback from "../../../Components/GenericFallback";
 import { useTheme } from "@mui/material/styles";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useSubscribeToMonitors } from "./Hooks/useSubscribeToMonitors";
+import SkeletonLayout from "./Components/Skeleton";
 // Constants
 const BREADCRUMBS = [{ name: `Distributed Uptime`, path: "/distributed-uptime" }];
 
@@ -20,6 +21,10 @@ const DistributedUptimeMonitors = () => {
 	const isAdmin = useIsAdmin();
 	const [isLoading, networkError, monitors, monitorsSummary, filteredMonitors] =
 		useSubscribeToMonitors();
+
+	if (isLoading) {
+		return <SkeletonLayout />;
+	}
 
 	if (networkError) {
 		return (
