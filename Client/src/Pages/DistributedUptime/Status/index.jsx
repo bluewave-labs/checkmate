@@ -1,38 +1,48 @@
 //Components
-import DistributedUptimeMap from "./Components/DistributedUptimeMap";
+import DistributedUptimeMap from "../Details/Components/DistributedUptimeMap";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import { Stack, Typography } from "@mui/material";
-import DeviceTicker from "./Components/DeviceTicker";
-import DistributedUptimeResponseChart from "./Components/DistributedUptimeResponseChart";
-import NextExpectedCheck from "./Components/NextExpectedCheck";
-import Footer from "./Components/Footer";
-import StatBoxes from "./Components/StatBoxes";
-import MonitorHeader from "./Components/MonitorHeader";
+import DeviceTicker from "../Details/Components/DeviceTicker";
+import DistributedUptimeResponseChart from "../Details/Components/DistributedUptimeResponseChart";
+import NextExpectedCheck from "../Details/Components/NextExpectedCheck";
+import Footer from "../Details/Components/Footer";
+import StatBoxes from "../Details/Components/StatBoxes";
+import ControlsHeader from "../../StatusPage/Status/Components/ControlsHeader";
 import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import GenericFallback from "../../../Components/GenericFallback";
-import MonitorCreateHeader from "../../../Components/MonitorCreateHeader";
-
+import Dialog from "../../../Components/Dialog";
 //Utils
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
-import { useSubscribeToDetails } from "./Hooks/useSubscribeToDetails";
-
-const DistributedUptimeDetails = () => {
-	const { monitorId } = useParams();
+import { useSubscribeToDetails } from "../Details/Hooks/useSubscribeToDetails";
+import { useStatusPageFetchByUrl } from "./Hooks/useStatusPageFetchByUrl";
+import { useStatusPageDelete } from "../../StatusPage/Status/Hooks/useStatusPageDelete";
+import { useNavigate } from "react-router-dom";
+const DistributedUptimeStatus = () => {
+	const { url } = useParams();
 	// Local State
 	const [dateRange, setDateRange] = useState("day");
-
+	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 	// Utils
 	const theme = useTheme();
-	const isAdmin = useIsAdmin();
+	const navigate = useNavigate();
+	const [statusPageIsLoading, statusPageNetworkError, statusPage, monitorId] =
+		useStatusPageFetchByUrl({
+			url,
+		});
+
 	const [isLoading, networkError, connectionStatus, monitor, lastUpdateTrigger] =
 		useSubscribeToDetails({ monitorId, dateRange });
+
+	const [deleteStatusPage, isDeleting] = useStatusPageDelete(() => {
+		navigate("/distributed-uptime");
+	}, url);
 	// Constants
 	const BREADCRUMBS = [
 		{ name: "Distributed Uptime", path: "/distributed-uptime" },
-		{ name: "Details", path: `/distributed-uptime/${monitorId}` },
+		{ name: "status", path: `` },
 	];
 
 	if (networkError) {
@@ -67,12 +77,12 @@ const DistributedUptimeDetails = () => {
 			gap={theme.spacing(10)}
 		>
 			<Breadcrumbs list={BREADCRUMBS} />
-			<MonitorCreateHeader
-				label="Create status page"
-				isAdmin={isAdmin}
-				path={`/distributed-uptime/status/create/${monitorId}`}
+			<ControlsHeader
+				statusPage={statusPage}
+				isDeleting={isDeleting}
+				isDeleteOpen={isDeleteOpen}
+				setIsDeleteOpen={setIsDeleteOpen}
 			/>
-			<MonitorHeader monitor={monitor} />
 			<StatBoxes
 				monitor={monitor}
 				lastUpdateTrigger={lastUpdateTrigger}
@@ -103,8 +113,23 @@ const DistributedUptimeDetails = () => {
 				/>
 			</Stack>
 			<Footer />
+			<Dialog
+				// open={isOpen.deleteStats}
+				title="Do you want to delete this status page?"
+				onConfirm={() => {
+					deleteStatusPage();
+					setIsDeleteOpen(false);
+				}}
+				onCancel={() => {
+					setIsDeleteOpen(false);
+				}}
+				open={isDeleteOpen}
+				confirmationButtonLabel="Yes, delete status page"
+				description="Once deleted, your status page cannot be retrieved."
+				isLoading={isDeleting || isLoading}
+			/>
 		</Stack>
 	);
 };
 
-export default DistributedUptimeDetails;
+export default DistributedUptimeStatus;
