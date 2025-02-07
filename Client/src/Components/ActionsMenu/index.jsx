@@ -18,7 +18,7 @@ const ActionsMenu = ({
 	isAdmin,
 	updateRowCallback,
 	pauseCallback,
-	setIsLoading,
+	setIsLoading = () => {},
 }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [actions, setActions] = useState({});
