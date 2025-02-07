@@ -42,8 +42,10 @@ const DistributedUptimeMonitors = () => {
 				vowelStart={false}
 				title="distributed uptime monitor"
 				checks={[
-					"Check if a website or service is up and running",
-					"Make use of UpRock's distributed network",
+					"Check if a server is online from multiple locations",
+					"Detect outages and performance issues in real time",
+					"Reduce false alarms by verifying downtime from different networks",
+					"Provide insights on regional availability and latency",
 				]}
 				link="/distributed-uptime/create"
 				isAdmin={isAdmin}
