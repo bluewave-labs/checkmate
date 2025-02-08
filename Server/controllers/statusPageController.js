@@ -72,6 +72,13 @@ class StatusPageController {
 
 	getStatusPageByUrl = async (req, res, next) => {
 		try {
+			await getStatusPageParamValidation.validateAsync(req.params);
+		} catch (error) {
+			next(handleValidationError(error, SERVICE_NAME));
+			return;
+		}
+
+		try {
 			const statusPage = await this.db.getStatusPageByUrl(req.params.url);
 			return res.success({
 				msg: successMessages.STATUS_PAGE_BY_URL,
