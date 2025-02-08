@@ -45,7 +45,7 @@ const getRandomDevice = () => {
 		model: randomModel,
 	};
 };
-const useSubscribeToDetails = ({ monitorId, dateRange }) => {
+const useSubscribeToDetails = ({ monitorId, isPublic, isPublished, dateRange }) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [connectionStatus, setConnectionStatus] = useState(undefined);
 	const [retryCount, setRetryCount] = useState(0);
@@ -58,10 +58,15 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 	const prevDateRangeRef = useRef(dateRange);
 
 	useEffect(() => {
+		if (typeof monitorId === "undefined") {
+			return;
+		}
+		// If this page is public and not published, don't subscribe to details
+		if (isPublic && isPublished === false) {
+			return;
+		}
+
 		try {
-			if (typeof monitorId === "undefined") {
-				return;
-			}
 			const cleanup = networkService.subscribeToDistributedUptimeDetails({
 				authToken,
 				monitorId,

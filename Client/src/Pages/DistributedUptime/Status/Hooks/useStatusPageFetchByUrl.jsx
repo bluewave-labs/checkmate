@@ -8,6 +8,7 @@ const useStatusPageFetchByUrl = ({ url }) => {
 	const [networkError, setNetworkError] = useState(false);
 	const [statusPage, setStatusPage] = useState(undefined);
 	const [monitorId, setMonitorId] = useState(undefined);
+	const [isPublished, setIsPublished] = useState(false);
 	const { authToken } = useSelector((state) => state.auth);
 	useEffect(() => {
 		const fetchStatusPageByUrl = async () => {
@@ -17,6 +18,7 @@ const useStatusPageFetchByUrl = ({ url }) => {
 				const statusPage = response.data.data;
 				setStatusPage(statusPage);
 				setMonitorId(statusPage?.monitors[0]);
+				setIsPublished(statusPage?.isPublished);
 			} catch (error) {
 				setNetworkError(true);
 				createToast({
@@ -29,7 +31,7 @@ const useStatusPageFetchByUrl = ({ url }) => {
 		fetchStatusPageByUrl();
 	}, [authToken, url]);
 
-	return [isLoading, networkError, statusPage, monitorId];
+	return [isLoading, networkError, statusPage, monitorId, isPublished];
 };
 
 export { useStatusPageFetchByUrl };
