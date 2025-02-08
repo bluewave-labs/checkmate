@@ -16,7 +16,6 @@ import SkeletonLayout from "./Components/Skeleton";
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useSubscribeToDetails } from "../Details/Hooks/useSubscribeToDetails";
 import { useStatusPageFetchByUrl } from "./Hooks/useStatusPageFetchByUrl";
 import { useStatusPageDelete } from "../../StatusPage/Status/Hooks/useStatusPageDelete";
@@ -33,13 +32,18 @@ const DistributedUptimeStatus = () => {
 	// Utils
 	const theme = useTheme();
 	const navigate = useNavigate();
-	const [statusPageIsLoading, statusPageNetworkError, statusPage, monitorId] =
-		useStatusPageFetchByUrl({
-			url,
-		});
+	const [
+		statusPageIsLoading,
+		statusPageNetworkError,
+		statusPage,
+		monitorId,
+		isPublished,
+	] = useStatusPageFetchByUrl({
+		url,
+	});
 
 	const [isLoading, networkError, connectionStatus, monitor, lastUpdateTrigger] =
-		useSubscribeToDetails({ monitorId, dateRange });
+		useSubscribeToDetails({ monitorId, dateRange, isPublic, isPublished });
 
 	const [deleteStatusPage, isDeleting] = useStatusPageDelete(() => {
 		navigate("/distributed-uptime");
@@ -59,6 +63,35 @@ const DistributedUptimeStatus = () => {
 			paddingBottom: "10vh",
 			paddingLeft: "10vw",
 		};
+	}
+
+	// Done loading, a status page doesn't exist
+	if (!statusPageIsLoading && typeof statusPage === "undefined") {
+		return (
+			<Stack sx={sx}>
+				<GenericFallback>
+					<Typography
+						variant="h1"
+						marginY={theme.spacing(4)}
+						color={theme.palette.primary.contrastTextTertiary}
+					>
+						A public status page is not set up.
+					</Typography>
+					<Typography>Please contact to your administrator</Typography>
+				</GenericFallback>
+			</Stack>
+		);
+	}
+
+	// Done loading, a status page exists but is not public
+	if (!statusPageIsLoading && statusPage.isPublished === false) {
+		return (
+			<Stack sx={sx}>
+				<GenericFallback>
+					<Typography>This status page is not public.</Typography>
+				</GenericFallback>
+			</Stack>
+		);
 	}
 
 	if (isLoading || statusPageIsLoading) {
