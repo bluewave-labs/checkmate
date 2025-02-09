@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import Flag from "react-world-flags";
+import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 const LanguageSelector = () => {
 	const { i18n } = useTranslation();
@@ -78,55 +78,59 @@ const LanguageSelector = () => {
 				},
 			}}
 		>
-			{languages.map((lang) => (
-				<MenuItem
-					key={lang}
-					value={lang}
-					sx={{
-						color: theme.palette.primary.contrastText,
-						"&:hover": {
-							backgroundColor: theme.palette.primary.lowContrast,
-						},
-						"&.Mui-selected": {
-							backgroundColor: theme.palette.primary.lowContrast,
+			{languages.map((lang) => {
+				const flag = lang ? `fi fi-${lang}` : null;
+
+				return (
+					<MenuItem
+						key={lang}
+						value={lang}
+						sx={{
+							color: theme.palette.primary.contrastText,
 							"&:hover": {
 								backgroundColor: theme.palette.primary.lowContrast,
 							},
-						},
-					}}
-				>
-					<Stack
-						direction="row"
-						spacing={2}
-						alignItems="center"
-						ml={0.5}
-					>
-						<Box
-							component="span"
-							sx={{
-								width: 16,
-								height: 12,
-								display: "flex",
-								alignItems: "center",
-								"& img": {
-									width: "100%",
-									height: "100%",
-									objectFit: "cover",
-									borderRadius: 0.5,
+							"&.Mui-selected": {
+								backgroundColor: theme.palette.primary.lowContrast,
+								"&:hover": {
+									backgroundColor: theme.palette.primary.lowContrast,
 								},
-							}}
+							},
+						}}
+					>
+						<Stack
+							direction="row"
+							spacing={2}
+							alignItems="center"
+							ml={0.5}
 						>
-							<Flag code={lang.toUpperCase()} />
-						</Box>
-						<Box
-							component="span"
-							sx={{ textTransform: "uppercase", fontSize: 10 }}
-						>
-							{lang}
-						</Box>
-					</Stack>
-				</MenuItem>
-			))}
+							<Box
+								component="span"
+								sx={{
+									width: 16,
+									height: 12,
+									display: "flex",
+									alignItems: "center",
+									"& img": {
+										width: "100%",
+										height: "100%",
+										objectFit: "cover",
+										borderRadius: 0.5,
+									},
+								}}
+							>
+								{flag && <span className={flag} />}
+							</Box>
+							<Box
+								component="span"
+								sx={{ textTransform: "uppercase", fontSize: 10 }}
+							>
+								{lang}
+							</Box>
+						</Stack>
+					</MenuItem>
+				);
+			})}
 		</Select>
 	);
 };
