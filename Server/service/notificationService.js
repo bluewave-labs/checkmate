@@ -33,22 +33,23 @@ class NotificationService {
 		return null;
 	}
 
-	async sendWebhookNotification(networkResponse, address, platform, botToken, chatId) {
+	async sendWebhookNotification(networkResponse, config) {
 		const { monitor, status } = networkResponse;
-		let url = address;
+		const { type, webhookUrl, botToken, chatId } = config;
+		let url = webhookUrl;
 	
-		const message = this.formatNotificationMessage(monitor, status, platform, chatId);
+		const message = this.formatNotificationMessage(monitor, status, type, chatId);
 		if (!message) {
 			this.logger.warn({
-				message: `Unsupported platform: ${platform}`,
+				message: `Unsupported webhook type: ${type}`,
 				service: this.SERVICE_NAME,
 				method: 'sendWebhookNotification',
-				platform
+				type
 			});
 			return false;
 		}
 	
-		if (platform === 'telegram') {
+		if (type === 'telegram') {
 			if (!botToken || !chatId) {
 				return false;
 			}
@@ -56,17 +57,17 @@ class NotificationService {
 		}
 	
 		try {
-			const response = await this.networkService.requestWebhook(platform, url, message);
+			const response = await this.networkService.requestWebhook(type, url, message);
 			return response.status;
 		} catch (error) {
 			this.logger.error({
-				message: `Error sending ${platform} notification`,
+				message: `Error sending ${type} notification`,
 				service: this.SERVICE_NAME,
 				method: 'sendWebhookNotification',
 				error: error.message,
 				stack: error.stack,
 				url,
-				platform,
+				type,
 				requestPayload: message
 			});
 			return false;

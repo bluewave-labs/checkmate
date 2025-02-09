@@ -23,34 +23,34 @@ class NotificationController {
                 prevStatus: true,
             };
     
-            if (type === "telegram") {
-                if (!config?.botToken || !config?.chatId) {
+            if (type === "webhook") {
+                if (!config?.type) {
                     return res.status(400).json({ 
                         success: false, 
-                        msg: "botToken and chatId are required for Telegram notifications" 
+                        msg: "webhook type is required in config" 
                     });
                 }
+
+                if (config.type === "telegram") {
+                    if (!config.botToken || !config.chatId) {
+                        return res.status(400).json({ 
+                            success: false, 
+                            msg: "botToken and chatId are required for Telegram notifications" 
+                        });
+                    }
+                } else if (["discord", "slack"].includes(config.type)) {
+                    if (!config.webhookUrl) {
+                        return res.status(400).json({ 
+                            success: false, 
+                            msg: `webhookUrl is required for ${config.type} notifications` 
+                        });
+                    }
+                }
+
                 await this.notificationService.sendWebhookNotification(
-                    networkResponse, null, type, config.botToken, config.chatId
+                    networkResponse,
+                    config
                 );
-            } else if (type === "discord" || type === "slack") {
-                if (!config?.webhookUrl) {
-                    return res.status(400).json({ 
-                        success: false, 
-                        msg: `webhookUrl is required for ${type} notifications` 
-                    });
-                }
-                await this.notificationService.sendWebhookNotification(
-                    networkResponse, config.webhookUrl, type
-                );
-            } else if (type === "email") {
-                if (!config?.address) {
-                    return res.status(400).json({ 
-                        success: false, 
-                        msg: "address is required for email notifications" 
-                    });
-                }
-                await this.notificationService.sendEmail(networkResponse, config.address);
             }
     
             res.json({ success: true, msg: "Notification sent successfully" });
@@ -64,7 +64,6 @@ class NotificationController {
             res.status(500).json({ success: false, msg: "Failed to send notification" });
         }
     }
-    
 }
 
 export default NotificationController;

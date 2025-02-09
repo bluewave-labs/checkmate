@@ -8,14 +8,14 @@ const NotificationSchema = mongoose.Schema(
 		},
 		type: {
 			type: String,
-			enum: ["email", "sms"],
+			enum: ["email", "sms", "webhook"],
 		},
 		config: {
-			webhookUrl: { type: String }, // For Discord & Slack
-			botToken: { type: String }, // For Telegram
-			chatId: { type: String }, // For Telegram
+			type: String,  
+			webhookUrl: String,
+			botToken: String,
+			chatId: String
 		  },
-	
 		address: {
 			type: String,
 		},
@@ -55,19 +55,6 @@ const NotificationSchema = mongoose.Schema(
 		timestamps: true,
 	}
 );
-
-NotificationSchema.pre("save", function (next) {
-	if (this.type === "telegram" && (!this.config.botToken || !this.config.chatId)) {
-	  return next(new Error("botToken and chatId are required for Telegram notifications"));
-	}
-	if ((this.type === "discord" || this.type === "slack") && !this.config.webhookUrl) {
-	  return next(new Error(`webhookUrl is required for ${this.type} notifications`));
-	}
-	if (this.type === "email" && !this.config.address) {
-	  return next(new Error("address is required for email notifications"));
-	}
-	next();
-  });
 
 NotificationSchema.pre("save", function (next) {
 	if (!this.cpuAlertThreshold || this.isModified("alertThreshold")) {
