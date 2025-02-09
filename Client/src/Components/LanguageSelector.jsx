@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
