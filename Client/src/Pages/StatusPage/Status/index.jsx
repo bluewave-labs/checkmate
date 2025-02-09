@@ -32,6 +32,7 @@ const PublicStatus = () => {
 	const currentPath = location.pathname;
 	let sx = { paddingLeft: theme.spacing(20), paddingRight: theme.spacing(20) };
 	let link = undefined;
+
 	// Public status page
 	if (currentPath === "/status/public") {
 		sx = {
@@ -139,7 +140,6 @@ const PublicStatus = () => {
 			<MonitorsList monitors={monitors} />
 			{link}
 			<Dialog
-				// open={isOpen.deleteStats}
 				title="Do you want to delete this status page?"
 				onConfirm={() => {
 					deleteStatusPage();

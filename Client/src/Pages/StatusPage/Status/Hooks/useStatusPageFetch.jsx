@@ -18,11 +18,13 @@ const useStatusPageFetch = (isCreate = false) => {
 			const response = await networkService.getStatusPage({ authToken });
 			if (!response?.data?.data) return;
 			const { statusPage, monitors } = response.data.data;
+
 			setStatusPage(statusPage);
 
 			const monitorsWithPercentage = monitors.map((monitor) =>
 				getMonitorWithPercentage(monitor, theme)
 			);
+
 			setMonitors(monitorsWithPercentage);
 		} catch (error) {
 			// If there is a 404, status page is not found
@@ -35,7 +37,7 @@ const useStatusPageFetch = (isCreate = false) => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [authToken, theme]);
+	}, [authToken, theme, getMonitorWithPercentage]);
 
 	useEffect(() => {
 		if (isCreate === true) {

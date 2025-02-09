@@ -22,10 +22,7 @@ const useMonitorUtils = () => {
 		}
 
 		return {
-			id: monitor._id,
-			name: monitor.name,
-			url: monitor.url,
-			title: monitor.name,
+			...monitor,
 			percentage: uptimePercentage,
 			percentageColor,
 			monitor: monitor,

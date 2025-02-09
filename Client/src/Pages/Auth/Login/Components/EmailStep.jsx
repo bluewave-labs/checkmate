@@ -3,6 +3,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import TextInput from "../../../../Components/Inputs/TextInput";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 /**
  * Renders the email step of the login process which includes an email field.
@@ -18,6 +19,7 @@ import PropTypes from "prop-types";
 const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 	const theme = useTheme();
 	const inputRef = useRef(null);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (inputRef.current) {
@@ -33,8 +35,8 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 				position="relative"
 			>
 				<Box>
-					<Typography component="h1">Log In</Typography>
-					<Typography>Enter your email address</Typography>
+					<Typography component="h1">{t("authLoginTitle")}</Typography>
+					<Typography>{t("authLoginEnterEmail")}</Typography>
 				</Box>
 				<Box
 					textAlign="left"
@@ -48,7 +50,7 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 					<TextInput
 						type="email"
 						id="login-email-input"
-						label="Email"
+						label={t("email")}
 						isRequired={true}
 						placeholder="jordan.ellis@domain.com"
 						autoComplete="email"
@@ -77,7 +79,7 @@ const EmailStep = ({ form, errors, onSubmit, onChange }) => {
 								},
 							}}
 						>
-							Continue
+							{t("continue")}
 						</Button>
 					</Stack>
 				</Box>

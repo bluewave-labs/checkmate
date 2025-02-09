@@ -4,6 +4,7 @@ import { useTheme } from "@emotion/react";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import TextInput from "../../../../Components/Inputs/TextInput";
+import { useTranslation } from "react-i18next";
 
 StepTwo.propTypes = {
 	form: PropTypes.object,
@@ -27,6 +28,7 @@ StepTwo.propTypes = {
 function StepTwo({ form, errors, onSubmit, onChange, onBack }) {
 	const theme = useTheme();
 	const inputRef = useRef(null);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (inputRef.current) {
@@ -41,8 +43,8 @@ function StepTwo({ form, errors, onSubmit, onChange, onBack }) {
 				textAlign="center"
 			>
 				<Box>
-					<Typography component="h1">Sign Up</Typography>
-					<Typography>Enter your email address</Typography>
+					<Typography component="h1">{t("signUp")}</Typography>
+					<Typography>{t("enterEmail")}</Typography>
 				</Box>
 
 				<Box
@@ -58,7 +60,7 @@ function StepTwo({ form, errors, onSubmit, onChange, onBack }) {
 					<TextInput
 						type="email"
 						id="register-email-input"
-						label="Email"
+						label={t("commonEmail")}
 						isRequired={true}
 						placeholder="jordan.ellis@domain.com"
 						autoComplete="email"
@@ -89,7 +91,7 @@ function StepTwo({ form, errors, onSubmit, onChange, onBack }) {
 							}}
 						>
 							<ArrowBackRoundedIcon />
-							Back
+							{t("commonBack")}
 						</Button>
 						<Button
 							variant="contained"
@@ -105,7 +107,7 @@ function StepTwo({ form, errors, onSubmit, onChange, onBack }) {
 								},
 							}}
 						>
-							Continue
+							{t("continue")}
 						</Button>
 					</Stack>
 				</Box>

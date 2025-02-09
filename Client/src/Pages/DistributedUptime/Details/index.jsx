@@ -10,21 +10,23 @@ import StatBoxes from "./Components/StatBoxes";
 import MonitorHeader from "./Components/MonitorHeader";
 import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import GenericFallback from "../../../Components/GenericFallback";
-
+import MonitorCreateHeader from "../../../Components/MonitorCreateHeader";
+import SkeletonLayout from "./Components/Skeleton";
 //Utils
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import useSubscribeToDetails from "./Hooks/useSubscribeToDetails";
+import { useIsAdmin } from "../../../Hooks/useIsAdmin";
+import { useSubscribeToDetails } from "./Hooks/useSubscribeToDetails";
 
 const DistributedUptimeDetails = () => {
 	const { monitorId } = useParams();
-
 	// Local State
 	const [dateRange, setDateRange] = useState("day");
 
 	// Utils
 	const theme = useTheme();
+	const isAdmin = useIsAdmin();
 	const [isLoading, networkError, connectionStatus, monitor, lastUpdateTrigger] =
 		useSubscribeToDetails({ monitorId, dateRange });
 	// Constants
@@ -32,6 +34,10 @@ const DistributedUptimeDetails = () => {
 		{ name: "Distributed Uptime", path: "/distributed-uptime" },
 		{ name: "Details", path: `/distributed-uptime/${monitorId}` },
 	];
+
+	if (isLoading) {
+		return <SkeletonLayout />;
+	}
 
 	if (networkError) {
 		return (
@@ -65,6 +71,11 @@ const DistributedUptimeDetails = () => {
 			gap={theme.spacing(10)}
 		>
 			<Breadcrumbs list={BREADCRUMBS} />
+			<MonitorCreateHeader
+				label="Create status page"
+				isAdmin={isAdmin}
+				path={`/distributed-uptime/status/create/${monitorId}`}
+			/>
 			<MonitorHeader monitor={monitor} />
 			<StatBoxes
 				monitor={monitor}

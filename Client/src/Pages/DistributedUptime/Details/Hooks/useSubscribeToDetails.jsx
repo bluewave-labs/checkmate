@@ -45,7 +45,7 @@ const getRandomDevice = () => {
 		model: randomModel,
 	};
 };
-const useSubscribeToDetails = ({ monitorId, dateRange }) => {
+const useSubscribeToDetails = ({ monitorId, isPublic, isPublished, dateRange }) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [connectionStatus, setConnectionStatus] = useState(undefined);
 	const [retryCount, setRetryCount] = useState(0);
@@ -58,6 +58,14 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 	const prevDateRangeRef = useRef(dateRange);
 
 	useEffect(() => {
+		if (typeof monitorId === "undefined") {
+			return;
+		}
+		// If this page is public and not published, don't subscribe to details
+		if (isPublic && isPublished === false) {
+			return;
+		}
+
 		try {
 			const cleanup = networkService.subscribeToDistributedUptimeDetails({
 				authToken,
@@ -65,6 +73,9 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 				dateRange: dateRange,
 				normalize: true,
 				onUpdate: (data) => {
+					if (isLoading === true) {
+						setIsLoading(false);
+					}
 					if (networkError === true) {
 						setNetworkError(false);
 					}
@@ -84,6 +95,7 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 					setRetryCount(0); // Reset retry count on successful connection
 				},
 				onError: () => {
+					setIsLoading(false);
 					setNetworkError(true);
 					setConnectionStatus("down");
 				},
@@ -91,8 +103,6 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 			return cleanup;
 		} catch (error) {
 			setNetworkError(true);
-		} finally {
-			setIsLoading(false);
 		}
 	}, [
 		authToken,
@@ -102,6 +112,7 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 		setConnectionStatus,
 		networkError,
 		devices,
+		isLoading,
 	]);
 
 	useEffect(() => {
@@ -116,4 +127,4 @@ const useSubscribeToDetails = ({ monitorId, dateRange }) => {
 	return [isLoading, networkError, connectionStatus, monitor, lastUpdateTrigger];
 };
 
-export default useSubscribeToDetails;
+export { useSubscribeToDetails };
