@@ -7,7 +7,7 @@ import TextInput from "../../../../Components/Inputs/TextInput";
 import { PasswordEndAdornment } from "../../../../Components/Inputs/TextInput/Adornments";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import PropTypes from "prop-types";
-
+import { useTranslation } from "react-i18next";
 /**
  * Renders the password step of the login process, including a password input field.
  *
@@ -23,6 +23,7 @@ const PasswordStep = ({ form, errors, onSubmit, onChange, onBack }) => {
 	const theme = useTheme();
 	const inputRef = useRef(null);
 	const authState = useSelector((state) => state.auth);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (inputRef.current) {
@@ -38,8 +39,8 @@ const PasswordStep = ({ form, errors, onSubmit, onChange, onBack }) => {
 				textAlign="center"
 			>
 				<Box>
-					<Typography component="h1">Log In</Typography>
-					<Typography>Enter your password</Typography>
+					<Typography component="h1">{t("authLoginTitle")}</Typography>
+					<Typography>{t("authLoginEnterPassword")}</Typography>
 				</Box>
 				<Box
 					component="form"
@@ -56,7 +57,7 @@ const PasswordStep = ({ form, errors, onSubmit, onChange, onBack }) => {
 					<TextInput
 						type="password"
 						id="login-password-input"
-						label="Password"
+						label={t("password")}
 						isRequired={true}
 						placeholder="••••••••••"
 						autoComplete="current-password"
@@ -87,7 +88,7 @@ const PasswordStep = ({ form, errors, onSubmit, onChange, onBack }) => {
 							}}
 						>
 							<ArrowBackRoundedIcon />
-							Back
+							{t("commonBack")}{" "}
 						</Button>
 						<LoadingButton
 							variant="contained"
@@ -104,7 +105,7 @@ const PasswordStep = ({ form, errors, onSubmit, onChange, onBack }) => {
 								},
 							}}
 						>
-							Continue
+							{t("continue")}
 						</LoadingButton>
 					</Stack>
 				</Box>

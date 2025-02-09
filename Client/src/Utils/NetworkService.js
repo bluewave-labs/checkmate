@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18next from 'i18next';
 const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 const FALLBACK_BASE_URL = "http://localhost:5000/api/v1";
 import { clearAuthState } from "../Features/Auth/authSlice";
@@ -23,6 +24,21 @@ class NetworkService {
 			}
 			this.setBaseUrl(baseURL);
 		});
+		this.axiosInstance.interceptors.request.use(
+			(config) => {
+				const currentLanguage = i18next.language || 'en';
+
+				config.headers = {
+					...config.headers,
+					"Accept-Language": currentLanguage,
+				};
+
+				return config;
+			},
+			(error) => {
+				return Promise.reject(error);
+			}
+		);
 		this.axiosInstance.interceptors.response.use(
 			(response) => response,
 			(error) => {

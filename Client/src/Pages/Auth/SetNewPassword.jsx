@@ -17,11 +17,13 @@ import Logo from "../../assets/icons/checkmate-icon.svg?react";
 import Background from "../../assets/Images/background-grid.svg?react";
 import "./index.css";
 import { useValidatePassword } from "./hooks/useValidatePassword";
+import { useTranslation } from "react-i18next";
 
 const SetNewPassword = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const theme = useTheme();
+	const { t } = useTranslation();
 
 	const passwordId = useId();
 	const confirmPasswordId = useId();
@@ -97,7 +99,7 @@ const SetNewPassword = () => {
 				gap={theme.spacing(4)}
 			>
 				<Logo style={{ borderRadius: theme.shape.borderRadius }} />
-				<Typography sx={{ userSelect: "none" }}>Checkmate</Typography>
+				<Typography sx={{ userSelect: "none" }}>{t("commonAppName")}</Typography>
 			</Stack>
 			<Stack
 				width="100%"
@@ -142,10 +144,8 @@ const SetNewPassword = () => {
 								<LockIcon alt="lock icon" />
 							</IconBox>
 						</Stack>
-						<Typography component="h1">Set new password</Typography>
-						<Typography>
-							Your new password must be different to previously used passwords.
-						</Typography>
+						<Typography component="h1">{t("authSetNewPasswordTitle")}</Typography>
+						<Typography>{t("authSetNewPasswordDescription")}</Typography>
 					</Box>
 					<Box
 						width="100%"
@@ -166,7 +166,7 @@ const SetNewPassword = () => {
 								id={passwordId}
 								type="password"
 								name="password"
-								label="Password"
+								label={t("commonPassword")}
 								isRequired={true}
 								placeholder="••••••••"
 								value={form.password}
@@ -186,7 +186,7 @@ const SetNewPassword = () => {
 								id={confirmPasswordId}
 								type="password"
 								name="confirm"
-								label="Confirm password"
+								label={t("authSetNewPasswordConfirmPassword")}
 								isRequired={true}
 								placeholder="••••••••"
 								value={form.confirm}
@@ -201,33 +201,33 @@ const SetNewPassword = () => {
 							mb={theme.spacing(12)}
 						>
 							<Check
-								noHighlightText={"Must be at least"}
-								text={"8 characters long"}
+								noHighlightText={t("authPasswordMustBeAtLeast")}
+								text={t("authPasswordCharactersLong")}
 								variant={feedbacks.length}
 							/>
 							<Check
-								noHighlightText={"Must contain at least"}
-								text={"one special character"}
+								noHighlightText={t("authPasswordMustContainAtLeast")}
+								text={t("authPasswordSpecialCharacter")}
 								variant={feedbacks.special}
 							/>
 							<Check
-								noHighlightText={"Must contain at least"}
-								text={"one number"}
+								noHighlightText={t("authPasswordMustContainAtLeast")}
+								text={t("authPasswordOneNumber")}
 								variant={feedbacks.number}
 							/>
 							<Check
-								noHighlightText={"Must contain at least"}
-								text={"one upper character"}
+								noHighlightText={t("authPasswordMustContainAtLeast")}
+								text={t("authPasswordUpperCharacter")}
 								variant={feedbacks.uppercase}
 							/>
 							<Check
-								noHighlightText={"Must contain at least"}
-								text={"one lower character"}
+								noHighlightText={t("authPasswordMustContainAtLeast")}
+								text={t("authPasswordLowerCharacter")}
 								variant={feedbacks.lowercase}
 							/>
 							<Check
-								noHighlightText={"Confirm password and password"}
-								text={"must match"}
+								noHighlightText={t("authPasswordConfirmAndPassword")}
+								text={t("authPasswordMustMatch")}
 								variant={feedbacks.confirm}
 							/>
 						</Stack>
@@ -244,7 +244,7 @@ const SetNewPassword = () => {
 						}
 						sx={{ width: "100%", maxWidth: 400 }}
 					>
-						Reset password
+						{t("authSetNewPasswordResetPassword")}
 					</LoadingButton>
 				</Stack>
 			</Stack>
@@ -252,7 +252,7 @@ const SetNewPassword = () => {
 				textAlign="center"
 				p={theme.spacing(12)}
 			>
-				<Typography display="inline-block">Go back to —</Typography>
+				<Typography display="inline-block">{t("goBackTo")} —</Typography>
 				<Typography
 					component="span"
 					color={theme.palette.primary.main}
@@ -260,7 +260,7 @@ const SetNewPassword = () => {
 					onClick={() => navigate("/login")}
 					sx={{ userSelect: "none" }}
 				>
-					Log In
+					{t("authLoginTitle")}
 				</Typography>
 			</Box>
 		</Stack>
