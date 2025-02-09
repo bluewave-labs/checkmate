@@ -1,4 +1,3 @@
-import { errorMessages, successMessages } from "../utils/messages.js";
 const SERVICE_NAME = "NetworkService";
 const UPROCK_ENDPOINT = "https://api.uprock.com/checkmate/push";
 
@@ -13,7 +12,8 @@ const UPROCK_ENDPOINT = "https://api.uprock.com/checkmate/push";
  */
 class NetworkService {
 	static SERVICE_NAME = SERVICE_NAME;
-	constructor(axios, ping, logger, http, Docker, net) {
+
+	constructor(axios, ping, logger, http, Docker, net, stringService) {
 		this.TYPE_PING = "ping";
 		this.TYPE_HTTP = "http";
 		this.TYPE_PAGESPEED = "pagespeed";
@@ -30,6 +30,7 @@ class NetworkService {
 		this.http = http;
 		this.Docker = Docker;
 		this.net = net;
+		this.stringService = stringService;
 	}
 
 	/**
@@ -87,13 +88,13 @@ class NetworkService {
 			if (error) {
 				pingResponse.status = false;
 				pingResponse.code = this.PING_ERROR;
-				pingResponse.message = errorMessages.PING_CANNOT_RESOLVE;
+				pingResponse.message = "No response";
 				return pingResponse;
 			}
 
 			pingResponse.code = 200;
 			pingResponse.status = response.alive;
-			pingResponse.message = successMessages.PING_SUCCESS;
+			pingResponse.message = "Success";
 			return pingResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -240,7 +241,7 @@ class NetworkService {
 			const containers = await docker.listContainers({ all: true });
 			const containerExists = containers.some((c) => c.Id.startsWith(job.data.url));
 			if (!containerExists) {
-				throw new Error(errorMessages.DOCKER_NOT_FOUND);
+				throw new Error(this.stringService.dockerNotFound);
 			}
 			const container = docker.getContainer(job.data.url);
 
@@ -257,12 +258,12 @@ class NetworkService {
 			if (error) {
 				dockerResponse.status = false;
 				dockerResponse.code = error.statusCode || this.NETWORK_ERROR;
-				dockerResponse.message = error.reason || errorMessages.DOCKER_FAIL;
+				dockerResponse.message = error.reason || "Failed to fetch Docker container information";
 				return dockerResponse;
 			}
 			dockerResponse.status = response?.State?.Status === "running" ? true : false;
 			dockerResponse.code = 200;
-			dockerResponse.message = successMessages.DOCKER_SUCCESS;
+			dockerResponse.message = "Docker container status fetched successfully";
 			return dockerResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -310,13 +311,13 @@ class NetworkService {
 			if (error) {
 				portResponse.status = false;
 				portResponse.code = this.NETWORK_ERROR;
-				portResponse.message = errorMessages.PORT_FAIL;
+				portResponse.message = this.stringService.portFail;
 				return portResponse;
 			}
 
 			portResponse.status = response.success;
 			portResponse.code = 200;
-			portResponse.message = successMessages.PORT_SUCCESS;
+			portResponse.message = this.stringService.portSuccess;
 			return portResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;

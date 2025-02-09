@@ -7,14 +7,15 @@ import logger from "../utils/logger.js";
 import jwt from "jsonwebtoken";
 import { handleError, handleValidationError } from "./controllerUtils.js";
 import { getTokenFromHeaders } from "../utils/utils.js";
-import { successMessages } from "../utils/messages.js";
+
 const SERVICE_NAME = "inviteController";
 
 class InviteController {
-	constructor(db, settingsService, emailService) {
+	constructor(db, settingsService, emailService, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
 		this.emailService = emailService;
+		this.stringService = stringService;
 	}
 
 	/**
@@ -66,7 +67,7 @@ class InviteController {
 				});
 
 			return res.success({
-				msg: successMessages.INVITE_ISSUED,
+				msg: this.stringService.inviteIssued,
 				data: inviteToken,
 			});
 		} catch (error) {
@@ -86,7 +87,7 @@ class InviteController {
 			const invite = await this.db.getInviteToken(req.body.token);
 
 			return res.success({
-				msg: successMessages.INVITE_VERIFIED,
+				msg: this.stringService.inviteVerified,
 				data: invite,
 			});
 		} catch (error) {

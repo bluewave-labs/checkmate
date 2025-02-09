@@ -1,18 +1,18 @@
 import { handleError } from "./controllerUtils.js";
-import { successMessages } from "../utils/messages.js";
 
 const SERVICE_NAME = "JobQueueController";
 
 class JobQueueController {
-	constructor(jobQueue) {
+	constructor(jobQueue, stringService) {
 		this.jobQueue = jobQueue;
+		this.stringService = stringService;
 	}
 
 	getMetrics = async (req, res, next) => {
 		try {
 			const metrics = await this.jobQueue.getMetrics();
 			res.success({
-				msg: successMessages.QUEUE_GET_METRICS,
+				msg: this.stringService.queueGetMetrics,
 				data: metrics,
 			});
 		} catch (error) {
@@ -25,7 +25,7 @@ class JobQueueController {
 		try {
 			const jobs = await this.jobQueue.getJobStats();
 			return res.success({
-				msg: successMessages.QUEUE_GET_METRICS,
+				msg: this.stringService.queueGetMetrics,
 				data: jobs,
 			});
 		} catch (error) {
@@ -38,7 +38,7 @@ class JobQueueController {
 		try {
 			await this.jobQueue.addJob(Math.random().toString(36).substring(7));
 			return res.success({
-				msg: successMessages.QUEUE_ADD_JOB,
+				msg: this.stringService.queueAddJob,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "addJob"));
@@ -50,7 +50,7 @@ class JobQueueController {
 		try {
 			await this.jobQueue.obliterate();
 			return res.success({
-				msg: successMessages.QUEUE_OBLITERATE,
+				msg: this.stringService.queueObliterate,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "obliterateQueue"));
