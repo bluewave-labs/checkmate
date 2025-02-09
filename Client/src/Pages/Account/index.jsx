@@ -73,11 +73,6 @@ const Account = ({ open = "profile" }) => {
 					<TabList
 						onChange={handleTabChange}
 						aria-label="account tabs"
-						sx={{
-							"& .MuiTabs-indicator": {
-								backgroundColor: theme.palette.tertiary.contrastText,
-							},
-						}}
 					>
 						{tabList.map((label, index) => (
 							<Tab
@@ -87,33 +82,6 @@ const Account = ({ open = "profile" }) => {
 								onKeyDown={handleKeyDown}
 								onFocus={() => handleFocus(label.toLowerCase())}
 								tabIndex={index}
-								sx={{
-									fontSize: 13,
-									color: theme.palette.tertiary.contrastText,
-									backgroundColor: theme.palette.tertiary.main,
-									textTransform: "none",
-									minWidth: "fit-content",
-									paddingY: theme.spacing(6),
-									fontWeight: 400,
-									borderBottom: "2px solid transparent",
-									borderRight: `1px solid ${theme.palette.primary.lowContrast}`,
-									"&:first-child": { borderTopLeftRadius: "8px" },
-									"&:last-child": { borderTopRightRadius: "8px", borderRight: 0 },
-									"&:focus-visible": {
-										color: theme.palette.primary.contrastText,
-										borderColor: theme.palette.tertiary.contrastText,
-										borderRightColor: theme.palette.primary.lowContrast,
-									},
-									"&.Mui-selected": {
-										backgroundColor: theme.palette.secondary.main,
-										color: theme.palette.secondary.contrastText,
-										borderColor: theme.palette.secondary.contrastText,
-										borderRightColor: theme.palette.primary.lowContrast,
-									},
-									"&:hover": {
-										borderColor: theme.palette.primary.lowContrast,
-									},
-								}}
 							/>
 						))}
 					</TabList>

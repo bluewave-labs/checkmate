@@ -3,10 +3,10 @@ import { Box, Stack } from "@mui/material";
 import DataTable from "../../../../../Components/Table";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
-import Host from "../Host";
+import Host from "../../../../../Components/Host";
 import { StatusLabel } from "../../../../../Components/Label";
 import BarChart from "../../../../../Components/Charts/BarChart";
-import ActionsMenu from "../ActionsMenu";
+import ActionsMenu from "../../../../../Components/ActionsMenu";
 
 import LoadingSpinner from "../LoadingSpinner";
 import TableSkeleton from "../../../../../Components/Table/skeleton";
@@ -49,7 +49,6 @@ import PropTypes from "prop-types";
 const UptimeDataTable = ({
 	isAdmin,
 	isSearching,
-	setIsLoading,
 	filteredMonitors,
 	sort,
 	setSort,
@@ -167,7 +166,6 @@ const UptimeDataTable = ({
 					monitor={row.monitor}
 					isAdmin={isAdmin}
 					updateRowCallback={triggerUpdate}
-					setIsLoading={setIsLoading}
 					pauseCallback={triggerUpdate}
 				/>
 			),
@@ -206,12 +204,10 @@ UptimeDataTable.propTypes = {
 	isSearching: PropTypes.bool,
 	setSort: PropTypes.func,
 	setSearch: PropTypes.func,
-	setIsLoading: PropTypes.func,
 	triggerUpdate: PropTypes.func,
 	debouncedSearch: PropTypes.string,
 	onSearchChange: PropTypes.func,
 	isAdmin: PropTypes.bool,
-	isLoading: PropTypes.bool,
 	monitors: PropTypes.array,
 	filteredMonitors: PropTypes.array,
 	monitorCount: PropTypes.number,

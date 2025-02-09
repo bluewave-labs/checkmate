@@ -1,6 +1,6 @@
 // Components
 import DataTable from "../../../../../Components/Table";
-import Host from "../../../../Uptime/Monitors/Components/Host";
+import Host from "../../../../../Components/Host";
 import { StatusLabel } from "../../../../../Components/Label";
 import { Stack } from "@mui/material";
 import { InfrastructureMenu } from "../MonitorsTableMenu";
@@ -12,6 +12,7 @@ import CustomGauge from "../../../../../Components/Charts/CustomGauge";
 import { useTheme } from "@emotion/react";
 import useUtils from "../../../../Uptime/Monitors/Hooks/useUtils";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const MonitorsTable = ({ shouldRender, monitors, isAdmin, handleActionMenuDelete }) => {
 	// Utils
@@ -129,6 +130,13 @@ const MonitorsTable = ({ shouldRender, monitors, isAdmin, handleActionMenuDelete
 			}}
 		/>
 	);
+};
+
+MonitorsTable.propTypes = {
+	shouldRender: PropTypes.bool,
+	monitors: PropTypes.array,
+	isAdmin: PropTypes.bool,
+	handleActionMenuDelete: PropTypes.func,
 };
 
 export default MonitorsTable;

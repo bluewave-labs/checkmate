@@ -93,6 +93,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 						<Typography
 							component="h2"
 							mb={theme.spacing(1.5)}
+							sx={{ wordBreak: 'break-all' }}
 						>
 							{error ? error : label}
 						</Typography>
@@ -168,7 +169,7 @@ const ProgressUpload = ({ icon, label, size, progress = 0, onClick, error }) => 
 
 ProgressUpload.propTypes = {
 	icon: PropTypes.element, // JSX element for the icon (optional)
-	label: PropTypes.string.isRequired, // Label text for the progress item
+	label: PropTypes.string, // Label text for the progress item
 	size: PropTypes.string.isRequired, // Size information for the progress item
 	progress: PropTypes.number.isRequired, // Current progress value (0-100)
 	onClick: PropTypes.func.isRequired, // Function to handle click events on the remove button

@@ -252,7 +252,11 @@ const startApp = async () => {
 		ServiceRegistry.get(NotificationService.SERVICE_NAME)
 	);
 
-	const distributedUptimeController = new DistributedUptimeController();
+	const distributedUptimeController = new DistributedUptimeController(
+		ServiceRegistry.get(MongoDB.SERVICE_NAME),
+		http,
+		ServiceRegistry.get(StatusService.SERVICE_NAME)
+	);
 
 	//Create routes
 	const authRoutes = new AuthRoutes(authController);

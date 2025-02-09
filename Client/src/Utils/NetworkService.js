@@ -861,6 +861,165 @@ class NetworkService {
 			"https://api.github.com/repos/bluewave-labs/bluewave-uptime/releases/latest"
 		);
 	}
+
+	subscribeToDistributedUptimeMonitors(config) {
+		const {
+			authToken,
+			teamId,
+			onUpdate,
+			onError,
+			onOpen,
+			limit,
+			types,
+			page,
+			rowsPerPage,
+			filter,
+			field,
+			order,
+		} = config;
+
+		const params = new URLSearchParams();
+
+		if (limit) params.append("limit", limit);
+		if (types) {
+			types.forEach((type) => {
+				params.append("type", type);
+			});
+		}
+		if (page) params.append("page", page);
+		if (rowsPerPage) params.append("rowsPerPage", rowsPerPage);
+		if (filter) params.append("filter", filter);
+		if (field) params.append("field", field);
+		if (order) params.append("order", order);
+
+		if (this.eventSource) {
+			this.eventSource.close();
+		}
+
+		const url = `${this.axiosInstance.defaults.baseURL}/distributed-uptime/monitors/${teamId}?${params.toString()}`;
+		this.eventSource = new EventSource(url, {
+			headers: { Authorization: `Bearer ${authToken}` },
+		});
+
+		this.eventSource.onopen = () => {
+			onOpen?.();
+		};
+
+		this.eventSource.addEventListener("open", (e) => {});
+
+		this.eventSource.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			onUpdate(data);
+		};
+
+		this.eventSource.onerror = (error) => {
+			console.error("Monitor stream error:", error);
+			onError?.();
+			this.eventSource.close();
+		};
+
+		// Returns a cleanup function
+		return () => {
+			if (this.eventSource) {
+				this.eventSource.close();
+				this.eventSource = null;
+			}
+			return () => {
+				console.log("Nothing to cleanup");
+			};
+		};
+	}
+
+	subscribeToDistributedUptimeDetails(config) {
+		const params = new URLSearchParams();
+		const { authToken, monitorId, onUpdate, onOpen, onError, dateRange, normalize } =
+			config;
+		if (dateRange) params.append("dateRange", dateRange);
+		if (normalize) params.append("normalize", normalize);
+
+		const url = `${this.axiosInstance.defaults.baseURL}/distributed-uptime/monitors/details/${monitorId}?${params.toString()}`;
+		this.eventSource = new EventSource(url, {
+			headers: { Authorization: `Bearer ${authToken}` },
+		});
+
+		this.eventSource.onopen = (e) => {
+			onOpen?.();
+		};
+
+		this.eventSource.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			onUpdate(data);
+		};
+
+		this.eventSource.onerror = (error) => {
+			console.error("Monitor stream error:", error);
+			onError?.();
+			this.eventSource.close();
+		};
+		return () => {
+			if (this.eventSource) {
+				this.eventSource.close();
+				this.eventSource = null;
+			}
+		};
+	}
+
+	async getStatusPage(config) {
+		const { authToken } = config;
+		return this.axiosInstance.get(`/status-page`, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+				"Content-Type": "application/json",
+			},
+		});
+	}
+
+	async createStatusPage(config) {
+		const { authToken, user, form, isCreate } = config;
+		const fd = new FormData();
+		fd.append("isPublished", form.isPublished);
+		fd.append("companyName", form.companyName);
+		fd.append("url", form.url);
+		fd.append("timezone", form.timezone);
+		fd.append("color", form.color);
+		fd.append("showCharts", form.showCharts);
+		fd.append("showUptimePercentage", form.showUptimePercentage);
+		form.monitors.forEach((monitorId) => {
+			fd.append("monitors[]", monitorId);
+		});
+		if (form?.logo?.src && form?.logo?.src !== "") {
+			const imageResult = await axios.get(form.logo.src, {
+				responseType: "blob",
+			});
+			fd.append("logo", imageResult.data);
+			// Cleanup blob
+			if (form.logo.src.startsWith("blob:")) {
+				URL.revokeObjectURL(form.logo.src);
+			}
+		}
+		if (isCreate) {
+			return this.axiosInstance.post(`/status-page`, fd, {
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+				},
+			});
+		}
+
+		return this.axiosInstance.put(`/status-page`, fd, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+	}
+
+	async deleteStatusPage(config) {
+		const { authToken } = config;
+		return this.axiosInstance.delete(`/status-page`, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+	}
 }
 
 export default NetworkService;

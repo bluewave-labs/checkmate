@@ -27,9 +27,18 @@ import Infrastructure from "../Pages/Infrastructure/Monitors";
 import InfrastructureCreate from "../Pages/Infrastructure/Create";
 import InfrastructureDetails from "../Pages/Infrastructure/Details";
 
+// Distributed Uptime
+import DistributedUptimeMonitors from "../Pages/DistributedUptime/Monitors";
+import CreateDistributedUptime from "../Pages/DistributedUptime/Create";
+import DistributedUptimeDetails from "../Pages/DistributedUptime/Details";
+
+// Incidents
 import Incidents from "../Pages/Incidents";
 
-import Status from "../Pages/Status";
+// Status pages
+import CreateStatus from "../Pages/StatusPage/Create";
+import Status from "../Pages/StatusPage/Status";
+
 import Integrations from "../Pages/Integrations";
 
 // Settings
@@ -39,6 +48,7 @@ import Settings from "../Pages/Settings";
 import Maintenance from "../Pages/Maintenance";
 
 import ProtectedRoute from "../Components/ProtectedRoute";
+import ProtectedDistributedUptimeRoute from "../Components/ProtectedDistributedUptimeRoute";
 import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
 import withAdminCheck from "../Components/HOC/withAdminCheck";
 
@@ -74,6 +84,31 @@ const Routes = () => {
 				<Route
 					path="/uptime/configure/:monitorId/"
 					element={<UptimeConfigure />}
+				/>
+				<Route
+					path="/distributed-uptime"
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<DistributedUptimeMonitors />{" "}
+						</ProtectedDistributedUptimeRoute>
+					}
+				/>
+
+				<Route
+					path="/distributed-uptime/create"
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<CreateDistributedUptime />
+						</ProtectedDistributedUptimeRoute>
+					}
+				/>
+				<Route
+					path="/distributed-uptime/:monitorId"
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<DistributedUptimeDetails />
+						</ProtectedDistributedUptimeRoute>
+					}
 				/>
 				<Route
 					path="pagespeed"
@@ -112,6 +147,16 @@ const Routes = () => {
 					path="status"
 					element={<Status />}
 				/>
+
+				<Route
+					path="status/create"
+					element={<CreateStatus />}
+				/>
+				<Route
+					path="status/configure"
+					element={<CreateStatus />}
+				/>
+
 				<Route
 					path="integrations"
 					element={<Integrations />}
@@ -173,6 +218,10 @@ const Routes = () => {
 			<Route
 				path="/new-password-confirmed"
 				element={<AuthNewPasswordConfirmed />}
+			/>
+			<Route
+				path="/status/public"
+				element={<Status />}
 			/>
 
 			<Route

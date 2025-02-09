@@ -11,11 +11,16 @@ import { checkImage } from "../../../Utils/fileUtils";
  * @param {string} props.id - The unique identifier for the input field.
  * @param {string} props.src - The URL of the image to display.
  * @param {function} props.onChange - The function to handle file input change.
+ * @param {boolean} props.isRound - Whether the shape of the image to display is round.
+ * @param {string} props.maxSize - Custom message for the max uploaded file size
  * @returns {JSX.Element} The rendered component.
  */
 
-const ImageField = ({ id, src, loading, onChange }) => {
+const ImageField = ({ id, src, loading, onChange, error, isRound = true, maxSize }) => {
 	const theme = useTheme();
+	const error_border_style = error ? { borderColor: theme.palette.error.main } : {};
+
+	const roundShape = isRound ? { borderRadius: "50%" } : {};
 
 	const [isDragging, setIsDragging] = useState(false);
 	const handleDragEnter = () => {
@@ -46,6 +51,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 								borderColor: theme.palette.primary.main,
 								backgroundColor: "hsl(215, 87%, 51%, 0.05)",
 							},
+							...error_border_style,
 						}}
 						onDragEnter={handleDragEnter}
 						onDragLeave={handleDragLeave}
@@ -62,6 +68,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 									cursor: "pointer",
 									maxWidth: "500px",
 									minHeight: "175px",
+									zIndex: 1,
 								},
 								"& fieldset": {
 									padding: 0,
@@ -78,7 +85,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 								top: "50%",
 								left: "50%",
 								transform: "translate(-50%, -50%)",
-								zIndex: "-1",
+								zIndex: 0,
 								width: "100%",
 							}}
 						>
@@ -111,7 +118,7 @@ const ImageField = ({ id, src, loading, onChange }) => {
 								color={theme.palette.primary.contrastTextTertiary}
 								sx={{ opacity: 0.6 }}
 							>
-								(maximum size: 3MB)
+								(maximum size: {maxSize ?? "3MB"})
 							</Typography>
 						</Stack>
 					</Box>
@@ -122,6 +129,19 @@ const ImageField = ({ id, src, loading, onChange }) => {
 					>
 						Supported formats: JPG, PNG
 					</Typography>
+					{error && (
+						<Typography
+							component="span"
+							className="input-error"
+							color={theme.palette.error.main}
+							mt={theme.spacing(2)}
+							sx={{
+								opacity: 0.8,
+							}}
+						>
+							{error}
+						</Typography>
+					)}
 				</>
 			) : (
 				<Stack
@@ -132,10 +152,10 @@ const ImageField = ({ id, src, loading, onChange }) => {
 						sx={{
 							width: "250px",
 							height: "250px",
-							borderRadius: "50%",
 							overflow: "hidden",
 							backgroundImage: `url(${src})`,
 							backgroundSize: "cover",
+							...roundShape,
 						}}
 					></Box>
 				</Stack>
@@ -148,6 +168,8 @@ ImageField.propTypes = {
 	id: PropTypes.string.isRequired,
 	src: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
+	isRound: PropTypes.bool,
+	maxSize: PropTypes.string,
 };
 
 export default ImageField;

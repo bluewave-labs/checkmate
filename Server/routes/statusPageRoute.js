@@ -1,6 +1,7 @@
 import { Router } from "express";
-
 import { verifyJWT } from "../middleware/verifyJWT.js";
+import multer from "multer";
+const upload = multer();
 
 class StatusPageRoutes {
 	constructor(statusPageController) {
@@ -10,8 +11,20 @@ class StatusPageRoutes {
 	}
 
 	initRoutes() {
-		this.router.get("/:url", this.statusPageController.getStatusPageByUrl);
-		this.router.post("/:url", verifyJWT, this.statusPageController.createStatusPage);
+		this.router.get("/", this.statusPageController.getStatusPage);
+		this.router.post(
+			"/",
+			upload.single("logo"),
+			verifyJWT,
+			this.statusPageController.createStatusPage
+		);
+		this.router.put(
+			"/",
+			upload.single("logo"),
+			verifyJWT,
+			this.statusPageController.updateStatusPage
+		);
+		this.router.delete("/", verifyJWT, this.statusPageController.deleteStatusPage);
 	}
 
 	getRouter() {

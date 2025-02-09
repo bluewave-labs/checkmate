@@ -152,6 +152,11 @@ const newSemanticColors = {
 			light: newColors.blueGray600,
 			dark: newColors.gray200,
 		},
+		// CAIO_REVIEW, need a brighter color for dark bg
+		contrastTextSecondaryDarkBg: {
+			light: newColors.gray200,
+			dark: newColors.gray200,
+		},
 		contrastTextTertiary: {
 			light: newColors.blueGray500,
 			dark: newColors.gray500,
@@ -244,6 +249,21 @@ const newSemanticColors = {
 		color5: {
 			light: paletteColors.gray50,
 			dark: paletteColors.gray850,
+		},
+	},
+
+	map: {
+		main: {
+			light: newColors.offWhite,
+			dark: undefined,
+		},
+		lowContrast: {
+			light: newColors.gray200,
+			dark: undefined,
+		},
+		highContrast: {
+			light: newColors.gray500,
+			dark: undefined,
 		},
 	},
 };

@@ -136,7 +136,8 @@ const successMessages = {
 	// Status Page
 	STATUS_PAGE_BY_URL: "Got status page by url successfully",
 	STATUS_PAGE_CREATE: "Status page created successfully",
-
+	STATUS_PAGE_DELETE: "Status page deleted successfully",
+	STATUS_PAGE_UPDATE: "Status page updated successfully",
 	// Docker
 	DOCKER_SUCCESS: "Docker container status fetched successfully",
 

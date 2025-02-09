@@ -4,6 +4,7 @@ services:
     restart: always
     environment:
       UPTIME_APP_API_BASE_URL: "https://checkmate-test.bluewavelabs.ca/api/v1"
+      UPTIME_STATUS_PAGE_SUBDOMAIN_PREFIX: "http://uptimegenie.com/"
     ports:
       - "80:80"
       - "443:443"
@@ -45,7 +46,8 @@ services:
       start_period: 5s
   mongodb:
     image: uptime_database_mongo:latest
-    command: ["mongod", "--quiet", "--auth"]
+    restart: always
+    command: ["mongod", "--quiet", "--replSet", "rs0", "--bind_ip_all"]
     ports:
       - "27017:27017"
     volumes:
