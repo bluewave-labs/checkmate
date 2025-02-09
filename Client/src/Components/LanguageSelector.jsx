@@ -3,7 +3,7 @@ import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import "flag-icons/css/flag-icons.min.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setLanguage } from "../Features/Settings/uiSlice";
+import { setLanguage } from "../Features/UI/uiSlice";
 
 const LanguageSelector = () => {
 	const { i18n } = useTranslation();
