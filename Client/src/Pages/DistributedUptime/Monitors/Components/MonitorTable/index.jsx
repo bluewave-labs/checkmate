@@ -79,7 +79,7 @@ const MonitorTable = ({ isLoading, monitors }) => {
 					},
 				},
 				onRowClick: (row) => {
-					navigate(`/distributed-uptime/${row.id}`);
+					navigate(`/distributed-uptime/${row._id}`);
 				},
 			}}
 		/>

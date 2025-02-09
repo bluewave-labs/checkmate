@@ -24,73 +24,70 @@ const CustomToolTip = ({ active, payload, label }) => {
 			? payload[0]?.payload?.originalAvgResponseTime
 			: (payload[0]?.payload?.avgResponseTime ?? 0);
 		return (
-			<ChartBox
-				icon={<ResponseTimeIcon />}
-				header="Response Times"
-				sx={{ padding: 0 }}
+			<Box
+				className="area-tooltip"
+				sx={{
+					backgroundColor: theme.palette.primary.main,
+					border: 1,
+					borderColor: theme.palette.primary.lowContrast,
+					borderRadius: theme.shape.borderRadius,
+					py: theme.spacing(2),
+					px: theme.spacing(4),
+				}}
 			>
-				<Box
-					className="area-tooltip"
+				<Typography
 					sx={{
-						backgroundColor: theme.palette.background.main,
-						border: 1,
-						borderColor: theme.palette.primary.lowContrast,
-						borderRadius: theme.shape.borderRadius,
-						py: theme.spacing(2),
-						px: theme.spacing(4),
+						color: theme.palette.text.tertiary,
+						fontSize: 12,
+						fontWeight: 500,
 					}}
 				>
-					<Typography
+					{formatDateWithTz(label, "ddd, MMMM D, YYYY, h:mm A", uiTimezone)}
+				</Typography>
+				<Box mt={theme.spacing(1)}>
+					<Box
+						display="inline-block"
+						width={theme.spacing(4)}
+						height={theme.spacing(4)}
+						backgroundColor={theme.palette.primary.main}
+						sx={{ borderRadius: "50%" }}
+					/>
+					<Stack
+						display="inline-flex"
+						direction="row"
+						justifyContent="space-between"
+						ml={theme.spacing(3)}
 						sx={{
-							color: theme.palette.text.tertiary,
-							fontSize: 12,
-							fontWeight: 500,
+							"& span": {
+								color: theme.palette.text.tertiary,
+								fontSize: 11,
+								fontWeight: 500,
+							},
 						}}
 					>
-						{formatDateWithTz(label, "ddd, MMMM D, YYYY, h:mm A", uiTimezone)}
-					</Typography>
-					<Box mt={theme.spacing(1)}>
-						<Box
-							display="inline-block"
-							width={theme.spacing(4)}
-							height={theme.spacing(4)}
-							backgroundColor={theme.palette.primary.main}
-							sx={{ borderRadius: "50%" }}
-						/>
-						<Stack
-							display="inline-flex"
-							direction="row"
-							justifyContent="space-between"
-							ml={theme.spacing(3)}
-							sx={{
-								"& span": {
-									color: theme.palette.text.tertiary,
-									fontSize: 11,
-									fontWeight: 500,
-								},
-							}}
+						<Typography
+							component="span"
+							sx={{ opacity: 0.8 }}
 						>
+							Response time
+						</Typography>
+						<Typography
+							ml={theme.spacing(4)}
+							component="span"
+						>
+							{Math.floor(responseTime)}
 							<Typography
 								component="span"
 								sx={{ opacity: 0.8 }}
 							>
-								Response Time
-							</Typography>{" "}
-							<Typography component="span">
-								{Math.floor(responseTime)}
-								<Typography
-									component="span"
-									sx={{ opacity: 0.8 }}
-								>
-									{" "}
-									ms
-								</Typography>
+								{" "}
+								ms
 							</Typography>
-						</Stack>
-					</Box>
-					{/* Display original value */}
+						</Typography>
+					</Stack>
 				</Box>
-			</ChartBox>
+				{/* Display original value */}
+			</Box>
 		);
 	}
 	return null;
@@ -143,75 +140,81 @@ const DistributedUptimeResponseChart = ({ checks }) => {
 
 	if (checks.length === 0) return null;
 	return (
-		<ResponsiveContainer
-			width="100%"
-			minWidth={25}
-			height={220}
+		<ChartBox
+			icon={<ResponseTimeIcon />}
+			header="Response Times"
+			sx={{ padding: 0 }}
 		>
-			<AreaChart
+			<ResponsiveContainer
 				width="100%"
-				height="100%"
-				data={checks}
-				margin={{
-					top: 10,
-					right: 0,
-					left: 0,
-					bottom: 0,
-				}}
-				onMouseMove={() => setIsHovered(true)}
-				onMouseLeave={() => setIsHovered(false)}
+				minWidth={25}
+				height={220}
 			>
-				<CartesianGrid
-					stroke={theme.palette.primary.lowContrast}
-					strokeWidth={1}
-					strokeOpacity={1}
-					fill="transparent"
-					vertical={false}
-				/>
-				<defs>
-					<linearGradient
-						id="colorUv"
-						x1="0"
-						y1="0"
-						x2="0"
-						y2="1"
-					>
-						<stop
-							offset="0%"
-							stopColor={theme.palette.accent.darker}
-							stopOpacity={0.8}
-						/>
-						<stop
-							offset="100%"
-							stopColor={theme.palette.accent.main}
-							stopOpacity={0}
-						/>
-					</linearGradient>
-				</defs>
-				<XAxis
-					stroke={theme.palette.primary.lowContrast}
-					dataKey="_id"
-					tick={<CustomTick />}
-					minTickGap={0}
-					axisLine={false}
-					tickLine={false}
-					height={20}
-				/>
-				<Tooltip
-					cursor={{ stroke: theme.palette.primary.lowContrast }}
-					content={<CustomToolTip />}
-					wrapperStyle={{ pointerEvents: "none" }}
-				/>
-				<Area
-					type="monotone"
-					dataKey="avgResponseTime"
-					stroke={theme.palette.primary.accent}
-					fill="url(#colorUv)"
-					strokeWidth={isHovered ? 2.5 : 1.5}
-					activeDot={{ stroke: theme.palette.background.main, r: 5 }}
-				/>
-			</AreaChart>
-		</ResponsiveContainer>
+				<AreaChart
+					width="100%"
+					height="100%"
+					data={checks}
+					margin={{
+						top: 10,
+						right: 0,
+						left: 0,
+						bottom: 0,
+					}}
+					onMouseMove={() => setIsHovered(true)}
+					onMouseLeave={() => setIsHovered(false)}
+				>
+					<CartesianGrid
+						stroke={theme.palette.primary.lowContrast}
+						strokeWidth={1}
+						strokeOpacity={1}
+						fill="transparent"
+						vertical={false}
+					/>
+					<defs>
+						<linearGradient
+							id="colorUv"
+							x1="0"
+							y1="0"
+							x2="0"
+							y2="1"
+						>
+							<stop
+								offset="0%"
+								stopColor={theme.palette.accent.darker}
+								stopOpacity={0.8}
+							/>
+							<stop
+								offset="100%"
+								stopColor={theme.palette.accent.main}
+								stopOpacity={0}
+							/>
+						</linearGradient>
+					</defs>
+					<XAxis
+						stroke={theme.palette.primary.lowContrast}
+						dataKey="_id"
+						tick={<CustomTick />}
+						minTickGap={0}
+						axisLine={false}
+						tickLine={false}
+						height={20}
+					/>
+					<Tooltip
+						cursor={{ stroke: theme.palette.primary.lowContrast }}
+						content={<CustomToolTip />}
+						wrapperStyle={{ pointerEvents: "none" }}
+					/>
+					<Area
+						type="monotone"
+						dataKey="avgResponseTime"
+						stroke={theme.palette.primary.accent}
+						fill="url(#colorUv)"
+						strokeWidth={isHovered ? 2.5 : 1.5}
+						activeDot={{ stroke: theme.palette.background.main, r: 5 }}
+					/>
+				</AreaChart>
+			</ResponsiveContainer>
+		</ChartBox>
 	);
 };
 

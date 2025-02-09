@@ -1,7 +1,6 @@
 import { handleError } from "./controllerUtils.js";
 import Monitor from "../db/models/Monitor.js";
 import DistributedUptimeCheck from "../db/models/DistributedUptimeCheck.js";
-
 const SERVICE_NAME = "DistributedUptimeQueueController";
 
 class DistributedUptimeController {

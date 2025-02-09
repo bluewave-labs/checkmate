@@ -73,9 +73,12 @@ const CustomToolTip = ({ active, payload, label, dateRange }) => {
 							component="span"
 							sx={{ opacity: 0.8 }}
 						>
-							Response Time
-						</Typography>{" "}
-						<Typography component="span">
+							Response time:
+						</Typography>
+						<Typography
+							ml={theme.spacing(4)}
+							component="span"
+						>
 							{Math.floor(responseTime)}
 							<Typography
 								component="span"

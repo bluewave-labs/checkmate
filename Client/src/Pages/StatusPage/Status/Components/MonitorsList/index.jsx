@@ -34,7 +34,7 @@ const MonitorsList = ({ monitors = [] }) => {
 							gap={theme.spacing(20)}
 						>
 							<Box flex={9}>
-								<StatusPageBarChart checks={monitor.checks.slice().reverse()} />
+								<StatusPageBarChart checks={monitor?.checks?.slice().reverse()} />
 							</Box>
 							<Box flex={1}>
 								<StatusLabel
