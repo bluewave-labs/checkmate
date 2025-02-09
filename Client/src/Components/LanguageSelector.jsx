@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import "/node_modules/flag-icons/css/flag-icons.min.css";
+import "flag-icons/css/flag-icons.min.css";
 
 const LanguageSelector = () => {
 	const { i18n } = useTranslation();
