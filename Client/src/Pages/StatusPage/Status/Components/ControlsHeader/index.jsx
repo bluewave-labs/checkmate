@@ -14,9 +14,15 @@ const Controls = ({ isDeleteOpen, setIsDeleteOpen, isDeleting }) => {
 	const location = useLocation();
 	const currentPath = location.pathname;
 	const navigate = useNavigate();
+
 	if (currentPath === "/status/public") {
 		return null;
 	}
+
+	if (currentPath.startsWith("/distributed-uptime/status/public")) {
+		return null;
+	}
+
 	return (
 		<Stack
 			direction="row"
@@ -80,7 +86,7 @@ const ControlsHeader = ({ statusPage, isDeleting, isDeleteOpen, setIsDeleteOpen 
 				<Image
 					shouldRender={statusPage?.logo?.data ? true : false}
 					alt={"Company logo"}
-					maxWidth={"100px"}
+					maxWidth={"300px"}
 					base64={statusPage?.logo?.data}
 				/>
 				<Typography variant="h2">{statusPage?.companyName}</Typography>

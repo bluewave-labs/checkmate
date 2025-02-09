@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import SkeletonLayout from "./skeleton";
 
-const CreateMonitorHeader = ({ isAdmin, shouldRender = true, path }) => {
+const CreateMonitorHeader = ({
+	isAdmin,
+	label = "Create new",
+	shouldRender = true,
+	path,
+}) => {
 	const navigate = useNavigate();
 	if (!isAdmin) return null;
 	if (!shouldRender) return <SkeletonLayout />;
@@ -18,7 +23,7 @@ const CreateMonitorHeader = ({ isAdmin, shouldRender = true, path }) => {
 				color="accent"
 				onClick={() => navigate(path)}
 			>
-				Create new
+				{label}
 			</Button>
 		</Stack>
 	);
@@ -30,4 +35,5 @@ CreateMonitorHeader.propTypes = {
 	isAdmin: PropTypes.bool.isRequired,
 	shouldRender: PropTypes.bool,
 	path: PropTypes.string.isRequired,
+	label: PropTypes.string,
 };

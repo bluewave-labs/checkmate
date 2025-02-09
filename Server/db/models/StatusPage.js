@@ -15,12 +15,11 @@ const StatusPageSchema = mongoose.Schema(
 		},
 		timezone: {
 			type: String,
-			required: true,
-			default: "America/Toronto",
+			required: false,
 		},
 		color: {
 			type: String,
-			required: true,
+			required: false,
 			default: "#4169E1",
 		},
 		monitors: [

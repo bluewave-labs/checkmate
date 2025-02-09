@@ -180,6 +180,8 @@ const imageValidation = joi.object({
 
 const logoImageValidation = joi
 	.object({
+		src: joi.string(),
+		name: joi.string(),
 		type: joi
 			.string()
 			.valid("image/jpeg", "image/png")

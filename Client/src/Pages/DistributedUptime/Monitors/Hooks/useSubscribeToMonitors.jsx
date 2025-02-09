@@ -32,6 +32,10 @@ const useSubscribeToMonitors = () => {
 				field: null,
 				order: null,
 				onUpdate: (data) => {
+					if (isLoading === true) {
+						setIsLoading(false);
+					}
+
 					const res = data.monitors;
 					const { monitors, filteredMonitors, summary } = res;
 					const mappedMonitors = filteredMonitors.map((monitor) =>
@@ -41,6 +45,9 @@ const useSubscribeToMonitors = () => {
 					setMonitorsSummary(summary);
 					setFilteredMonitors(mappedMonitors);
 				},
+				onError: () => {
+					setIsLoading(false);
+				},
 			});
 
 			return cleanup;
@@ -49,8 +56,6 @@ const useSubscribeToMonitors = () => {
 				body: error.message,
 			});
 			setNetworkError(true);
-		} finally {
-			setIsLoading(false);
 		}
 	}, [authToken, user, getMonitorWithPercentage, theme]);
 	return [isLoading, networkError, monitors, monitorsSummary, filteredMonitors];

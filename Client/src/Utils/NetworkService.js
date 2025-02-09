@@ -990,19 +990,31 @@ class NetworkService {
 		});
 	}
 
+	async getStatusPageByUrl(config) {
+		const { authToken, url } = config;
+		return this.axiosInstance.get(`/status-page/${url}`, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+				"Content-Type": "application/json",
+			},
+		});
+	}
+
 	async createStatusPage(config) {
 		const { authToken, user, form, isCreate } = config;
 		const fd = new FormData();
-		fd.append("isPublished", form.isPublished);
-		fd.append("companyName", form.companyName);
-		fd.append("url", form.url);
-		fd.append("timezone", form.timezone);
-		fd.append("color", form.color);
-		fd.append("showCharts", form.showCharts);
-		fd.append("showUptimePercentage", form.showUptimePercentage);
-		form.monitors.forEach((monitorId) => {
-			fd.append("monitors[]", monitorId);
-		});
+		form.isPublished && fd.append("isPublished", form.isPublished);
+		form.companyName && fd.append("companyName", form.companyName);
+		form.url && fd.append("url", form.url);
+		form.timezone && fd.append("timezone", form.timezone);
+		form.color && fd.append("color", form.color);
+		form.showCharts && fd.append("showCharts", form.showCharts);
+		form.showUptimePercentage &&
+			fd.append("showUptimePercentage", form.showUptimePercentage);
+		form.monitors &&
+			form.monitors.forEach((monitorId) => {
+				fd.append("monitors[]", monitorId);
+			});
 		if (form?.logo?.src && form?.logo?.src !== "") {
 			const imageResult = await axios.get(form.logo.src, {
 				responseType: "blob",
@@ -1029,8 +1041,10 @@ class NetworkService {
 	}
 
 	async deleteStatusPage(config) {
-		const { authToken } = config;
-		return this.axiosInstance.delete(`/status-page`, {
+		const { authToken, url } = config;
+		const encodedUrl = encodeURIComponent(url);
+
+		return this.axiosInstance.delete(`/status-page/${encodedUrl}`, {
 			headers: {
 				Authorization: `Bearer ${authToken}`,
 			},

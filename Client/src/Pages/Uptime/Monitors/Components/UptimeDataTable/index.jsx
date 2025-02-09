@@ -191,7 +191,7 @@ const UptimeDataTable = ({
 						},
 					},
 					onRowClick: (row) => {
-						navigate(`/uptime/${row.id}`);
+						navigate(`/uptime/${row._id}`);
 					},
 					emptyView: "No monitors found",
 				}}

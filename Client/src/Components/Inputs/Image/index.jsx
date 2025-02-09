@@ -106,7 +106,7 @@ const ImageField = ({ id, src, loading, onChange, error, isRound = true, maxSize
 								<Typography
 									component="span"
 									fontSize="inherit"
-									color={theme.palette.primary.main}
+									color="info"
 									fontWeight={500}
 								>
 									Click to upload

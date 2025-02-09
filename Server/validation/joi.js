@@ -421,8 +421,8 @@ const getStatusPageParamValidation = joi.object({
 const createStatusPageBodyValidation = joi.object({
 	companyName: joi.string().required(),
 	url: joi.string().required(),
-	timezone: joi.string().required(),
-	color: joi.string().required(),
+	timezone: joi.string().optional(),
+	color: joi.string().optional(),
 	monitors: joi
 		.array()
 		.items(joi.string().pattern(/^[0-9a-fA-F]{24}$/))
@@ -434,7 +434,7 @@ const createStatusPageBodyValidation = joi.object({
 			"any.required": "Monitors are required",
 		}),
 	isPublished: joi.boolean(),
-	showCharts: joi.boolean(),
+	showCharts: joi.boolean().optional(),
 	showUptimePercentage: joi.boolean(),
 });
 
