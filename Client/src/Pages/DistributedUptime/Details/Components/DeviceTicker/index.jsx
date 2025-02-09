@@ -1,7 +1,7 @@
 import { Stack, Typography, List, ListItem } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import PulseDot from "../../../../../Components/Animated/PulseDot";
-import "/node_modules/flag-icons/css/flag-icons.min.css";
+import "flag-icons/css/flag-icons.min.css";
 
 const BASE_BOX_PADDING_VERTICAL = 16;
 const BASE_BOX_PADDING_HORIZONTAL = 8;
