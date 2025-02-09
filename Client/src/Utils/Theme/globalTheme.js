@@ -128,6 +128,10 @@ const baseTheme = (palette) => ({
 					"&:hover": {
 						boxShadow: "none",
 					},
+					"&.Mui-disabled": {
+						backgroundColor: theme.palette.secondary.main,
+						color: theme.palette.primary.contrastText,
+					},
 					"&.MuiLoadingButton-root": {
 						"&:disabled": {
 							backgroundColor: theme.palette.secondary.main,
