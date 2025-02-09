@@ -3,15 +3,18 @@ import { useTranslation } from "react-i18next";
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import Flag from "react-world-flags";
+import { useSelector, useDispatch } from "react-redux";
+import { setLanguage } from "../Features/Settings/uiSlice";
 
 const LanguageSelector = () => {
 	const { i18n } = useTranslation();
 	const theme = useTheme();
-	const [language, setLanguage] = useState(i18n.language || "gb");
+	const dispatch = useDispatch();
+	const language = useSelector((state) => state.ui.language);
 
 	const handleChange = (event) => {
 		const newLang = event.target.value;
-		setLanguage(newLang);
+		dispatch(setLanguage(newLang));
 		i18n.changeLanguage(newLang);
 	};
 
