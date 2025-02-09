@@ -159,7 +159,7 @@ const deleteStatusPage = async (url) => {
 		await StatusPage.deleteOne({ url });
 	} catch (error) {
 		error.service = SERVICE_NAME;
-		error.method = "createStatusPage";
+		error.method = "deleteStatusPage";
 		throw error;
 	}
 };
