@@ -1,6 +1,7 @@
 import "./reportStyles.css";
 import { formatDurationRounded, formatDateWithWeekday } from "../timeUtils";
 import { calculateDowntimeCount, calculatePingStats, calculateActiveRanges} from "./reportUtils";
+import PropTypes from 'prop-types';
 
 
 
@@ -114,4 +115,9 @@ export const ProductReport = ({ monitorData, certificateExpiry }) => {
 			</div>
 		</div>
 	);
+};
+
+ProductReport.propTypes = {
+	monitorData: PropTypes.object.isRequired,
+	certificateExpiry: PropTypes.string.isRequired,
 };

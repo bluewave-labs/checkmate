@@ -2,6 +2,7 @@ import { useState } from "react";
 import DropDownButton from "../../DropDownButton";
 import { Box } from "@mui/material";
 import {downloadReport} from "../../../Utils/Report/downloadReport";
+import PropTypes from 'prop-types';
 
 const options = [
     { name: "Download HTML Report", tag: "html" },
@@ -11,8 +12,6 @@ const options = [
 const ReportDownloadButton = ({ shouldRender, monitor, certificateExpiry }) => {
 	const [downloadFormat, setDownloadFormat] = useState("pdf");
     if (!shouldRender) return null;
-
-    
 
 	const handleDownload = async () => {
 		try {
@@ -35,6 +34,12 @@ const ReportDownloadButton = ({ shouldRender, monitor, certificateExpiry }) => {
 			
 		</Box>
 	);
+};
+
+ReportDownloadButton.propTypes = {
+	shouldRender: PropTypes.bool.isRequired,
+	monitor: PropTypes.object.isRequired,
+	certificateExpiry: PropTypes.string.isRequired,
 };
 
 export default ReportDownloadButton;

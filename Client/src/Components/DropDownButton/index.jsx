@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
+import PropTypes from 'prop-types';
 
 const DropDownButton = ({options, setValue, hanldeClick}) => {
   const theme = useTheme();
@@ -91,5 +92,16 @@ const DropDownButton = ({options, setValue, hanldeClick}) => {
       </>
   );
 }
+
+DropDownButton.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      tag: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  setValue: PropTypes.func.isRequired,
+  hanldeClick: PropTypes.func.isRequired,
+};
 
 export default DropDownButton;

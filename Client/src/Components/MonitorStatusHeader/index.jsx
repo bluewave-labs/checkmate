@@ -16,9 +16,6 @@ const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor, cert
 		return <SkeletonLayout />;
 	}
 
-	console.log(reportData);
-    console.log(certificateExpiry);
-
 	return (
 		<Stack
 			direction="row"
@@ -64,6 +61,7 @@ MonitorStatusHeader.propTypes = {
 	isAdmin: PropTypes.bool,
 	monitor: PropTypes.object,
 	certificateExpiry: PropTypes.object,
+	reportData: PropTypes.object,
 };
 
 export default MonitorStatusHeader;
