@@ -23,7 +23,7 @@ const initialState = {
 	greeting: { index: 0, lastUpdate: null },
 	timezone: "America/Toronto",
 	distributedUptimeEnabled: false,
-	language: "en",
+	language: "gb",
 };
 
 const uiSlice = createSlice({

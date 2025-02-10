@@ -2,18 +2,15 @@ import { useTranslation } from "react-i18next";
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import "flag-icons/css/flag-icons.min.css";
-import { useSelector, useDispatch } from "react-redux";
-import { setLanguage } from "../Features/UI/uiSlice";
+import { useSelector } from "react-redux";
 
 const LanguageSelector = () => {
 	const { i18n } = useTranslation();
 	const theme = useTheme();
-	const dispatch = useDispatch();
-	const language = useSelector((state) => state.ui.language);
+	const { language } = useSelector((state) => state.ui);
 
 	const handleChange = (event) => {
 		const newLang = event.target.value;
-		dispatch(setLanguage(newLang));
 		i18n.changeLanguage(newLang);
 	};
 

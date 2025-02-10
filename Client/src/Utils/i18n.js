@@ -1,5 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { setLanguage } from "../Features/UI/uiSlice";
+import store from "../store";
 
 const primaryLanguage = "gb";
 
@@ -13,7 +15,7 @@ Object.keys(translations).forEach((path) => {
 	};
 });
 
-const savedLanguage = localStorage.getItem("language") || primaryLanguage;
+const savedLanguage = store.getState.ui.language || primaryLanguage;
 
 i18n.use(initReactI18next).init({
 	resources,
@@ -28,7 +30,7 @@ i18n.use(initReactI18next).init({
 });
 
 i18n.on("languageChanged", (lng) => {
-	localStorage.setItem("language", lng);
+	store.dispatch(setLanguage(lng));
 });
 
 export default i18n;
