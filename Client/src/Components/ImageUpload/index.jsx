@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import ImageField from "../Inputs/Image";
 import ProgressUpload from "../ProgressBars";
 import { formatBytes } from "../../Utils/fileUtils";
@@ -7,11 +7,46 @@ import { imageValidation } from "../../Validation/validation";
 import ImageIcon from "@mui/icons-material/Image";
 import {GenericDialog} from "../Dialog/genericDialog";
 
-const ImageUpload = ({ open, onClose, onUpdate, currentImage, theme }) => {
+const isValidBase64Image = (data) => {
+    return /^[A-Za-z0-9+/=]+$/.test(data);
+  };
+
+const ImageUpload = ({ 
+    open,
+    onClose,
+    onUpdate,
+    currentImage,
+    theme,
+    shouldRender = true,
+    alt = "Uploaded Image",
+    width = "auto",
+    height = "auto",
+    minWidth = "auto",
+    minHeight = "auto",
+    maxWidth = "auto",
+    maxHeight = "auto",
+    placeholder,
+    sx
+ }) => {
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ value: 0, isLoading: false });
   const [errors, setErrors] = useState({});
   const intervalRef = useRef(null);
+
+  // Handle base64 and placeholder logic
+  let imageSrc = currentImage;
+
+  if (typeof file?.src !== "undefined") {
+    imageSrc = file.src;
+  } else if (typeof currentImage !== "undefined" && isValidBase64Image(currentImage)) {
+    imageSrc = `data:image/png;base64,${currentImage}`;
+  } else if (typeof placeholder !== "undefined") {
+    imageSrc = placeholder;
+  }
+
+  if (shouldRender === false) {
+    return null;
+  }
 
   // Handles image file selection
   const handlePicture = (event) => {
