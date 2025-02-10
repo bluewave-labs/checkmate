@@ -13,7 +13,11 @@ const useStatusPageFetchByUrl = ({ url }) => {
 	useEffect(() => {
 		const fetchStatusPageByUrl = async () => {
 			try {
-				const response = await networkService.getStatusPageByUrl({ authToken, url });
+				const response = await networkService.getStatusPageByUrl({
+					authToken,
+					url,
+					type: "distributed",
+				});
 				if (!response?.data?.data) return;
 				const statusPage = response.data.data;
 				setStatusPage(statusPage);

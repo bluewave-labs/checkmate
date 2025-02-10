@@ -14,6 +14,7 @@ import { createToast } from "../../../Utils/toastUtils";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useStatusPageFetch } from "../Status/Hooks/useStatusPageFetch";
+import { useParams } from "react-router-dom";
 
 //Constants
 const TAB_LIST = ["General settings", "Contents"];
@@ -24,16 +25,18 @@ const ERROR_TAB_MAPPING = [
 ];
 
 const CreateStatusPage = () => {
+	const { url } = useParams();
 	//Local state
 	const [tab, setTab] = useState(0);
 	const [progress, setProgress] = useState({ value: 0, isLoading: false });
 	const [form, setForm] = useState({
 		isPublished: false,
 		companyName: "",
-		url: "/status/public",
+		url: url ?? Math.floor(Math.random() * 1000000).toFixed(0),
 		logo: undefined,
 		timezone: "America/Toronto",
 		color: "#4169E1",
+		type: "uptime",
 		monitors: [],
 		showCharts: true,
 		showUptimePercentage: true,
@@ -45,7 +48,7 @@ const CreateStatusPage = () => {
 
 	// Setup
 	const location = useLocation();
-	const isCreate = location.pathname === "/status/create";
+	const isCreate = location.pathname === "/status/uptime/create";
 
 	//Utils
 	const theme = useTheme();
@@ -53,8 +56,9 @@ const CreateStatusPage = () => {
 	const [createStatusPage, createStatusIsLoading, createStatusPageNetworkError] =
 		useCreateStatusPage(isCreate);
 	const navigate = useNavigate();
+
 	const [statusPage, statusPageMonitors, statusPageIsLoading, statusPageNetworkError] =
-		useStatusPageFetch(isCreate);
+		useStatusPageFetch(isCreate, url);
 
 	// Handlers
 	const handleFormChange = (e) => {
@@ -131,7 +135,7 @@ const CreateStatusPage = () => {
 			const success = await createStatusPage({ form });
 			if (success) {
 				createToast({ body: "Status page created successfully" });
-				navigate("/status");
+				navigate(`/status/uptime/${form.url}`);
 			}
 			return;
 		}
@@ -141,7 +145,6 @@ const CreateStatusPage = () => {
 			newErrors[err.path[0]] = err.message;
 		});
 		setErrors((prev) => ({ ...prev, ...newErrors }));
-
 		const errorTabs = Object.keys(newErrors).map((err) => {
 			return ERROR_TAB_MAPPING.findIndex((tab) => tab.includes(err));
 		});
@@ -150,6 +153,13 @@ const CreateStatusPage = () => {
 		if (errorTabs.some((errorTab) => errorTab === tab)) {
 			return;
 		}
+
+		// If we get -1, there's an unknown error
+		if (errorTabs[0] === -1) {
+			createToast({ body: "Unknown error" });
+			return;
+		}
+
 		// Otherwise go to tab with error
 		setTab(errorTabs[0]);
 	};
@@ -218,6 +228,7 @@ const CreateStatusPage = () => {
 				tab={tab}
 				setTab={setTab}
 				TAB_LIST={TAB_LIST}
+				isCreate={isCreate}
 			/>
 			<Stack
 				direction="row"

@@ -2,6 +2,7 @@ import { handleError, handleValidationError } from "./controllerUtils.js";
 import {
 	createStatusPageBodyValidation,
 	getStatusPageParamValidation,
+	getStatusPageQueryValidation,
 	imageValidation,
 } from "../validation/joi.js";
 import { successMessages, errorMessages } from "../utils/messages.js";
@@ -73,19 +74,33 @@ class StatusPageController {
 	getStatusPageByUrl = async (req, res, next) => {
 		try {
 			await getStatusPageParamValidation.validateAsync(req.params);
+			await getStatusPageQueryValidation.validateAsync(req.query);
 		} catch (error) {
 			next(handleValidationError(error, SERVICE_NAME));
 			return;
 		}
 
 		try {
-			const statusPage = await this.db.getStatusPageByUrl(req.params.url);
+			const statusPage = await this.db.getStatusPageByUrl(req.params.url, req.query.type);
 			return res.success({
 				msg: successMessages.STATUS_PAGE_BY_URL,
 				data: statusPage,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "getStatusPageByUrl"));
+		}
+	};
+
+	getStatusPagesByTeamId = async (req, res, next) => {
+		try {
+			const teamId = req.params.teamId;
+			const statusPages = await this.db.getStatusPagesByTeamId(teamId);
+			return res.success({
+				msg: successMessages.STATUS_PAGE_BY_TEAM_ID,
+				data: statusPages,
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "getStatusPageByTeamId"));
 		}
 	};
 

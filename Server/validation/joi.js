@@ -418,7 +418,14 @@ const getStatusPageParamValidation = joi.object({
 	url: joi.string().required(),
 });
 
+const getStatusPageQueryValidation = joi.object({
+	type: joi.string().valid("uptime", "distributed").required(),
+});
+
 const createStatusPageBodyValidation = joi.object({
+	userId: joi.string().required(),
+	teamId: joi.string().required(),
+	type: joi.string().valid("uptime", "distributed").required(),
 	companyName: joi.string().required(),
 	url: joi.string().required(),
 	timezone: joi.string().optional(),
@@ -519,5 +526,6 @@ export {
 	updateAppSettingsBodyValidation,
 	createStatusPageBodyValidation,
 	getStatusPageParamValidation,
+	getStatusPageQueryValidation,
 	imageValidation,
 };

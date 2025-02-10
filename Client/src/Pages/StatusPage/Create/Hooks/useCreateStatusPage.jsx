@@ -3,7 +3,7 @@ import { networkService } from "../../../../main";
 import { useSelector } from "react-redux";
 import { createToast } from "../../../../Utils/toastUtils";
 
-const useCreateStatusPage = (isCreate) => {
+const useCreateStatusPage = (isCreate, url) => {
 	const { authToken, user } = useSelector((state) => state.auth);
 
 	const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +11,7 @@ const useCreateStatusPage = (isCreate) => {
 	const createStatusPage = async ({ form }) => {
 		setIsLoading(true);
 		try {
-			await networkService.createStatusPage({ authToken, user, form, isCreate });
+			await networkService.createStatusPage({ authToken, user, form, isCreate, url });
 			return true;
 		} catch (error) {
 			setNetworkError(true);
