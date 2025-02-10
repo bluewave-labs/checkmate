@@ -5,15 +5,19 @@ import { useTheme } from "@emotion/react";
 import useUtils from "../../Pages/Uptime/Monitors/Hooks/useUtils";
 import { formatDurationRounded } from "../../Utils/timeUtils";
 import ConfigButton from "./ConfigButton";
+import ReportDownloadButton from "./ReportDownloadButton";
 import SkeletonLayout from "./skeleton";
 import PropTypes from "prop-types";
 
-const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor }) => {
+const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor, certificateExpiry }) => {
 	const theme = useTheme();
 	const { statusColor, statusMsg, determineState } = useUtils();
 	if (!shouldRender) {
 		return <SkeletonLayout />;
 	}
+
+	console.log(monitor);
+    console.log(certificateExpiry);
 
 	return (
 		<Stack
@@ -37,11 +41,19 @@ const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor }) =>
 					</Typography>
 				</Stack>
 			</Stack>
+			<Stack>
 			<ConfigButton
 				path={path}
 				shouldRender={isAdmin}
 				monitorId={monitor?._id}
 			/>
+			<ReportDownloadButton 
+				shouldRender={isAdmin}
+				monitor={monitor}
+				certificateExpiry={certificateExpiry}
+			/>
+
+			</Stack>
 		</Stack>
 	);
 };
@@ -51,6 +63,7 @@ MonitorStatusHeader.propTypes = {
 	shouldRender: PropTypes.bool,
 	isAdmin: PropTypes.bool,
 	monitor: PropTypes.object,
+	certificateExpiry: PropTypes.object,
 };
 
 export default MonitorStatusHeader;

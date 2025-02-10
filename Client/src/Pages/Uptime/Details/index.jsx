@@ -103,6 +103,7 @@ const UptimeDetails = () => {
 					isAdmin={isAdmin}
 					shouldRender={!monitorIsLoading}
 					monitor={monitor}
+					certificateExpiry={certificateExpiry}
 				/>
 				<GenericFallback>
 					<Typography>There is no check history for this monitor yet.</Typography>
@@ -119,6 +120,7 @@ const UptimeDetails = () => {
 				isAdmin={isAdmin}
 				shouldRender={!monitorIsLoading}
 				monitor={monitor}
+				certificateExpiry={certificateExpiry}
 			/>
 			<UptimeStatusBoxes
 				shouldRender={!monitorIsLoading}
