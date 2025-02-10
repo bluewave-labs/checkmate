@@ -1,5 +1,5 @@
 import axios from "axios";
-import i18next from 'i18next';
+import i18next from "i18next";
 const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 const FALLBACK_BASE_URL = "http://localhost:5000/api/v1";
 import { clearAuthState } from "../Features/Auth/authSlice";
@@ -26,7 +26,7 @@ class NetworkService {
 		});
 		this.axiosInstance.interceptors.request.use(
 			(config) => {
-				const currentLanguage = i18next.language || 'en';
+				const currentLanguage = i18next.language || "en";
 
 				config.headers = {
 					...config.headers,
@@ -1003,6 +1003,8 @@ class NetworkService {
 	async createStatusPage(config) {
 		const { authToken, user, form, isCreate } = config;
 		const fd = new FormData();
+		fd.append("teamId", user.teamId);
+		fd.append("userId", user._id);
 		form.isPublished && fd.append("isPublished", form.isPublished);
 		form.companyName && fd.append("companyName", form.companyName);
 		form.url && fd.append("url", form.url);
