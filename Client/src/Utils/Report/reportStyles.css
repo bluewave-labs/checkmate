@@ -1,0 +1,20 @@
+.product-report{
+    display: flex;
+    padding: 1rem;
+    color: rgb(36, 36, 36);
+    padding: 25px;
+}
+
+.report-content{
+
+}
+
+.info-title {
+    font-weight:600;
+}
+
+hr{
+    border: 0; 
+    border-top: 1px solid #ddd;
+    width: 700px;
+}

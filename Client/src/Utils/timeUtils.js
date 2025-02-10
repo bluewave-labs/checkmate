@@ -111,6 +111,19 @@ export const formatDate = (date, customOptions) => {
 		.replace(/\b(AM|PM)\b/g, (match) => match.toLowerCase());
 };
 
+export const formatDateWithWeekday = (date) => {
+	const options = {
+				weekday: "short",
+				year: "numeric",
+				month: "long",
+				day: "numeric",
+				hour: "numeric",
+				minute: "numeric",
+				hour12: true,
+			};
+			return new Intl.DateTimeFormat("en-US", options).format(new Date(date));
+}
+
 export const formatDateWithTz = (timestamp, format, timezone) => {
 	const formattedDate = dayjs(timestamp).tz(timezone).format(format);
 	return formattedDate;
