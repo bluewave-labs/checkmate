@@ -14,6 +14,12 @@ const StatusPageSchema = mongoose.Schema(
 			immutable: true,
 			required: true,
 		},
+		type: {
+			type: String,
+			required: true,
+			default: "uptime",
+			enum: ["uptime", "distributed"],
+		},
 		companyName: {
 			type: String,
 			required: true,
