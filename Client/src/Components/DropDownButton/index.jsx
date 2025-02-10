@@ -45,7 +45,6 @@ const DropDownButton = ({options, setValue, hanldeClick}) => {
       >
         <Button size='small' onClick={hanldeClick}>{options[selectedIndex].name}</Button>
         <Button
-          size="small"
           aria-controls={open ? 'split-button-menu' : undefined}
           aria-expanded={open ? 'true' : undefined}
           aria-label="select merge strategy"

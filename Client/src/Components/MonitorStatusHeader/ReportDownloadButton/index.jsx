@@ -37,9 +37,9 @@ const ReportDownloadButton = ({ shouldRender, monitor, certificateExpiry }) => {
 };
 
 ReportDownloadButton.propTypes = {
-	shouldRender: PropTypes.bool.isRequired,
-	monitor: PropTypes.object.isRequired,
-	certificateExpiry: PropTypes.string.isRequired,
+	shouldRender: PropTypes.bool,
+	monitor: PropTypes.object,
+	certificateExpiry: PropTypes.string,
 };
 
 export default ReportDownloadButton;

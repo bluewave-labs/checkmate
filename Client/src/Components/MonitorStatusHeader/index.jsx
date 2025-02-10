@@ -38,7 +38,11 @@ const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor, cert
 					</Typography>
 				</Stack>
 			</Stack>
-			<Stack>
+			<Stack
+				direction="row"
+				alignItems="center"
+				gap={theme.spacing(2)}
+			>
 			<ConfigButton
 				path={path}
 				shouldRender={isAdmin}
@@ -60,7 +64,7 @@ MonitorStatusHeader.propTypes = {
 	shouldRender: PropTypes.bool,
 	isAdmin: PropTypes.bool,
 	monitor: PropTypes.object,
-	certificateExpiry: PropTypes.object,
+	certificateExpiry: PropTypes.string,
 	reportData: PropTypes.object,
 };
 
