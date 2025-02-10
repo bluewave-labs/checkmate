@@ -31,14 +31,17 @@ import InfrastructureDetails from "../Pages/Infrastructure/Details";
 import DistributedUptimeMonitors from "../Pages/DistributedUptime/Monitors";
 import CreateDistributedUptime from "../Pages/DistributedUptime/Create";
 import DistributedUptimeDetails from "../Pages/DistributedUptime/Details";
-import DistributedUptimeStatus from "../Pages/DistributedUptime/Status";
-import CreateDistributedUptimeStatus from "../Pages/DistributedUptime/CreateStatus";
+
+// Distributed Uptime Status
+import CreateDistributedUptimeStatus from "../Pages/DistributedUptimeStatus/Create";
+import DistributedUptimeStatus from "../Pages/DistributedUptimeStatus/Status";
 
 // Incidents
 import Incidents from "../Pages/Incidents";
 
 // Status pages
 import CreateStatus from "../Pages/StatusPage/Create";
+import StatusPages from "../Pages/StatusPage/StatusPages";
 import Status from "../Pages/StatusPage/Status";
 
 import Integrations from "../Pages/Integrations";
@@ -112,22 +115,6 @@ const Routes = () => {
 						</ProtectedDistributedUptimeRoute>
 					}
 				/>
-				<Route
-					path="/distributed-uptime/status/create/:monitorId"
-					element={
-						<ProtectedDistributedUptimeRoute>
-							<CreateDistributedUptimeStatus />
-						</ProtectedDistributedUptimeRoute>
-					}
-				/>
-				<Route
-					path="/distributed-uptime/status/:url"
-					element={
-						<ProtectedDistributedUptimeRoute>
-							<DistributedUptimeStatus />
-						</ProtectedDistributedUptimeRoute>
-					}
-				/>
 
 				<Route
 					path="pagespeed"
@@ -164,16 +151,49 @@ const Routes = () => {
 
 				<Route
 					path="status"
+					element={<StatusPages />}
+				/>
+
+				<Route
+					path="status/uptime/:url"
 					element={<Status />}
 				/>
 
 				<Route
-					path="status/create"
+					path="/status/distributed/:url"
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<DistributedUptimeStatus />
+						</ProtectedDistributedUptimeRoute>
+					}
+				/>
+
+				<Route
+					path="status/uptime/create"
 					element={<CreateStatus />}
 				/>
+
 				<Route
-					path="status/configure"
+					path="/status/distributed/create/:monitorId"
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<CreateDistributedUptimeStatus />
+						</ProtectedDistributedUptimeRoute>
+					}
+				/>
+
+				<Route
+					path="status/uptime/configure/:url"
 					element={<CreateStatus />}
+				/>
+
+				<Route
+					path="/status/distributed/configure/:url"
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<CreateDistributedUptimeStatus />
+						</ProtectedDistributedUptimeRoute>
+					}
 				/>
 
 				<Route
@@ -239,11 +259,11 @@ const Routes = () => {
 				element={<AuthNewPasswordConfirmed />}
 			/>
 			<Route
-				path="/status/public"
+				path="/status/uptime/public/:url"
 				element={<Status />}
 			/>
 			<Route
-				path="/distributed-uptime/status/public/:url"
+				path="/status/distributed/public/:url"
 				element={<DistributedUptimeStatus />}
 			/>
 
