@@ -11,18 +11,21 @@ const useStatusPagesFetch = () => {
 	const [statusPages, setStatusPages] = useState(undefined);
 
 	useEffect(() => {
-		try {
-			networkService
-				.getStatusPagesByTeamId({ authToken, teamId: user.teamId })
-				.then((res) => {
-					setStatusPages(res.data.data);
+		const fetchStatusPages = async () => {
+			try {
+				const res = await networkService.getStatusPagesByTeamId({
+					authToken,
+					teamId: user.teamId,
 				});
-		} catch (error) {
-			setNetworkError(true);
-			createToast(error.message, "error");
-		} finally {
-			setIsLoading(false);
-		}
+				setStatusPages(res?.data?.data);
+			} catch (error) {
+				setNetworkError(true);
+				createToast(error.message, "error");
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		fetchStatusPages();
 	}, [authToken, user]);
 	return [isLoading, networkError, statusPages];
 };
