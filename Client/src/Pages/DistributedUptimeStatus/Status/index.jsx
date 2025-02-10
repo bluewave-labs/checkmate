@@ -1,12 +1,12 @@
 //Components
-import DistributedUptimeMap from "../Details/Components/DistributedUptimeMap";
+import DistributedUptimeMap from "../../DistributedUptime/Details/Components/DistributedUptimeMap";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import { Stack, Typography } from "@mui/material";
-import DeviceTicker from "../Details/Components/DeviceTicker";
-import DistributedUptimeResponseChart from "../Details/Components/DistributedUptimeResponseChart";
-import NextExpectedCheck from "../Details/Components/NextExpectedCheck";
-import Footer from "../Details/Components/Footer";
-import StatBoxes from "../Details/Components/StatBoxes";
+import DeviceTicker from "../../DistributedUptime/Details/Components/DeviceTicker";
+import DistributedUptimeResponseChart from "../../DistributedUptime/Details/Components/DistributedUptimeResponseChart";
+import NextExpectedCheck from "../../DistributedUptime/Details/Components/NextExpectedCheck";
+import Footer from "../../DistributedUptime/Details/Components/Footer";
+import StatBoxes from "../../DistributedUptime/Details/Components/StatBoxes";
 import ControlsHeader from "../../StatusPage/Status/Components/ControlsHeader";
 import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import GenericFallback from "../../../Components/GenericFallback";
@@ -16,7 +16,7 @@ import SkeletonLayout from "./Components/Skeleton";
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSubscribeToDetails } from "../Details/Hooks/useSubscribeToDetails";
+import { useSubscribeToDetails } from "../../DistributedUptime/Details/Hooks/useSubscribeToDetails";
 import { useStatusPageFetchByUrl } from "./Hooks/useStatusPageFetchByUrl";
 import { useStatusPageDelete } from "../../StatusPage/Status/Hooks/useStatusPageDelete";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ import { useLocation } from "react-router-dom";
 const DistributedUptimeStatus = () => {
 	const { url } = useParams();
 	const location = useLocation();
-	const isPublic = location.pathname.startsWith("/distributed-uptime/status/public");
+	const isPublic = location.pathname.startsWith("/status/distributed/public");
 
 	// Local State
 	const [dateRange, setDateRange] = useState("day");
@@ -84,7 +84,7 @@ const DistributedUptimeStatus = () => {
 	}
 
 	// Done loading, a status page exists but is not public
-	if (!statusPageIsLoading && statusPage.isPublished === false) {
+	if (!statusPageIsLoading && isPublic && statusPage.isPublished === false) {
 		return (
 			<Stack sx={sx}>
 				<GenericFallback>
@@ -141,6 +141,8 @@ const DistributedUptimeStatus = () => {
 				isDeleting={isDeleting}
 				isDeleteOpen={isDeleteOpen}
 				setIsDeleteOpen={setIsDeleteOpen}
+				url={url}
+				type="distributed"
 			/>
 			<StatBoxes
 				monitor={monitor}
