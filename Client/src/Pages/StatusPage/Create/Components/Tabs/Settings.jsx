@@ -129,6 +129,7 @@ const TabSettings = ({
 };
 
 TabSettings.propTypes = {
+	isCreate: PropTypes.bool,
 	tabValue: PropTypes.string,
 	form: PropTypes.object,
 	handleFormChange: PropTypes.func,
