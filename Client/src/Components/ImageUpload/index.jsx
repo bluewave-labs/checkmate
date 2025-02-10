@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import ImageField from "../Inputs/Image";
 import ProgressUpload from "../ProgressBars";
 import { formatBytes } from "../../Utils/fileUtils";
@@ -113,6 +113,18 @@ const ImageUpload = ({
       onConfirm={handleUpdatePicture}
       isLoading={false}
     >
+        <Box
+        component="img"
+        src={imageSrc}
+        alt={alt}
+        minWidth={minWidth}
+        minHeight={minHeight}
+        maxWidth={maxWidth}
+        maxHeight={maxHeight}
+        width={width}
+        height={height}
+        sx={{ ...sx }}
+      />
       <ImageField
         id="update-profile-picture" // Add the required id prop
         src={
