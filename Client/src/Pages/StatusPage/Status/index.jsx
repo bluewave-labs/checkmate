@@ -16,25 +16,29 @@ import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useLocation } from "react-router-dom";
 import { useStatusPageDelete } from "./Hooks/useStatusPageDelete";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 const PublicStatus = () => {
+	const { url } = useParams();
+
 	// Local state
 	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 	// Utils
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
 	const [statusPage, monitors, isLoading, networkError, fetchStatusPage] =
-		useStatusPageFetch();
-	const [deleteStatusPage, isDeleting] = useStatusPageDelete(fetchStatusPage);
+		useStatusPageFetch(false, url);
+	const [deleteStatusPage, isDeleting] = useStatusPageDelete(fetchStatusPage, url);
 	const location = useLocation();
 
 	// Setup
 	const currentPath = location.pathname;
 	let sx = { paddingLeft: theme.spacing(20), paddingRight: theme.spacing(20) };
 	let link = undefined;
+	const isPublic = location.pathname.startsWith("/status/uptime/public");
 
 	// Public status page
-	if (currentPath === "/status/public") {
+	if (isPublic) {
 		sx = {
 			paddingTop: theme.spacing(20),
 			paddingLeft: "20vw",
@@ -65,11 +69,7 @@ const PublicStatus = () => {
 	}
 
 	// Public status page fallback
-	if (
-		!isLoading &&
-		typeof statusPage === "undefined" &&
-		currentPath === "/status/public"
-	) {
+	if (!isLoading && typeof statusPage === "undefined" && isPublic) {
 		return (
 			<Stack sx={sx}>
 				<GenericFallback>
@@ -87,11 +87,7 @@ const PublicStatus = () => {
 	}
 
 	// Finished loading, but status page is not public
-	if (
-		!isLoading &&
-		currentPath === "/status/public" &&
-		statusPage.isPublished === false
-	) {
+	if (!isLoading && isPublic && statusPage.isPublished === false) {
 		return (
 			<Stack sx={sx}>
 				<GenericFallback>
@@ -111,15 +107,16 @@ const PublicStatus = () => {
 	// Status page doesn't exist
 	if (!isLoading && typeof statusPage === "undefined") {
 		return (
-			<Fallback
-				title="status page"
-				checks={[
-					"Display a list of monitors to track",
-					"Share your monitors with the public",
-				]}
-				link="/status/create"
-				isAdmin={isAdmin}
-			/>
+			<GenericFallback>
+				<Typography
+					variant="h1"
+					marginY={theme.spacing(4)}
+					color={theme.palette.primary.contrastTextTertiary}
+				>
+					There's no status page here.
+				</Typography>
+				<Typography>Please contact to your administrator</Typography>
+			</GenericFallback>
 		);
 	}
 
@@ -134,6 +131,7 @@ const PublicStatus = () => {
 				isDeleting={isDeleting}
 				isDeleteOpen={isDeleteOpen}
 				setIsDeleteOpen={setIsDeleteOpen}
+				url={url}
 			/>
 			<Typography variant="h2">Service status</Typography>
 			<StatusBar monitors={monitors} />

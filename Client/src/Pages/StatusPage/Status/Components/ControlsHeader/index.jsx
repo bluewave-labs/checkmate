@@ -9,17 +9,17 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Controls = ({ isDeleteOpen, setIsDeleteOpen, isDeleting }) => {
+const Controls = ({ isDeleteOpen, setIsDeleteOpen, isDeleting, url, type }) => {
 	const theme = useTheme();
 	const location = useLocation();
 	const currentPath = location.pathname;
 	const navigate = useNavigate();
 
-	if (currentPath === "/status/public") {
+	if (currentPath.startsWith("/status/uptime/public")) {
 		return null;
 	}
 
-	if (currentPath.startsWith("/distributed-uptime/status/public")) {
+	if (currentPath.startsWith("/status/distributed/public")) {
 		return null;
 	}
 
@@ -42,7 +42,13 @@ const Controls = ({ isDeleteOpen, setIsDeleteOpen, isDeleting }) => {
 				<Button
 					variant="contained"
 					color="secondary"
-					onClick={() => navigate(`/status/configure`)}
+					onClick={() => {
+						if (type === "uptime") {
+							navigate(`/status/uptime/configure/${url}`);
+						} else {
+							navigate(`/status/distributed/configure/${url}`);
+						}
+					}}
 					sx={{
 						px: theme.spacing(5),
 						"& svg": {
@@ -62,11 +68,19 @@ const Controls = ({ isDeleteOpen, setIsDeleteOpen, isDeleting }) => {
 
 Controls.propTypes = {
 	isDeleting: PropTypes.bool,
+	url: PropTypes.string,
 	isDeleteOpen: PropTypes.bool.isRequired,
 	setIsDeleteOpen: PropTypes.func.isRequired,
 };
 
-const ControlsHeader = ({ statusPage, isDeleting, isDeleteOpen, setIsDeleteOpen }) => {
+const ControlsHeader = ({
+	statusPage,
+	isDeleting,
+	isDeleteOpen,
+	setIsDeleteOpen,
+	url,
+	type = "uptime",
+}) => {
 	const theme = useTheme();
 
 	return (
@@ -95,16 +109,20 @@ const ControlsHeader = ({ statusPage, isDeleting, isDeleteOpen, setIsDeleteOpen 
 				isDeleting={isDeleting}
 				isDeleteOpen={isDeleteOpen}
 				setIsDeleteOpen={setIsDeleteOpen}
+				url={url}
+				type={type}
 			/>
 		</Stack>
 	);
 };
 
 ControlsHeader.propTypes = {
+	url: PropTypes.string,
 	statusPage: PropTypes.object,
 	isDeleting: PropTypes.bool,
 	isDeleteOpen: PropTypes.bool.isRequired,
 	setIsDeleteOpen: PropTypes.func.isRequired,
+	type: PropTypes.string,
 };
 
 export default ControlsHeader;
