@@ -309,11 +309,14 @@ const ProfilePanel = () => {
 				description={
 					"If you delete your account, you will no longer be able to sign in, and all of your data will be deleted. Deleting your account is permanent and non-recoverable action."
 				}
+				onClose={() => setIsOpen("")}
 				onCancel={() => setIsOpen("")}
 				confirmationButtonLabel={"Delete account"}
 				onConfirm={handleDeleteAccount}
 				isLoading={isLoading}
-			/>
+			>
+			<></>
+			</GenericDialog>
 
 			{/* Image Upload Modal */}
 			<ImageUpload

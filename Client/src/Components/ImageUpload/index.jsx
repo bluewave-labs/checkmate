@@ -79,18 +79,19 @@ const ImageUpload = ({ open, onClose, onUpdate, currentImage, theme }) => {
       isLoading={false}
     >
       <ImageField
+        id="update-profile-picture" // Add the required id prop
         src={
-          file?.delete
+            file?.delete
             ? ""
             : file?.src
-              ? file.src
-              : currentImage
+                ? file.src
+                : currentImage
                 ? currentImage
                 : ""
         }
         loading={progress.isLoading && progress.value !== 100}
         onChange={handlePicture}
-      />
+        />
       {progress.isLoading || progress.value !== 0 || errors["picture"] ? (
         <ProgressUpload
           icon={<ImageIcon />}
