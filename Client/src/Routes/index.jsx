@@ -52,6 +52,8 @@ import Settings from "../Pages/Settings";
 
 import Maintenance from "../Pages/Maintenance";
 
+import Wallet from "../Pages/Wallet";
+
 import ProtectedRoute from "../Components/ProtectedRoute";
 import ProtectedDistributedUptimeRoute from "../Components/ProtectedDistributedUptimeRoute";
 import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
@@ -265,6 +267,11 @@ const Routes = () => {
 			<Route
 				path="/status/distributed/public/:url"
 				element={<DistributedUptimeStatus />}
+			/>
+
+			<Route
+				path="/wallet"
+				element={<Wallet />}
 			/>
 
 			<Route

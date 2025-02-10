@@ -109,7 +109,7 @@ const baseTheme = (palette) => ({
 								return (
 									props.variant === "contained" &&
 									props.disabled &&
-									props.classes.loadingIndicator === undefined // Do not apply to loading button
+									props?.classes?.loadingIndicator === undefined // Do not apply to loading button
 								);
 							},
 							style: {
