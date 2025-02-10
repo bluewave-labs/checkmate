@@ -38,6 +38,20 @@ const MonitorSchema = mongoose.Schema(
 				"distributed_http",
 			],
 		},
+		jsonPath: {
+			type: String,
+		},
+		expectedValue: {
+			type: String,
+		},
+		matchMethod: {
+			type: String,
+			enum: [
+				"equal",
+				"include",
+				"regex",
+			],
+		},
 		url: {
 			type: String,
 			required: true,
