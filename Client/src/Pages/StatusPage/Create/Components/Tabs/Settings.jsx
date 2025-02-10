@@ -15,6 +15,7 @@ import timezones from "../../../../../Utils/timezones.json";
 import PropTypes from "prop-types";
 
 const TabSettings = ({
+	isCreate,
 	tabValue,
 	form,
 	handleFormChange,
@@ -68,8 +69,8 @@ const TabSettings = ({
 							id="url"
 							name="url"
 							type="url"
+							disabled={!isCreate}
 							label="Your status page address"
-							disabled
 							value={form.url}
 							onChange={handleFormChange}
 						/>
