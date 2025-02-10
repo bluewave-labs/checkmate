@@ -100,7 +100,7 @@ class StatusPageController {
 				data: statusPages,
 			});
 		} catch (error) {
-			next(handleError(error, SERVICE_NAME, "getStatusPageByUrl"));
+			next(handleError(error, SERVICE_NAME, "getStatusPageByTeamId"));
 		}
 	};
 
