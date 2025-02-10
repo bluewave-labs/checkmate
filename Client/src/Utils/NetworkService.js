@@ -991,8 +991,21 @@ class NetworkService {
 	}
 
 	async getStatusPageByUrl(config) {
-		const { authToken, url } = config;
-		return this.axiosInstance.get(`/status-page/${url}`, {
+		const { authToken, url, type } = config;
+		const params = new URLSearchParams();
+		params.append("type", type);
+
+		return this.axiosInstance.get(`/status-page/${url}?${params.toString()}`, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+				"Content-Type": "application/json",
+			},
+		});
+	}
+
+	async getStatusPagesByTeamId(config) {
+		const { authToken, teamId } = config;
+		return this.axiosInstance.get(`/status-page/team/${teamId}`, {
 			headers: {
 				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
@@ -1005,6 +1018,7 @@ class NetworkService {
 		const fd = new FormData();
 		fd.append("teamId", user.teamId);
 		fd.append("userId", user._id);
+		fd.append("type", form.type);
 		form.isPublished && fd.append("isPublished", form.isPublished);
 		form.companyName && fd.append("companyName", form.companyName);
 		form.url && fd.append("url", form.url);
