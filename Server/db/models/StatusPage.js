@@ -2,6 +2,18 @@ import mongoose from "mongoose";
 
 const StatusPageSchema = mongoose.Schema(
 	{
+		userId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "User",
+			immutable: true,
+			required: true,
+		},
+		teamId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Team",
+			immutable: true,
+			required: true,
+		},
 		companyName: {
 			type: String,
 			required: true,

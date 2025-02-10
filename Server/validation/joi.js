@@ -419,6 +419,8 @@ const getStatusPageParamValidation = joi.object({
 });
 
 const createStatusPageBodyValidation = joi.object({
+	userId: joi.string().required(),
+	teamId: joi.string().required(),
 	companyName: joi.string().required(),
 	url: joi.string().required(),
 	timezone: joi.string().optional(),
