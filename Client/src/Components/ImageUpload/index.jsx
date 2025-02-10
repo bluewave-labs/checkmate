@@ -5,139 +5,133 @@ import ProgressUpload from "../ProgressBars";
 import { formatBytes } from "../../Utils/fileUtils";
 import { imageValidation } from "../../Validation/validation";
 import ImageIcon from "@mui/icons-material/Image";
-import GenericDialog from "../Dialog/genericDialog";
+import {GenericDialog} from "../Dialog/genericDialog";
 
-/**
- * ImageUpload component handles the uploading and updating of the profile picture.
- *
- * @param {Object} props - Component props.
- * @param {boolean} props.open - Controls the visibility of the modal.
- * @param {Function} props.onClose - Callback to close the modal.
- * @param {Function} props.onUpdate - Callback to update the profile picture.
- * @param {string} props.currentImage - The current profile image URL or base64 string.
- * @returns {JSX.Element}
- */
-const ImageUpload = ({ open, onClose, onUpdate, currentImage }) => {
-	const [file, setFile] = useState();
-	const [progress, setProgress] = useState({ value: 0, isLoading: false });
-	const [errors, setErrors] = useState({});
-	const intervalRef = useRef(null);
+const ImageUpload = ({ open, onClose, onUpdate, currentImage, theme }) => {
+  const [file, setFile] = useState();
+  const [progress, setProgress] = useState({ value: 0, isLoading: false });
+  const [errors, setErrors] = useState({});
+  const intervalRef = useRef(null);
 
-	// Handles image file selection
-	const handlePicture = (event) => {
-		const pic = event.target.files[0];
-		let error = validateField({ type: pic.type, size: pic.size }, imageValidation);
-		if (error) return;
+  // Handles image file selection
+  const handlePicture = (event) => {
+    const pic = event.target.files[0];
+    let error = validateField({ type: pic.type, size: pic.size }, imageValidation);
+    if (error) return;
 
-		setProgress((prev) => ({ ...prev, isLoading: true }));
-		setFile({
-			src: URL.createObjectURL(pic),
-			name: pic.name,
-			size: formatBytes(pic.size),
-			delete: false,
-		});
+    setProgress((prev) => ({ ...prev, isLoading: true }));
+    setFile({
+      src: URL.createObjectURL(pic),
+      name: pic.name,
+      size: formatBytes(pic.size),
+      delete: false,
+    });
 
-		// Simulate upload progress
-		intervalRef.current = setInterval(() => {
-			const buffer = 12;
-			setProgress((prev) => {
-				if (prev.value + buffer >= 100) {
-					clearInterval(intervalRef.current);
-					return { value: 100, isLoading: false };
-				}
-				return { ...prev, value: prev.value + buffer };
-			});
-		}, 120);
-	};
+    // Simulate upload progress
+    intervalRef.current = setInterval(() => {
+      const buffer = 12;
+      setProgress((prev) => {
+        if (prev.value + buffer >= 100) {
+          clearInterval(intervalRef.current);
+          return { value: 100, isLoading: false };
+        }
+        return { ...prev, value: prev.value + buffer };
+      });
+    }, 120);
+  };
 
-	// Validates input against provided schema and updates error state
-	const validateField = (toValidate, schema, name = "picture") => {
-		const { error } = schema.validate(toValidate, { abortEarly: false });
-		setErrors((prev) => {
-			const prevErrors = { ...prev };
-			if (error) prevErrors[name] = error.details[0].message;
-			else delete prevErrors[name];
-			return prevErrors;
-		});
-		if (error) return true;
-	};
+  // Validates input against provided schema and updates error state
+  const validateField = (toValidate, schema, name = "picture") => {
+    const { error } = schema.validate(toValidate, { abortEarly: false });
+    setErrors((prev) => {
+      const prevErrors = { ...prev };
+      if (error) prevErrors[name] = error.details[0].message;
+      else delete prevErrors[name];
+      return prevErrors;
+    });
+    if (error) return true;
+  };
 
-	// Resets picture-related states and clears interval
-	const removePicture = () => {
-		errors["picture"] && setErrors((prev) => ({ ...prev, picture: undefined }));
-		setFile({ delete: true });
-		clearInterval(intervalRef.current);
-		setProgress({ value: 0, isLoading: false });
-	};
+  // Resets picture-related states and clears interval
+  const removePicture = () => {
+    errors["picture"] && setErrors((prev) => ({ ...prev, picture: undefined }));
+    setFile({ delete: true });
+    clearInterval(intervalRef.current);
+    setProgress({ value: 0, isLoading: false });
+  };
 
-	// Updates the profile picture and closes the modal
-	const handleUpdatePicture = () => {
-		setProgress({ value: 0, isLoading: false });
-		onUpdate(file.src); // Pass the new image URL to the parent component
-		onClose(); // Close the modal
-	};
+  // Updates the profile picture and closes the modal
+  const handleUpdatePicture = () => {
+    setProgress({ value: 0, isLoading: false });
+    onUpdate(file.src); // Pass the new image URL to the parent component
+    onClose(); // Close the modal
+  };
 
-	return (
-		<GenericDialog
-			title={"Upload Image"}
-			open={open}
-			onClose={onClose}
-		>
-			<ImageField
-				id="update-profile-picture"
-				src={
-					file?.delete
-						? ""
-						: file?.src
-							? file.src
-							: currentImage
-								? currentImage
-								: ""
-				}
-				loading={progress.isLoading && progress.value !== 100}
-				onChange={handlePicture}
-			/>
-			{progress.isLoading || progress.value !== 0 || errors["picture"] ? (
-				<ProgressUpload
-					icon={<ImageIcon />}
-					label={file?.name}
-					size={file?.size}
-					progress={progress.value}
-					onClick={removePicture}
-					error={errors["picture"]}
-				/>
-			) : (
-				""
-			)}
-			<Stack
-				direction="row"
-				mt={2}
-				gap={2}
-				justifyContent="flex-end"
-			>
-				<Button
-					variant="text"
-					color="info"
-					onClick={removePicture}
-				>
-					Remove
-				</Button>
-				<Button
-					variant="contained"
-					color="accent"
-					onClick={handleUpdatePicture}
-					disabled={
-						(Object.keys(errors).length !== 0 && errors?.picture) ||
-						progress.value !== 100
-							? true
-							: false
-					}
-				>
-					Update
-				</Button>
-			</Stack>
-		</GenericDialog>
-	);
+  return (
+    <GenericDialog
+      open={open}
+      onClose={onClose}
+      theme={theme} // Pass the theme prop
+      title={"Upload Image"}
+      description={"Select an image to upload."}
+      confirmationButtonLabel={"Update"}
+      onConfirm={handleUpdatePicture}
+      isLoading={false}
+    >
+      <ImageField
+        src={
+          file?.delete
+            ? ""
+            : file?.src
+              ? file.src
+              : currentImage
+                ? currentImage
+                : ""
+        }
+        loading={progress.isLoading && progress.value !== 100}
+        onChange={handlePicture}
+      />
+      {progress.isLoading || progress.value !== 0 || errors["picture"] ? (
+        <ProgressUpload
+          icon={<ImageIcon />}
+          label={file?.name}
+          size={file?.size}
+          progress={progress.value}
+          onClick={removePicture}
+          error={errors["picture"]}
+        />
+      ) : (
+        ""
+      )}
+      <Stack
+        direction="row"
+        mt={2}
+        gap={2}
+        justifyContent="flex-end"
+      >
+        <Button
+          variant="text"
+          color="info"
+          onClick={removePicture}
+        >
+          Remove
+        </Button>
+        <Button
+          variant="contained"
+          color="accent"
+          onClick={handleUpdatePicture}
+          disabled={
+            (Object.keys(errors).length !== 0 && errors?.picture) ||
+            progress.value !== 100
+              ? true
+              : false
+          }
+        >
+          Update
+        </Button>
+      </Stack>
+    </GenericDialog>
+  );
 };
 
 export default ImageUpload;

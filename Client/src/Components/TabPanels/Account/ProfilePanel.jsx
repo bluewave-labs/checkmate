@@ -321,6 +321,7 @@ const ProfilePanel = () => {
 				onClose={() => setIsOpen("")}
 				onUpdate={handleUpdatePicture}
 				currentImage={user?.avatarImage ? `data:image/png;base64,${user.avatarImage}` : ""}
+				theme={theme}
 			/>
 		</TabPanel>
 	);
