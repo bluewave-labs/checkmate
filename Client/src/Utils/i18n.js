@@ -15,11 +15,12 @@ Object.keys(translations).forEach((path) => {
 	};
 });
 
-const savedLanguage = store.getState.ui.language || primaryLanguage;
+const savedLanguage = store.getState()?.ui?.language;
+const initialLanguage = savedLanguage || primaryLanguage;
 
 i18n.use(initReactI18next).init({
 	resources,
-	lng: savedLanguage,
+	lng: initialLanguage,
 	fallbackLng: primaryLanguage,
 	debug: import.meta.env.MODE === "development",
 	ns: ["translation"],
