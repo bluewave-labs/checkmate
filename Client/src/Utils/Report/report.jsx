@@ -1,40 +1,5 @@
 import "./reportStyles.css";
-
-const formatDate = (dateString) => {
-	const options = {
-		weekday: "short",
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-		hour: "numeric",
-		minute: "numeric",
-		hour12: true,
-	};
-	return new Intl.DateTimeFormat("en-US", options).format(new Date(dateString));
-};
-const formatUptimeStreak = (uptimeStreak) => {
-	const seconds = Math.floor(uptimeStreak / 1000);
-	const minutes = Math.floor(seconds / 60);
-	const hours = Math.floor(minutes / 60);
-	const days = Math.floor(hours / 24);
-
-	if (days > 0) {
-		return `${days} day${days > 1 ? "s" : ""}`;
-	} else if (hours > 0) {
-		return `${hours} hour${hours > 1 ? "s" : ""}`;
-	} else if (minutes > 0) {
-		return `${minutes} minute${minutes > 1 ? "s" : ""}`;
-	} else {
-		return `${seconds} second${seconds > 1 ? "s" : ""}`;
-	}
-};
-// const timeSince = (dateString) => {
-//     const now = new Date();
-//     const updatedAt = new Date(dateString);
-//     const difference = now - updatedAt;
-
-// 	return formatUptimeStreak(difference);
-// };
+import { formatDurationRounded, formatDateWithWeekday } from "../timeUtils";
 
 const calculateDowntimeCount = (checks) => {
 	if (!checks || checks.length < 2) return 0;
@@ -118,7 +83,7 @@ export const ProductReport = ({ monitorData, certificateExpiry }) => {
 			<div id="report-content">
 				<h1>{monitorData.name} - monitoring report</h1>
 				<p>Report generated on {new Date().toLocaleString()}</p>
-				<hr/>
+				<hr />
 				<div>
 					<div>
 						<h2>Basic information</h2>
@@ -128,9 +93,12 @@ export const ProductReport = ({ monitorData, certificateExpiry }) => {
 							</p>
 							<p>
 								<span className="info-title">Date added:</span>{" "}
-								{formatDate(monitorData.createdAt)}
+								{formatDateWithWeekday(monitorData.createdAt)}
 							</p>
-							<p><span className="font-medium">Certificate expiration:</span> {certificateExpiry}</p>
+							<p>
+								<span className="info-title">Certificate expiration:</span>{" "}
+								{certificateExpiry}
+							</p>
 						</div>
 					</div>
 					<hr />
@@ -147,7 +115,7 @@ export const ProductReport = ({ monitorData, certificateExpiry }) => {
 							</p>
 							<p>
 								<span className="info-title">Last checked:</span>{" "}
-								{formatDate(monitorData.updatedAt)}
+								{formatDateWithWeekday(monitorData.updatedAt)}
 							</p>
 						</div>
 					</div>
@@ -156,10 +124,16 @@ export const ProductReport = ({ monitorData, certificateExpiry }) => {
 						<h2>Performance metrics</h2>
 						<div>
 							<p>
-								<span className="info-title">Minimum ping:</span> {pingStats.min}ms
+								<span className="info-title">Minimum ping:</span>{" "}
+								{pingStats.min > 2000
+									? (pingStats.min / 1000).toFixed(2) + "s"
+									: pingStats.min + "ms"}
 							</p>
 							<p>
-								<span className="info-title">Maximum ping:</span> {pingStats.max}ms
+								<span className="info-title">Maximum ping:</span>{" "}
+								{pingStats.max > 2000
+									? (pingStats.max / 1000).toFixed(2) + "s"
+									: pingStats.max + "ms"}
 							</p>
 							<p>
 								<span className="info-title">Average ping:</span>{" "}
@@ -181,7 +155,7 @@ export const ProductReport = ({ monitorData, certificateExpiry }) => {
 							</p>
 							<p>
 								<span className="info-title">Check interval:</span>{" "}
-								{formatUptimeStreak(monitorData.interval)}
+								{formatDurationRounded(monitorData.interval)}
 							</p>
 						</div>
 					</div>
@@ -192,16 +166,16 @@ export const ProductReport = ({ monitorData, certificateExpiry }) => {
 							<p>
 								<span className="info-title">Active time:</span>{" "}
 								{monitorData.isActive
-									? formatUptimeStreak(monitorData.uptimeDuration)
+									? formatDurationRounded(monitorData.uptimeDuration)
 									: "0 sec"}
 							</p>
 							<p>
 								<span className="info-title">Maximum active time:</span>{" "}
-								{formatUptimeStreak(activeRanges.max)}
+								{formatDurationRounded(activeRanges.max)}
 							</p>
 							<p>
 								<span className="info-title">Minimum active time:</span>{" "}
-								{formatUptimeStreak(activeRanges.min)}
+								{formatDurationRounded(activeRanges.min)}
 							</p>
 						</div>
 					</div>
