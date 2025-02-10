@@ -1,17 +1,16 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import "flag-icons/css/flag-icons.min.css";
+import { useSelector } from "react-redux";
 
 const LanguageSelector = () => {
 	const { i18n } = useTranslation();
 	const theme = useTheme();
-	const [language, setLanguage] = useState(i18n.language || "gb");
+	const { language } = useSelector((state) => state.ui);
 
 	const handleChange = (event) => {
 		const newLang = event.target.value;
-		setLanguage(newLang);
 		i18n.changeLanguage(newLang);
 	};
 

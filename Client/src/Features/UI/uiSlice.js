@@ -23,6 +23,7 @@ const initialState = {
 	greeting: { index: 0, lastUpdate: null },
 	timezone: "America/Toronto",
 	distributedUptimeEnabled: false,
+	language: "gb",
 };
 
 const uiSlice = createSlice({
@@ -51,6 +52,9 @@ const uiSlice = createSlice({
 		setTimezone(state, action) {
 			state.timezone = action.payload.timezone;
 		},
+		setLanguage(state, action) {
+            state.language = action.payload;
+        },
 	},
 });
 
@@ -62,4 +66,5 @@ export const {
 	setGreeting,
 	setTimezone,
 	setDistributedUptimeEnabled,
+	setLanguage,
 } = uiSlice.actions;
