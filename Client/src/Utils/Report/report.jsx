@@ -116,97 +116,95 @@ export const ProductReport = ({ monitorData, certificateExpiry }) => {
 	return (
 		<div className="product-report">
 			<div id="report-content">
-				<h1>{monitorData.name} Monitoring Report</h1>
+				<h1>{monitorData.name} - monitoring report</h1>
+				<p>Report generated on {new Date().toLocaleString()}</p>
 				<hr/>
 				<div>
 					<div>
-						<h2>Basic Information</h2>
+						<h2>Basic information</h2>
 						<div>
 							<p>
-								<span className="info-title">Site URL:</span> {monitorData.url}
+								<span className="info-title">Site url:</span> {monitorData.url}
 							</p>
 							<p>
-								<span className="info-title">Date Added:</span>{" "}
+								<span className="info-title">Date added:</span>{" "}
 								{formatDate(monitorData.createdAt)}
 							</p>
-							<p><span className="info-title">Certificate Expiration:</span> {certificateExpiry}</p>
+							<p><span className="font-medium">Certificate expiration:</span> {certificateExpiry}</p>
 						</div>
 					</div>
 					<hr />
 					<div>
-						<h2>Availability Statistics</h2>
+						<h2>Availability statistics</h2>
 						<div>
 							<p>
-								<span className="info-title">Downtime Count:</span>{" "}
+								<span className="info-title">Downtime count:</span>{" "}
 								{calculateDowntimeCount(monitorData.checks)}{" "}
 							</p>
 							<p>
-								<span className="info-title">Uptime Percentage:</span>{" "}
+								<span className="info-title">Uptime percentage:</span>{" "}
 								{Math.round(monitorData.periodUptime)} %
 							</p>
 							<p>
-								<span className="info-title">Last Checked:</span>{" "}
+								<span className="info-title">Last checked:</span>{" "}
 								{formatDate(monitorData.updatedAt)}
 							</p>
 						</div>
 					</div>
 					<hr />
 					<div>
-						<h2>Performance Metrics</h2>
+						<h2>Performance metrics</h2>
 						<div>
 							<p>
-								<span className="info-title">Minimum Ping:</span> {pingStats.min}ms
+								<span className="info-title">Minimum ping:</span> {pingStats.min}ms
 							</p>
 							<p>
-								<span className="info-title">Maximum Ping:</span> {pingStats.max}ms
+								<span className="info-title">Maximum ping:</span> {pingStats.max}ms
 							</p>
 							<p>
-								<span className="info-title">Average Ping:</span>{" "}
-								{Math.round(monitorData.groupedAvgResponseTime.avgResponseTime)}ms
+								<span className="info-title">Average ping:</span>{" "}
+								{Math.round(monitorData.periodAvgResponseTime)}ms
 							</p>
 						</div>
 					</div>
 					<hr />
 					<div>
-						<h2>Monitoring Details</h2>
+						<h2>Monitoring details</h2>
 						<div>
 							<p>
-								<span className="info-title">Total Incidents:</span>{" "}
+								<span className="info-title">Total incidents:</span>{" "}
 								{monitorData.periodIncidents}
 							</p>
 							<p>
-								<span className="info-title">Total Checks:</span>{" "}
+								<span className="info-title">Total checks:</span>{" "}
 								{monitorData.periodTotalChecks}
 							</p>
 							<p>
-								<span className="info-title">Check Interval:</span>{" "}
+								<span className="info-title">Check interval:</span>{" "}
 								{formatUptimeStreak(monitorData.interval)}
 							</p>
 						</div>
 					</div>
 					<hr />
 					<div>
-						<h2>Activity Times</h2>
+						<h2>Activity times</h2>
 						<div>
 							<p>
-								<span className="info-title">Active Time:</span>{" "}
+								<span className="info-title">Active time:</span>{" "}
 								{monitorData.isActive
 									? formatUptimeStreak(monitorData.uptimeDuration)
 									: "0 sec"}
 							</p>
 							<p>
-								<span className="info-title">Maximum Active Time:</span>{" "}
+								<span className="info-title">Maximum active time:</span>{" "}
 								{formatUptimeStreak(activeRanges.max)}
 							</p>
 							<p>
-								<span className="info-title">Minimum Active Time:</span>{" "}
+								<span className="info-title">Minimum active time:</span>{" "}
 								{formatUptimeStreak(activeRanges.min)}
 							</p>
 						</div>
 					</div>
-				</div>
-				<div>
-					<p>Report generated on {new Date().toLocaleString()}</p>
 				</div>
 			</div>
 		</div>

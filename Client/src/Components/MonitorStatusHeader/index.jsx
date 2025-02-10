@@ -9,14 +9,14 @@ import ReportDownloadButton from "./ReportDownloadButton";
 import SkeletonLayout from "./skeleton";
 import PropTypes from "prop-types";
 
-const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor, certificateExpiry }) => {
+const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor, certificateExpiry, reportData }) => {
 	const theme = useTheme();
 	const { statusColor, statusMsg, determineState } = useUtils();
 	if (!shouldRender) {
 		return <SkeletonLayout />;
 	}
 
-	console.log(monitor);
+	console.log(reportData);
     console.log(certificateExpiry);
 
 	return (
@@ -49,7 +49,7 @@ const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor, cert
 			/>
 			<ReportDownloadButton 
 				shouldRender={isAdmin}
-				monitor={monitor}
+				monitor={reportData}
 				certificateExpiry={certificateExpiry}
 			/>
 
