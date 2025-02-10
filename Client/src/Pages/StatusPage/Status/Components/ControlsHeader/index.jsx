@@ -1,6 +1,7 @@
 // Components
 import { Box, Stack, Typography, Button } from "@mui/material";
-import Image from "../../../../../Components/Image";
+//import Image from "../../../../../Components/Image";
+import ImageUpload from "../../../../../Components/ImageUpload";
 import SettingsIcon from "../../../../../assets/icons/settings-bold.svg?react";
 
 //Utils
@@ -83,7 +84,7 @@ const ControlsHeader = ({ statusPage, isDeleting, isDeleteOpen, setIsDeleteOpen 
 				gap={theme.spacing(8)}
 				alignItems="flex-end"
 			>
-				<Image
+				<ImageUpload
 					shouldRender={statusPage?.logo?.data ? true : false}
 					alt={"Company logo"}
 					maxWidth={"300px"}

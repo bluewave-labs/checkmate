@@ -4,7 +4,8 @@ import ConfigBox from "../../../Components/ConfigBox";
 import Checkbox from "../../../Components/Inputs/Checkbox";
 import TextInput from "../../../Components/Inputs/TextInput";
 import VisuallyHiddenInput from "./Components/VisuallyHiddenInput";
-import Image from "../../../Components/Image";
+//import Image from "../../../Components/Image";
+import ImageUpload from "../../../Components/ImageUpload";
 import LogoPlaceholder from "../../../assets/Images/logo_placeholder.svg";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 // Utils
@@ -175,7 +176,7 @@ const CreateStatus = () => {
 					gap={theme.spacing(18)}
 					alignItems="center"
 				>
-					<Image
+					<ImageUpload
 						src={form.logo ? URL.createObjectURL(form.logo) : undefined}
 						alt="Logo"
 						minWidth={"300px"}
