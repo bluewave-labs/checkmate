@@ -151,54 +151,55 @@ class NetworkService {
 
 			httpResponse.code = response.status;
 
-			if (expectedValue) {
-				// validate if response data match expected value
-				let result = response?.data;
-
-				this.logger.info({
-					service: this.SERVICE_NAME,
-					method: "requestHttp",
-					message: `Job: [${name}](${_id}) match result with expected value`,
-					details: { expectedValue, result, jsonPath, matchMethod }
-				});
-
-				if (jsonPath) {
-					const contentType = response.headers['content-type'];
-
-					if (contentType && contentType.includes('application/json')) {
-						try {
-							result = jmespath.search(result, jsonPath);
-						} catch (error) {
-							httpResponse.status = false;
-							httpResponse.message = "JSONPath Search Error";
-							return httpResponse;
-						}
-					} else {
-						httpResponse.status = false;
-						httpResponse.message = "Response Not JSON";
-						return httpResponse;
-					}
-				}
-
-				if (result === null || result === undefined) {
-					httpResponse.status = false;
-					httpResponse.message = "Empty Result";
-					return httpResponse;
-				}
-
-				let match;
-				result = typeof result === "object" ? JSON.stringify(result) : result.toString();
-				if (matchMethod === "include") match = result.includes(expectedValue);
-				else if (matchMethod === "regex") match = new RegExp(expectedValue).test(result);
-				else match = result === expectedValue;
-
-				httpResponse.status = match;
-				httpResponse.message = match ? "Match" : "Not Match";
+			if (!expectedValue) {
+				// not configure expected value, return
+				httpResponse.status = true;
+				httpResponse.message = this.http.STATUS_CODES[response.status];
 				return httpResponse;
 			}
 
-			httpResponse.status = true;
-			httpResponse.message = this.http.STATUS_CODES[response.status];
+			// validate if response data match expected value
+			let result = response?.data;
+
+			this.logger.info({
+				service: this.SERVICE_NAME,
+				method: "requestHttp",
+				message: `Job: [${name}](${_id}) match result with expected value`,
+				details: { expectedValue, result, jsonPath, matchMethod }
+			});
+
+			if (jsonPath) {
+				const contentType = response.headers['content-type'];
+
+				if (contentType && contentType.includes('application/json')) {
+					try {
+						result = jmespath.search(result, jsonPath);
+					} catch (error) {
+						httpResponse.status = false;
+						httpResponse.message = "JSONPath Search Error";
+						return httpResponse;
+					}
+				} else {
+					httpResponse.status = false;
+					httpResponse.message = "Response Not JSON";
+					return httpResponse;
+				}
+			}
+
+			if (result === null || result === undefined) {
+				httpResponse.status = false;
+				httpResponse.message = "Empty Result";
+				return httpResponse;
+			}
+
+			let match;
+			result = typeof result === "object" ? JSON.stringify(result) : result.toString();
+			if (matchMethod === "include") match = result.includes(expectedValue);
+			else if (matchMethod === "regex") match = new RegExp(expectedValue).test(result);
+			else match = result === expectedValue;
+
+			httpResponse.status = match;
+			httpResponse.message = match ? "Match" : "Not Match";
 			return httpResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
