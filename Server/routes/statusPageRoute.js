@@ -12,8 +12,8 @@ class StatusPageRoutes {
 
 	initRoutes() {
 		this.router.get("/", this.statusPageController.getStatusPage);
-		this.router.get("/:url", this.statusPageController.getStatusPageByUrl);
 		this.router.get("/team/:teamId", this.statusPageController.getStatusPagesByTeamId);
+		this.router.get("/:url", this.statusPageController.getStatusPageByUrl);
 
 		this.router.post(
 			"/",

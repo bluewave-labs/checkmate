@@ -67,6 +67,7 @@ const Controls = ({ isDeleteOpen, setIsDeleteOpen, isDeleting, url, type }) => {
 };
 
 Controls.propTypes = {
+	type: PropTypes.string,
 	isDeleting: PropTypes.bool,
 	url: PropTypes.string,
 	isDeleteOpen: PropTypes.bool.isRequired,
