@@ -2,13 +2,14 @@
 import { Stack, Typography } from "@mui/material";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import Fallback from "../../../Components/Fallback";
+import MonitorCreateHeader from "../../../Components/MonitorCreateHeader";
 import GenericFallback from "../../../Components/GenericFallback";
 // Utils
 import { useTheme } from "@emotion/react";
 import { useStatusPagesFetch } from "./Hooks/useStatusPagesFetch";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useNavigate } from "react-router";
-const BREADCRUMBS = [{ name: `Status Pages`, path: "/distributed-uptime/status-pages" }];
+const BREADCRUMBS = [{ name: `Status Pages`, path: "" }];
 
 const StatusPages = () => {
 	// Utils
@@ -57,6 +58,11 @@ const StatusPages = () => {
 	return (
 		<Stack gap={theme.spacing(10)}>
 			<Breadcrumbs list={BREADCRUMBS} />
+			<MonitorCreateHeader
+				label="Create status page"
+				isAdmin={isAdmin}
+				path="/status/uptime/create"
+			/>
 			{statusPages?.map((statusPage) => {
 				return (
 					<Stack

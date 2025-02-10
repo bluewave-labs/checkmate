@@ -1,7 +1,6 @@
 // Components
 import { Typography, Stack } from "@mui/material";
 import GenericFallback from "../../../Components/GenericFallback";
-import Fallback from "../../../Components/Fallback";
 import AdminLink from "./Components/AdminLink";
 import ControlsHeader from "./Components/ControlsHeader";
 import SkeletonLayout from "./Components/Skeleton";
@@ -17,7 +16,7 @@ import { useLocation } from "react-router-dom";
 import { useStatusPageDelete } from "./Hooks/useStatusPageDelete";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 const PublicStatus = () => {
 	const { url } = useParams();
 
@@ -26,17 +25,18 @@ const PublicStatus = () => {
 	// Utils
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
+	const location = useLocation();
+	const navigate = useNavigate();
+
 	const [statusPage, monitors, isLoading, networkError, fetchStatusPage] =
 		useStatusPageFetch(false, url);
 	const [deleteStatusPage, isDeleting] = useStatusPageDelete(fetchStatusPage, url);
-	const location = useLocation();
 
 	// Setup
 	const currentPath = location.pathname;
 	let sx = { paddingLeft: theme.spacing(20), paddingRight: theme.spacing(20) };
 	let link = undefined;
 	const isPublic = location.pathname.startsWith("/status/uptime/public");
-
 	// Public status page
 	if (isPublic) {
 		sx = {
@@ -142,6 +142,7 @@ const PublicStatus = () => {
 				onConfirm={() => {
 					deleteStatusPage();
 					setIsDeleteOpen(false);
+					navigate("/status");
 				}}
 				onCancel={() => {
 					setIsDeleteOpen(false);
