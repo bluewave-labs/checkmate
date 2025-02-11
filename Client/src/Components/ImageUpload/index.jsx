@@ -13,7 +13,8 @@ const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
   };
 
-const ImageUpload = ({ open, onClose, onUpdate, currentImage, theme, shouldRender = true, placeholder,}) => {
+const ImageUpload = ({ open, onClose, onUpdate, value, currentImage = value, theme, shouldRender = true, placeholder, maxSize, acceptedTypes, previewSize = 150, onError,}) => {
+
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ value: 0, isLoading: false });
   const [errors, setErrors] = useState({});
@@ -61,31 +62,45 @@ const handleDrop = (event) => {
 
     event.target.value = "";
     setFile(null);
-  
-    // Validate file type and size
+
+    if (maxSize && pic.size > maxSize) {
+        const errorMsg = `File size exceeds ${formatBytes(maxSize)}`;
+        setErrors({ picture: errorMsg });
+        if (onError) onError(errorMsg);
+        return;
+    }
+
+    if (acceptedTypes && !acceptedTypes.includes(pic.type)) {
+        const errorMsg = `File type not supported. Allowed: ${acceptedTypes.join(", ")}`;
+        setErrors({ picture: errorMsg });
+        if (onError) onError(errorMsg);
+        return;
+    }
+
+    // Validate file type and size using schema
     let error = validateField({ type: pic.type, size: pic.size }, imageValidation);
     if (error) return;
-  
+
     setProgress({ value: 0, isLoading: true });
     setFile({
-      src: URL.createObjectURL(pic),
-      name: pic.name,
-      size: formatBytes(pic.size),
-      delete: false,
+        src: URL.createObjectURL(pic),
+        name: pic.name,
+        size: formatBytes(pic.size),
+        delete: false,
     });
-  
+
     // Simulate upload progress
     intervalRef.current = setInterval(() => {
-      const buffer = 12;
-      setProgress((prev) => {
-        if (prev.value + buffer >= 100) {
-          clearInterval(intervalRef.current);
-          return { value: 100, isLoading: false };
-        }
-        return { ...prev, value: prev.value + buffer };
-      });
+        const buffer = 12;
+        setProgress((prev) => {
+            if (prev.value + buffer >= 100) {
+                clearInterval(intervalRef.current);
+                return { value: 100, isLoading: false };
+            }
+            return { ...prev, value: prev.value + buffer };
+        });
     }, 120);
-  };
+ };
 
   // Validates input against provided schema and updates error state
   const validateField = (toValidate, schema, name = "picture") => {
@@ -215,8 +230,8 @@ const handleDrop = (event) => {
         ) : (
             <Box
                 sx={{
-                    width: "150px",
-                    height: "150px",
+                    width: `${previewSize}px`, 
+                    height: `${previewSize}px`, 
                     overflow: "hidden",
                     backgroundImage: `url(${file?.src || currentImage})`,
                     backgroundSize: "cover",
