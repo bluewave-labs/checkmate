@@ -34,7 +34,6 @@ const MaintenanceTable = ({
 	updateCallback,
 }) => {
 	const { rowsPerPage } = useSelector((state) => state.ui.maintenance);
-	console.log(rowsPerPage);
 	const dispatch = useDispatch();
 
 	const handleChangePage = (event, newPage) => {
@@ -174,8 +173,6 @@ const MaintenanceTable = ({
 		}
 		setSort({ field, order });
 	};
-
-	console.log(handleChangePage);
 
 	return (
 		<>
