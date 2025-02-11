@@ -25,7 +25,7 @@ const StatusPagesTable = ({ data }) => {
 						alignItems="center"
 						gap={theme.spacing(2)}
 					>
-						<Typography>{row.url}</Typography>
+						<Typography>{`/${row.url}`}</Typography>
 						<ArrowOutwardIcon />
 					</Stack>
 				);
