@@ -5,11 +5,11 @@ import Fallback from "../../../Components/Fallback";
 import MonitorCreateHeader from "../../../Components/MonitorCreateHeader";
 import GenericFallback from "../../../Components/GenericFallback";
 import StatusPagesTable from "./Components/StatusPagesTable";
+import SkeletonLayout from "../../../Components/Skeletons/FullPage";
 // Utils
 import { useTheme } from "@emotion/react";
 import { useStatusPagesFetch } from "./Hooks/useStatusPagesFetch";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
-import { useNavigate } from "react-router";
 const BREADCRUMBS = [{ name: `Status Pages`, path: "" }];
 
 const StatusPages = () => {
@@ -17,30 +17,9 @@ const StatusPages = () => {
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
 	const [isLoading, networkError, statusPages] = useStatusPagesFetch();
-	const navigate = useNavigate();
 
-	// Handlers
-	const handleStatusPageClick = (statusPage) => {
-		if (statusPage.type === "distributed") {
-			navigate(`/status/distributed/${statusPage.url}`);
-		} else if (statusPage.type === "uptime") {
-			navigate(`/status/uptime/${statusPage.url}`);
-		}
-	};
-
-	if (!isLoading && typeof statusPages === "undefined") {
-		return (
-			<Fallback
-				title="status page"
-				checks={[
-					"Monitor and display the health of your services in real time",
-					"Track multiple services and share their status",
-					"Keep users informed about outages and performance",
-				]}
-				link="/status/uptime/create"
-				isAdmin={isAdmin}
-			/>
-		);
+	if (isLoading) {
+		return <SkeletonLayout />;
 	}
 
 	if (networkError === true) {
@@ -55,6 +34,21 @@ const StatusPages = () => {
 				</Typography>
 				<Typography>Please check your connection</Typography>
 			</GenericFallback>
+		);
+	}
+
+	if (!isLoading && typeof statusPages !== "undefined" && statusPages.length === 0) {
+		return (
+			<Fallback
+				title="status page"
+				checks={[
+					"Monitor and display the health of your services in real time",
+					"Track multiple services and share their status",
+					"Keep users informed about outages and performance",
+				]}
+				link="/status/uptime/create"
+				isAdmin={isAdmin}
+			/>
 		);
 	}
 	return (
