@@ -95,6 +95,7 @@ class StatusPageController {
 		try {
 			const teamId = req.params.teamId;
 			const statusPages = await this.db.getStatusPagesByTeamId(teamId);
+
 			return res.success({
 				msg: successMessages.STATUS_PAGE_BY_TEAM_ID,
 				data: statusPages,
