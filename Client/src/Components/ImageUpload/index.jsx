@@ -6,6 +6,7 @@ import { imageValidation } from "../../Validation/validation";
 import ImageIcon from "@mui/icons-material/Image";
 import {GenericDialog} from "../Dialog/genericDialog";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { checkImage } from "../../Utils/fileUtils";
 import "./index.css";
 
 
@@ -115,7 +116,7 @@ const ImageUpload = ({
       id="modal-update-picture"
       open={open}
       onClose={onClose}
-      theme={theme} // Pass the theme prop
+      theme={theme}
       title={"Upload Image"}
       description={"Select an image to upload."}
       confirmationButtonLabel={"Update"}
@@ -123,85 +124,109 @@ const ImageUpload = ({
       isLoading={false}
     >
     <Box
-        className="image-field-wrapper"
-        sx={{
-            position: "relative",
-            height: "fit-content",
-            border: "dashed",
-            borderRadius: theme.shape.borderRadius,
-            borderColor: isDragging
-            ? theme.palette.primary.main
-            : theme.palette.primary.lowContrast,
-            borderWidth: "2px",
-            transition: "0.2s",
-            "&:hover": {
+    className="image-field-wrapper"
+    sx={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "180px",
+        maxHeight: "220px",
+        border: "dashed",
+        borderRadius: theme.shape.borderRadius,
+        borderColor: isDragging ? theme.palette.primary.main : theme.palette.primary.lowContrast,
+        borderWidth: "2px",
+        transition: "0.2s",
+        "&:hover": {
             borderColor: theme.palette.primary.main,
             backgroundColor: "hsl(215, 87%, 51%, 0.05)",
-            },
-        }}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-    >
-    <TextField
+        },
+    }}
+    onDragEnter={handleDragEnter}
+    onDragLeave={handleDragLeave}
+    onDrop={handleDrop}
+    onDragOver={(e) => e.preventDefault()}
+>
+
+    {/* ✅ FILE INPUT FIXED - Ensuring it covers entire upload area */}
+    <input
         id="update-profile-picture"
         type="file"
         onChange={handlePicture}
-        sx={{
+        style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
             width: "100%",
-            "& .MuiInputBase-input[type='file']": {
-                opacity: 0,
-                cursor: "pointer",
-                maxWidth: "500px",
-                minHeight: "175px",
-                zIndex: 1,
-            },
-            "& fieldset": {
-                padding: 0,
-                border: "none",
-            },
+            height: "100%",
+            opacity: 0,
+            cursor: "pointer",
+            zIndex: 3,  // ✅ Ensures it's always on top and clickable
+            pointerEvents: "all", // ✅ Fixes click issue
         }}
     />
-    <Stack
-        alignItems="center"
-        gap="4px"
-        sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            zIndex: 0,
-            width: "100%",
-        }}
-        >
-        <IconButton
-            sx={{
-            pointerEvents: "none",
-            borderRadius: theme.shape.borderRadius,
-            border: `solid ${theme.shape.borderThick}px ${theme.palette.primary.lowContrast}`,
-            boxShadow: theme.shape.boxShadow,
-            }}
-        >
-            <CloudUploadIcon />
-        </IconButton>
-        <Typography component="h2" color={theme.palette.primary.contrastTextTertiary}>
-            <Typography component="span" fontSize="inherit" color="info" fontWeight={500}>
-            Click to upload
-            </Typography>{" "}
-            or drag and drop
-        </Typography>
-        <Typography
-            component="p"
-            color={theme.palette.primary.contrastTextTertiary}
-            sx={{ opacity: 0.6 }}
-        >
-            (maximum size: 3MB)
-        </Typography>
-    </Stack>
-    </Box>
 
-      {progress.isLoading || progress.value !== 0 || errors["picture"] ? (
+    {!checkImage(file?.src || currentImage) || progress.isLoading ? (
+        <>
+            <Stack
+                className="custom-file-text"
+                alignItems="center"
+                gap="4px"
+                sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 1,
+                    width: "100%",
+                }}
+            >
+                <IconButton
+                    sx={{
+                        pointerEvents: "none",
+                        borderRadius: theme.shape.borderRadius,
+                        border: `solid ${theme.shape.borderThick}px ${theme.palette.primary.lowContrast}`,
+                        boxShadow: theme.shape.boxShadow,
+                    }}
+                >
+                    <CloudUploadIcon />
+                </IconButton>
+                <Typography component="h2" color={theme.palette.primary.contrastTextTertiary}>
+                    <Typography component="span" fontSize="inherit" color="info" fontWeight={500}>
+                    Click to upload
+                    </Typography>{" "}
+                    or drag and drop
+                </Typography>
+                <Typography
+                    component="p"
+                    color={theme.palette.primary.contrastTextTertiary}
+                    sx={{ opacity: 0.6 }}
+                >
+                    (maximum size: 3MB)
+                </Typography>
+            </Stack>
+        </>
+    ) : (
+        <Box
+            sx={{
+                width: "150px",
+                height: "150px",
+                overflow: "hidden",
+                backgroundImage: `url(${file?.src || currentImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        />
+    )}
+</Box>
+
+
+    {progress.isLoading || progress.value !== 0 || errors["picture"] ? (
         <ProgressUpload
           icon={<ImageIcon />}
           label={file?.name}
@@ -210,15 +235,14 @@ const ImageUpload = ({
           onClick={removePicture}
           error={errors["picture"]}
         />
-      ) : (
-        ""
-      )}
-      <Stack
+    ) : null}
+
+    <Stack
         direction="row"
         mt={2}
         gap={2}
         justifyContent="flex-end"
-      >
+    >
         <Button
           variant="text"
           color="info"
@@ -239,8 +263,10 @@ const ImageUpload = ({
         >
           Update
         </Button>
-      </Stack>
-    </GenericDialog>
+    </Stack>
+</GenericDialog>
+
+
   );
 };
 
