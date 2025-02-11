@@ -1,10 +1,13 @@
 import StatusPage from "../../models/StatusPage.js";
-import { errorMessages } from "../../../utils/messages.js";
 import { NormalizeData } from "../../../utils/dataUtils.js";
+import ServiceRegistry from "../../../service/serviceRegistry.js";
+import StringService from "../../../service/stringService.js";
 
 const SERVICE_NAME = "statusPageModule";
 
 const createStatusPage = async (statusPageData, image) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPage = new StatusPage({ ...statusPageData });
 		if (image) {
@@ -19,7 +22,7 @@ const createStatusPage = async (statusPageData, image) => {
 		if (error?.code === 11000) {
 			// Handle duplicate URL errors
 			error.status = 400;
-			error.message = errorMessages.STATUS_PAGE_URL_NOT_UNIQUE;
+			error.message = stringService.statusPageUrlNotUnique;
 		}
 		error.service = SERVICE_NAME;
 		error.method = "createStatusPage";
@@ -67,6 +70,8 @@ const getStatusPageByUrl = async (url, type) => {
 };
 
 const getStatusPagesByTeamId = async (teamId) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPages = await StatusPage.find({ teamId });
 		return statusPages;
@@ -78,6 +83,8 @@ const getStatusPagesByTeamId = async (teamId) => {
 };
 
 const getStatusPage = async (url) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPageQuery = await StatusPage.aggregate([
 			{ $match: { url: url } },
@@ -151,7 +158,7 @@ const getStatusPage = async (url) => {
 			},
 		]);
 		if (!statusPageQuery.length) {
-			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+			const error = new Error(stringService.statusPageNotFound);
 			error.status = 404;
 			throw error;
 		}
