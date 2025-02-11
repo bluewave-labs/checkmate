@@ -74,11 +74,6 @@ const getStatusPagesByTeamId = async (teamId) => {
 
 	try {
 		const statusPages = await StatusPage.find({ teamId });
-		if (statusPages.length === 0) {
-			const error = new Error(stringService.statusPageNotFound);
-			error.status = 404;
-			throw error;
-		}
 		return statusPages;
 	} catch (error) {
 		error.service = SERVICE_NAME;
