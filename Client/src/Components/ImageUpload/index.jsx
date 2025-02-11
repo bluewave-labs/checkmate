@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import ImageField from "../Inputs/Image";
 import ProgressUpload from "../ProgressBars";
 import { formatBytes } from "../../Utils/fileUtils";
@@ -23,6 +23,7 @@ const ImageUpload = ({
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ value: 0, isLoading: false });
   const [errors, setErrors] = useState({});
+  const [isDragging, setIsDragging] = useState(false);
   const intervalRef = useRef(null);
 
   // Handle base64 and placeholder logic
@@ -39,6 +40,15 @@ const ImageUpload = ({
   if (shouldRender === false) {
     return null;
   }
+
+  const handleDragEnter = () => setIsDragging(true);
+  const handleDragLeave = () => setIsDragging(false);
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setIsDragging(false);
+    handlePicture(event);
+  };
+
 
   // Handles image file selection
   const handlePicture = (event) => {
@@ -105,6 +115,27 @@ const ImageUpload = ({
       onConfirm={handleUpdatePicture}
       isLoading={false}
     >
+    <Box
+        className="image-field-wrapper"
+        sx={{
+            position: "relative",
+            height: "fit-content",
+            border: "dashed",
+            borderRadius: theme.shape.borderRadius,
+            borderColor: isDragging
+            ? theme.palette.primary.main
+            : theme.palette.primary.lowContrast,
+            borderWidth: "2px",
+            transition: "0.2s",
+            "&:hover": {
+            borderColor: theme.palette.primary.main,
+            backgroundColor: "hsl(215, 87%, 51%, 0.05)",
+            },
+        }}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+    />
       <ImageField
         id="update-profile-picture" // Add the required id prop
         src={
