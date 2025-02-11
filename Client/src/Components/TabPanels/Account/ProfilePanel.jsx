@@ -12,7 +12,7 @@ import { createToast } from "../../../Utils/toastUtils";
 import { logger } from "../../../Utils/Logger";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { GenericDialog } from "../../Dialog/genericDialog";
-import ImageUpload from "../../ImageUpload"; // Import the new ImageUpload component
+import ImageUpload from "../../ImageUpload";
 
 const ProfilePanel = () => {
 	const theme = useTheme();

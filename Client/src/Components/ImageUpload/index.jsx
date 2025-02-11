@@ -13,15 +13,7 @@ const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
   };
 
-const ImageUpload = ({ 
-    open,
-    onClose,
-    onUpdate,
-    currentImage,
-    theme,
-    shouldRender = true,
-    placeholder,
- }) => {
+const ImageUpload = ({ open, onClose, onUpdate, currentImage, theme, shouldRender = true, placeholder,}) => {
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ value: 0, isLoading: false });
   const [errors, setErrors] = useState({});
@@ -43,13 +35,24 @@ const ImageUpload = ({
     return null;
   }
 
-  const handleDragEnter = () => setIsDragging(true);
-  const handleDragLeave = () => setIsDragging(false);
-  const handleDrop = (event) => {
+  const handleDragEnter = (event) => {
+    event.preventDefault();
+    setIsDragging(true);
+};
+
+const handleDragLeave = (event) => {
     event.preventDefault();
     setIsDragging(false);
-    handlePicture(event);
-  };
+};
+
+const handleDrop = (event) => {
+    event.preventDefault();
+    setIsDragging(false);
+
+    if (event.dataTransfer.files.length > 0) {
+        handlePicture({ target: { files: event.dataTransfer.files } });
+    }
+};
 
   // Handles image file selection
   const handlePicture = (event) => {
