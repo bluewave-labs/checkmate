@@ -125,7 +125,7 @@ class NotificationService {
 			for (const notification of notifications) {
 				if (notification.type === "email") {
 					this.sendEmail(networkResponse, notification.address);
-				} else if (["discord", "slack", "telegram"].includes(notification.type)) {
+				} else if (notification.type === "webhook") {
 					this.sendWebhookNotification(networkResponse, notification.address, notification.type);
 				
 				// Handle other types of notifications here
