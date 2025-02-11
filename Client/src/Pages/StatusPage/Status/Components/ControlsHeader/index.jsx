@@ -43,7 +43,11 @@ const Controls = ({ isDeleteOpen, setIsDeleteOpen, isDeleting, url, type }) => {
 					variant="contained"
 					color="secondary"
 					onClick={() => {
-						navigate(`/status/`);
+						if (type === "uptime") {
+							navigate(`/status/uptime/configure/${url}`);
+						} else {
+							navigate(`/status/distributed/configure/${url}`);
+						}
 					}}
 					sx={{
 						px: theme.spacing(5),
