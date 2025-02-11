@@ -9,7 +9,6 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { checkImage } from "../../Utils/fileUtils";
 import "./index.css";
 
-
 const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
   };
@@ -52,11 +51,13 @@ const ImageUpload = ({
     handlePicture(event);
   };
 
-
   // Handles image file selection
   const handlePicture = (event) => {
     const pic = event.target.files[0];
     if (!pic) return;
+
+    event.target.value = "";
+    setFile(null);
   
     // Validate file type and size
     let error = validateField({ type: pic.type, size: pic.size }, imageValidation);
@@ -82,7 +83,6 @@ const ImageUpload = ({
       });
     }, 120);
   };
-  
 
   // Validates input against provided schema and updates error state
   const validateField = (toValidate, schema, name = "picture") => {
@@ -99,7 +99,7 @@ const ImageUpload = ({
   // Resets picture-related states and clears interval
   const removePicture = () => {
     errors["picture"] && setErrors((prev) => ({ ...prev, picture: undefined }));
-    setFile({ delete: true });
+    setFile(null);
     clearInterval(intervalRef.current);
     setProgress({ value: 0, isLoading: false });
   };
@@ -222,7 +222,6 @@ const ImageUpload = ({
             />
         )}
         </Box>
-
 
         {progress.isLoading || progress.value !== 0 || errors["picture"] ? (
             <ProgressUpload
