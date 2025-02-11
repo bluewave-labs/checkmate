@@ -249,9 +249,12 @@ class StringService {
     return this.translationService.getTranslation('statusPageUpdate');
   }
 
-
   get statusPageNotFound() {
     return this.translationService.getTranslation('statusPageNotFound');
+  }
+
+  get statusPageByTeamId() {
+    return this.translationService.getTranslation('statusPageByTeamId');
   }
 
   get statusPageUrlNotUnique() {

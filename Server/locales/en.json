@@ -143,5 +143,6 @@
   "monitorPause": "Monitor paused successfully",
   "monitorResume": "Monitor resumed successfully",
   "statusPageDelete": "Status page deleted successfully",
-  "statusPageUpdate": "Status page updated successfully"
+  "statusPageUpdate": "Status page updated successfully",
+  "statusPageByTeamId": "Got status pages by team id successfully"
 }

@@ -83,7 +83,7 @@ class StatusPageController {
 		try {
 			const statusPage = await this.db.getStatusPageByUrl(req.params.url, req.query.type);
 			return res.success({
-				msg: successMessages.STATUS_PAGE_BY_URL,
+				msg: this.stringService.statusPageByUrl,
 				data: statusPage,
 			});
 		} catch (error) {
@@ -96,7 +96,7 @@ class StatusPageController {
 			const teamId = req.params.teamId;
 			const statusPages = await this.db.getStatusPagesByTeamId(teamId);
 			return res.success({
-				msg: successMessages.STATUS_PAGE_BY_TEAM_ID,
+				msg: this.stringService.statusPageByTeamId,
 				data: statusPages,
 			});
 		} catch (error) {
