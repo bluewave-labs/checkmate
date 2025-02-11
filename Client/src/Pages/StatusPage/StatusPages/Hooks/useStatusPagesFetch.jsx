@@ -20,7 +20,12 @@ const useStatusPagesFetch = () => {
 				setStatusPages(res?.data?.data);
 			} catch (error) {
 				setNetworkError(true);
-				createToast(error.message, "error");
+				if (error.response.status === 404) {
+					return;
+				}
+				createToast({
+					body: error.message,
+				});
 			} finally {
 				setIsLoading(false);
 			}
