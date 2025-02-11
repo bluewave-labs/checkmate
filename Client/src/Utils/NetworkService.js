@@ -1,5 +1,5 @@
 import axios from "axios";
-import i18next from 'i18next';
+import i18next from "i18next";
 const BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 const FALLBACK_BASE_URL = "http://localhost:5000/api/v1";
 import { clearAuthState } from "../Features/Auth/authSlice";
@@ -26,7 +26,7 @@ class NetworkService {
 		});
 		this.axiosInstance.interceptors.request.use(
 			(config) => {
-				const currentLanguage = i18next.language || 'en';
+				const currentLanguage = i18next.language || "en";
 
 				config.headers = {
 					...config.headers,
@@ -991,8 +991,21 @@ class NetworkService {
 	}
 
 	async getStatusPageByUrl(config) {
-		const { authToken, url } = config;
-		return this.axiosInstance.get(`/status-page/${url}`, {
+		const { authToken, url, type } = config;
+		const params = new URLSearchParams();
+		params.append("type", type);
+
+		return this.axiosInstance.get(`/status-page/${url}?${params.toString()}`, {
+			headers: {
+				Authorization: `Bearer ${authToken}`,
+				"Content-Type": "application/json",
+			},
+		});
+	}
+
+	async getStatusPagesByTeamId(config) {
+		const { authToken, teamId } = config;
+		return this.axiosInstance.get(`/status-page/team/${teamId}`, {
 			headers: {
 				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
@@ -1003,6 +1016,9 @@ class NetworkService {
 	async createStatusPage(config) {
 		const { authToken, user, form, isCreate } = config;
 		const fd = new FormData();
+		fd.append("teamId", user.teamId);
+		fd.append("userId", user._id);
+		fd.append("type", form.type);
 		form.isPublished && fd.append("isPublished", form.isPublished);
 		form.companyName && fd.append("companyName", form.companyName);
 		form.url && fd.append("url", form.url);

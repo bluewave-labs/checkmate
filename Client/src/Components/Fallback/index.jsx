@@ -27,7 +27,6 @@ const Fallback = ({ title, checks, link = "/", isAdmin, vowelStart = false }) =>
 
 	return (
 		<Box
-			className="page-speed"
 			position="relative"
 			border={1}
 			borderColor={theme.palette.primary.lowContrast}

@@ -35,9 +35,13 @@ const updateStatusPage = async (statusPageData, image) => {
 				contentType: image.mimetype,
 			};
 		}
-		const statusPage = await StatusPage.findOneAndUpdate({}, statusPageData, {
-			new: true,
-		});
+		const statusPage = await StatusPage.findOneAndUpdate(
+			{ url: statusPageData.url },
+			statusPageData,
+			{
+				new: true,
+			}
+		);
 
 		return statusPage;
 	} catch (error) {
@@ -47,10 +51,14 @@ const updateStatusPage = async (statusPageData, image) => {
 	}
 };
 
-const getStatusPageByUrl = async (url) => {
+const getStatusPageByUrl = async (url, type) => {
 	try {
-		const statusPage = await StatusPage.aggregate([{ $match: { url } }]);
-		return statusPage[0];
+		if (type === "distributed") {
+			const statusPage = await StatusPage.aggregate([{ $match: { url } }]);
+			return statusPage[0];
+		} else {
+			return getStatusPage(url);
+		}
 	} catch (error) {
 		error.service = SERVICE_NAME;
 		error.method = "getStatusPageByUrl";
@@ -58,10 +66,26 @@ const getStatusPageByUrl = async (url) => {
 	}
 };
 
-const getStatusPage = async () => {
+const getStatusPagesByTeamId = async (teamId) => {
+	try {
+		const statusPages = await StatusPage.find({ teamId });
+		if (statusPages.length === 0) {
+			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+			error.status = 404;
+			throw error;
+		}
+		return statusPages;
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "getStatusPagesByTeamId";
+		throw error;
+	}
+};
+
+const getStatusPage = async (url) => {
 	try {
 		const statusPageQuery = await StatusPage.aggregate([
-			{ $match: { url: "/status/public" } },
+			{ $match: { url: url } },
 			{
 				$set: {
 					originalMonitors: "$monitors",
@@ -167,6 +191,7 @@ const deleteStatusPage = async (url) => {
 export {
 	createStatusPage,
 	updateStatusPage,
+	getStatusPagesByTeamId,
 	getStatusPage,
 	getStatusPageByUrl,
 	deleteStatusPage,

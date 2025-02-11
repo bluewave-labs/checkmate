@@ -8,6 +8,7 @@ import Content from "./Content";
 import PropTypes from "prop-types";
 
 const Tabs = ({
+	isCreate,
 	form,
 	errors,
 	monitors,
@@ -47,6 +48,7 @@ const Tabs = ({
 					progress={progress}
 					removeLogo={removeLogo}
 					errors={errors}
+					isCreate={isCreate}
 				/>
 			) : (
 				<Content
