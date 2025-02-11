@@ -4,6 +4,7 @@ import Breadcrumbs from "../../../Components/Breadcrumbs";
 import Fallback from "../../../Components/Fallback";
 import MonitorCreateHeader from "../../../Components/MonitorCreateHeader";
 import GenericFallback from "../../../Components/GenericFallback";
+import StatusPagesTable from "./Components/StatusPagesTable";
 // Utils
 import { useTheme } from "@emotion/react";
 import { useStatusPagesFetch } from "./Hooks/useStatusPagesFetch";
@@ -32,8 +33,9 @@ const StatusPages = () => {
 			<Fallback
 				title="status page"
 				checks={[
-					"Display a list of monitors to track",
-					"Share your monitors with the public",
+					"Monitor and display the health of your services in real time",
+					"Track multiple services and share their status",
+					"Keep users informed about outages and performance",
 				]}
 				link="/status/uptime/create"
 				isAdmin={isAdmin}
@@ -63,19 +65,7 @@ const StatusPages = () => {
 				isAdmin={isAdmin}
 				path="/status/uptime/create"
 			/>
-			{statusPages?.map((statusPage) => {
-				return (
-					<Stack
-						key={statusPage._id}
-						onClick={() => handleStatusPageClick(statusPage)}
-						sx={{ cursor: "pointer" }}
-					>
-						<Typography variant="h2">Company Name: {statusPage.companyName}</Typography>
-						<Typography variant="h2">Status page URL: {statusPage.url}</Typography>
-						<Typography variant="h2">Type: {statusPage.type}</Typography>
-					</Stack>
-				);
-			})}
+			<StatusPagesTable data={statusPages} />
 		</Stack>
 	);
 };
