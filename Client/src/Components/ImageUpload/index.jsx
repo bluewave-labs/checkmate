@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Box, Button, Stack, IconButton, Typography } from "@mui/material";
+import { Box, Button, Stack, IconButton, TextField , Typography } from "@mui/material";
 import ProgressUpload from "../ProgressBars";
 import { formatBytes } from "../../Utils/fileUtils";
 import { imageValidation } from "../../Validation/validation";
@@ -108,6 +108,7 @@ const ImageUpload = ({
 
   return (
     <GenericDialog
+      id="modal-update-picture"
       open={open}
       onClose={onClose}
       theme={theme} // Pass the theme prop
@@ -137,18 +138,25 @@ const ImageUpload = ({
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
     >
-    <input
+    <TextField
         id="update-profile-picture"
         type="file"
         onChange={handlePicture}
-        style={{
-            opacity: 0,
-            cursor: "pointer",
+        sx={{
             width: "100%",
-            height: "175px",
-            zIndex: 1,
-            position: "absolute",
+            "& .MuiInputBase-input[type='file']": {
+                opacity: 0,
+                cursor: "pointer",
+                maxWidth: "500px",
+                minHeight: "175px",
+                zIndex: 1,
+            },
+            "& fieldset": {
+                padding: 0,
+                border: "none",
+            },
         }}
     />
     <Stack
