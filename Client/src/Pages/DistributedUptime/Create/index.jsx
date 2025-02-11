@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { monitorValidation } from "../../../Validation/validation";
 import { createUptimeMonitor } from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
+import { useLocation } from "react-router-dom";
 
 // Constants
 const BREADCRUMBS = [
@@ -34,6 +35,9 @@ const SELECT_VALUES = [
 ];
 
 const CreateDistributedUptime = () => {
+	const location = useLocation();
+	const isCreate = location.pathname.startsWith("/distributed-uptime/create");
+
 	// Redux state
 	const { user, authToken } = useSelector((state) => state.auth);
 	const isLoading = useSelector((state) => state.uptimeMonitors.isLoading);
@@ -103,7 +107,6 @@ const CreateDistributedUptime = () => {
 			{ [name]: value },
 			{ abortEarly: false }
 		);
-		console.log(name);
 		setErrors((prev) => ({
 			...prev,
 			...(error ? { [name]: error.details[0].message } : { [name]: undefined }),

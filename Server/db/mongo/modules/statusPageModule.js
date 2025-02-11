@@ -1,10 +1,13 @@
 import StatusPage from "../../models/StatusPage.js";
-import { errorMessages } from "../../../utils/messages.js";
 import { NormalizeData } from "../../../utils/dataUtils.js";
+import ServiceRegistry from "../../../service/serviceRegistry.js";
+import StringService from "../../../service/stringService.js";
 
 const SERVICE_NAME = "statusPageModule";
 
 const createStatusPage = async (statusPageData, image) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPage = new StatusPage({ ...statusPageData });
 		if (image) {
@@ -19,7 +22,7 @@ const createStatusPage = async (statusPageData, image) => {
 		if (error?.code === 11000) {
 			// Handle duplicate URL errors
 			error.status = 400;
-			error.message = errorMessages.STATUS_PAGE_URL_NOT_UNIQUE;
+			error.message = stringService.statusPageUrlNotUnique;
 		}
 		error.service = SERVICE_NAME;
 		error.method = "createStatusPage";
@@ -35,9 +38,13 @@ const updateStatusPage = async (statusPageData, image) => {
 				contentType: image.mimetype,
 			};
 		}
-		const statusPage = await StatusPage.findOneAndUpdate({}, statusPageData, {
-			new: true,
-		});
+		const statusPage = await StatusPage.findOneAndUpdate(
+			{ url: statusPageData.url },
+			statusPageData,
+			{
+				new: true,
+			}
+		);
 
 		return statusPage;
 	} catch (error) {
@@ -47,10 +54,14 @@ const updateStatusPage = async (statusPageData, image) => {
 	}
 };
 
-const getStatusPageByUrl = async (url) => {
+const getStatusPageByUrl = async (url, type) => {
 	try {
-		const statusPage = await StatusPage.aggregate([{ $match: { url } }]);
-		return statusPage[0];
+		if (type === "distributed") {
+			const statusPage = await StatusPage.aggregate([{ $match: { url } }]);
+			return statusPage[0];
+		} else {
+			return getStatusPage(url);
+		}
 	} catch (error) {
 		error.service = SERVICE_NAME;
 		error.method = "getStatusPageByUrl";
@@ -58,10 +69,25 @@ const getStatusPageByUrl = async (url) => {
 	}
 };
 
-const getStatusPage = async () => {
+const getStatusPagesByTeamId = async (teamId) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
+	try {
+		const statusPages = await StatusPage.find({ teamId });
+		return statusPages;
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "getStatusPagesByTeamId";
+		throw error;
+	}
+};
+
+const getStatusPage = async (url) => {
+	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
+
 	try {
 		const statusPageQuery = await StatusPage.aggregate([
-			{ $match: { url: "/status/public" } },
+			{ $match: { url: url } },
 			{
 				$set: {
 					originalMonitors: "$monitors",
@@ -132,7 +158,7 @@ const getStatusPage = async () => {
 			},
 		]);
 		if (!statusPageQuery.length) {
-			const error = new Error(errorMessages.STATUS_PAGE_NOT_FOUND);
+			const error = new Error(stringService.statusPageNotFound);
 			error.status = 404;
 			throw error;
 		}
@@ -167,6 +193,7 @@ const deleteStatusPage = async (url) => {
 export {
 	createStatusPage,
 	updateStatusPage,
+	getStatusPagesByTeamId,
 	getStatusPage,
 	getStatusPageByUrl,
 	deleteStatusPage,

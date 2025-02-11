@@ -74,7 +74,7 @@ const DistributedUptimeDetails = () => {
 			<MonitorCreateHeader
 				label="Create status page"
 				isAdmin={isAdmin}
-				path={`/distributed-uptime/status/create/${monitorId}`}
+				path={`/status/distributed/create/${monitorId}`}
 			/>
 			<MonitorHeader monitor={monitor} />
 			<StatBoxes

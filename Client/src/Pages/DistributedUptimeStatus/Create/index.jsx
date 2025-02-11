@@ -9,8 +9,9 @@ import LogoPlaceholder from "../../../assets/Images/logo_placeholder.svg";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 // Utils
 import { useTheme } from "@emotion/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useStatusPageFetch } from "../../StatusPage/Status/Hooks/useStatusPageFetch";
 import { useCreateStatusPage } from "../../StatusPage/Create/Hooks/useCreateStatusPage";
 import { useLocation } from "react-router-dom";
 import { statusPageValidation } from "../../../Validation/validation";
@@ -20,20 +21,25 @@ import { useNavigate } from "react-router-dom";
 
 const CreateStatus = () => {
 	const theme = useTheme();
-	const { monitorId } = useParams();
+	const { monitorId, url } = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
-	const isCreate = location.pathname.startsWith("/distributed-uptime/status/create");
+	const isCreate = location.pathname.startsWith("/status/distributed/create");
 	const [createStatusPage, isLoading, networkError] = useCreateStatusPage(isCreate);
+
+	const [statusPage, statusPageMonitors, statusPageIsLoading, statusPageNetworkError] =
+		useStatusPageFetch(isCreate, url);
+
 	const BREADCRUMBS = [
 		{ name: "distributed uptime", path: "/distributed-uptime" },
 		{ name: "details", path: `/distributed-uptime/${monitorId}` },
-		{ name: "create status page", path: `` },
+		{ name: isCreate ? "create status page" : "edit status page", path: `` },
 	];
 	// Local state
 	const [form, setForm] = useState({
+		type: "distributed",
 		isPublished: false,
-		url: Math.floor(Math.random() * 1000000).toFixed(0),
+		url: url ?? Math.floor(Math.random() * 1000000).toFixed(0),
 		logo: undefined,
 		companyName: "",
 		monitors: [monitorId],
@@ -87,8 +93,9 @@ const CreateStatus = () => {
 		if (typeof error === "undefined") {
 			const success = await createStatusPage({ form: formToSubmit });
 			if (success) {
-				createToast({ body: "Status page created successfully" });
-				navigate(`/distributed-uptime/status/${form.url}`);
+				const verb = isCreate ? "created" : "updated";
+				createToast({ body: `Status page ${verb} successfully` });
+				navigate(`/status/distributed/${form.url}`);
 			}
 			return;
 		}
@@ -98,6 +105,36 @@ const CreateStatus = () => {
 		});
 		setErrors((prev) => ({ ...prev, ...newErrors }));
 	};
+
+	// If we are configuring, populate fields
+	useEffect(() => {
+		if (isCreate) return;
+		if (typeof statusPage === "undefined") {
+			return;
+		}
+
+		let newLogo = undefined;
+		if (statusPage.logo) {
+			newLogo = {
+				src: `data:${statusPage.logo.contentType};base64,${statusPage.logo.data}`,
+				name: "logo",
+				type: statusPage.logo.contentType,
+				size: null,
+			};
+		}
+
+		setForm((prev) => {
+			return {
+				...prev,
+				companyName: statusPage?.companyName,
+				isPublished: statusPage?.isPublished,
+				timezone: statusPage?.timezone,
+				monitors: statusPageMonitors.map((monitor) => monitor._id),
+				color: statusPage?.color,
+				logo: newLogo,
+			};
+		});
+	}, [isCreate, statusPage, statusPageMonitors]);
 
 	return (
 		<Stack gap={theme.spacing(10)}>
@@ -159,6 +196,7 @@ const CreateStatus = () => {
 						name="url"
 						type="url"
 						label="Your status page address"
+						disabled={!isCreate}
 						value={form.url}
 						onChange={handleFormChange}
 						helperText={errors["url"]}

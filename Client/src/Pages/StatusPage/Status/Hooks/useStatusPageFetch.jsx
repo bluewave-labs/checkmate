@@ -5,7 +5,7 @@ import { createToast } from "../../../../Utils/toastUtils";
 import { useTheme } from "@emotion/react";
 import { useMonitorUtils } from "../../../../Hooks/useMonitorUtils";
 
-const useStatusPageFetch = (isCreate = false) => {
+const useStatusPageFetch = (isCreate = false, url) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [networkError, setNetworkError] = useState(false);
 	const [statusPage, setStatusPage] = useState(undefined);
@@ -15,10 +15,13 @@ const useStatusPageFetch = (isCreate = false) => {
 	const { getMonitorWithPercentage } = useMonitorUtils();
 	const fetchStatusPage = useCallback(async () => {
 		try {
-			const response = await networkService.getStatusPage({ authToken });
+			const response = await networkService.getStatusPageByUrl({
+				authToken,
+				url,
+				type: "uptime",
+			});
 			if (!response?.data?.data) return;
 			const { statusPage, monitors } = response.data.data;
-
 			setStatusPage(statusPage);
 
 			const monitorsWithPercentage = monitors.map((monitor) =>
@@ -37,7 +40,7 @@ const useStatusPageFetch = (isCreate = false) => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [authToken, theme, getMonitorWithPercentage]);
+	}, [authToken, theme, getMonitorWithPercentage, url]);
 
 	useEffect(() => {
 		if (isCreate === true) {

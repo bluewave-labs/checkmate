@@ -12,7 +12,7 @@ const QUEUE_LOOKUP = {
 };
 const getSchedulerId = (monitor) => `scheduler:${monitor.type}:${monitor._id}`;
 
-import { successMessages, errorMessages } from "../utils/messages.js";
+
 class NewJobQueue {
 	static SERVICE_NAME = SERVICE_NAME;
 
@@ -22,6 +22,7 @@ class NewJobQueue {
 		networkService,
 		notificationService,
 		settingsService,
+		stringService,
 		logger,
 		Queue,
 		Worker
@@ -44,6 +45,7 @@ class NewJobQueue {
 		this.settingsService = settingsService;
 		this.logger = logger;
 		this.Worker = Worker;
+		this.stringService = stringService;
 
 		QUEUE_NAMES.forEach((name) => {
 			this.queues[name] = new Queue(name, { connection });
@@ -455,7 +457,7 @@ class NewJobQueue {
 
 			if (wasDeleted === true) {
 				this.logger.info({
-					message: successMessages.JOB_QUEUE_DELETE_JOB,
+					message: this.stringService.jobQueueDeleteJob,
 					service: SERVICE_NAME,
 					method: "deleteJob",
 					details: `Deleted job ${monitor._id}`,
@@ -464,7 +466,7 @@ class NewJobQueue {
 				await this.scaleWorkers(workerStats, queue);
 			} else {
 				this.logger.error({
-					message: errorMessages.JOB_QUEUE_DELETE_JOB,
+					message: this.stringService.jobQueueDeleteJob,
 					service: SERVICE_NAME,
 					method: "deleteJob",
 					details: `Failed to delete job ${monitor._id}`,
@@ -587,7 +589,7 @@ class NewJobQueue {
 
 			const metrics = await this.getMetrics();
 			this.logger.info({
-				message: successMessages.JOB_QUEUE_OBLITERATE,
+				message: this.stringService.jobQueueObliterate,
 				service: SERVICE_NAME,
 				method: "obliterate",
 				details: metrics,
