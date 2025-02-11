@@ -134,7 +134,11 @@ const CreateStatusPage = () => {
 		if (typeof error === "undefined") {
 			const success = await createStatusPage({ form });
 			if (success) {
-				createToast({ body: "Status page created successfully" });
+				createToast({
+					body: isCreate
+						? "Status page created successfully"
+						: "Status page updated successfully",
+				});
 				navigate(`/status/uptime/${form.url}`);
 			}
 			return;
