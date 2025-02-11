@@ -91,12 +91,16 @@ const handleDrop = (event) => {
   const validateField = (toValidate, schema, name = "picture") => {
     const { error } = schema.validate(toValidate, { abortEarly: false });
     setErrors((prev) => {
-      const prevErrors = { ...prev };
-      if (error) prevErrors[name] = error.details[0].message;
-      else delete prevErrors[name];
-      return prevErrors;
+        const prevErrors = { ...prev };
+        if (error) {
+            prevErrors[name] = error.details[0].message;
+            if (onError) onError(error.details[0].message);
+        } else {
+            delete prevErrors[name];
+        }
+        return prevErrors;
     });
-    if (error) return true;
+    return !!error;
   };
 
   // Resets picture-related states and clears interval
