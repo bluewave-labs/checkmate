@@ -1,10 +1,13 @@
 import { useState, useRef } from "react";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, IconButton, Typography } from "@mui/material";
 import ProgressUpload from "../ProgressBars";
 import { formatBytes } from "../../Utils/fileUtils";
 import { imageValidation } from "../../Validation/validation";
 import ImageIcon from "@mui/icons-material/Image";
 import {GenericDialog} from "../Dialog/genericDialog";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import "./index.css";
+
 
 const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
@@ -134,7 +137,7 @@ const ImageUpload = ({
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-    />
+    >
     <input
         id="update-profile-picture"
         type="file"
@@ -148,6 +151,43 @@ const ImageUpload = ({
             position: "absolute",
         }}
     />
+    <Stack
+        alignItems="center"
+        gap="4px"
+        sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 0,
+            width: "100%",
+        }}
+        >
+        <IconButton
+            sx={{
+            pointerEvents: "none",
+            borderRadius: theme.shape.borderRadius,
+            border: `solid ${theme.shape.borderThick}px ${theme.palette.primary.lowContrast}`,
+            boxShadow: theme.shape.boxShadow,
+            }}
+        >
+            <CloudUploadIcon />
+        </IconButton>
+        <Typography component="h2" color={theme.palette.primary.contrastTextTertiary}>
+            <Typography component="span" fontSize="inherit" color="info" fontWeight={500}>
+            Click to upload
+            </Typography>{" "}
+            or drag and drop
+        </Typography>
+        <Typography
+            component="p"
+            color={theme.palette.primary.contrastTextTertiary}
+            sx={{ opacity: 0.6 }}
+        >
+            (maximum size: 3MB)
+        </Typography>
+    </Stack>
+    </Box>
 
       {progress.isLoading || progress.value !== 0 || errors["picture"] ? (
         <ProgressUpload
