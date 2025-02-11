@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { Box, Button, Stack } from "@mui/material";
-import ImageField from "../Inputs/Image";
 import ProgressUpload from "../ProgressBars";
 import { formatBytes } from "../../Utils/fileUtils";
 import { imageValidation } from "../../Validation/validation";
@@ -136,20 +135,20 @@ const ImageUpload = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
     />
-      <ImageField
-        id="update-profile-picture" // Add the required id prop
-        src={
-            file?.delete
-            ? ""
-            : file?.src
-                ? file.src
-                : currentImage
-                ? currentImage
-                : ""
-        }
-        loading={progress.isLoading && progress.value !== 100}
+    <input
+        id="update-profile-picture"
+        type="file"
         onChange={handlePicture}
-        />
+        style={{
+            opacity: 0,
+            cursor: "pointer",
+            width: "100%",
+            height: "175px",
+            zIndex: 1,
+            position: "absolute",
+        }}
+    />
+
       {progress.isLoading || progress.value !== 0 || errors["picture"] ? (
         <ProgressUpload
           icon={<ImageIcon />}
