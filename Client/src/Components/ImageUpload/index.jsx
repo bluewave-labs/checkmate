@@ -55,17 +55,20 @@ const ImageUpload = ({
   // Handles image file selection
   const handlePicture = (event) => {
     const pic = event.target.files[0];
+    if (!pic) return;
+  
+    // Validate file type and size
     let error = validateField({ type: pic.type, size: pic.size }, imageValidation);
     if (error) return;
-
-    setProgress((prev) => ({ ...prev, isLoading: true }));
+  
+    setProgress({ value: 0, isLoading: true });
     setFile({
       src: URL.createObjectURL(pic),
       name: pic.name,
       size: formatBytes(pic.size),
       delete: false,
     });
-
+  
     // Simulate upload progress
     intervalRef.current = setInterval(() => {
       const buffer = 12;
@@ -78,6 +81,7 @@ const ImageUpload = ({
       });
     }, 120);
   };
+  
 
   // Validates input against provided schema and updates error state
   const validateField = (toValidate, schema, name = "picture") => {
