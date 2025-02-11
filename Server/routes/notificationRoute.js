@@ -1,4 +1,5 @@
 import express from 'express';
+import { verifyJWT } from '../middleware/verifyJWT.js';
 
 class NotificationRoutes {
     constructor(notificationController) {
@@ -8,7 +9,7 @@ class NotificationRoutes {
     }
 
     initializeRoutes() {
-        this.router.post('/trigger', this.notificationController.triggerNotification.bind(this.notificationController));
+        this.router.post('/trigger', verifyJWT, this.notificationController.triggerNotification.bind(this.notificationController));
     }
 
     getRouter() {

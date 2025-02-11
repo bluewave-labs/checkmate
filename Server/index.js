@@ -38,7 +38,7 @@ import QueueController from "./controllers/queueController.js";
 import DistributedUptimeRoutes from "./routes/distributedUptimeRoute.js";
 import DistributedUptimeController from "./controllers/distributedUptimeController.js";
 
-import NotificationRoutes from "./routes/notificationRoute.js"; // Add this line
+import NotificationRoutes from "./routes/notificationRoute.js";
 
 import NotificationController from "./controllers/notificationController.js";
 
@@ -299,7 +299,7 @@ const startApp = async () => {
 	app.use("/api/v1/queue", verifyJWT, queueRoutes.getRouter());
 	app.use("/api/v1/distributed-uptime", distributedUptimeRoutes.getRouter());
 	app.use("/api/v1/status-page", statusPageRoutes.getRouter());
-	app.use("/api/v1/notifications", notificationRoutes.getRouter()); // Add this line
+	app.use("/api/v1/notifications", verifyJWT, notificationRoutes.getRouter());
 	app.use(handleErrors);
 };
 
