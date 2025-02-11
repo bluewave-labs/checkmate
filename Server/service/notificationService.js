@@ -39,7 +39,7 @@ class NotificationService {
 		let url = webhookUrl;
 	
 		const message = this.formatNotificationMessage(monitor, status, type, chatId);
-		if (!message) {
+		if (message === null) {
 			this.logger.warn({
 				message: `Unsupported webhook type: ${type}`,
 				service: this.SERVICE_NAME,
