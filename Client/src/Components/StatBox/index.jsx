@@ -1,6 +1,5 @@
 import { Stack, Typography } from "@mui/material";
-//import Image from "../Image";
-import ImageUpload from "../ImageUpload";
+import Image from "../Image";
 import { useTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import useUtils from "../../Pages/Uptime/Monitors/Hooks/useUtils";
@@ -107,7 +106,7 @@ const StatBox = ({
 			}}
 		>
 			{img && (
-				<ImageUpload
+				<Image
 					src={img}
 					height={"30px"}
 					width={"30px"}
