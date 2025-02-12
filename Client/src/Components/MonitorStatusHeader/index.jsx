@@ -9,7 +9,7 @@ import ReportDownloadButton from "./ReportDownloadButton";
 import SkeletonLayout from "./skeleton";
 import PropTypes from "prop-types";
 
-const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor, certificateExpiry, reportData }) => {
+const MonitorStatusHeader = ({children, path, shouldRender = true, isAdmin, monitor}) => {
 	const theme = useTheme();
 	const { statusColor, statusMsg, determineState } = useUtils();
 	if (!shouldRender) {
@@ -48,24 +48,18 @@ const MonitorStatusHeader = ({ path, shouldRender = true, isAdmin, monitor, cert
 				shouldRender={isAdmin}
 				monitorId={monitor?._id}
 			/>
-			<ReportDownloadButton 
-				shouldRender={isAdmin}
-				monitor={reportData}
-				certificateExpiry={certificateExpiry}
-			/>
-
+			{children && children}
 			</Stack>
 		</Stack>
 	);
 };
 
 MonitorStatusHeader.propTypes = {
+	children: PropTypes.node,
 	path: PropTypes.string.isRequired,
 	shouldRender: PropTypes.bool,
 	isAdmin: PropTypes.bool,
 	monitor: PropTypes.object,
-	certificateExpiry: PropTypes.string,
-	reportData: PropTypes.object,
 };
 
 export default MonitorStatusHeader;
