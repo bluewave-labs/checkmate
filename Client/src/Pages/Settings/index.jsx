@@ -7,7 +7,10 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useIsAdmin } from "../../Hooks/useIsAdmin";
 import Dialog from "../../Components/Dialog";
 import ConfigBox from "../../Components/ConfigBox";
-import WalletConnector from "../../Components/WalletConnector";
+import {
+	WalletMultiButton,
+	WalletDisconnectButton,
+} from "@solana/wallet-adapter-react-ui";
 
 //Utils
 import { useTheme } from "@emotion/react";
@@ -370,7 +373,13 @@ const Settings = () => {
 							</Typography>
 						</Box>
 						<Box>
-							<WalletConnector />
+							<Stack
+								direction="row"
+								spacing={2}
+							>
+								<WalletMultiButton />
+								<WalletDisconnectButton />
+							</Stack>
 						</Box>
 					</ConfigBox>
 				)}
