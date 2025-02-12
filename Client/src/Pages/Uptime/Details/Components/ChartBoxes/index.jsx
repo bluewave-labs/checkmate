@@ -30,6 +30,12 @@ const ChartBoxes = ({
 		return <SkeletonLayout />;
 	}
 
+	const totalUpChecks = monitor?.upChecks?.totalChecks ?? 0;
+	const totalDownChecks = monitor?.downChecks?.totalChecks ?? 0;
+	const denominator =
+		totalUpChecks + totalDownChecks > 0 ? totalUpChecks + totalDownChecks : 1;
+	const groupedUptimePercentage = (totalUpChecks / denominator) * 100;
+
 	return (
 		<Stack
 			direction="row"
@@ -73,11 +79,7 @@ const ChartBoxes = ({
 						<Typography component="span">
 							{hoveredUptimeData !== null
 								? Math.floor(hoveredUptimeData?.avgResponseTime ?? 0)
-								: Math.floor(
-										((monitor?.upChecks?.totalChecks ?? 0) /
-											(monitor?.totalChecks ?? 1)) *
-											100
-									)}
+								: Math.floor(groupedUptimePercentage)}
 							<Typography component="span">
 								{hoveredUptimeData !== null ? " ms" : " %"}
 							</Typography>
