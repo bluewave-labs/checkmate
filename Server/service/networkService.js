@@ -144,7 +144,7 @@ class NetworkService {
 				const code = error.response?.status || this.NETWORK_ERROR;
 				httpResponse.code = code;
 				httpResponse.status = false;
-				httpResponse.message = this.http.STATUS_CODES[code] || "Network Error";
+				httpResponse.message = this.http.STATUS_CODES[code] || this.stringService.httpNetworkError;
 				return httpResponse;
 			}
 
@@ -173,7 +173,7 @@ class NetworkService {
 				const isJson = contentType?.includes('application/json');
 				if (!isJson) {
 					httpResponse.status = false;
-					httpResponse.message = "Response Not JSON";
+					httpResponse.message = this.stringService.httpNotJson;
 					return httpResponse;
 				}
 
@@ -181,14 +181,14 @@ class NetworkService {
 					result = jmespath.search(result, jsonPath);
 				} catch (error) {
 					httpResponse.status = false;
-					httpResponse.message = "JSONPath Search Error";
+					httpResponse.message = this.stringService.httpJsonPathError;
 					return httpResponse;
 				}
 			}
 
 			if (result === null || result === undefined) {
 				httpResponse.status = false;
-				httpResponse.message = "Empty Result";
+				httpResponse.message = this.stringService.httpEmptyResult;
 				return httpResponse;
 			}
 
@@ -199,7 +199,7 @@ class NetworkService {
 			else match = result === expectedValue;
 
 			httpResponse.status = match;
-			httpResponse.message = match ? "Match" : "Not Match";
+			httpResponse.message = match ? this.stringService.httpMatchSuccess : this.stringService.httpMatchFail;
 			return httpResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
