@@ -19,7 +19,7 @@ import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import useMonitorFetch from "./Hooks/useMonitorFetch";
 import useCertificateFetch from "./Hooks/useCertificateFetch";
 import useChecksFetch from "./Hooks/useChecksFetch";
-import useReportFetch from "./Hooks/useReportFetch";
+import ReportDownloadButton from "../../../Components/MonitorStatusHeader/ReportDownloadButton";
 
 // Constants
 const BREADCRUMBS = [
@@ -69,13 +69,6 @@ const UptimeDetails = () => {
 		page,
 		rowsPerPage,
 	});
-
-	const [reportData, reportIsLoading, reportNetworkError] = useReportFetch({
-		authToken,
-		monitorId,
-		dateRange,
-	});
-
 	// Handlers
 	const handlePageChange = (_, newPage) => {
 		setPage(newPage);
@@ -110,8 +103,6 @@ const UptimeDetails = () => {
 					isAdmin={isAdmin}
 					shouldRender={!monitorIsLoading}
 					monitor={monitor}
-					reportData={reportData}
-					certificateExpiry={certificateExpiry}
 				/>
 				<GenericFallback>
 					<Typography>There is no check history for this monitor yet.</Typography>
@@ -128,9 +119,13 @@ const UptimeDetails = () => {
 				isAdmin={isAdmin}
 				shouldRender={!monitorIsLoading}
 				monitor={monitor}
-				reportData={reportData}
-				certificateExpiry={certificateExpiry}
-			/>
+			>
+				{isAdmin && <ReportDownloadButton
+					monitorId={monitorId}
+					certificateExpiry={certificateExpiry}
+					dateRange={dateRange}
+				/>}
+			</MonitorStatusHeader>
 			<UptimeStatusBoxes
 				shouldRender={!monitorIsLoading}
 				monitor={monitor}
