@@ -1,5 +1,4 @@
 import jmespath from 'jmespath';
-import { errorMessages, successMessages } from "../utils/messages.js";
 const SERVICE_NAME = "NetworkService";
 const UPROCK_ENDPOINT = "https://api.uprock.com/checkmate/push";
 
@@ -171,17 +170,18 @@ class NetworkService {
 			if (jsonPath) {
 				const contentType = response.headers['content-type'];
 
-				if (contentType && contentType.includes('application/json')) {
-					try {
-						result = jmespath.search(result, jsonPath);
-					} catch (error) {
-						httpResponse.status = false;
-						httpResponse.message = "JSONPath Search Error";
-						return httpResponse;
-					}
-				} else {
+				const isJson = contentType?.includes('application/json');
+				if (!isJson) {
 					httpResponse.status = false;
 					httpResponse.message = "Response Not JSON";
+					return httpResponse;
+				}
+
+				try {
+					result = jmespath.search(result, jsonPath);
+				} catch (error) {
+					httpResponse.status = false;
+					httpResponse.message = "JSONPath Search Error";
 					return httpResponse;
 				}
 			}
