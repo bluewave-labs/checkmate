@@ -99,9 +99,11 @@ class NetworkService {
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 */
 	async createMonitor(config) {
-		return this.axiosInstance.post(`/monitors`, config.monitor, {
+		const { authToken, monitor } = config;
+
+		return this.axiosInstance.post(`/monitors`, monitor, {
 			headers: {
-				Authorization: `Bearer ${config.authToken}`,
+				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -284,9 +286,16 @@ class NetworkService {
 	 * @returns {Promise<AxiosResponse>} The response from the axios PUT request.
 	 */
 	async updateMonitor(config) {
-		return this.axiosInstance.put(`/monitors/${config.monitorId}`, config.updatedFields, {
+		const { authToken, monitorId, monitor } = config;
+		const updatedFields = {
+			name: monitor.name,
+			description: monitor.description,
+			interval: monitor.interval,
+			notifications: monitor.notifications,
+		};
+		return this.axiosInstance.put(`/monitors/${monitorId}`, updatedFields, {
 			headers: {
-				Authorization: `Bearer ${config.authToken}`,
+				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
