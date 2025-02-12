@@ -144,5 +144,11 @@
   "monitorResume": "Monitor resumed successfully",
   "statusPageDelete": "Status page deleted successfully",
   "statusPageUpdate": "Status page updated successfully",
-  "statusPageByTeamId": "Got status pages by team id successfully"
+  "statusPageByTeamId": "Got status pages by team id successfully",
+  "httpNetworkError": "Network error",
+  "httpNotJson": "Response data is not json",
+  "httpJsonPathError": "Failed to parse json data",
+  "httpEmptyResult": "Result is empty",
+  "httpMatchSuccess": "Response data match successfully",
+  "httpMatchFail": "Failed to match response data"
 }
