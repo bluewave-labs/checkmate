@@ -1,3 +1,4 @@
+import jmespath from 'jmespath';
 const SERVICE_NAME = "NetworkService";
 const UPROCK_ENDPOINT = "https://api.uprock.com/checkmate/push";
 
@@ -122,20 +123,19 @@ class NetworkService {
 	 */
 	async requestHttp(job) {
 		try {
-			const url = job.data.url;
+			const { url, secret, _id, name, teamId, type, jsonPath, matchMethod, expectedValue } = job.data;
 			const config = {};
 
-			job.data.secret !== undefined &&
-				(config.headers = { Authorization: `Bearer ${job.data.secret}` });
+			secret !== undefined && (config.headers = { Authorization: `Bearer ${secret}` });
 
 			const { response, responseTime, error } = await this.timeRequest(() =>
 				this.axios.get(url, config)
 			);
 
 			const httpResponse = {
-				monitorId: job.data._id,
-				teamId: job.data.teamId,
-				type: job.data.type,
+				monitorId: _id,
+				teamId,
+				type,
 				responseTime,
 				payload: response?.data,
 			};
@@ -144,12 +144,62 @@ class NetworkService {
 				const code = error.response?.status || this.NETWORK_ERROR;
 				httpResponse.code = code;
 				httpResponse.status = false;
-				httpResponse.message = this.http.STATUS_CODES[code] || "Network Error";
+				httpResponse.message = this.http.STATUS_CODES[code] || this.stringService.httpNetworkError;
 				return httpResponse;
 			}
-			httpResponse.status = true;
+
 			httpResponse.code = response.status;
-			httpResponse.message = this.http.STATUS_CODES[response.status];
+
+			if (!expectedValue) {
+				// not configure expected value, return
+				httpResponse.status = true;
+				httpResponse.message = this.http.STATUS_CODES[response.status];
+				return httpResponse;
+			}
+
+			// validate if response data match expected value
+			let result = response?.data;
+
+			this.logger.info({
+				service: this.SERVICE_NAME,
+				method: "requestHttp",
+				message: `Job: [${name}](${_id}) match result with expected value`,
+				details: { expectedValue, result, jsonPath, matchMethod }
+			});
+
+			if (jsonPath) {
+				const contentType = response.headers['content-type'];
+
+				const isJson = contentType?.includes('application/json');
+				if (!isJson) {
+					httpResponse.status = false;
+					httpResponse.message = this.stringService.httpNotJson;
+					return httpResponse;
+				}
+
+				try {
+					result = jmespath.search(result, jsonPath);
+				} catch (error) {
+					httpResponse.status = false;
+					httpResponse.message = this.stringService.httpJsonPathError;
+					return httpResponse;
+				}
+			}
+
+			if (result === null || result === undefined) {
+				httpResponse.status = false;
+				httpResponse.message = this.stringService.httpEmptyResult;
+				return httpResponse;
+			}
+
+			let match;
+			result = typeof result === "object" ? JSON.stringify(result) : result.toString();
+			if (matchMethod === "include") match = result.includes(expectedValue);
+			else if (matchMethod === "regex") match = new RegExp(expectedValue).test(result);
+			else match = result === expectedValue;
+
+			httpResponse.status = match;
+			httpResponse.message = match ? this.stringService.httpMatchSuccess : this.stringService.httpMatchFail;
 			return httpResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
