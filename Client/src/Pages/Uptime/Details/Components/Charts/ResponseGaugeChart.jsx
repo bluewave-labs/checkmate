@@ -85,9 +85,9 @@ const ResponseGaugeChart = ({ avgResponseTime }) => {
 				</text>
 				<text
 					x="50%"
-					y="55%"
+					y="70%"
 					textAnchor="middle"
-					dominantBaseline="hanging"
+					alignmentBaseline="hanging"
 					fontSize={25}
 				>
 					<tspan fontWeight={600}>{responseTime}</tspan> <tspan opacity={0.8}>ms</tspan>
