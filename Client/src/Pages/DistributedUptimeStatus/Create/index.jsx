@@ -13,7 +13,6 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useStatusPageFetch } from "../../StatusPage/Status/Hooks/useStatusPageFetch";
 import { useCreateStatusPage } from "../../StatusPage/Create/Hooks/useCreateStatusPage";
-import { useLocation } from "react-router-dom";
 import { statusPageValidation } from "../../../Validation/validation";
 import { buildErrors } from "../../../Validation/error";
 import { createToast } from "../../../Utils/toastUtils";
@@ -23,8 +22,7 @@ const CreateStatus = () => {
 	const theme = useTheme();
 	const { monitorId, url } = useParams();
 	const navigate = useNavigate();
-	const location = useLocation();
-	const isCreate = location.pathname.startsWith("/status/distributed/create");
+	const isCreate = typeof url === "undefined";
 	const [createStatusPage, isLoading, networkError] = useCreateStatusPage(isCreate);
 
 	const [statusPage, statusPageMonitors, statusPageIsLoading, statusPageNetworkError] =
