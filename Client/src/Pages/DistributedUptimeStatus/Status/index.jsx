@@ -75,9 +75,9 @@ const DistributedUptimeStatus = () => {
 						marginY={theme.spacing(4)}
 						color={theme.palette.primary.contrastTextTertiary}
 					>
-						A public status page is not set up.
+						A status page is not set up.
 					</Typography>
-					<Typography>Please contact to your administrator</Typography>
+					<Typography>Please contact your administrator</Typography>
 				</GenericFallback>
 			</Stack>
 		);
