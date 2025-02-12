@@ -183,6 +183,7 @@ function Sidebar() {
 			This is the top lever for styles
 			*/
 			sx={{
+				position: 'relative',
 				border: 1,
 				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: theme.shape.borderRadius,
@@ -302,6 +303,19 @@ function Sidebar() {
 					</Typography>
 				</Stack>
 			</Stack>
+			<Box
+			sx={{
+				flexGrow: 1,
+				overflow: 'auto',
+				'&::-webkit-scrollbar': {
+					width: theme.spacing(2),
+                },
+				'&::-webkit-scrollbar-thumb': {
+                    backgroundColor: theme.palette.primary.lowContrast,
+                    borderRadius: theme.spacing(4),
+                },
+			}}
+			>
 			<List
 				component="nav"
 				aria-labelledby="nested-menu-subheader"
@@ -315,6 +329,7 @@ function Sidebar() {
 							/* TODO px should be centralized in container */
 							px: collapsed ? theme.spacing(2) : theme.spacing(4),
 							backgroundColor: "transparent",
+							position: 'static',
 						}}
 					>
 						Menu
@@ -566,7 +581,8 @@ function Sidebar() {
 					);
 				})}
 			</List>
-			<Divider sx={{ mt: "auto" }} />
+			</Box>
+			<Divider sx={{ mt: "auto", borderColor: theme.palette.primary.lowContrast }} />
 
 			<Stack
 				direction="row"
