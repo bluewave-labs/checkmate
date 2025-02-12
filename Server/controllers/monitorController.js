@@ -316,6 +316,10 @@ class MonitorController {
 						name: "deleteDistributedUptimeChecks",
 						fn: () => this.db.deleteDistributedChecksByMonitorId(monitor._id),
 					},
+
+					// TODO  We don't actually want to delete the status page if there are other monitors in it
+					// We actually just want to remove the monitor being deleted from the status page.
+					// Only delete he status page if there are no other monitors in it.
 					{
 						name: "deleteStatusPages",
 						fn: () => this.db.deleteStatusPagesByMonitorId(monitor._id),
