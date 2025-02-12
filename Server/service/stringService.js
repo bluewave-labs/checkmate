@@ -321,6 +321,30 @@ class StringService {
     return this.translationService.getTranslation('getAppSettings');
   }
 
+  get httpNetworkError() {
+    return this.translationService.getTranslation('httpNetworkError');
+  }
+
+  get httpNotJson() {
+    return this.translationService.getTranslation('httpNotJson');
+  }
+
+  get httpJsonPathError() {
+    return this.translationService.getTranslation('httpJsonPathError');
+  }
+
+  get httpEmptyResult() {
+    return this.translationService.getTranslation('httpEmptyResult');
+  }
+
+  get httpMatchSuccess() {
+    return this.translationService.getTranslation('httpMatchSuccess');
+  }
+
+  get httpMatchFail() {
+    return this.translationService.getTranslation('httpMatchFail');
+  }
+
   get updateAppSettings() {
     return this.translationService.getTranslation('updateAppSettings');
   }
