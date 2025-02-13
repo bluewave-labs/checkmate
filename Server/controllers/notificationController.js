@@ -15,13 +15,18 @@ class NotificationController {
                 statusChanged: true,
                 prevStatus: true,
             };
+
             if (type === "webhook") {
                 await this.notificationService.sendWebhookNotification(
                     networkResponse,
                     config
                 );
             }
-            res.json({ success: true, msg: "Notification sent successfully" });
+
+            return res.success({
+                msg: "Notification sent successfully"
+            });
+
         } catch (error) {
             logger.error({
                 message: error.message,
@@ -29,7 +34,10 @@ class NotificationController {
                 method: "triggerNotification",
                 stack: error.stack,
             });
-            res.status(500).json({ success: false, msg: "Failed to send notification" });
+
+            return res.error({
+                msg: "Failed to send notification"
+            });
         }
     }
 }
