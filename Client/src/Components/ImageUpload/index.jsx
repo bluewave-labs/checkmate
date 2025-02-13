@@ -13,7 +13,7 @@ const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
   };
 
-const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize, acceptedTypes, previewSize = 150, setErrors, errors}) => {
+const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize, acceptedTypes, previewSize = 150, setErrors, errors = {}}) => {
 
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ value: 0, isLoading: false });
@@ -54,14 +54,14 @@ const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize, acceptedTy
 
     if (maxSize && pic.size > maxSize) {
         const errorMsg = `File size exceeds ${formatBytes(maxSize)}`;
-        if (setErrors) setErrors((prev) => ({ ...prev, picture: errorMsg }));
+        if (setErrors) setErrors?.((prev) => ({ ...prev, picture: errorMsg }));
         if (onError) onError(errorMsg);
         return;
     }
 
     if (acceptedTypes && !acceptedTypes.includes(pic.type)) {
         const errorMsg = `File type not supported. Allowed: ${acceptedTypes.join(", ")}`;
-        if (setErrors) setErrors((prev) => ({ ...prev, picture: errorMsg }));
+        if (setErrors) setErrors?.((prev) => ({ ...prev, picture: errorMsg }));
         if (onError) onError(errorMsg);
         return;
     }
@@ -95,7 +95,7 @@ const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize, acceptedTy
   const validateField = (toValidate, schema, name = "picture") => {
     const { error } = schema.validate(toValidate, { abortEarly: false });
     if (setErrors) {
-        setErrors((prev) => {
+        setErrors?.((prev) => {
             const prevErrors = { ...prev };
             if (error) {
                 prevErrors[name] = error.details[0].message;
@@ -122,7 +122,7 @@ const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize, acceptedTy
         onUpdate(file.src);
     }
     setProgress({ value: 0, isLoading: false });
-    onClose(); // Close the modal
+    onClose("");  // Close the modal
   };
 
   return (

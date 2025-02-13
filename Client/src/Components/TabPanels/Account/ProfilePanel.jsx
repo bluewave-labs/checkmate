@@ -325,7 +325,7 @@ const ProfilePanel = () => {
 				setErrors={setErrors}
 				errors={errors}
 				open={isOpen === "picture"}
-				onClose={() => setIsOpen("")}
+				onClose={setIsOpen}
 				onUpdate={handleUpdatePicture}
 			/>
 		</TabPanel>
