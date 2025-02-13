@@ -7,7 +7,6 @@ import ImageIcon from "@mui/icons-material/Image";
 import {GenericDialog} from "../Dialog/genericDialog";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { checkImage } from "../../Utils/fileUtils";
-import "./index.css";
 
 const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
