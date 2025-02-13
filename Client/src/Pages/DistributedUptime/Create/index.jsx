@@ -13,18 +13,15 @@ import { createToast } from "../../../Utils/toastUtils";
 
 // Utility
 import { useTheme } from "@emotion/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { monitorValidation } from "../../../Validation/validation";
-import { createUptimeMonitor } from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useCreateDistributedUptimeMonitor } from "./Hooks/useCreateDistributedUptimeMonitor";
+import { useMonitorFetch } from "./Hooks/useMonitorFetch";
 
 // Constants
-const BREADCRUMBS = [
-	{ name: `distributed uptime`, path: "/distributed-uptime" },
-	{ name: "create", path: `/distributed-uptime/create` },
-];
 const MS_PER_MINUTE = 60000;
 const SELECT_VALUES = [
 	{ _id: 1, name: "1 minute" },
@@ -34,18 +31,30 @@ const SELECT_VALUES = [
 	{ _id: 5, name: "5 minutes" },
 ];
 
+const parseUrl = (url) => {
+	try {
+		return new URL(url);
+	} catch (error) {
+		return null;
+	}
+};
+
 const CreateDistributedUptime = () => {
-	const location = useLocation();
-	const isCreate = location.pathname.startsWith("/distributed-uptime/create");
+	const { monitorId } = useParams();
+	const isCreate = typeof monitorId === "undefined";
+
+	const BREADCRUMBS = [
+		{ name: `distributed uptime`, path: "/distributed-uptime" },
+		{ name: isCreate ? "create" : "configure", path: `` },
+	];
 
 	// Redux state
 	const { user, authToken } = useSelector((state) => state.auth);
-	const isLoading = useSelector((state) => state.uptimeMonitors.isLoading);
 
 	// Local state
 	const [https, setHttps] = useState(true);
 	const [notifications, setNotifications] = useState([]);
-	const [monitor, setMonitor] = useState({
+	const [form, setForm] = useState({
 		type: "distributed_http",
 		name: "",
 		url: "",
@@ -55,12 +64,37 @@ const CreateDistributedUptime = () => {
 
 	//utils
 	const theme = useTheme();
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [createDistributedUptimeMonitor, isLoading, networkError] =
+		useCreateDistributedUptimeMonitor({ isCreate, monitorId });
+
+	const [monitor, monitorIsLoading, monitorNetworkError] = useMonitorFetch({
+		authToken,
+		monitorId,
+		isCreate,
+	});
+
+	// Effect to set monitor to fetched monitor
+	useEffect(() => {
+		if (typeof monitor !== "undefined") {
+			const parsedUrl = parseUrl(monitor?.url);
+			const protocol = parsedUrl?.protocol?.replace(":", "") || "";
+			setHttps(protocol === "https");
+
+			const newForm = {
+				name: monitor.name,
+				interval: monitor.interval / MS_PER_MINUTE,
+				url: parsedUrl.host,
+				type: monitor.type,
+			};
+
+			setForm(newForm);
+		}
+	}, [monitor]);
 
 	// Handlers
-	const handleCreateMonitor = async (event) => {
-		const monitorToSubmit = { ...monitor };
+	const handleCreateMonitor = async () => {
+		const monitorToSubmit = { ...form };
 
 		// Prepend protocol to url
 		monitorToSubmit.url = `http${https ? "s" : ""}://` + monitorToSubmit.url;
@@ -68,7 +102,6 @@ const CreateDistributedUptime = () => {
 		const { error } = monitorValidation.validate(monitorToSubmit, {
 			abortEarly: false,
 		});
-
 		if (error) {
 			const newErrors = {};
 			error.details.forEach((err) => {
@@ -80,16 +113,14 @@ const CreateDistributedUptime = () => {
 		}
 
 		// Append needed fields
-		monitorToSubmit.description = monitor.name;
-		monitorToSubmit.interval = monitor.interval * MS_PER_MINUTE;
+		monitorToSubmit.description = form.name;
+		monitorToSubmit.interval = form.interval * MS_PER_MINUTE;
 		monitorToSubmit.teamId = user.teamId;
 		monitorToSubmit.userId = user._id;
 		monitorToSubmit.notifications = notifications;
 
-		const action = await dispatch(
-			createUptimeMonitor({ authToken, monitor: monitorToSubmit })
-		);
-		if (action.meta.requestStatus === "fulfilled") {
+		const success = await createDistributedUptimeMonitor({ form: monitorToSubmit });
+		if (success) {
 			createToast({ body: "Monitor created successfully!" });
 			navigate("/distributed-uptime");
 		} else {
@@ -98,9 +129,10 @@ const CreateDistributedUptime = () => {
 	};
 
 	const handleChange = (event) => {
-		const { name, value } = event.target;
-		setMonitor({
-			...monitor,
+		let { name, value } = event.target;
+
+		setForm({
+			...form,
 			[name]: value,
 		});
 		const { error } = monitorValidation.validate(
@@ -178,7 +210,8 @@ const CreateDistributedUptime = () => {
 							label="URL to monitor"
 							https={https}
 							placeholder={"www.google.com"}
-							value={monitor.url}
+							disabled={!isCreate}
+							value={form.url}
 							name="url"
 							onChange={handleChange}
 							error={errors["url"] ? true : false}
@@ -190,7 +223,7 @@ const CreateDistributedUptime = () => {
 							label="Display name"
 							isOptional={true}
 							placeholder={"Google"}
-							value={monitor.name}
+							value={form.name}
 							name="name"
 							onChange={handleChange}
 							error={errors["name"] ? true : false}
@@ -217,8 +250,11 @@ const CreateDistributedUptime = () => {
 								checked={true}
 								onChange={handleChange}
 							/>
-							{monitor.type === "http" || monitor.type === "distributed_http" ? (
-								<ButtonGroup sx={{ ml: theme.spacing(16) }}>
+							{form.type === "http" || form.type === "distributed_http" ? (
+								<ButtonGroup
+									disabled={!isCreate}
+									sx={{ ml: theme.spacing(16) }}
+								>
 									<Button
 										variant="group"
 										filled={https.toString()}
@@ -282,7 +318,7 @@ const CreateDistributedUptime = () => {
 							id="monitor-interval"
 							label="Check frequency"
 							name="interval"
-							value={monitor.interval || 1}
+							value={form.interval}
 							onChange={handleChange}
 							items={SELECT_VALUES}
 						/>
@@ -299,7 +335,7 @@ const CreateDistributedUptime = () => {
 						disabled={!Object.values(errors).every((value) => value === undefined)}
 						loading={isLoading}
 					>
-						Create monitor
+						{isCreate ? "Create monitor" : "Configure monitor"}
 					</LoadingButton>
 				</Stack>
 			</Stack>

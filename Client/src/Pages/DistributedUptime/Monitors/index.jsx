@@ -41,7 +41,7 @@ const DistributedUptimeMonitors = () => {
 		);
 	}
 
-	if (typeof monitorsSummary !== "undefined" && monitorsSummary.totalMonitors === 0) {
+	if (typeof monitorsSummary === "undefined" || monitorsSummary.totalMonitors === 0) {
 		return (
 			<Fallback
 				vowelStart={false}

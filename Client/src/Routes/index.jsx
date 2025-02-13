@@ -108,6 +108,14 @@ const Routes = () => {
 					}
 				/>
 				<Route
+					path="/distributed-uptime/configure/:monitorId"
+					element={
+						<ProtectedDistributedUptimeRoute>
+							<CreateDistributedUptime />
+						</ProtectedDistributedUptimeRoute>
+					}
+				/>
+				<Route
 					path="/distributed-uptime/:monitorId"
 					element={
 						<ProtectedDistributedUptimeRoute>
