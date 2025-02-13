@@ -8,6 +8,7 @@ import {GenericDialog} from "../Dialog/genericDialog";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { checkImage } from "../../Utils/fileUtils";
 import { useTheme } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 
 const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
@@ -25,6 +26,7 @@ const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize = DEFAULT_M
   const UPLOAD_PROGRESS_INCREMENT = 12;  // Controls the speed of upload progress
   const UPLOAD_PROGRESS_INTERVAL = 120;  // Controls how often progress updates (milliseconds)
   const UPLOAD_COMPLETE = 100;  // Represents the max progress percentage
+  const { t } = useTranslation();
   
   // Handle base64 and placeholder logic
   let imageSrc = placeholder || ""; // Default to placeholder or empty string
@@ -132,9 +134,9 @@ const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize = DEFAULT_M
         id="modal-update-picture"
         open={open}
         onClose={onClose}
-        title={"Upload Image"}
-        description={"Select an image to upload."}
-        confirmationButtonLabel={"Update"}
+        title={t("uploadImage")}
+        description={t("selectImage")}
+        confirmationButtonLabel={t("update")}
         onConfirm={handleUpdatePicture}
         theme={theme}
         isLoading={false}
