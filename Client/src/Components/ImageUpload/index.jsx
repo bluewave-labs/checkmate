@@ -13,7 +13,7 @@ const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
   };
 
-const ImageUpload = ({ open, onClose, onUpdate, shouldRender = true, placeholder, maxSize, acceptedTypes, previewSize = 150, setErrors, errors}) => {
+const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize, acceptedTypes, previewSize = 150, setErrors, errors}) => {
 
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ value: 0, isLoading: false });
@@ -34,30 +34,15 @@ const ImageUpload = ({ open, onClose, onUpdate, shouldRender = true, placeholder
   } else {
       imageSrc = ""; // Ensure it's an empty string instead of "undefined"
   }  
-  
 
-  if (shouldRender === false) {
-    return null;
-  }
-
-  const handleDragEnter = (event) => {
+  const handleDrag = (event, isDragging) => {
     event.preventDefault();
-    setIsDragging(true);
-};
+    setIsDragging(isDragging);
 
-const handleDragLeave = (event) => {
-    event.preventDefault();
-    setIsDragging(false);
-};
-
-const handleDrop = (event) => {
-    event.preventDefault();
-    setIsDragging(false);
-
-    if (event.dataTransfer.files.length > 0) {
+    if (event.type === "drop" && event.dataTransfer.files.length > 0) {
         handlePicture({ target: { files: event.dataTransfer.files } });
     }
-};
+  };
 
   // Handles image file selection
   const handlePicture = (event) => {
@@ -172,9 +157,9 @@ const handleDrop = (event) => {
                     backgroundColor: "hsl(215, 87%, 51%, 0.05)",
                 },
             }}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
+            onDragEnter={(e) => handleDrag(e, true)}
+            onDragLeave={(e) => handleDrag(e, false)}
+            onDrop={(e) => handleDrag(e, false)}
             onDragOver={(e) => e.preventDefault()}
         >
         <input
