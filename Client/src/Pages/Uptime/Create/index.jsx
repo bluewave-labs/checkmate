@@ -93,6 +93,12 @@ const CreateMonitor = () => {
 			interval: monitor.interval * MS_PER_MINUTE,
 		};
 
+		if (monitor.type === "http") {
+			form.expectedValue = monitor.expectedValue;
+			form.jsonPath = monitor.jsonPath;
+			form.matchMethod = monitor.matchMethod;
+		}
+
 		const { error } = monitorValidation.validate(form, {
 			abortEarly: false,
 		});
@@ -399,6 +405,69 @@ const CreateMonitor = () => {
 							onChange={(event) => handleChange(event, "interval")}
 							items={SELECT_VALUES}
 						/>
+						{
+							monitor.type === "http" && <>
+								<Select
+									id="match-method"
+									label="Match Method"
+									value={monitor.matchMethod || "equal"}
+									onChange={(event) => handleChange(event, "matchMethod")}
+									items={[
+										{ _id: "equal", name: "Equal" },
+										{ _id: "include", name: "Include" },
+										{ _id: "regex", name: "Regex" },
+									]}
+								/>
+								<Stack>
+									<TextInput
+										type="text"
+										id="expected-value"
+										label="Expected value"
+										isOptional={true}
+										placeholder={{
+											regex: "^[\w.-]+@gmail.com$",
+											equal: "janet@gmail.com",
+											include: "@gmail.com"
+										}[monitor.matchMethod || "equal"]}
+										value={monitor.expectedValue}
+										onChange={(event) => handleChange(event, "expectedValue")}
+										error={errors["expectedValue"] ? true : false}
+										helperText={errors["expectedValue"]}
+									/>
+									<Typography
+										component="span"
+										color={theme.palette.primary.contrastTextTertiary}
+										opacity={0.8}
+									>
+										The expected value is used to match the response result, and the result determines the status.
+									</Typography>
+								</Stack>
+								<Stack>
+									<TextInput
+										type="text"
+										id="json-path"
+										label="JSON Path"
+										isOptional={true}
+										placeholder="data.email"
+										value={monitor.jsonPath}
+										onChange={(event) => handleChange(event, "jsonPath")}
+										error={errors["jsonPath"] ? true : false}
+										helperText={errors["jsonPath"]}
+									/>
+									<Typography
+										component="span"
+										color={theme.palette.primary.contrastTextTertiary}
+										opacity={0.8}
+									>
+										The expression is evaluated against the reponse JSON data and the result will get used to match with expected value. Check out&nbsp;
+										<Typography component="a" href="https://jmespath.org/" target="_blank" color="info">
+											jmespath.org
+										</Typography>
+										&nbsp;for the documentation about the query language.
+									</Typography>
+								</Stack>
+							</>
+						}
 					</Stack>
 				</ConfigBox>
 				<Stack
