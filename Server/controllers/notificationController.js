@@ -2,6 +2,7 @@
 class NotificationController {
     constructor(notificationService) {
         this.notificationService = notificationService;
+        this.triggerNotification = this.triggerNotification.bind(this);
     }
 
     async triggerNotification(req, res, next) { 

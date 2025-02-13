@@ -36,7 +36,7 @@ class NotificationRoutes {
             '/trigger', 
             verifyJWT,
             this.validateRequest(triggerNotificationBodyValidation),
-            this.notificationController.triggerNotification.bind(this.notificationController)
+            this.notificationController.triggerNotification
         );
     }
 
