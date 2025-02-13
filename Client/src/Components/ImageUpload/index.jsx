@@ -10,6 +10,29 @@ import { checkImage } from "../../Utils/fileUtils";
 import { useTheme } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 
+/**
+ * @component
+ * @param {Object} props - Component properties.
+ * @param {boolean} props.open - Controls whether the upload modal is open.
+ * @param {function} props.onClose - Function to close the modal.
+ * @param {function} props.onUpdate - Callback function triggered when an image is successfully uploaded.
+ * @param {string} [props.placeholder] - Optional placeholder image (URL or base64).
+ * @param {number} [props.maxSize=3145728] - Maximum allowed file size in bytes (default: 3MB).
+ * @param {string[]} [props.acceptedTypes] - List of allowed image MIME types (e.g., `["image/png", "image/jpeg"]`).
+ * @param {number} [props.previewSize=150] - Size of the image preview in pixels.
+ * @param {function} [props.setErrors] - Function to set error messages in the parent component.
+ * @param {Object} [props.errors={}] - Object containing validation errors.
+ * 
+ * @example
+ * <ImageUpload 
+ *    open={isOpen} 
+ *    onClose={setIsOpen(false)}
+ *    onUpdate={(imageUrl) => console.log("Image uploaded:", imageUrl)}
+ *    maxSize={5 * 1024 * 1024} // 5MB
+ *    acceptedTypes={["image/png", "image/jpeg"]}
+ * />
+ */
+
 const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
   };
