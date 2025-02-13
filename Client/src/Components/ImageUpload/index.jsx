@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Box, Button, Stack, IconButton, TextField , Typography } from "@mui/material";
+import { Box, Button, Stack, IconButton , Typography } from "@mui/material";
 import ProgressUpload from "../ProgressBars";
 import { formatBytes } from "../../Utils/fileUtils";
 import { imageValidation } from "../../Validation/validation";
@@ -7,29 +7,34 @@ import ImageIcon from "@mui/icons-material/Image";
 import {GenericDialog} from "../Dialog/genericDialog";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { checkImage } from "../../Utils/fileUtils";
+import { useTheme } from "@mui/material/styles";
 
 const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
   };
 
-const ImageUpload = ({ open, onClose, onUpdate, value, currentImage = value, theme, shouldRender = true, placeholder, maxSize, acceptedTypes, previewSize = 150, onError,}) => {
+const ImageUpload = ({ open, onClose, onUpdate, shouldRender = true, placeholder, maxSize, acceptedTypes, previewSize = 150, setErrors, errors}) => {
 
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ value: 0, isLoading: false });
-  const [errors, setErrors] = useState({});
   const [isDragging, setIsDragging] = useState(false);
   const intervalRef = useRef(null);
-
+  const theme = useTheme();
+  const UPLOAD_PROGRESS_INCREMENT = 12;  // Controls the speed of upload progress
+  const UPLOAD_PROGRESS_INTERVAL = 120;  // Controls how often progress updates (milliseconds)
+  const UPLOAD_COMPLETE = 100;  // Represents the max progress percentage
+  
   // Handle base64 and placeholder logic
-  let imageSrc = currentImage;
+  let imageSrc = placeholder || ""; // Default to placeholder or empty string
 
-  if (typeof file?.src !== "undefined") {
-    imageSrc = file.src;
-  } else if (typeof currentImage !== "undefined" && isValidBase64Image(currentImage)) {
-    imageSrc = `data:image/png;base64,${currentImage}`;
-  } else if (typeof placeholder !== "undefined") {
-    imageSrc = placeholder;
-  }
+  if (file?.src) {
+      imageSrc = file.src; // Use uploaded file's preview
+  } else if (placeholder && isValidBase64Image(placeholder)) {
+      imageSrc = `data:image/png;base64,${placeholder}`; // Convert base64 string if valid
+  } else {
+      imageSrc = ""; // Ensure it's an empty string instead of "undefined"
+  }  
+  
 
   if (shouldRender === false) {
     return null;
@@ -64,14 +69,14 @@ const handleDrop = (event) => {
 
     if (maxSize && pic.size > maxSize) {
         const errorMsg = `File size exceeds ${formatBytes(maxSize)}`;
-        setErrors({ picture: errorMsg });
+        if (setErrors) setErrors((prev) => ({ ...prev, picture: errorMsg }));
         if (onError) onError(errorMsg);
         return;
     }
 
     if (acceptedTypes && !acceptedTypes.includes(pic.type)) {
         const errorMsg = `File type not supported. Allowed: ${acceptedTypes.join(", ")}`;
-        setErrors({ picture: errorMsg });
+        if (setErrors) setErrors((prev) => ({ ...prev, picture: errorMsg }));
         if (onError) onError(errorMsg);
         return;
     }
@@ -90,30 +95,31 @@ const handleDrop = (event) => {
 
     // Simulate upload progress
     intervalRef.current = setInterval(() => {
-        const buffer = 12;
         setProgress((prev) => {
-            if (prev.value + buffer >= 100) {
+            const nextValue = prev.value + UPLOAD_PROGRESS_INCREMENT;
+            if (nextValue >= UPLOAD_COMPLETE) {
                 clearInterval(intervalRef.current);
-                return { value: 100, isLoading: false };
+                return { value: UPLOAD_COMPLETE, isLoading: false };
             }
-            return { ...prev, value: prev.value + buffer };
+            return { ...prev, value: nextValue };
         });
-    }, 120);
- };
+    }, UPLOAD_PROGRESS_INTERVAL);
+    };
 
   // Validates input against provided schema and updates error state
   const validateField = (toValidate, schema, name = "picture") => {
     const { error } = schema.validate(toValidate, { abortEarly: false });
-    setErrors((prev) => {
-        const prevErrors = { ...prev };
-        if (error) {
-            prevErrors[name] = error.details[0].message;
-            if (onError) onError(error.details[0].message);
-        } else {
-            delete prevErrors[name];
-        }
-        return prevErrors;
-    });
+    if (setErrors) {
+        setErrors((prev) => {
+            const prevErrors = { ...prev };
+            if (error) {
+                prevErrors[name] = error.details[0].message;
+            } else {
+                delete prevErrors[name];
+            }
+            return prevErrors;
+        });
+    }
     return !!error;
   };
 
@@ -127,8 +133,10 @@ const handleDrop = (event) => {
 
   // Updates the profile picture and closes the modal
   const handleUpdatePicture = () => {
+    if (file?.src) {
+        onUpdate(file.src);
+    }
     setProgress({ value: 0, isLoading: false });
-    onUpdate(file.src); // Pass the new image URL to the parent component
     onClose(); // Close the modal
   };
 
@@ -137,11 +145,11 @@ const handleDrop = (event) => {
         id="modal-update-picture"
         open={open}
         onClose={onClose}
-        theme={theme}
         title={"Upload Image"}
         description={"Select an image to upload."}
         confirmationButtonLabel={"Update"}
         onConfirm={handleUpdatePicture}
+        theme={theme}
         isLoading={false}
         >
         <Box
@@ -186,12 +194,12 @@ const handleDrop = (event) => {
             }}
         />
 
-        {!checkImage(file?.src || currentImage) || progress.isLoading ? (
+            {!checkImage(imageSrc) || progress.isLoading ? (
             <>
                 <Stack
                     className="custom-file-text"
                     alignItems="center"
-                    gap="4px"
+                    gap={theme.spacing(0.5)}
                     sx={{
                         position: "absolute",
                         top: "50%",
@@ -232,7 +240,7 @@ const handleDrop = (event) => {
                     width: `${previewSize}px`, 
                     height: `${previewSize}px`, 
                     overflow: "hidden",
-                    backgroundImage: `url(${file?.src || currentImage})`,
+                    backgroundImage: imageSrc ? `url(${imageSrc})` : "none",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     borderRadius: "50%",
@@ -244,21 +252,21 @@ const handleDrop = (event) => {
         )}
         </Box>
 
-        {progress.isLoading || progress.value !== 0 || errors["picture"] ? (
+        {progress.isLoading || progress.value !== 0 || errors?.picture ? (
             <ProgressUpload
             icon={<ImageIcon />}
             label={file?.name}
-            size={file?.size}
+            size={file?.size || "0 KB"}
             progress={progress.value}
             onClick={removePicture}
-            error={errors["picture"]}
+            error={errors?.picture}
             />
         ) : null}
 
         <Stack
             direction="row"
-            mt={2}
-            gap={2}
+            mt={theme.spacing(2)} 
+            gap={theme.spacing(2)}
             justifyContent="flex-end"
         >
             <Button
@@ -274,7 +282,7 @@ const handleDrop = (event) => {
             onClick={handleUpdatePicture}
             disabled={
                 (Object.keys(errors).length !== 0 && errors?.picture) ||
-                progress.value !== 100
+                progress.value !== UPLOAD_COMPLETE 
                 ? true
                 : false
             }

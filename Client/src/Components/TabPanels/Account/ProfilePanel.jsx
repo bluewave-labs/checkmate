@@ -90,12 +90,14 @@ const ProfilePanel = () => {
 
 	// Handles updating the profile picture
 	const handleUpdatePicture = (newImage) => {
-		setLocalData((prev) => ({
-			...prev,
-			file: newImage,
-			deleteProfileImage: false,
-		}));
-	};
+		if (newImage) {
+			setLocalData((prev) => ({
+				...prev,
+				file: newImage,
+				deleteProfileImage: false,
+			}));
+		}
+	};	
 
 	// Handles deleting the profile picture
 	const handleDeletePicture = () => {
@@ -320,11 +322,11 @@ const ProfilePanel = () => {
 
 			{/* Image Upload Modal */}
 			<ImageUpload
+				setErrors={setErrors}
+				errors={errors}
 				open={isOpen === "picture"}
 				onClose={() => setIsOpen("")}
 				onUpdate={handleUpdatePicture}
-				currentImage={user?.avatarImage ? `data:image/png;base64,${user.avatarImage}` : ""}
-				theme={theme}
 			/>
 		</TabPanel>
 	);
