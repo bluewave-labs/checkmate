@@ -307,6 +307,7 @@ function Sidebar() {
 			sx={{
 				flexGrow: 1,
 				overflow: 'auto',
+				overflowX: 'hidden',
 				'&::-webkit-scrollbar': {
 					width: theme.spacing(2),
                 },
