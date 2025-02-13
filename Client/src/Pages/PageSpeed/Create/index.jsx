@@ -14,7 +14,6 @@ import { parseDomainName } from "../../../Utils/monitorUtils";
 // MUI
 import { useTheme } from "@emotion/react";
 import { Box, Stack, Typography, Button, ButtonGroup } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
 
 //Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
@@ -335,7 +334,7 @@ const CreatePageSpeed = () => {
 					direction="row"
 					justifyContent="flex-end"
 				>
-					<LoadingButton
+					<Button
 						variant="contained"
 						color="accent"
 						onClick={handleCreateMonitor}
@@ -343,7 +342,7 @@ const CreatePageSpeed = () => {
 						loading={isLoading}
 					>
 						Create monitor
-					</LoadingButton>
+					</Button>
 				</Stack>
 			</Stack>
 		</Box>

@@ -1,8 +1,7 @@
 import TabPanel from "@mui/lab/TabPanel";
 import { useState } from "react";
 import { useTheme } from "@emotion/react";
-import { Box, Stack, Typography } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
+import { Box, Stack, Typography, Button } from "@mui/material";
 import { PasswordEndAdornment } from "../../Inputs/TextInput/Adornments";
 import TextInput from "../../Inputs/TextInput";
 import { credentials } from "../../../Validation/validation";
@@ -226,7 +225,7 @@ const PasswordPanel = () => {
 					direction="row"
 					justifyContent="flex-end"
 				>
-					<LoadingButton
+					<Button
 						variant="contained"
 						color="accent"
 						type="submit"
@@ -242,7 +241,7 @@ const PasswordPanel = () => {
 						}}
 					>
 						Save
-					</LoadingButton>
+					</Button>
 				</Stack>
 			</Stack>
 		</TabPanel>

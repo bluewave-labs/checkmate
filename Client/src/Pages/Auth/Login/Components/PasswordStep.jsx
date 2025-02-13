@@ -1,7 +1,6 @@
 import { useRef, useEffect } from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { useSelector } from "react-redux";
 import TextInput from "../../../../Components/Inputs/TextInput";
 import { PasswordEndAdornment } from "../../../../Components/Inputs/TextInput/Adornments";
@@ -90,7 +89,7 @@ const PasswordStep = ({ form, errors, onSubmit, onChange, onBack }) => {
 							<ArrowBackRoundedIcon />
 							{t("commonBack")}{" "}
 						</Button>
-						<LoadingButton
+						<Button
 							variant="contained"
 							color="accent"
 							type="submit"
@@ -106,7 +105,7 @@ const PasswordStep = ({ form, errors, onSubmit, onChange, onBack }) => {
 							}}
 						>
 							{t("continue")}
-						</LoadingButton>
+						</Button>
 					</Stack>
 				</Box>
 			</Stack>

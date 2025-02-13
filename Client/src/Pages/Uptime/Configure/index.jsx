@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router";
 import { useTheme } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Box, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Stack, Tooltip, Typography, Button } from "@mui/material";
 import { monitorValidation } from "../../../Validation/validation";
 import { createToast } from "../../../Utils/toastUtils";
 import { logger } from "../../../Utils/Logger";
@@ -22,7 +22,6 @@ import Checkbox from "../../../Components/Inputs/Checkbox";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import PulseDot from "../../../Components/Animated/PulseDot";
 import SkeletonLayout from "./skeleton";
-import LoadingButton from "@mui/lab/LoadingButton";
 import "./index.css";
 import Dialog from "../../../Components/Dialog";
 
@@ -292,7 +291,7 @@ const Configure = () => {
 									ml: "auto",
 								}}
 							>
-								<LoadingButton
+								<Button
 									variant="contained"
 									color="secondary"
 									loading={isLoading}
@@ -323,8 +322,8 @@ const Configure = () => {
 											Resume
 										</>
 									)}
-								</LoadingButton>
-								<LoadingButton
+								</Button>
+								<Button
 									loading={isLoading}
 									variant="contained"
 									color="error"
@@ -332,7 +331,7 @@ const Configure = () => {
 									onClick={() => setIsOpen(true)}
 								>
 									Remove
-								</LoadingButton>
+								</Button>
 							</Box>
 						</Stack>
 						<ConfigBox>
@@ -347,7 +346,11 @@ const Configure = () => {
 								<TextInput
 									type={monitor?.type === "http" ? "url" : "text"}
 									https={protocol === "https"}
-									startAdornment={monitor?.type === "http" && <HttpAdornment https={protocol === "https"} />}
+									startAdornment={
+										monitor?.type === "http" && (
+											<HttpAdornment https={protocol === "https"} />
+										)
+									}
 									id="monitor-url"
 									label="URL to monitor"
 									placeholder="google.com"
@@ -443,7 +446,7 @@ const Configure = () => {
 							justifyContent="flex-end"
 							mt="auto"
 						>
-							<LoadingButton
+							<Button
 								variant="contained"
 								color="accent"
 								loading={isLoading}
@@ -451,7 +454,7 @@ const Configure = () => {
 								onClick={handleSubmit}
 							>
 								Save
-							</LoadingButton>
+							</Button>
 						</Stack>
 					</Stack>
 				</>
