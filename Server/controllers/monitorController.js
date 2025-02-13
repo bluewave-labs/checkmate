@@ -14,7 +14,6 @@ import {
 	getHardwareDetailsByIdQueryValidation,
 } from "../validation/joi.js";
 import sslChecker from "ssl-checker";
-import { successMessages } from "../utils/messages.js";
 import jwt from "jsonwebtoken";
 import { getTokenFromHeaders } from "../utils/utils.js";
 import logger from "../utils/logger.js";
@@ -24,10 +23,11 @@ import seedDb from "../db/mongo/utils/seedDb.js";
 const SERVICE_NAME = "monitorController";
 
 class MonitorController {
-	constructor(db, settingsService, jobQueue) {
+	constructor(db, settingsService, jobQueue, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
 		this.jobQueue = jobQueue;
+		this.stringService = stringService;
 	}
 
 	/**
@@ -43,7 +43,7 @@ class MonitorController {
 		try {
 			const monitors = await this.db.getAllMonitors();
 			return res.success({
-				msg: successMessages.MONITOR_GET_ALL,
+				msg: this.stringService.monitorGetAll,
 				data: monitors,
 			});
 		} catch (error) {
@@ -64,7 +64,7 @@ class MonitorController {
 		try {
 			const monitors = await this.db.getAllMonitorsWithUptimeStats();
 			return res.success({
-				msg: successMessages.MONITOR_GET_ALL,
+				msg: this.stringService.monitorGetAll,
 				data: monitors,
 			});
 		} catch (error) {
@@ -76,7 +76,7 @@ class MonitorController {
 		try {
 			const monitor = await this.db.getUptimeDetailsById(req);
 			return res.success({
-				msg: successMessages.MONITOR_GET_BY_ID,
+				msg: this.stringService.monitorGetById,
 				data: monitor,
 			});
 		} catch (error) {
@@ -105,7 +105,7 @@ class MonitorController {
 		try {
 			const monitorStats = await this.db.getMonitorStatsById(req);
 			return res.success({
-				msg: successMessages.MONITOR_STATS_BY_ID,
+				msg: this.stringService.monitorStatsById,
 				data: monitorStats,
 			});
 		} catch (error) {
@@ -133,7 +133,7 @@ class MonitorController {
 		try {
 			const monitor = await this.db.getHardwareDetailsById(req);
 			return res.success({
-				msg: successMessages.MONITOR_GET_BY_ID,
+				msg: this.stringService.monitorGetById,
 				data: monitor,
 			});
 		} catch (error) {
@@ -154,7 +154,7 @@ class MonitorController {
 			const certificate = await fetchMonitorCertificate(sslChecker, monitor);
 
 			return res.success({
-				msg: successMessages.MONITOR_CERTIFICATE,
+				msg: this.stringService.monitorCertificate,
 				data: {
 					certificateDate: new Date(certificate.validTo),
 				},
@@ -187,7 +187,7 @@ class MonitorController {
 		try {
 			const monitor = await this.db.getMonitorById(req.params.monitorId);
 			return res.success({
-				msg: successMessages.MONITOR_GET_BY_ID,
+				msg: this.stringService.monitorGetById,
 				data: monitor,
 			});
 		} catch (error) {
@@ -231,7 +231,7 @@ class MonitorController {
 			// Add monitor to job queue
 			this.jobQueue.addJob(monitor._id, monitor);
 			return res.success({
-				msg: successMessages.MONITOR_CREATE,
+				msg: this.stringService.monitorCreate,
 				data: monitor,
 			});
 		} catch (error) {
@@ -295,12 +295,49 @@ class MonitorController {
 		try {
 			const monitor = await this.db.deleteMonitor(req, res, next);
 			// Delete associated checks,alerts,and notifications
+
 			try {
-				await this.jobQueue.deleteJob(monitor);
-				await this.db.deleteChecks(monitor._id);
-				await this.db.deletePageSpeedChecksByMonitorId(monitor._id);
-				await this.db.deleteNotificationsByMonitorId(monitor._id);
-				await this.db.deleteHardwareChecksByMonitorId(monitor._id);
+				const operations = [
+					{ name: "deleteJob", fn: () => this.jobQueue.deleteJob(monitor) },
+					{ name: "deleteChecks", fn: () => this.db.deleteChecks(monitor._id) },
+					{
+						name: "deletePageSpeedChecks",
+						fn: () => this.db.deletePageSpeedChecksByMonitorId(monitor._id),
+					},
+					{
+						name: "deleteNotifications",
+						fn: () => this.db.deleteNotificationsByMonitorId(monitor._id),
+					},
+					{
+						name: "deleteHardwareChecks",
+						fn: () => this.db.deleteHardwareChecksByMonitorId(monitor._id),
+					},
+					{
+						name: "deleteDistributedUptimeChecks",
+						fn: () => this.db.deleteDistributedChecksByMonitorId(monitor._id),
+					},
+
+					// TODO  We don't actually want to delete the status page if there are other monitors in it
+					// We actually just want to remove the monitor being deleted from the status page.
+					// Only delete he status page if there are no other monitors in it.
+					{
+						name: "deleteStatusPages",
+						fn: () => this.db.deleteStatusPagesByMonitorId(monitor._id),
+					},
+				];
+				const results = await Promise.allSettled(operations.map((op) => op.fn()));
+
+				results.forEach((result, index) => {
+					if (result.status === "rejected") {
+						const operationName = operations[index].name;
+						logger.error({
+							message: `Failed to ${operationName} for monitor ${monitor._id}`,
+							service: SERVICE_NAME,
+							method: "deleteMonitor",
+							stack: result.reason.stack,
+						});
+					}
+				});
 			} catch (error) {
 				logger.error({
 					message: `Error deleting associated records for monitor ${monitor._id} with name ${monitor.name}`,
@@ -309,7 +346,7 @@ class MonitorController {
 					stack: error.stack,
 				});
 			}
-			return res.success({ msg: successMessages.MONITOR_DELETE });
+			return res.success({ msg: this.stringService.monitorDelete });
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "deleteMonitor"));
 		}
@@ -401,7 +438,7 @@ class MonitorController {
 			// Add the new job back to the queue
 			await this.jobQueue.addJob(editedMonitor._id, editedMonitor);
 			return res.success({
-				msg: successMessages.MONITOR_EDIT,
+				msg: this.stringService.monitorEdit,
 				data: editedMonitor,
 			});
 		} catch (error) {
@@ -438,8 +475,8 @@ class MonitorController {
 			monitor.save();
 			return res.success({
 				msg: monitor.isActive
-					? successMessages.MONITOR_RESUME
-					: successMessages.MONITOR_PAUSE,
+					? this.stringService.monitorResume
+					: this.stringService.monitorPause,
 				data: monitor,
 			});
 		} catch (error) {
@@ -469,7 +506,7 @@ class MonitorController {
 			);
 
 			return res.success({
-				msg: successMessages.MONITOR_DEMO_ADDED,
+				msg: this.stringService.monitorDemoAdded,
 				data: demoMonitors.length,
 			});
 		} catch (error) {
@@ -488,7 +525,7 @@ class MonitorController {
 		try {
 			const monitors = await this.db.getMonitorsByTeamId(req);
 			return res.success({
-				msg: successMessages.MONITOR_GET_BY_TEAM_ID,
+				msg: this.stringService.monitorGetByTeamId,
 				data: monitors,
 			});
 		} catch (error) {

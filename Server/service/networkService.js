@@ -1,4 +1,4 @@
-import { errorMessages, successMessages } from "../utils/messages.js";
+import jmespath from 'jmespath';
 const SERVICE_NAME = "NetworkService";
 const UPROCK_ENDPOINT = "https://api.uprock.com/checkmate/push";
 
@@ -13,7 +13,8 @@ const UPROCK_ENDPOINT = "https://api.uprock.com/checkmate/push";
  */
 class NetworkService {
 	static SERVICE_NAME = SERVICE_NAME;
-	constructor(axios, ping, logger, http, Docker, net) {
+
+	constructor(axios, ping, logger, http, Docker, net, stringService) {
 		this.TYPE_PING = "ping";
 		this.TYPE_HTTP = "http";
 		this.TYPE_PAGESPEED = "pagespeed";
@@ -30,6 +31,7 @@ class NetworkService {
 		this.http = http;
 		this.Docker = Docker;
 		this.net = net;
+		this.stringService = stringService;
 	}
 
 	/**
@@ -87,13 +89,13 @@ class NetworkService {
 			if (error) {
 				pingResponse.status = false;
 				pingResponse.code = this.PING_ERROR;
-				pingResponse.message = errorMessages.PING_CANNOT_RESOLVE;
+				pingResponse.message = "No response";
 				return pingResponse;
 			}
 
 			pingResponse.code = 200;
 			pingResponse.status = response.alive;
-			pingResponse.message = successMessages.PING_SUCCESS;
+			pingResponse.message = "Success";
 			return pingResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -121,20 +123,19 @@ class NetworkService {
 	 */
 	async requestHttp(job) {
 		try {
-			const url = job.data.url;
+			const { url, secret, _id, name, teamId, type, jsonPath, matchMethod, expectedValue } = job.data;
 			const config = {};
 
-			job.data.secret !== undefined &&
-				(config.headers = { Authorization: `Bearer ${job.data.secret}` });
+			secret !== undefined && (config.headers = { Authorization: `Bearer ${secret}` });
 
 			const { response, responseTime, error } = await this.timeRequest(() =>
 				this.axios.get(url, config)
 			);
 
 			const httpResponse = {
-				monitorId: job.data._id,
-				teamId: job.data.teamId,
-				type: job.data.type,
+				monitorId: _id,
+				teamId,
+				type,
 				responseTime,
 				payload: response?.data,
 			};
@@ -143,12 +144,62 @@ class NetworkService {
 				const code = error.response?.status || this.NETWORK_ERROR;
 				httpResponse.code = code;
 				httpResponse.status = false;
-				httpResponse.message = this.http.STATUS_CODES[code] || "Network Error";
+				httpResponse.message = this.http.STATUS_CODES[code] || this.stringService.httpNetworkError;
 				return httpResponse;
 			}
-			httpResponse.status = true;
+
 			httpResponse.code = response.status;
-			httpResponse.message = this.http.STATUS_CODES[response.status];
+
+			if (!expectedValue) {
+				// not configure expected value, return
+				httpResponse.status = true;
+				httpResponse.message = this.http.STATUS_CODES[response.status];
+				return httpResponse;
+			}
+
+			// validate if response data match expected value
+			let result = response?.data;
+
+			this.logger.info({
+				service: this.SERVICE_NAME,
+				method: "requestHttp",
+				message: `Job: [${name}](${_id}) match result with expected value`,
+				details: { expectedValue, result, jsonPath, matchMethod }
+			});
+
+			if (jsonPath) {
+				const contentType = response.headers['content-type'];
+
+				const isJson = contentType?.includes('application/json');
+				if (!isJson) {
+					httpResponse.status = false;
+					httpResponse.message = this.stringService.httpNotJson;
+					return httpResponse;
+				}
+
+				try {
+					result = jmespath.search(result, jsonPath);
+				} catch (error) {
+					httpResponse.status = false;
+					httpResponse.message = this.stringService.httpJsonPathError;
+					return httpResponse;
+				}
+			}
+
+			if (result === null || result === undefined) {
+				httpResponse.status = false;
+				httpResponse.message = this.stringService.httpEmptyResult;
+				return httpResponse;
+			}
+
+			let match;
+			result = typeof result === "object" ? JSON.stringify(result) : result.toString();
+			if (matchMethod === "include") match = result.includes(expectedValue);
+			else if (matchMethod === "regex") match = new RegExp(expectedValue).test(result);
+			else match = result === expectedValue;
+
+			httpResponse.status = match;
+			httpResponse.message = match ? this.stringService.httpMatchSuccess : this.stringService.httpMatchFail;
 			return httpResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -240,7 +291,7 @@ class NetworkService {
 			const containers = await docker.listContainers({ all: true });
 			const containerExists = containers.some((c) => c.Id.startsWith(job.data.url));
 			if (!containerExists) {
-				throw new Error(errorMessages.DOCKER_NOT_FOUND);
+				throw new Error(this.stringService.dockerNotFound);
 			}
 			const container = docker.getContainer(job.data.url);
 
@@ -257,12 +308,12 @@ class NetworkService {
 			if (error) {
 				dockerResponse.status = false;
 				dockerResponse.code = error.statusCode || this.NETWORK_ERROR;
-				dockerResponse.message = error.reason || errorMessages.DOCKER_FAIL;
+				dockerResponse.message = error.reason || "Failed to fetch Docker container information";
 				return dockerResponse;
 			}
 			dockerResponse.status = response?.State?.Status === "running" ? true : false;
 			dockerResponse.code = 200;
-			dockerResponse.message = successMessages.DOCKER_SUCCESS;
+			dockerResponse.message = "Docker container status fetched successfully";
 			return dockerResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -310,13 +361,13 @@ class NetworkService {
 			if (error) {
 				portResponse.status = false;
 				portResponse.code = this.NETWORK_ERROR;
-				portResponse.message = errorMessages.PORT_FAIL;
+				portResponse.message = this.stringService.portFail;
 				return portResponse;
 			}
 
 			portResponse.status = response.success;
 			portResponse.code = 200;
-			portResponse.message = successMessages.PORT_SUCCESS;
+			portResponse.message = this.stringService.portSuccess;
 			return portResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;

@@ -12,23 +12,31 @@ import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import GenericFallback from "../../../Components/GenericFallback";
 import MonitorCreateHeader from "../../../Components/MonitorCreateHeader";
 import SkeletonLayout from "./Components/Skeleton";
+import ControlsHeader from "./Components/ControlsHeader";
+import Dialog from "../../../Components/Dialog";
 //Utils
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useSubscribeToDetails } from "./Hooks/useSubscribeToDetails";
+import { useDeleteMonitor } from "./Hooks/useDeleteMonitor";
+import { useNavigate } from "react-router-dom";
 
 const DistributedUptimeDetails = () => {
 	const { monitorId } = useParams();
 	// Local State
 	const [dateRange, setDateRange] = useState("day");
+	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
 	// Utils
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
+	const navigate = useNavigate();
 	const [isLoading, networkError, connectionStatus, monitor, lastUpdateTrigger] =
 		useSubscribeToDetails({ monitorId, dateRange });
+
+	const [deleteMonitor, isDeleting] = useDeleteMonitor({ monitorId });
 	// Constants
 	const BREADCRUMBS = [
 		{ name: "Distributed Uptime", path: "/distributed-uptime" },
@@ -76,6 +84,12 @@ const DistributedUptimeDetails = () => {
 				isAdmin={isAdmin}
 				path={`/status/distributed/create/${monitorId}`}
 			/>
+			<ControlsHeader
+				isDeleting={isDeleting}
+				isDeleteOpen={isDeleteOpen}
+				setIsDeleteOpen={setIsDeleteOpen}
+				monitorId={monitorId}
+			/>
 			<MonitorHeader monitor={monitor} />
 			<StatBoxes
 				monitor={monitor}
@@ -107,6 +121,21 @@ const DistributedUptimeDetails = () => {
 				/>
 			</Stack>
 			<Footer />
+			<Dialog
+				title="Do you want to delete this monitor?"
+				onConfirm={() => {
+					deleteMonitor();
+					setIsDeleteOpen(false);
+					navigate("/distributed-uptime");
+				}}
+				onCancel={() => {
+					setIsDeleteOpen(false);
+				}}
+				open={isDeleteOpen}
+				confirmationButtonLabel="Yes, delete monitor"
+				description="Once deleted, your monitor cannot be retrieved."
+				isLoading={isDeleting || isLoading}
+			/>
 		</Stack>
 	);
 };

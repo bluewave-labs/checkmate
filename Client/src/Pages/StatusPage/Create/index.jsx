@@ -12,7 +12,6 @@ import { useMonitorsFetch } from "./Hooks/useMonitorsFetch";
 import { useCreateStatusPage } from "./Hooks/useCreateStatusPage";
 import { createToast } from "../../../Utils/toastUtils";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import { useStatusPageFetch } from "../Status/Hooks/useStatusPageFetch";
 import { useParams } from "react-router-dom";
 
@@ -47,8 +46,7 @@ const CreateStatusPage = () => {
 	const intervalRef = useRef(null);
 
 	// Setup
-	const location = useLocation();
-	const isCreate = location.pathname === "/status/uptime/create";
+	const isCreate = typeof url === "undefined";
 
 	//Utils
 	const theme = useTheme();
@@ -134,7 +132,11 @@ const CreateStatusPage = () => {
 		if (typeof error === "undefined") {
 			const success = await createStatusPage({ form });
 			if (success) {
-				createToast({ body: "Status page created successfully" });
+				createToast({
+					body: isCreate
+						? "Status page created successfully"
+						: "Status page updated successfully",
+				});
 				navigate(`/status/uptime/${form.url}`);
 			}
 			return;

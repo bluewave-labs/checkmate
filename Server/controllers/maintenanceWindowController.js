@@ -9,14 +9,15 @@ import {
 } from "../validation/joi.js";
 import jwt from "jsonwebtoken";
 import { getTokenFromHeaders } from "../utils/utils.js";
-import { successMessages } from "../utils/messages.js";
 import { handleValidationError, handleError } from "./controllerUtils.js";
+
 const SERVICE_NAME = "maintenanceWindowController";
 
 class MaintenanceWindowController {
-	constructor(db, settingsService) {
+	constructor(db, settingsService, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
+		this.stringService = stringService;
 	}
 
 	createMaintenanceWindows = async (req, res, next) => {
@@ -45,7 +46,7 @@ class MaintenanceWindowController {
 			await Promise.all(dbTransactions);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_CREATE,
+				msg: this.stringService.maintenanceWindowCreate,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "createMaintenanceWindow"));
@@ -63,7 +64,7 @@ class MaintenanceWindowController {
 			const maintenanceWindow = await this.db.getMaintenanceWindowById(req.params.id);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_ID,
+				msg: this.stringService.maintenanceWindowGetById,
 				data: maintenanceWindow,
 			});
 		} catch (error) {
@@ -89,7 +90,7 @@ class MaintenanceWindowController {
 			);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_TEAM,
+				msg: this.stringService.maintenanceWindowGetByTeam,
 				data: maintenanceWindows,
 			});
 		} catch (error) {
@@ -111,7 +112,7 @@ class MaintenanceWindowController {
 			);
 
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_GET_BY_USER,
+				msg: this.stringService.maintenanceWindowGetByUser,
 				data: maintenanceWindows,
 			});
 		} catch (error) {
@@ -129,7 +130,7 @@ class MaintenanceWindowController {
 		try {
 			await this.db.deleteMaintenanceWindowById(req.params.id);
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_DELETE,
+				msg: this.stringService.maintenanceWindowDelete,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "deleteMaintenanceWindow"));
@@ -150,7 +151,7 @@ class MaintenanceWindowController {
 				req.body
 			);
 			return res.success({
-				msg: successMessages.MAINTENANCE_WINDOW_EDIT,
+				msg: this.stringService.maintenanceWindowEdit,
 				data: editedMaintenanceWindow,
 			});
 		} catch (error) {
