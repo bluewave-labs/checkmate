@@ -7,6 +7,10 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useIsAdmin } from "../../Hooks/useIsAdmin";
 import Dialog from "../../Components/Dialog";
 import ConfigBox from "../../Components/ConfigBox";
+import {
+	WalletMultiButton,
+	WalletDisconnectButton,
+} from "@solana/wallet-adapter-react-ui";
 
 //Utils
 import { useTheme } from "@emotion/react";
@@ -358,6 +362,25 @@ const Settings = () => {
 							onConfirm={handleDeleteAllMonitors}
 							isLoading={isLoading || authIsLoading || checksIsLoading}
 						/>
+					</ConfigBox>
+				)}
+				{isAdmin && (
+					<ConfigBox>
+						<Box>
+							<Typography component="h1">Wallet</Typography>
+							<Typography sx={{ mt: theme.spacing(2) }}>
+								Connect your wallet here
+							</Typography>
+						</Box>
+						<Box>
+							<Stack
+								direction="row"
+								spacing={2}
+							>
+								<WalletMultiButton />
+								<WalletDisconnectButton />
+							</Stack>
+						</Box>
 					</ConfigBox>
 				)}
 
