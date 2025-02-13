@@ -122,7 +122,7 @@ const DistributedUptimeDetails = () => {
 			</Stack>
 			<Footer />
 			<Dialog
-				title="Do you want to delete this status page?"
+				title="Do you want to delete this monitor?"
 				onConfirm={() => {
 					deleteMonitor();
 					setIsDeleteOpen(false);
@@ -132,8 +132,8 @@ const DistributedUptimeDetails = () => {
 					setIsDeleteOpen(false);
 				}}
 				open={isDeleteOpen}
-				confirmationButtonLabel="Yes, delete status page"
-				description="Once deleted, your status page cannot be retrieved."
+				confirmationButtonLabel="Yes, delete monitor"
+				description="Once deleted, your monitor cannot be retrieved."
 				isLoading={isDeleting || isLoading}
 			/>
 		</Stack>
