@@ -82,14 +82,12 @@ const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize = DEFAULT_M
     if (maxSize && pic.size > maxSize) {
         const errorMsg = `File size exceeds ${formatBytes(maxSize)}`;
         if (setErrors) setErrors?.((prev) => ({ ...prev, picture: errorMsg }));
-        if (onError) onError(errorMsg);
         return;
     }
 
     if (acceptedTypes && !acceptedTypes.includes(pic.type)) {
         const errorMsg = `File type not supported. Allowed: ${acceptedTypes.join(", ")}`;
         if (setErrors) setErrors?.((prev) => ({ ...prev, picture: errorMsg }));
-        if (onError) onError(errorMsg);
         return;
     }
 
