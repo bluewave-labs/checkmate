@@ -13,7 +13,9 @@ const isValidBase64Image = (data) => {
     return /^[A-Za-z0-9+/=]+$/.test(data);
   };
 
-const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize, acceptedTypes, previewSize = 150, setErrors, errors = {}}) => {
+const DEFAULT_MAX_SIZE = 3 * 1024 * 1024; // 3MB
+
+const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize = DEFAULT_MAX_SIZE, acceptedTypes, previewSize = 150, setErrors, errors = {}}) => {
 
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ value: 0, isLoading: false });
@@ -215,7 +217,7 @@ const ImageUpload = ({ open, onClose, onUpdate, placeholder, maxSize, acceptedTy
                         color={theme.palette.primary.contrastTextTertiary}
                         sx={{ opacity: 0.6 }}
                     >
-                        (maximum size: 3MB)
+                        (Maximum size: {formatBytes(maxSize)})
                     </Typography>
                 </Stack>
             </>
