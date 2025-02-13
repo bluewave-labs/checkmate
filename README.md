@@ -38,6 +38,11 @@ Usage instructions can be found [here](https://docs.checkmate.so/). It's still W
 
 See installation instructions in [Checkmate documentation portal](https://docs.checkmate.so/quickstart). Alternatively, you can also use [Coolify](https://coolify.io/) for a one click Docker deployment. If you would like to monitor your server infrastructure, you'll need [Capture agent](https://github.com/bluewave-labs/capture). Capture repository also contains the installation instructions. 
 
+Due to extensive optimizations, Checkmate has a very small memory footprint and requires very low memory and CPU to run. This is the memory footprint of Nodejs on a server which checks 323 servers every minute:
+
+![image](https://github.com/user-attachments/assets/37e04a75-d83a-488f-b25c-025511b492c9)
+
+
 ## 💚 Questions & ideas
 
 If you have any questions, suggestions or comments, please use our [Discord channel](https://discord.gg/NAb6H3UTjK). We've also launched our [Discussions](https://github.com/bluewave-labs/bluewave-uptime/discussions) page! Feel free to ask questions or share your ideas—we'd love to hear from you!
