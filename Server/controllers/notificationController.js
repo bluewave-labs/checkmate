@@ -1,11 +1,10 @@
-import logger from '../utils/logger.js';
 
 class NotificationController {
     constructor(notificationService) {
         this.notificationService = notificationService;
     }
 
-    async triggerNotification(req, res) {
+    async triggerNotification(req, res, next) { 
         try {
             const { monitorId, type, config } = req.body;
     
@@ -28,16 +27,9 @@ class NotificationController {
             });
 
         } catch (error) {
-            logger.error({
-                message: error.message,
-                service: "NotificationController",
-                method: "triggerNotification",
-                stack: error.stack,
-            });
-
-            return res.error({
-                msg: "Failed to send notification"
-            });
+            error.service = "NotificationController";
+            error.method = "triggerNotification";
+            next(error);
         }
     }
 }
