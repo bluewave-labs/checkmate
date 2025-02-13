@@ -4,11 +4,12 @@ import Breadcrumbs from "../../../Components/Breadcrumbs";
 import Fallback from "../../../Components/Fallback";
 import MonitorCreateHeader from "../../../Components/MonitorCreateHeader";
 import GenericFallback from "../../../Components/GenericFallback";
+import StatusPagesTable from "./Components/StatusPagesTable";
+import SkeletonLayout from "../../../Components/Skeletons/FullPage";
 // Utils
 import { useTheme } from "@emotion/react";
 import { useStatusPagesFetch } from "./Hooks/useStatusPagesFetch";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
-import { useNavigate } from "react-router";
 const BREADCRUMBS = [{ name: `Status Pages`, path: "" }];
 
 const StatusPages = () => {
@@ -16,29 +17,9 @@ const StatusPages = () => {
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
 	const [isLoading, networkError, statusPages] = useStatusPagesFetch();
-	const navigate = useNavigate();
 
-	// Handlers
-	const handleStatusPageClick = (statusPage) => {
-		if (statusPage.type === "distributed") {
-			navigate(`/status/distributed/${statusPage.url}`);
-		} else if (statusPage.type === "uptime") {
-			navigate(`/status/uptime/${statusPage.url}`);
-		}
-	};
-
-	if (!isLoading && typeof statusPages === "undefined") {
-		return (
-			<Fallback
-				title="status page"
-				checks={[
-					"Display a list of monitors to track",
-					"Share your monitors with the public",
-				]}
-				link="/status/uptime/create"
-				isAdmin={isAdmin}
-			/>
-		);
+	if (isLoading) {
+		return <SkeletonLayout />;
 	}
 
 	if (networkError === true) {
@@ -55,6 +36,21 @@ const StatusPages = () => {
 			</GenericFallback>
 		);
 	}
+
+	if (!isLoading && typeof statusPages !== "undefined" && statusPages.length === 0) {
+		return (
+			<Fallback
+				title="status page"
+				checks={[
+					"Monitor and display the health of your services in real time",
+					"Track multiple services and share their status",
+					"Keep users informed about outages and performance",
+				]}
+				link="/status/uptime/create"
+				isAdmin={isAdmin}
+			/>
+		);
+	}
 	return (
 		<Stack gap={theme.spacing(10)}>
 			<Breadcrumbs list={BREADCRUMBS} />
@@ -63,19 +59,7 @@ const StatusPages = () => {
 				isAdmin={isAdmin}
 				path="/status/uptime/create"
 			/>
-			{statusPages?.map((statusPage) => {
-				return (
-					<Stack
-						key={statusPage._id}
-						onClick={() => handleStatusPageClick(statusPage)}
-						sx={{ cursor: "pointer" }}
-					>
-						<Typography variant="h2">Company Name: {statusPage.companyName}</Typography>
-						<Typography variant="h2">Status page URL: {statusPage.url}</Typography>
-						<Typography variant="h2">Type: {statusPage.type}</Typography>
-					</Stack>
-				);
-			})}
+			<StatusPagesTable data={statusPages} />
 		</Stack>
 	);
 };

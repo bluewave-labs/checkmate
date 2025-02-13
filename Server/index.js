@@ -78,6 +78,10 @@ import MongoDB from "./db/mongo/MongoDB.js";
 
 import IORedis from "ioredis";
 
+import TranslationService from './service/translationService.js';
+import languageMiddleware from './middleware/languageMiddleware.js';
+import StringService from './service/stringService.js';
+
 const SERVICE_NAME = "Server";
 const SHUTDOWN_TIMEOUT = 1000;
 let isShuttingDown = false;
@@ -160,11 +164,17 @@ const startApp = async () => {
 		}
 	}
 
+	// Create and Register Primary services
+	const translationService = new TranslationService(logger);
+	const stringService = new StringService(translationService);
+	ServiceRegistry.register(StringService.SERVICE_NAME, stringService);
+
 	// Create DB
 	const db = new MongoDB();
 	await db.connect();
 
 	// Create services
+	const networkService = new NetworkService(axios, ping, logger, http, Docker, net, stringService);
 	const settingsService = new SettingsService(AppSettings);
 	await settingsService.loadSettings();
 	const emailService = new EmailService(
@@ -176,9 +186,9 @@ const startApp = async () => {
 		nodemailer,
 		logger
 	);
-	const networkService = new NetworkService(axios, ping, logger, http, Docker, net);
 	const statusService = new StatusService(db, logger);
 	const notificationService = new NotificationService(emailService, db, logger, networkService);
+
 
 	const jobQueue = new JobQueue(
 		db,
@@ -186,6 +196,7 @@ const startApp = async () => {
 		networkService,
 		notificationService,
 		settingsService,
+		stringService,
 		logger,
 		Queue,
 		Worker
@@ -199,6 +210,10 @@ const startApp = async () => {
 	ServiceRegistry.register(NetworkService.SERVICE_NAME, networkService);
 	ServiceRegistry.register(StatusService.SERVICE_NAME, statusService);
 	ServiceRegistry.register(NotificationService.SERVICE_NAME, notificationService);
+	ServiceRegistry.register(TranslationService.SERVICE_NAME, translationService);
+
+	await translationService.initialize();
+
 	server = app.listen(PORT, () => {
 		logger.info({ message: `server started on port:${PORT}` });
 	});
@@ -212,40 +227,50 @@ const startApp = async () => {
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
 		ServiceRegistry.get(SettingsService.SERVICE_NAME),
 		ServiceRegistry.get(EmailService.SERVICE_NAME),
-		ServiceRegistry.get(JobQueue.SERVICE_NAME)
+		ServiceRegistry.get(JobQueue.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const monitorController = new MonitorController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
 		ServiceRegistry.get(SettingsService.SERVICE_NAME),
-		ServiceRegistry.get(JobQueue.SERVICE_NAME)
+		ServiceRegistry.get(JobQueue.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const settingsController = new SettingsController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
-		ServiceRegistry.get(SettingsService.SERVICE_NAME)
+		ServiceRegistry.get(SettingsService.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const checkController = new CheckController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
-		ServiceRegistry.get(SettingsService.SERVICE_NAME)
+		ServiceRegistry.get(SettingsService.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const inviteController = new InviteController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
 		ServiceRegistry.get(SettingsService.SERVICE_NAME),
-		ServiceRegistry.get(EmailService.SERVICE_NAME)
+		ServiceRegistry.get(EmailService.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const maintenanceWindowController = new MaintenanceWindowController(
 		ServiceRegistry.get(MongoDB.SERVICE_NAME),
-		ServiceRegistry.get(SettingsService.SERVICE_NAME)
+		ServiceRegistry.get(SettingsService.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
-	const queueController = new QueueController(ServiceRegistry.get(JobQueue.SERVICE_NAME));
+	const queueController = new QueueController(
+		ServiceRegistry.get(JobQueue.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
+	);
 
 	const statusPageController = new StatusPageController(
-		ServiceRegistry.get(MongoDB.SERVICE_NAME)
+		ServiceRegistry.get(MongoDB.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const notificationController = new NotificationController(
@@ -278,12 +303,10 @@ const startApp = async () => {
 	// Init job queue
 	await jobQueue.initJobQueue();
 	// Middleware
-	app.use(
-		cors()
-		//We will add configuration later
-	);
+	app.use(cors());
 	app.use(express.json());
 	app.use(helmet());
+	app.use(languageMiddleware(stringService, translationService));
 	// Swagger UI
 	app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 

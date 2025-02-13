@@ -9,7 +9,6 @@ import {
 	deleteChecksByTeamIdParamValidation,
 	updateChecksTTLBodyValidation,
 } from "../validation/joi.js";
-import { successMessages } from "../utils/messages.js";
 import jwt from "jsonwebtoken";
 import { getTokenFromHeaders } from "../utils/utils.js";
 import { handleValidationError, handleError } from "./controllerUtils.js";
@@ -17,9 +16,10 @@ import { handleValidationError, handleError } from "./controllerUtils.js";
 const SERVICE_NAME = "checkController";
 
 class CheckController {
-	constructor(db, settingsService) {
+	constructor(db, settingsService, stringService) {
 		this.db = db;
 		this.settingsService = settingsService;
+		this.stringService = stringService;
 	}
 
 	createCheck = async (req, res, next) => {
@@ -36,7 +36,7 @@ class CheckController {
 			const check = await this.db.createCheck(checkData);
 
 			return res.success({
-				msg: successMessages.CHECK_CREATE,
+				msg: this.stringService.checkCreate,
 				data: check,
 			});
 		} catch (error) {
@@ -57,7 +57,7 @@ class CheckController {
 			const result = await this.db.getChecksByMonitor(req);
 
 			return res.success({
-				msg: successMessages.CHECK_GET,
+				msg: this.stringService.checkGet,
 				data: result,
 			});
 		} catch (error) {
@@ -77,7 +77,7 @@ class CheckController {
 			const checkData = await this.db.getChecksByTeam(req);
 
 			return res.success({
-				msg: successMessages.CHECK_GET,
+				msg: this.stringService.checkGet,
 				data: checkData,
 			});
 		} catch (error) {
@@ -97,7 +97,7 @@ class CheckController {
 			const deletedCount = await this.db.deleteChecks(req.params.monitorId);
 
 			return res.success({
-				msg: successMessages.CHECK_DELETE,
+				msg: this.stringService.checkDelete,
 				data: { deletedCount },
 			});
 		} catch (error) {
@@ -117,7 +117,7 @@ class CheckController {
 			const deletedCount = await this.db.deleteChecksByTeamId(req.params.teamId);
 
 			return res.success({
-				msg: successMessages.CHECK_DELETE,
+				msg: this.stringService.checkDelete,
 				data: { deletedCount },
 			});
 		} catch (error) {
@@ -144,7 +144,7 @@ class CheckController {
 			await this.db.updateChecksTTL(teamId, ttl);
 
 			return res.success({
-				msg: successMessages.CHECK_UPDATE_TTL,
+				msg: this.stringService.checkUpdateTTL,
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "updateTTL"));

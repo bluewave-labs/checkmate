@@ -1015,11 +1015,12 @@ class NetworkService {
 
 	async createStatusPage(config) {
 		const { authToken, user, form, isCreate } = config;
+
 		const fd = new FormData();
 		fd.append("teamId", user.teamId);
 		fd.append("userId", user._id);
 		fd.append("type", form.type);
-		form.isPublished && fd.append("isPublished", form.isPublished);
+		form.isPublished !== undefined && fd.append("isPublished", form.isPublished);
 		form.companyName && fd.append("companyName", form.companyName);
 		form.url && fd.append("url", form.url);
 		form.timezone && fd.append("timezone", form.timezone);
