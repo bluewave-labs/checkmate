@@ -28,24 +28,6 @@ const UserSchema = mongoose.Schema(
 			data: Buffer,
 			contentType: String,
 		},
-		isActive: {
-			type: Boolean,
-			default: true,
-		},
-		isVerified: {
-			type: Boolean,
-			default: false,
-		},
-		role: {
-			type: [String],
-			default: "user",
-			enum: ["user", "admin", "superadmin", "demo"],
-		},
-		teamId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Team",
-			immutable: true,
-		},
 		checkTTL: {
 			type: Number,
 		},
