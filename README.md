@@ -38,9 +38,14 @@ Usage instructions can be found [here](https://docs.checkmate.so/). It's still W
 
 See installation instructions in [Checkmate documentation portal](https://docs.checkmate.so/quickstart). Alternatively, you can also use [Coolify](https://coolify.io/) for a one click Docker deployment. If you would like to monitor your server infrastructure, you'll need [Capture agent](https://github.com/bluewave-labs/capture). Capture repository also contains the installation instructions. 
 
+## 🚀 Performance
 Due to extensive optimizations, Checkmate has a very small memory footprint and requires very low memory and CPU to run. This is the memory footprint of Nodejs on a server which checks 323 servers every minute:
 
 ![image](https://github.com/user-attachments/assets/37e04a75-d83a-488f-b25c-025511b492c9)
+
+You can see the memory footprint of MongoDB and Redis memory footprints on the same server (398Mb and 15Mb) for the same amount of servers: 
+
+![image](https://github.com/user-attachments/assets/3b469e85-e675-4040-a162-3f24c1afc751)
 
 
 ## 💚 Questions & ideas
