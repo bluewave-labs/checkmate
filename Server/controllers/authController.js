@@ -1,3 +1,7 @@
+import User from "../db/models/User.js";
+import Team from "../db/models/Team.js";
+import TeamMember from "../db/models/TeamMember.js";
+
 import {
 	registrationBodyValidation,
 	loginValidation,
@@ -27,26 +31,73 @@ class AuthController {
 	 * Creates and returns JWT token with an arbitrary payload
 	 * @function
 	 * @param {Object} payload
-	 * @param {tokenType} typeOfToken - Whether to generate refresh token with long TTL or access token with short TTL.
 	 * @param {Object} appSettings
 	 * @returns {String}
 	 * @throws {Error}
 	 */
-	issueToken = (payload, typeOfToken, appSettings) => {
+	issueToken = (payload, appSettings) => {
 		try {
-			const tokenTTL =
-				typeOfToken === tokenType.REFRESH_TOKEN
-					? (appSettings?.refreshTokenTTL ?? "7d")
-					: (appSettings?.jwtTTL ?? "2h");
-			const tokenSecret =
-				typeOfToken === tokenType.REFRESH_TOKEN
-					? appSettings?.refreshTokenSecret
-					: appSettings?.jwtSecret;
-			const payloadData = typeOfToken === tokenType.REFRESH_TOKEN ? {} : payload;
+			const tokenTTL = appSettings?.jwtTTL ?? "2h";
+			const tokenSecret = appSettings?.jwtSecret;
 
-			return jwt.sign(payloadData, tokenSecret, { expiresIn: tokenTTL });
+			return jwt.sign(payload, tokenSecret, { expiresIn: tokenTTL });
 		} catch (error) {
 			throw handleError(error, SERVICE_NAME, "issueToken");
+		}
+	};
+
+	registerNewUser = async (req, res, next) => {
+		// !!!! TEMPORARY !!!!
+		await User.deleteMany({});
+		await Team.deleteMany({});
+		await TeamMember.deleteMany({});
+
+		// This method is for a new signup for an Owner
+		try {
+			await registrationBodyValidation.validateAsync(req.body);
+		} catch (error) {
+			const validationError = handleValidationError(error, SERVICE_NAME);
+			next(validationError);
+			return;
+		}
+
+		try {
+			const { subscription, teamName, ...user } = req.body;
+
+			// 1.  Create a user
+			const newUser = await this.db.insertUser(user);
+
+			// 2.  Create a team
+			const team = await this.db.insertTeam({
+				name: teamName,
+				owner: newUser._id,
+				subscription: {
+					plan: subscription,
+					maxMembers: 5,
+				},
+			});
+
+			// 3.  Create a team member
+			const teamMember = await this.db.insertTeamMember({
+				teamId: team._id,
+				owner: newUser._id,
+				role: ["owner", "admin"],
+			});
+
+			const userForToken = { ...newUser._doc };
+			delete userForToken.profileImage;
+			delete userForToken.avatarImage;
+
+			const appSettings = await this.settingsService.getSettings();
+
+			const token = this.issueToken(userForToken, appSettings);
+
+			res.success({
+				msg: this.stringService.authCreateUser,
+				data: { user: newUser, token: token },
+			});
+		} catch (error) {
+			next(handleError(error, SERVICE_NAME, "registerNewUser"));
 		}
 	};
 
@@ -164,14 +215,10 @@ class AuthController {
 			delete userWithoutPassword.password;
 			delete userWithoutPassword.avatarImage;
 
-			// Happy path, return token
+			// We need settings to issue tokens
 			const appSettings = await this.settingsService.getSettings();
-			const token = this.issueToken(
-				userWithoutPassword,
-				tokenType.ACCESS_TOKEN,
-				appSettings
-			);
-			const refreshToken = this.issueToken({}, tokenType.REFRESH_TOKEN, appSettings);
+
+			const token = this.issueToken(userWithoutPassword, appSettings);
 			// reset avatar image
 			userWithoutPassword.avatarImage = user.avatarImage;
 
@@ -180,7 +227,6 @@ class AuthController {
 				data: {
 					user: userWithoutPassword,
 					token: token,
-					refreshToken: refreshToken,
 				},
 			});
 		} catch (error) {
@@ -200,7 +246,6 @@ class AuthController {
 	 * @throws {Error} If there is an error during the process such as any of the token is not received
 	 */
 	refreshAuthToken = async (req, res, next) => {
-
 		try {
 			// check for refreshToken
 			const refreshToken = req.headers["x-refresh-token"];
@@ -266,7 +311,6 @@ class AuthController {
 	 * @throws {Error} If there is an error during the process, especially if there is a validation error (422), the user is unauthorized (401), or the password is incorrect (403).
 	 */
 	editUser = async (req, res, next) => {
-
 		try {
 			await editUserParamValidation.validateAsync(req.params);
 			await editUserBodyValidation.validateAsync(req.body);
