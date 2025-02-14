@@ -1,5 +1,7 @@
 FROM node:20-alpine AS build
 
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
 WORKDIR /app
 
 RUN apk add --no-cache \
@@ -9,7 +11,7 @@ RUN apk add --no-cache \
     libc-dev \
     linux-headers \
     libusb-dev \
-    udev-dev
+    eudev-dev
 
 
 COPY ../../Client/package*.json ./
