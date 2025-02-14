@@ -1,4 +1,4 @@
-import jmespath from 'jmespath';
+import jmespath from "jmespath";
 const SERVICE_NAME = "NetworkService";
 const UPROCK_ENDPOINT = "https://api.uprock.com/checkmate/push";
 
@@ -123,7 +123,17 @@ class NetworkService {
 	 */
 	async requestHttp(job) {
 		try {
-			const { url, secret, _id, name, teamId, type, jsonPath, matchMethod, expectedValue } = job.data;
+			const {
+				url,
+				secret,
+				_id,
+				name,
+				teamId,
+				type,
+				jsonPath,
+				matchMethod,
+				expectedValue,
+			} = job.data;
 			const config = {};
 
 			secret !== undefined && (config.headers = { Authorization: `Bearer ${secret}` });
@@ -144,7 +154,8 @@ class NetworkService {
 				const code = error.response?.status || this.NETWORK_ERROR;
 				httpResponse.code = code;
 				httpResponse.status = false;
-				httpResponse.message = this.http.STATUS_CODES[code] || this.stringService.httpNetworkError;
+				httpResponse.message =
+					this.http.STATUS_CODES[code] || this.stringService.httpNetworkError;
 				return httpResponse;
 			}
 
@@ -164,13 +175,13 @@ class NetworkService {
 				service: this.SERVICE_NAME,
 				method: "requestHttp",
 				message: `Job: [${name}](${_id}) match result with expected value`,
-				details: { expectedValue, result, jsonPath, matchMethod }
+				details: { expectedValue, result, jsonPath, matchMethod },
 			});
 
 			if (jsonPath) {
-				const contentType = response.headers['content-type'];
+				const contentType = response.headers["content-type"];
 
-				const isJson = contentType?.includes('application/json');
+				const isJson = contentType?.includes("application/json");
 				if (!isJson) {
 					httpResponse.status = false;
 					httpResponse.message = this.stringService.httpNotJson;
@@ -199,7 +210,9 @@ class NetworkService {
 			else match = result === expectedValue;
 
 			httpResponse.status = match;
-			httpResponse.message = match ? this.stringService.httpMatchSuccess : this.stringService.httpMatchFail;
+			httpResponse.message = match
+				? this.stringService.httpMatchSuccess
+				: this.stringService.httpMatchFail;
 			return httpResponse;
 		} catch (error) {
 			error.service = this.SERVICE_NAME;
@@ -308,7 +321,8 @@ class NetworkService {
 			if (error) {
 				dockerResponse.status = false;
 				dockerResponse.code = error.statusCode || this.NETWORK_ERROR;
-				dockerResponse.message = error.reason || "Failed to fetch Docker container information";
+				dockerResponse.message =
+					error.reason || "Failed to fetch Docker container information";
 				return dockerResponse;
 			}
 			dockerResponse.status = response?.State?.Status === "running" ? true : false;
@@ -397,6 +411,9 @@ class NetworkService {
 					},
 				}
 			);
+			if (response.data.success === false) {
+				throw new Error(response.data.message);
+			}
 		} catch (error) {
 			console.log(error.message);
 			error.service = this.SERVICE_NAME;
