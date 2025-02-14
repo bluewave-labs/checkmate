@@ -58,13 +58,13 @@ const registrationBodyValidation = joi.object({
 		}),
 	password: joi.string().min(8).required().pattern(passwordPattern),
 	profileImage: joi.any(),
+	teamName: joi.string(),
 	role: joi
 		.array()
-		.items(joi.string().valid("superadmin", "admin", "user", "demo"))
+		.items(joi.string().valid("owner", "admin", "user", "demo"))
 		.min(1)
 		.required(),
-	teamId: joi.string().allow("").required(),
-	inviteToken: joi.string().allow("").required(),
+	plan: joi.string().valid("free", "basic", "pro", "enterprise").required(),
 });
 
 const editUserParamValidation = joi.object({
