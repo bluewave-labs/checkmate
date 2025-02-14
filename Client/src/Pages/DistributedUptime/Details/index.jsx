@@ -61,8 +61,11 @@ const DistributedUptimeDetails = () => {
 			</GenericFallback>
 		);
 	}
-
-	if (typeof monitor === "undefined" || monitor.totalChecks === 0) {
+	if (
+		typeof monitor === "undefined" ||
+		typeof monitor?.totalChecks === "undefined" ||
+		monitor?.totalChecks === 0
+	) {
 		return (
 			<Stack gap={theme.spacing(10)}>
 				<Breadcrumbs list={BREADCRUMBS} />
