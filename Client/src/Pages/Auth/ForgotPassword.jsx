@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, Button } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { createToast } from "../../Utils/toastUtils";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,6 @@ import TextInput from "../../Components/Inputs/TextInput";
 import Logo from "../../assets/icons/checkmate-icon.svg?react";
 import Key from "../../assets/icons/key.svg?react";
 import Background from "../../assets/Images/background-grid.svg?react";
-import LoadingButton from "@mui/lab/LoadingButton";
 import IconBox from "../../Components/IconBox";
 import "./index.css";
 
@@ -185,7 +184,7 @@ const ForgotPassword = () => {
 							error={errors.email ? true : false}
 							helperText={errors.email}
 						/>
-						<LoadingButton
+						<Button
 							variant="contained"
 							color="accent"
 							loading={isLoading}
@@ -197,7 +196,7 @@ const ForgotPassword = () => {
 							}}
 						>
 							Send instructions
-						</LoadingButton>
+						</Button>
 					</Box>
 				</Stack>
 			</Stack>

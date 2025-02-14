@@ -1,6 +1,5 @@
 // Components
 import { Box, Stack, Typography, Button, ButtonGroup } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
 
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import ConfigBox from "../../../Components/ConfigBox";
@@ -328,15 +327,15 @@ const CreateDistributedUptime = () => {
 					direction="row"
 					justifyContent="flex-end"
 				>
-					<LoadingButton
+					<Button
 						variant="contained"
-						color="primary"
+						color="accent"
 						onClick={() => handleCreateMonitor()}
 						disabled={!Object.values(errors).every((value) => value === undefined)}
 						loading={isLoading}
 					>
 						{isCreate ? "Create monitor" : "Configure monitor"}
-					</LoadingButton>
+					</Button>
 				</Stack>
 			</Stack>
 		</Box>

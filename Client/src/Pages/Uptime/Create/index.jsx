@@ -13,7 +13,6 @@ import { createUptimeMonitor } from "../../../Features/UptimeMonitors/uptimeMoni
 
 // MUI
 import { Box, Stack, Typography, Button, ButtonGroup } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
 
 //Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
@@ -143,8 +142,8 @@ const CreateMonitor = () => {
 			...monitor,
 			[formName]: value,
 		};
-		if (formName === 'type') {
-			newMonitor.url = '';
+		if (formName === "type") {
+			newMonitor.url = "";
 		}
 		setMonitor(newMonitor);
 
@@ -405,7 +404,7 @@ const CreateMonitor = () => {
 					direction="row"
 					justifyContent="flex-end"
 				>
-					<LoadingButton
+					<Button
 						variant="contained"
 						color="accent"
 						onClick={handleCreateMonitor}
@@ -413,7 +412,7 @@ const CreateMonitor = () => {
 						loading={isLoading}
 					>
 						Create monitor
-					</LoadingButton>
+					</Button>
 				</Stack>
 			</Stack>
 		</Box>

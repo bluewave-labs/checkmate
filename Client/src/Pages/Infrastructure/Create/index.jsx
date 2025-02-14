@@ -11,7 +11,6 @@ import { capitalizeFirstLetter } from "../../../Utils/stringUtils";
 
 // MUI
 import { Box, Stack, Typography, Button, ButtonGroup } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
 
 //Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
@@ -405,14 +404,14 @@ const CreateInfrastructureMonitor = () => {
 					direction="row"
 					justifyContent="flex-end"
 				>
-					<LoadingButton
+					<Button
 						variant="contained"
 						color="accent"
 						onClick={handleCreateInfrastructureMonitor}
 						loading={monitorState?.isLoading}
 					>
 						Create infrastructure monitor
-					</LoadingButton>
+					</Button>
 				</Stack>
 			</Stack>
 		</Box>
