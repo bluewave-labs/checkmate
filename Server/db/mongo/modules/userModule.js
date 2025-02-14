@@ -23,7 +23,7 @@ const insertUser = async (
 ) => {
 	const stringService = ServiceRegistry.get(StringService.SERVICE_NAME);
 	try {
-		if (imageFile) {
+		if (typeof imageFile !== "undefined") {
 			// 1.  Save the full size image
 			userData.profileImage = {
 				data: imageFile.buffer,
@@ -35,23 +35,18 @@ const insertUser = async (
 			userData.avatarImage = avatar;
 		}
 
-		//  Handle creating team if superadmin
-		if (userData.role.includes("superadmin")) {
-			const team = new TeamModel({
-				email: userData.email,
-			});
-			userData.teamId = team._id;
-			userData.checkTTL = 60 * 60 * 24 * 30;
-			await team.save();
-		}
+		const user = await UserModel.create({
+			firstName: userData.firstName,
+			lastName: userData.lastName,
+			email: userData.email,
+			password: userData.password,
+		});
 
-		const newUser = new UserModel(userData);
-		await newUser.save();
-		return await UserModel.findOne({ _id: newUser._id })
-			.select("-password")
-			.select("-profileImage"); // .select() doesn't work with create, need to save then find
+		user.password = undefined;
+		user.profileImage = undefined;
+		return user;
 	} catch (error) {
-		if (error.code === DUPLICATE_KEY_CODE) {
+		if (error?.errorResponse?.code === DUPLICATE_KEY_CODE) {
 			error.message = stringService.dbUserExists;
 		}
 		error.service = SERVICE_NAME;
