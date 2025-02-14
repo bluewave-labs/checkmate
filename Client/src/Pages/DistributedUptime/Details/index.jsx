@@ -3,7 +3,7 @@ import DistributedUptimeMap from "./Components/DistributedUptimeMap";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import { Stack, Typography } from "@mui/material";
 import DeviceTicker from "./Components/DeviceTicker";
-import DistributedUptimeResponseChart from "./Components/DistributedUptimeResponseChart";
+import ResponseTimeChart from "./Components/DistributedUptimeResponseChart";
 import NextExpectedCheck from "./Components/NextExpectedCheck";
 import Footer from "./Components/Footer";
 import StatBoxes from "./Components/StatBoxes";
@@ -104,7 +104,8 @@ const DistributedUptimeDetails = () => {
 				dateRange={dateRange}
 				setDateRange={setDateRange}
 			/>
-			<DistributedUptimeResponseChart checks={monitor?.groupedChecks ?? []} />
+
+			<ResponseTimeChart checks={monitor?.groupedChecks ?? []} />
 			<Stack
 				direction="row"
 				gap={theme.spacing(8)}
