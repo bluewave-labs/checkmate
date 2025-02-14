@@ -10,6 +10,12 @@ import logger from "../../utils/logger.js";
 import * as userModule from "./modules/userModule.js";
 
 //****************************************
+// User Operations
+//****************************************
+
+import * as teamModule from "./modules/teamModule.js";
+
+//****************************************
 // Invite Token Operations
 //****************************************
 
@@ -73,6 +79,7 @@ class MongoDB {
 
 	constructor() {
 		Object.assign(this, userModule);
+		Object.assign(this, teamModule);
 		Object.assign(this, inviteModule);
 		Object.assign(this, recoveryModule);
 		Object.assign(this, monitorModule);
