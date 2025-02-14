@@ -62,6 +62,18 @@ const Configure = () => {
 		"notify-email-default": "notification-email",
 	};
 
+	const matchMethodOptions = [
+		{ _id: "equal", name: "Equal" },
+		{ _id: "include", name: "Include" },
+		{ _id: "regex", name: "Regex" },
+	];
+
+	const expectedValuePlaceholders = {
+		regex: "^[\w.-]+@gmail.com$",
+		equal: "janet@gmail.com",
+		include: "@gmail.com"
+	};
+
 	useEffect(() => {
 		const fetchMonitor = async () => {
 			try {
@@ -443,11 +455,7 @@ const Configure = () => {
 											label="Match Method"
 											value={monitor.matchMethod || "equal"}
 											onChange={(event) => handleChange(event, "matchMethod")}
-											items={[
-												{ _id: "equal", name: "Equal" },
-												{ _id: "include", name: "Include" },
-												{ _id: "regex", name: "Regex" },
-											]}
+											items={matchMethodOptions}
 										/>
 										<Stack>
 											<TextInput
@@ -455,11 +463,7 @@ const Configure = () => {
 												id="expected-value"
 												label="Expected value"
 												isOptional={true}
-												placeholder={{
-													regex: "^[\w.-]+@gmail.com$",
-													equal: "janet@gmail.com",
-													include: "@gmail.com"
-												}[monitor.matchMethod || "equal"]}
+												placeholder={expectedValuePlaceholders[monitor.matchMethod || "equal"]}
 												value={monitor.expectedValue}
 												onChange={(event) => handleChange(event, "expectedValue")}
 												error={errors["expectedValue"] ? true : false}
@@ -470,7 +474,7 @@ const Configure = () => {
 												color={theme.palette.primary.contrastTextTertiary}
 												opacity={0.8}
 											>
-												The expected value is used to match the response result, and the result determines the status.
+												The expected value is used to match against response result, and the match determines the status.
 											</Typography>
 										</Stack>
 										<Stack>
@@ -490,11 +494,11 @@ const Configure = () => {
 												color={theme.palette.primary.contrastTextTertiary}
 												opacity={0.8}
 											>
-												The expression is evaluated against the reponse JSON data and the result will get used to match with expected value. Check out&nbsp;
+												This expression will be evaluated against the reponse JSON data and the result will be used to match against the expected value. See&nbsp;
 												<Typography component="a" href="https://jmespath.org/" target="_blank" color="info">
 													jmespath.org
 												</Typography>
-												&nbsp;for the documentation about the query language.
+												&nbsp;for query language documentation.
 											</Typography>
 										</Stack>
 									</>
