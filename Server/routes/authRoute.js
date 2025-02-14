@@ -18,7 +18,7 @@ class AuthRoutes {
 		this.router.post(
 			"/register",
 			upload.single("profileImage"),
-			this.authController.registerUser
+			this.authController.registerNewUser
 		);
 		this.router.post("/login", this.authController.loginUser);
 		this.router.post("/refresh", this.authController.refreshAuthToken);
