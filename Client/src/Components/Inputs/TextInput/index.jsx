@@ -7,6 +7,7 @@ const getSx = (theme, type, maxWidth) => {
 	const sx = {
 		maxWidth: maxWidth,
 		"&  .MuiOutlinedInput-root ": {
+			backgroundColor: theme.palette.background.paper,
 			"&:hover .MuiOutlinedInput-notchedOutline": {
 				borderColor: theme.palette.primary.contrastText, // Adjust hover border color
 			},
@@ -152,7 +153,7 @@ TextInput.displayName = "TextInput";
 
 TextInput.propTypes = {
 	type: PropTypes.string,
-	id: PropTypes.string.isRequired,
+	id: PropTypes.string,
 	name: PropTypes.string,
 	value: PropTypes.string,
 	placeholder: PropTypes.string,
