@@ -65,6 +65,6 @@ function useValidatePassword() {
 		[form, errors]
 	);
 
-	return { handleChange, feedbacks, form, errors };
+	return [handleChange, feedbacks, form, errors];
 }
 export { useValidatePassword };
