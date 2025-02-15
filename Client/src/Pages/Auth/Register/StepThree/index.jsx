@@ -31,7 +31,7 @@ function StepThree({ onSubmit, onBack }) {
 		}
 	}, []);
 
-	const { handleChange, feedbacks, form, errors } = useValidatePassword();
+	const [handleChange, feedbacks, form, errors] = useValidatePassword();
 	return (
 		<>
 			<Stack
