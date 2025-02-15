@@ -24,4 +24,16 @@ const insertTeamMember = async (teamMemberData) => {
 	}
 };
 
-export { insertTeam, insertTeamMember };
+const getTeamsByUserId = async (userId) => {
+	try {
+		console.log(userId);
+		const teams = await TeamMember.find({ userId: userId }).select("teamId").lean();
+		return teams.map((team) => team.teamId);
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "getTeamsByUserId";
+		throw error;
+	}
+};
+
+export { insertTeam, insertTeamMember, getTeamsByUserId };
