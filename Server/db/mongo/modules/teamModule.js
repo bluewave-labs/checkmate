@@ -4,7 +4,6 @@ const SERVICE_NAME = "TeamModule";
 
 const insertTeam = async (teamData) => {
 	try {
-		console.log(teamData);
 		const team = await Team.create(teamData);
 		return team;
 	} catch (error) {
