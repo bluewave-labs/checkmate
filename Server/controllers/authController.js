@@ -80,7 +80,7 @@ class AuthController {
 			// 3.  Create a team member
 			const teamMember = await this.db.insertTeamMember({
 				teamId: team._id,
-				owner: newUser._id,
+				userId: newUser._id,
 				role: ["owner", "admin"],
 			});
 
@@ -94,7 +94,7 @@ class AuthController {
 
 			res.success({
 				msg: this.stringService.authCreateUser,
-				data: { user: newUser, token: token },
+				data: { user: newUser, teams: [team._id], token: token },
 			});
 		} catch (error) {
 			next(handleError(error, SERVICE_NAME, "registerNewUser"));
@@ -222,10 +222,14 @@ class AuthController {
 			// reset avatar image
 			userWithoutPassword.avatarImage = user.avatarImage;
 
+			// Get teams
+			const teams = await this.db.getTeamsByUserId(user._id);
+
 			return res.success({
 				msg: this.stringService.authLoginUser,
 				data: {
 					user: userWithoutPassword,
+					teams: teams,
 					token: token,
 				},
 			});
