@@ -13,9 +13,10 @@ import { useValidatePassword } from "../hooks/useValidatePassword";
 import { credentials } from "../../../Validation/validation";
 import { useDispatch } from "react-redux";
 import { register } from "../../../Features/Auth/authSlice";
-
+import { useNavigate } from "react-router-dom";
 const Register = () => {
 	const theme = useTheme();
+	const navigate = useNavigate();
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
 	const [handlePasswordChange, feedbacks, passwordForm, passwordErrors] =
@@ -70,8 +71,7 @@ const Register = () => {
 		};
 		const action = await dispatch(register(registrationForm));
 		if (action.payload.success) {
-			const authToken = action.payload.data;
-			localStorage.setItem("token", authToken);
+			navigate("/uptime");
 			createToast({
 				body: "Welcome! Your account was created successfully.",
 			});
