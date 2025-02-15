@@ -48,16 +48,6 @@ const Login = () => {
 			navigate("/uptime");
 			return;
 		}
-		networkService
-			.doesSuperAdminExist()
-			.then((response) => {
-				if (response.data.data === false) {
-					navigate("/register");
-				}
-			})
-			.catch((error) => {
-				logger.error(error);
-			});
 	}, [authToken, navigate]);
 
 	const handleChange = (event) => {
