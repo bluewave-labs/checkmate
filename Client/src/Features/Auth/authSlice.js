@@ -7,6 +7,7 @@ const initialState = {
 	isLoading: false,
 	authToken: "",
 	user: "",
+	teams: [],
 	success: null,
 	msg: null,
 };
@@ -148,6 +149,7 @@ const handleAuthFulfilled = (state, action) => {
 	state.msg = action.payload.msg;
 	state.authToken = action.payload.data.token;
 	state.user = action.payload.data.user;
+	state.teams = action.payload.data.teams;
 };
 const handleAuthRejected = (state, action) => {
 	state.isLoading = false;
