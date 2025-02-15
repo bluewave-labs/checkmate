@@ -4,7 +4,8 @@ import NotFound from "../Pages/NotFound";
 
 // Auth
 import AuthLogin from "../Pages/Auth/Login/Login";
-import AuthRegister from "../Pages/Auth/Register/Register";
+import OldAuthRegister from "../Pages/Auth/Register/Register";
+import AuthRegister from "../Pages/Auth/Register";
 import AuthForgotPassword from "../Pages/Auth/ForgotPassword";
 import AuthCheckEmail from "../Pages/Auth/CheckEmail";
 import AuthSetNewPassword from "../Pages/Auth/SetNewPassword";
@@ -242,6 +243,10 @@ const Routes = () => {
 			<Route
 				path="/register"
 				element={<AdminCheckedRegister />}
+			/>
+			<Route
+				path="/old-register"
+				element={<OldAuthRegister />}
 			/>
 
 			<Route
