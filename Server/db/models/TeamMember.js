@@ -7,7 +7,7 @@ const TeamMemberSchema = mongoose.Schema(
 			ref: "Team",
 			required: true,
 		},
-		owner: {
+		userId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 			required: true,
