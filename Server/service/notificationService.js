@@ -48,7 +48,7 @@ class NotificationService {
         if (platform === 'discord') {
             return { content: messageText };
         }
-        return null;
+        return undefined;
     }
 
 	/**
