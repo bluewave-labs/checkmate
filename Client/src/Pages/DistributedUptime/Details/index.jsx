@@ -3,7 +3,7 @@ import DistributedUptimeMap from "./Components/DistributedUptimeMap";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import { Stack, Typography } from "@mui/material";
 import DeviceTicker from "./Components/DeviceTicker";
-import DistributedUptimeResponseChart from "./Components/DistributedUptimeResponseChart";
+import ResponseTimeChart from "./Components/DistributedUptimeResponseChart";
 import NextExpectedCheck from "./Components/NextExpectedCheck";
 import Footer from "./Components/Footer";
 import StatBoxes from "./Components/StatBoxes";
@@ -12,23 +12,31 @@ import MonitorTimeFrameHeader from "../../../Components/MonitorTimeFrameHeader";
 import GenericFallback from "../../../Components/GenericFallback";
 import MonitorCreateHeader from "../../../Components/MonitorCreateHeader";
 import SkeletonLayout from "./Components/Skeleton";
+import ControlsHeader from "./Components/ControlsHeader";
+import Dialog from "../../../Components/Dialog";
 //Utils
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useIsAdmin } from "../../../Hooks/useIsAdmin";
 import { useSubscribeToDetails } from "./Hooks/useSubscribeToDetails";
+import { useDeleteMonitor } from "./Hooks/useDeleteMonitor";
+import { useNavigate } from "react-router-dom";
 
 const DistributedUptimeDetails = () => {
 	const { monitorId } = useParams();
 	// Local State
 	const [dateRange, setDateRange] = useState("day");
+	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
 	// Utils
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
+	const navigate = useNavigate();
 	const [isLoading, networkError, connectionStatus, monitor, lastUpdateTrigger] =
 		useSubscribeToDetails({ monitorId, dateRange });
+
+	const [deleteMonitor, isDeleting] = useDeleteMonitor({ monitorId });
 	// Constants
 	const BREADCRUMBS = [
 		{ name: "Distributed Uptime", path: "/distributed-uptime" },
@@ -53,8 +61,11 @@ const DistributedUptimeDetails = () => {
 			</GenericFallback>
 		);
 	}
-
-	if (typeof monitor === "undefined" || monitor.totalChecks === 0) {
+	if (
+		typeof monitor === "undefined" ||
+		typeof monitor?.totalChecks === "undefined" ||
+		monitor?.totalChecks === 0
+	) {
 		return (
 			<Stack gap={theme.spacing(10)}>
 				<Breadcrumbs list={BREADCRUMBS} />
@@ -76,6 +87,12 @@ const DistributedUptimeDetails = () => {
 				isAdmin={isAdmin}
 				path={`/status/distributed/create/${monitorId}`}
 			/>
+			<ControlsHeader
+				isDeleting={isDeleting}
+				isDeleteOpen={isDeleteOpen}
+				setIsDeleteOpen={setIsDeleteOpen}
+				monitorId={monitorId}
+			/>
 			<MonitorHeader monitor={monitor} />
 			<StatBoxes
 				monitor={monitor}
@@ -90,7 +107,8 @@ const DistributedUptimeDetails = () => {
 				dateRange={dateRange}
 				setDateRange={setDateRange}
 			/>
-			<DistributedUptimeResponseChart checks={monitor?.groupedChecks ?? []} />
+
+			<ResponseTimeChart checks={monitor?.groupedChecks ?? []} />
 			<Stack
 				direction="row"
 				gap={theme.spacing(8)}
@@ -107,6 +125,21 @@ const DistributedUptimeDetails = () => {
 				/>
 			</Stack>
 			<Footer />
+			<Dialog
+				title="Do you want to delete this monitor?"
+				onConfirm={() => {
+					deleteMonitor();
+					setIsDeleteOpen(false);
+					navigate("/distributed-uptime");
+				}}
+				onCancel={() => {
+					setIsDeleteOpen(false);
+				}}
+				open={isDeleteOpen}
+				confirmationButtonLabel="Yes, delete monitor"
+				description="Once deleted, your monitor cannot be retrieved."
+				isLoading={isDeleting || isLoading}
+			/>
 		</Stack>
 	);
 };

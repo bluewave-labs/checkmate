@@ -101,7 +101,7 @@ const UptimeDataTable = ({
 				<Host
 					key={row._id}
 					url={row.url}
-					title={row.title}
+					title={row.name}
 					percentageColor={row.percentageColor}
 					percentage={row.percentage}
 				/>

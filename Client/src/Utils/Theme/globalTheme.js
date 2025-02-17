@@ -109,7 +109,7 @@ const baseTheme = (palette) => ({
 								return (
 									props.variant === "contained" &&
 									props.disabled &&
-									props.classes.loadingIndicator === undefined // Do not apply to loading button
+									props?.classes?.loadingIndicator === undefined // Do not apply to loading button
 								);
 							},
 							style: {
@@ -132,7 +132,7 @@ const baseTheme = (palette) => ({
 						backgroundColor: theme.palette.secondary.main,
 						color: theme.palette.primary.contrastText,
 					},
-					"&.MuiLoadingButton-root": {
+					"&.MuiButton-root": {
 						"&:disabled": {
 							backgroundColor: theme.palette.secondary.main,
 							color: theme.palette.primary.contrastText,
@@ -141,12 +141,13 @@ const baseTheme = (palette) => ({
 							boxShadow: `0 0 0 1px ${theme.palette.accent.main}`, // CAIO_REVIEW, this should really have a solid BG color
 						},
 					},
-					"&.MuiLoadingButton-loading": {
-						"& .MuiLoadingButton-label": {
+					"&.MuiButton-loading": {
+						"&:disabled": {
 							color: "transparent",
 						},
-						"& .MuiLoadingButton-loadingIndicator": {
-							color: "inherit",
+
+						"& .MuiButton-loadingIndicator": {
+							color: theme.palette.primary.contrastText,
 						},
 					},
 				}),

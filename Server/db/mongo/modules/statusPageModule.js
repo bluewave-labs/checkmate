@@ -190,6 +190,16 @@ const deleteStatusPage = async (url) => {
 	}
 };
 
+const deleteStatusPagesByMonitorId = async (monitorId) => {
+	try {
+		await StatusPage.deleteMany({ monitors: { $in: [monitorId] } });
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "deleteStatusPageByMonitorId";
+		throw error;
+	}
+};
+
 export {
 	createStatusPage,
 	updateStatusPage,
@@ -197,4 +207,5 @@ export {
 	getStatusPage,
 	getStatusPageByUrl,
 	deleteStatusPage,
+	deleteStatusPagesByMonitorId,
 };

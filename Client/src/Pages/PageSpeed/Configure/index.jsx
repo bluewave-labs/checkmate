@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "@emotion/react";
-import { Box, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Stack, Tooltip, Typography, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import {
@@ -20,7 +20,6 @@ import Checkbox from "../../../Components/Inputs/Checkbox";
 import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import PulseDot from "../../../Components/Animated/PulseDot";
-import LoadingButton from "@mui/lab/LoadingButton";
 import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
 import SkeletonLayout from "./skeleton";
 import useUtils from "../../Uptime/Monitors/Hooks/useUtils";
@@ -265,7 +264,7 @@ const PageSpeedConfigure = () => {
 								alignSelf="flex-end"
 								ml="auto"
 							>
-								<LoadingButton
+								<Button
 									onClick={handlePause}
 									loading={isLoading}
 									variant="contained"
@@ -293,8 +292,8 @@ const PageSpeedConfigure = () => {
 											Resume
 										</>
 									)}
-								</LoadingButton>
-								<LoadingButton
+								</Button>
+								<Button
 									loading={isLoading}
 									variant="contained"
 									color="error"
@@ -304,7 +303,7 @@ const PageSpeedConfigure = () => {
 									}}
 								>
 									Remove
-								</LoadingButton>
+								</Button>
 							</Box>
 						</Stack>
 						<ConfigBox>
@@ -422,7 +421,7 @@ const PageSpeedConfigure = () => {
 							justifyContent="flex-end"
 							mt="auto"
 						>
-							<LoadingButton
+							<Button
 								loading={isLoading}
 								type="submit"
 								variant="contained"
@@ -431,7 +430,7 @@ const PageSpeedConfigure = () => {
 								sx={{ px: theme.spacing(12) }}
 							>
 								Save
-							</LoadingButton>
+							</Button>
 						</Stack>
 					</Stack>
 				</>

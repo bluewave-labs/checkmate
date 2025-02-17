@@ -14,7 +14,6 @@ import { formatBytes } from "../../../Utils/fileUtils";
 import { clearUptimeMonitorState } from "../../../Features/UptimeMonitors/uptimeMonitorsSlice";
 import { createToast } from "../../../Utils/toastUtils";
 import { logger } from "../../../Utils/Logger";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { GenericDialog } from "../../Dialog/genericDialog";
 import Dialog from "../../Dialog";
 
@@ -344,7 +343,7 @@ const ProfilePanel = () => {
 					justifyContent="flex-end"
 				>
 					<Box width="fit-content">
-						<LoadingButton
+						<Button
 							variant="contained"
 							color="accent"
 							onClick={handleSaveProfile}
@@ -354,7 +353,7 @@ const ProfilePanel = () => {
 							sx={{ px: theme.spacing(12) }}
 						>
 							Save
-						</LoadingButton>
+						</Button>
 					</Box>
 				</Stack>
 			</Stack>

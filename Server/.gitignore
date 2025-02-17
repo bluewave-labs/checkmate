@@ -4,3 +4,4 @@ node_modules
 *.sh
 .nyc_output
 coverage
+.clinic

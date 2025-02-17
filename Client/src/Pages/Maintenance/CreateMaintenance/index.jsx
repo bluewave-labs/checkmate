@@ -9,7 +9,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { maintenanceWindowValidation } from "../../../Validation/validation";
 import { createToast } from "../../../Utils/toastUtils";
-import LoadingButton from "@mui/lab/LoadingButton";
 
 import dayjs from "dayjs";
 import Select from "../../../Components/Inputs/Select";
@@ -552,7 +551,7 @@ const CreateMaintenance = () => {
 					>
 						Cancel
 					</Button>
-					<LoadingButton
+					<Button
 						loading={isLoading}
 						variant="contained"
 						color="accent"
@@ -564,7 +563,7 @@ const CreateMaintenance = () => {
 								? "Create maintenance"
 								: "Edit maintenance"
 						}`}
-					</LoadingButton>
+					</Button>
 				</Box>
 			</Stack>
 		</Box>

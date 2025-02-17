@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useTheme } from "@emotion/react";
-import { Box, Stack, Typography } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
+import { Box, Stack, Typography, Button } from "@mui/material";
 import { setNewPassword } from "../../Features/Auth/authSlice";
 import { createToast } from "../../Utils/toastUtils";
 import { credentials } from "../../Validation/validation";
@@ -232,7 +231,7 @@ const SetNewPassword = () => {
 							/>
 						</Stack>
 					</Box>
-					<LoadingButton
+					<Button
 						variant="contained"
 						color="accent"
 						loading={isLoading}
@@ -245,7 +244,7 @@ const SetNewPassword = () => {
 						sx={{ width: "100%", maxWidth: 400 }}
 					>
 						{t("authSetNewPasswordResetPassword")}
-					</LoadingButton>
+					</Button>
 				</Stack>
 			</Stack>
 			<Box

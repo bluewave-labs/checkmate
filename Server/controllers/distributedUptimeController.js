@@ -30,14 +30,7 @@ class DistributedUptimeController {
 			} = result;
 
 			// Calculate response time
-			const responseTime =
-				(first_byte_took +
-					body_read_took +
-					dns_took +
-					conn_took +
-					connect_took +
-					tls_took) /
-				1_000_000;
+			const responseTime = first_byte_took / 1_000_000;
 
 			// Calculate if server is up or down
 			const isErrorStatus = status_code >= 400;

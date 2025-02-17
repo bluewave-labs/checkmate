@@ -13,7 +13,6 @@ import { createUptimeMonitor } from "../../../Features/UptimeMonitors/uptimeMoni
 
 // MUI
 import { Box, Stack, Typography, Button, ButtonGroup } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
 
 //Components
 import Breadcrumbs from "../../../Components/Breadcrumbs";
@@ -33,6 +32,18 @@ const CreateMonitor = () => {
 		{ _id: 4, name: "4 minutes" },
 		{ _id: 5, name: "5 minutes" },
 	];
+
+	const matchMethodOptions = [
+		{ _id: "equal", name: "Equal" },
+		{ _id: "include", name: "Include" },
+		{ _id: "regex", name: "Regex" },
+	];
+
+	const expectedValuePlaceholders = {
+		regex: "^[\w.-]+@gmail.com$",
+		equal: "janet@gmail.com",
+		include: "@gmail.com"
+	};
 
 	const monitorTypeMaps = {
 		http: {
@@ -93,6 +104,12 @@ const CreateMonitor = () => {
 			interval: monitor.interval * MS_PER_MINUTE,
 		};
 
+		if (monitor.type === "http") {
+			form.expectedValue = monitor.expectedValue;
+			form.jsonPath = monitor.jsonPath;
+			form.matchMethod = monitor.matchMethod;
+		}
+
 		const { error } = monitorValidation.validate(form, {
 			abortEarly: false,
 		});
@@ -143,8 +160,8 @@ const CreateMonitor = () => {
 			...monitor,
 			[formName]: value,
 		};
-		if (formName === 'type') {
-			newMonitor.url = '';
+		if (formName === "type") {
+			newMonitor.url = "";
 		}
 		setMonitor(newMonitor);
 
@@ -399,13 +416,68 @@ const CreateMonitor = () => {
 							onChange={(event) => handleChange(event, "interval")}
 							items={SELECT_VALUES}
 						/>
+						{
+							monitor.type === "http" && <>
+								<Select
+									id="match-method"
+									label="Match Method"
+									value={monitor.matchMethod || "equal"}
+									onChange={(event) => handleChange(event, "matchMethod")}
+									items={matchMethodOptions}
+								/>
+								<Stack>
+									<TextInput
+										type="text"
+										id="expected-value"
+										label="Expected value"
+										isOptional={true}
+										placeholder={expectedValuePlaceholders[monitor.matchMethod || "equal"]}
+										value={monitor.expectedValue}
+										onChange={(event) => handleChange(event, "expectedValue")}
+										error={errors["expectedValue"] ? true : false}
+										helperText={errors["expectedValue"]}
+									/>
+									<Typography
+										component="span"
+										color={theme.palette.primary.contrastTextTertiary}
+										opacity={0.8}
+									>
+										The expected value is used to match against response result, and the match determines the status.
+									</Typography>
+								</Stack>
+								<Stack>
+									<TextInput
+										type="text"
+										id="json-path"
+										label="JSON Path"
+										isOptional={true}
+										placeholder="data.email"
+										value={monitor.jsonPath}
+										onChange={(event) => handleChange(event, "jsonPath")}
+										error={errors["jsonPath"] ? true : false}
+										helperText={errors["jsonPath"]}
+									/>
+									<Typography
+										component="span"
+										color={theme.palette.primary.contrastTextTertiary}
+										opacity={0.8}
+									>
+										This expression will be evaluated against the reponse JSON data and the result will be used to match against the expected value. See&nbsp;
+										<Typography component="a" href="https://jmespath.org/" target="_blank" color="info">
+											jmespath.org
+										</Typography>
+										&nbsp;for query language documentation.
+									</Typography>
+								</Stack>
+							</>
+						}
 					</Stack>
 				</ConfigBox>
 				<Stack
 					direction="row"
 					justifyContent="flex-end"
 				>
-					<LoadingButton
+					<Button
 						variant="contained"
 						color="accent"
 						onClick={handleCreateMonitor}
@@ -413,7 +485,7 @@ const CreateMonitor = () => {
 						loading={isLoading}
 					>
 						Create monitor
-					</LoadingButton>
+					</Button>
 				</Stack>
 			</Stack>
 		</Box>

@@ -8,7 +8,6 @@ import { networkService } from "../../../main";
 import { createToast } from "../../../Utils/toastUtils";
 import { useSelector } from "react-redux";
 import Select from "../../Inputs/Select";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { GenericDialog } from "../../Dialog/genericDialog";
 import DataTable from "../../Table/";
 /**
@@ -229,14 +228,13 @@ const TeamPanel = () => {
 							</Button>
 						</ButtonGroup>
 					</Stack>
-					<LoadingButton
-						loading={isSendingInvite}
+					<Button
 						variant="contained"
 						color="accent"
 						onClick={() => setIsOpen(true)}
 					>
 						Invite a team member
-					</LoadingButton>
+					</Button>
 				</Stack>
 
 				<DataTable
@@ -287,15 +285,15 @@ const TeamPanel = () => {
 					mt={theme.spacing(8)}
 					justifyContent="flex-end"
 				>
-					<LoadingButton
+					<Button
 						loading={isSendingInvite}
 						variant="contained" // CAIO_REVIEW
 						color="error"
 						onClick={closeInviteModal}
 					>
 						Cancel
-					</LoadingButton>
-					<LoadingButton
+					</Button>
+					<Button
 						variant="contained"
 						color="accent"
 						onClick={handleInviteMember}
@@ -303,7 +301,7 @@ const TeamPanel = () => {
 						disabled={isDisabled}
 					>
 						Send invite
-					</LoadingButton>
+					</Button>
 				</Stack>
 			</GenericDialog>
 		</TabPanel>

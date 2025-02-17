@@ -36,7 +36,17 @@ Usage instructions can be found [here](https://docs.checkmate.so/). It's still W
 
 ## 🛠️ Installation
 
-See installation instructions in [Checkmate documentation portal](https://docs.checkmate.so/quickstart). Alternatively, you can also use [Coolify](https://coolify.io/) for a one click Docker deployment. If you would like to monitor your server infrastructure, you'll need [Capture agent](https://github.com/bluewave-labs/capture). Capture repository also contains the installation instructions. 
+See installation instructions in [Checkmate documentation portal](https://docs.checkmate.so/quickstart). Alternatively, you can also use [Coolify](https://coolify.io/) or [Elestio](https://elest.io/open-source/checkmate) for a one click Docker deployment. If you would like to monitor your server infrastructure, you'll need [Capture agent](https://github.com/bluewave-labs/capture). Capture repository also contains the installation instructions. 
+
+## 🚀 Performance
+Thanks to extensive optimizations, Checkmate operates with an exceptionally small memory footprint, requiring minimal memory and CPU resources. Here’s the memory usage of a Node.js instance running on a server that monitors 323 servers every minute:
+
+![image](https://github.com/user-attachments/assets/37e04a75-d83a-488f-b25c-025511b492c9)
+
+You can see the memory footprint of MongoDB and Redis on the same server (398Mb and 15Mb) for the same amount of servers: 
+
+![image](https://github.com/user-attachments/assets/3b469e85-e675-4040-a162-3f24c1afc751)
+
 
 ## 💚 Questions & ideas
 
@@ -97,7 +107,7 @@ If you have any questions, suggestions or comments, please use our [Discord chan
 
 ## 🤝 Contributing
 
-We pride ourselves on building strong connections with contributors at every level. Despite being a young project, Checkmate has already earned 3300 stars and attracted 40+ contributors from around the globe. So, don’t hold back — jump in, contribute and learn with us!
+We pride ourselves on building strong connections with contributors at every level. Despite being a young project, Checkmate has already earned 3700+ stars and attracted 45+ contributors from around the globe. So, don’t hold back — jump in, contribute and learn with us!
 
 Here's how you can contribute:
 
@@ -113,18 +123,17 @@ Here's how you can contribute:
   <img src="https://contrib.rocks/image?repo=bluewave-labs/checkmate" />
 </a>
 
-<!--
+## 💰 Our sponsors
 
-![Alt](https://repobeats.axiom.co/api/embed/c35d999c82dbb31e967427ea4166c14da4172e73.svg "Repobeats analytics image")
-
---> 
+Thanks to [Gitbook](https://gitbook.io/) for giving us a free tier for their documentation platform, and [Poeditor](https://poeditor.com/) providing us a free account to use their i18n services. If you would like to sponsor Checkmate, please send an email to hello@bluewavelabs.ca
 
 [![Star History Chart](https://api.star-history.com/svg?repos=bluewave-labs/checkmate&type=Date)](https://star-history.com/#bluewave-labs/bluewave-uptime&Date)
 
 Also check other developer and contributor-friendly projects of BlueWave:
 
+- [LangRoute](https://github.com/bluewave-labs/langroute), an LLM proxy and gateway
 - [DataRoom](https://github.com/bluewave-labs/bluewave-dataroom), an secure file sharing application, aka dataroom.
-- [BlueWave HRM](https://github.com/bluewave-labs/bluewave-hrm), a complete Human Resource Management platform.
+- [Headcount](https://github.com/bluewave-labs/bluewave-hrm), a complete Human Resource Management platform.
 - [Guidefox](https://github.com/bluewave-labs/guidefox), an application that helps new users learn how to use your product via hints, tours, popups and banners.
 - [VerifyWise](https://github.com/bluewave-labs/verifywise), the first open source AI governance platform.
 

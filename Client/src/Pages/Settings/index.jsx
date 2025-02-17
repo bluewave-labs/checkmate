@@ -3,10 +3,13 @@ import { Box, Stack, Typography, Button, Switch } from "@mui/material";
 import TextInput from "../../Components/Inputs/TextInput";
 import Link from "../../Components/Link";
 import Select from "../../Components/Inputs/Select";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { useIsAdmin } from "../../Hooks/useIsAdmin";
 import Dialog from "../../Components/Dialog";
 import ConfigBox from "../../Components/ConfigBox";
+import {
+	WalletMultiButton,
+	WalletDisconnectButton,
+} from "@solana/wallet-adapter-react-ui";
 
 //Utils
 import { useTheme } from "@emotion/react";
@@ -324,7 +327,7 @@ const Settings = () => {
 						<Stack gap={theme.spacing(20)}>
 							<Box>
 								<Typography>Add demo monitors</Typography>
-								<LoadingButton
+								<Button
 									variant="contained"
 									color="accent"
 									loading={isLoading || authIsLoading || checksIsLoading}
@@ -332,11 +335,11 @@ const Settings = () => {
 									sx={{ mt: theme.spacing(4) }}
 								>
 									Add demo monitors
-								</LoadingButton>
+								</Button>
 							</Box>
 							<Box>
 								<Typography>Remove all monitors</Typography>
-								<LoadingButton
+								<Button
 									variant="contained"
 									color="error"
 									loading={isLoading || authIsLoading || checksIsLoading}
@@ -346,7 +349,7 @@ const Settings = () => {
 									sx={{ mt: theme.spacing(4) }}
 								>
 									Remove all monitors
-								</LoadingButton>
+								</Button>
 							</Box>
 						</Stack>
 						<Dialog
@@ -358,6 +361,25 @@ const Settings = () => {
 							onConfirm={handleDeleteAllMonitors}
 							isLoading={isLoading || authIsLoading || checksIsLoading}
 						/>
+					</ConfigBox>
+				)}
+				{isAdmin && (
+					<ConfigBox>
+						<Box>
+							<Typography component="h1">Wallet</Typography>
+							<Typography sx={{ mt: theme.spacing(2) }}>
+								Connect your wallet here. This is required for the Distributed Uptime monitor to connect to multiple nodes globally.  
+							</Typography>
+						</Box>
+						<Box>
+							<Stack
+								direction="row"
+								spacing={2}
+							>
+								<WalletMultiButton />
+								<WalletDisconnectButton />
+							</Stack>
+						</Box>
 					</ConfigBox>
 				)}
 
@@ -381,7 +403,7 @@ const Settings = () => {
 					direction="row"
 					justifyContent="flex-end"
 				>
-					<LoadingButton
+					<Button
 						loading={isLoading || authIsLoading || checksIsLoading}
 						disabled={Object.keys(errors).length > 0}
 						variant="contained"
@@ -390,7 +412,7 @@ const Settings = () => {
 						onClick={handleSave}
 					>
 						Save
-					</LoadingButton>
+					</Button>
 				</Stack>
 			</Stack>
 		</Box>

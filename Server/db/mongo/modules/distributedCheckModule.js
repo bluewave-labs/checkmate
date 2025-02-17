@@ -12,4 +12,15 @@ const createDistributedCheck = async (checkData) => {
 	}
 };
 
-export { createDistributedCheck };
+const deleteDistributedChecksByMonitorId = async (monitorId) => {
+	try {
+		const result = await DistributedUptimeCheck.deleteMany({ monitorId });
+		return result.deletedCount;
+	} catch (error) {
+		error.service = SERVICE_NAME;
+		error.method = "deleteDistributedChecksByMonitorId";
+		throw error;
+	}
+};
+
+export { createDistributedCheck, deleteDistributedChecksByMonitorId };

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router";
 import { useTheme } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { Box, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Stack, Tooltip, Typography, Button } from "@mui/material";
 import { monitorValidation } from "../../../Validation/validation";
 import { createToast } from "../../../Utils/toastUtils";
 import { logger } from "../../../Utils/Logger";
@@ -22,7 +22,6 @@ import Checkbox from "../../../Components/Inputs/Checkbox";
 import Breadcrumbs from "../../../Components/Breadcrumbs";
 import PulseDot from "../../../Components/Animated/PulseDot";
 import SkeletonLayout from "./skeleton";
-import LoadingButton from "@mui/lab/LoadingButton";
 import "./index.css";
 import Dialog from "../../../Components/Dialog";
 
@@ -60,6 +59,18 @@ const Configure = () => {
 		"monitor-checks-http": "type",
 		"monitor-checks-ping": "type",
 		"notify-email-default": "notification-email",
+	};
+
+	const matchMethodOptions = [
+		{ _id: "equal", name: "Equal" },
+		{ _id: "include", name: "Include" },
+		{ _id: "regex", name: "Regex" },
+	];
+
+	const expectedValuePlaceholders = {
+		regex: "^[\w.-]+@gmail.com$",
+		equal: "janet@gmail.com",
+		include: "@gmail.com"
 	};
 
 	useEffect(() => {
@@ -292,7 +303,7 @@ const Configure = () => {
 									ml: "auto",
 								}}
 							>
-								<LoadingButton
+								<Button
 									variant="contained"
 									color="secondary"
 									loading={isLoading}
@@ -323,8 +334,8 @@ const Configure = () => {
 											Resume
 										</>
 									)}
-								</LoadingButton>
-								<LoadingButton
+								</Button>
+								<Button
 									loading={isLoading}
 									variant="contained"
 									color="error"
@@ -332,7 +343,7 @@ const Configure = () => {
 									onClick={() => setIsOpen(true)}
 								>
 									Remove
-								</LoadingButton>
+								</Button>
 							</Box>
 						</Stack>
 						<ConfigBox>
@@ -347,7 +358,11 @@ const Configure = () => {
 								<TextInput
 									type={monitor?.type === "http" ? "url" : "text"}
 									https={protocol === "https"}
-									startAdornment={monitor?.type === "http" && <HttpAdornment https={protocol === "https"} />}
+									startAdornment={
+										monitor?.type === "http" && (
+											<HttpAdornment https={protocol === "https"} />
+										)
+									}
 									id="monitor-url"
 									label="URL to monitor"
 									placeholder="google.com"
@@ -436,6 +451,61 @@ const Configure = () => {
 									onChange={(event) => handleChange(event, "interval")}
 									items={frequencies}
 								/>
+								{
+									monitor.type === "http" && <>
+										<Select
+											id="match-method"
+											label="Match Method"
+											value={monitor.matchMethod || "equal"}
+											onChange={(event) => handleChange(event, "matchMethod")}
+											items={matchMethodOptions}
+										/>
+										<Stack>
+											<TextInput
+												type="text"
+												id="expected-value"
+												label="Expected value"
+												isOptional={true}
+												placeholder={expectedValuePlaceholders[monitor.matchMethod || "equal"]}
+												value={monitor.expectedValue}
+												onChange={(event) => handleChange(event, "expectedValue")}
+												error={errors["expectedValue"] ? true : false}
+												helperText={errors["expectedValue"]}
+											/>
+											<Typography
+												component="span"
+												color={theme.palette.primary.contrastTextTertiary}
+												opacity={0.8}
+											>
+												The expected value is used to match against response result, and the match determines the status.
+											</Typography>
+										</Stack>
+										<Stack>
+											<TextInput
+												type="text"
+												id="json-path"
+												label="JSON Path"
+												isOptional={true}
+												placeholder="data.email"
+												value={monitor.jsonPath}
+												onChange={(event) => handleChange(event, "jsonPath")}
+												error={errors["jsonPath"] ? true : false}
+												helperText={errors["jsonPath"]}
+											/>
+											<Typography
+												component="span"
+												color={theme.palette.primary.contrastTextTertiary}
+												opacity={0.8}
+											>
+												This expression will be evaluated against the reponse JSON data and the result will be used to match against the expected value. See&nbsp;
+												<Typography component="a" href="https://jmespath.org/" target="_blank" color="info">
+													jmespath.org
+												</Typography>
+												&nbsp;for query language documentation.
+											</Typography>
+										</Stack>
+									</>
+								}
 							</Stack>
 						</ConfigBox>
 						<Stack
@@ -443,7 +513,7 @@ const Configure = () => {
 							justifyContent="flex-end"
 							mt="auto"
 						>
-							<LoadingButton
+							<Button
 								variant="contained"
 								color="accent"
 								loading={isLoading}
@@ -451,7 +521,7 @@ const Configure = () => {
 								onClick={handleSubmit}
 							>
 								Save
-							</LoadingButton>
+							</Button>
 						</Stack>
 					</Stack>
 				</>
