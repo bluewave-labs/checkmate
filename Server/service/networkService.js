@@ -437,46 +437,40 @@ class NetworkService {
 
 	async requestWebhook(platform, url, message) {
 		try {
-			const { response, responseTime, error } = await this.timeRequest(() =>
-				this.axios.post(url, message, {
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				})
-			);
+			const response = await this.axios.post(url, message, {
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
 	
-			const webhookResponse = {
+			return {
 				type: 'webhook',
-				responseTime,
-				payload: response?.data
+				status: true,
+				code: response.status,
+				message: `Successfully sent ${platform} notification`,
+				payload: response.data
 			};
 	
-			if (error) {
-				webhookResponse.status = false;
-				webhookResponse.code = error.response?.status || this.NETWORK_ERROR;
-				webhookResponse.message = `Failed to send ${platform} notification`;
-				this.logger.warn({
-					message: error.message,
-					service: this.SERVICE_NAME,
-					method: 'requestWebhook',
-					url,
-					platform,
-					error: error.message,
-					statusCode: error.response?.status,
-					responseData: error.response?.data,
-					requestPayload: message
-				});
-				return webhookResponse;
-			}
-	
-			webhookResponse.status = true;
-			webhookResponse.code = response.status;
-			webhookResponse.message = `Successfully sent ${platform} notification`;
-			return webhookResponse;
 		} catch (error) {
-			error.service = this.SERVICE_NAME;
-			error.method = 'requestWebhook';
-			throw error;
+			this.logger.warn({
+				message: error.message,
+				service: this.SERVICE_NAME,
+				method: 'requestWebhook',
+				url,
+				platform,
+				error: error.message,
+				statusCode: error.response?.status,
+				responseData: error.response?.data,
+				requestPayload: message
+			});
+	
+			return {
+				type: 'webhook',
+				status: false,
+				code: error.response?.status || this.NETWORK_ERROR,
+				message: `Failed to send ${platform} notification`,
+				payload: error.response?.data
+			};
 		}
 	}
 	
