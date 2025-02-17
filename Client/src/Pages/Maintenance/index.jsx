@@ -11,59 +11,58 @@ import { useNavigate } from "react-router-dom";
 import { useIsAdmin } from "../../Hooks/useIsAdmin";
 
 const Maintenance = () => {
-    const theme = useTheme();
-    const navigate = useNavigate();
-    const { authToken } = useSelector((state) => state.auth);
-    const { rowsPerPage } = useSelector((state) => state.ui.maintenance);
-    const isAdmin = useIsAdmin();
-    const [maintenanceWindows, setMaintenanceWindows] = useState([]);
-    const [maintenanceWindowCount, setMaintenanceWindowCount] = useState(0);
-    const [page, setPage] = useState(0);
-    const [sort, setSort] = useState({});
-    const [updateTrigger, setUpdateTrigger] = useState(false);
+		const theme = useTheme();
+		const navigate = useNavigate();
+		const { authToken } = useSelector((state) => state.auth);
+		const { rowsPerPage } = useSelector((state) => state.ui.maintenance);
+		const isAdmin = useIsAdmin();
+		const [maintenanceWindows, setMaintenanceWindows] = useState([]);
+		const [maintenanceWindowCount, setMaintenanceWindowCount] = useState(0);
+		const [page, setPage] = useState(0);
+		const [sort, setSort] = useState({});
+		const [updateTrigger, setUpdateTrigger] = useState(false);
 
-    const handleActionMenuDelete = () => {
-        setUpdateTrigger((prev) => !prev);
-    };
+		const handleActionMenuDelete = () => {
+			setUpdateTrigger((prev) => !prev);
+		};
 
-    useEffect(() => {
-        const fetchMaintenanceWindows = async () => {
-            try {
-                const response = await networkService.getMaintenanceWindowsByTeamId({
-                    authToken: authToken,
-                    page: page,
-                    rowsPerPage: rowsPerPage,
-                });
-                const { maintenanceWindows, maintenanceWindowCount } = response.data.data;
-                setMaintenanceWindows(maintenanceWindows);
-                setMaintenanceWindowCount(maintenanceWindowCount);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchMaintenanceWindows();
-    }, [authToken, page, rowsPerPage, updateTrigger]);
+		useEffect(() => {
+			const fetchMaintenanceWindows = async () => {
+				try {
+					const response = await networkService.getMaintenanceWindowsByTeamId({
+						authToken: authToken,
+						page: page,
+						rowsPerPage: rowsPerPage,
+					});
+					const { maintenanceWindows, maintenanceWindowCount } = response.data.data;
+					setMaintenanceWindows(maintenanceWindows);
+					setMaintenanceWindowCount(maintenanceWindowCount);
+				} catch (error) {
+					console.log(error);
+				}
+			};
+			fetchMaintenanceWindows();
+		}, [authToken, page, rowsPerPage, updateTrigger]);
 
-    //Return Fallback directly if no maintenance windows exist
-    if (maintenanceWindows.length === 0) {
-        return (
-            <Fallback
-                title="maintenance window"
-                checks={[
-                    "Mark your maintenance periods",
-                    "Eliminate any misunderstandings",
-                    "Stop sending alerts in maintenance windows",
-                ]}
-                link="/maintenance/create"
-                isAdmin={isAdmin}
-            />
-        );
-    }
+		//Return Fallback directly if no maintenance windows exist
+		if (maintenanceWindows.length === 0) {
+			return (
+				<Fallback
+					title="maintenance window"
+					checks={[
+						"Mark your maintenance periods",
+						"Eliminate any misunderstandings",
+						"Stop sending alerts in maintenance windows",
+					]}
+					link="/maintenance/create"
+					isAdmin={isAdmin}
+				/>
+			);
+		}
 
     return (
         <Box
             className="maintenance table-container"
-			
             sx={{
 				':has(> [class*="fallback__"])': {
                 position: "relative",
