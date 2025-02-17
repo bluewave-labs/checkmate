@@ -183,7 +183,7 @@ function Sidebar() {
 			This is the top lever for styles
 			*/
 			sx={{
-				position: 'relative',
+				position: "relative",
 				border: 1,
 				borderColor: theme.palette.primary.lowContrast,
 				borderRadius: theme.shape.borderRadius,
@@ -304,86 +304,55 @@ function Sidebar() {
 				</Stack>
 			</Stack>
 			<Box
- 			sx={{
- 				flexGrow: 1,
- 				overflow: 'auto',
- 				overflowX: 'hidden',
- 				'&::-webkit-scrollbar': {
- 					width: theme.spacing(2),
-                 },
- 				'&::-webkit-scrollbar-thumb': {
-                     backgroundColor: theme.palette.primary.lowContrast,
-                     borderRadius: theme.spacing(4),
-                 },
- 			}}
- 			>
-			<List
-				component="nav"
-				aria-labelledby="nested-menu-subheader"
-				disablePadding
-				subheader={
-					<ListSubheader
-						component="div"
-						id="nested-menu-subheader"
-						sx={{
-							py: theme.spacing(4),
-							/* TODO px should be centralized in container */
-							px: collapsed ? theme.spacing(2) : theme.spacing(4),
-							backgroundColor: "transparent",
-							position: "static",
-						}}
-					>
-						Menu
-					</ListSubheader>
-				}
 				sx={{
-					px: theme.spacing(6),
-					height: "100%",
-					/* overflow: "hidden", */
+					flexGrow: 1,
+					overflow: "auto",
+					overflowX: "hidden",
+					"&::-webkit-scrollbar": {
+						width: theme.spacing(2),
+					},
+					"&::-webkit-scrollbar-thumb": {
+						backgroundColor: theme.palette.primary.lowContrast,
+						borderRadius: theme.spacing(4),
+					},
 				}}
 			>
-				{menu.map((item) => {
-					if (item.path === "distributed-uptime" && distributedUptimeEnabled === false) {
-						return null;
-					}
-					return item.path ? (
-						/* If item has a path */
-						<Tooltip
-							key={item.path}
-							placement="right"
-							title={collapsed ? item.name : ""}
-							slotProps={{
-								popper: {
-									modifiers: [
-										{
-											name: "offset",
-											options: {
-												offset: [0, -16],
-											},
-										},
-									],
-								},
+				<List
+					component="nav"
+					aria-labelledby="nested-menu-subheader"
+					disablePadding
+					subheader={
+						<ListSubheader
+							component="div"
+							id="nested-menu-subheader"
+							sx={{
+								py: theme.spacing(4),
+								/* TODO px should be centralized in container */
+								px: collapsed ? theme.spacing(2) : theme.spacing(4),
+								backgroundColor: "transparent",
+								position: "static",
 							}}
-							disableInteractive
 						>
-							<ListItemButton
-								className={location.pathname === `/${item.path}` ? "selected-path" : ""}
-								onClick={() => navigate(`/${item.path}`)}
-								sx={{
-									height: "37px",
-									gap: theme.spacing(4),
-									borderRadius: theme.shape.borderRadius,
-									px: theme.spacing(4),
-								}}
-							>
-								<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
-								<ListItemText>{item.name}</ListItemText>
-							</ListItemButton>
-						</Tooltip>
-					) : collapsed ? (
-						/* TODO Do we ever get here? If item does not have a path and collapsed state is true  */
-						<React.Fragment key={item.name}>
+							Menu
+						</ListSubheader>
+					}
+					sx={{
+						px: theme.spacing(6),
+						height: "100%",
+						/* overflow: "hidden", */
+					}}
+				>
+					{menu.map((item) => {
+						if (
+							item.path === "distributed-uptime" &&
+							distributedUptimeEnabled === false
+						) {
+							return null;
+						}
+						return item.path ? (
+							/* If item has a path */
 							<Tooltip
+								key={item.path}
 								placement="right"
 								title={collapsed ? item.name : ""}
 								slotProps={{
@@ -402,11 +371,11 @@ function Sidebar() {
 							>
 								<ListItemButton
 									className={
-										Boolean(anchorEl) && popup === item.name ? "selected-path" : ""
+										location.pathname.startsWith(`/${item.path}`) ? "selected-path" : ""
 									}
-									onClick={(event) => openPopup(event, item.name)}
+									onClick={() => navigate(`/${item.path}`)}
 									sx={{
-										position: "relative",
+										height: "37px",
 										gap: theme.spacing(4),
 										borderRadius: theme.shape.borderRadius,
 										px: theme.spacing(4),
@@ -416,104 +385,68 @@ function Sidebar() {
 									<ListItemText>{item.name}</ListItemText>
 								</ListItemButton>
 							</Tooltip>
-							<Menu
-								className="sidebar-popup"
-								anchorEl={anchorEl}
-								open={Boolean(anchorEl) && popup === item.name}
-								onClose={closePopup}
-								disableScrollLock
-								anchorOrigin={{
-									vertical: "top",
-									horizontal: "right",
-								}}
-								slotProps={{
-									paper: {
-										sx: {
-											mt: theme.spacing(-2),
-											ml: theme.spacing(1),
-										},
-									},
-								}}
-								MenuListProps={{ sx: { px: 1, py: 2 } }}
-								sx={{
-									ml: theme.spacing(8),
-									/* TODO what is this selection? */
-									"& .selected-path": {
-										backgroundColor: theme.palette.tertiary.main,
-									},
-								}}
-							>
-								{item.nested.map((child) => {
-									if (
-										child.name === "Team" &&
-										authState.user?.role &&
-										!authState.user.role.includes("superadmin")
-									) {
-										return null;
-									}
-
-									return (
-										<MenuItem
-											className={
-												location.pathname.includes(child.path) ? "selected-path" : ""
-											}
-											key={child.path}
-											onClick={() => {
-												const url = URL_MAP[child.path];
-												if (url) {
-													window.open(url, "_blank", "noreferrer");
-												} else {
-													navigate(`/${child.path}`);
-												}
-												closePopup();
-											}}
-											sx={{
-												gap: theme.spacing(4),
-												opacity: 0.9,
-												/* TODO this has no effect? */
-												"& svg": {
-													"& path": {
-														stroke: theme.palette.primary.contrastTextTertiary,
-														strokeWidth: 1.1,
+						) : collapsed ? (
+							/* TODO Do we ever get here? If item does not have a path and collapsed state is true  */
+							<React.Fragment key={item.name}>
+								<Tooltip
+									placement="right"
+									title={collapsed ? item.name : ""}
+									slotProps={{
+										popper: {
+											modifiers: [
+												{
+													name: "offset",
+													options: {
+														offset: [0, -16],
 													},
 												},
-											}}
-										>
-											{child.icon}
-											{child.name}
-										</MenuItem>
-									);
-								})}
-							</Menu>
-						</React.Fragment>
-					) : (
-						/* TODO Do we ever get here? If item does not have a path and collapsed state is false */
-						<React.Fragment key={item.name}>
-							<ListItemButton
-								onClick={() =>
-									setOpen((prev) => ({
-										...Object.fromEntries(Object.keys(prev).map((key) => [key, false])),
-										[item.name]: !prev[item.name],
-									}))
-								}
-								sx={{
-									gap: theme.spacing(4),
-									borderRadius: theme.shape.borderRadius,
-									px: theme.spacing(4),
-								}}
-							>
-								<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
-								<ListItemText>{item.name}</ListItemText>
-								{open[`${item.name}`] ? <ArrowUp /> : <ArrowDown />}
-							</ListItemButton>
-							<Collapse
-								in={open[`${item.name}`]}
-								timeout="auto"
-							>
-								<List
-									component="div"
-									disablePadding
-									sx={{ pl: theme.spacing(12) }}
+											],
+										},
+									}}
+									disableInteractive
+								>
+									<ListItemButton
+										className={
+											Boolean(anchorEl) && popup === item.name ? "selected-path" : ""
+										}
+										onClick={(event) => openPopup(event, item.name)}
+										sx={{
+											position: "relative",
+											gap: theme.spacing(4),
+											borderRadius: theme.shape.borderRadius,
+											px: theme.spacing(4),
+										}}
+									>
+										<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
+										<ListItemText>{item.name}</ListItemText>
+									</ListItemButton>
+								</Tooltip>
+								<Menu
+									className="sidebar-popup"
+									anchorEl={anchorEl}
+									open={Boolean(anchorEl) && popup === item.name}
+									onClose={closePopup}
+									disableScrollLock
+									anchorOrigin={{
+										vertical: "top",
+										horizontal: "right",
+									}}
+									slotProps={{
+										paper: {
+											sx: {
+												mt: theme.spacing(-2),
+												ml: theme.spacing(1),
+											},
+										},
+									}}
+									MenuListProps={{ sx: { px: 1, py: 2 } }}
+									sx={{
+										ml: theme.spacing(8),
+										/* TODO what is this selection? */
+										"& .selected-path": {
+											backgroundColor: theme.palette.tertiary.main,
+										},
+									}}
 								>
 									{item.nested.map((child) => {
 										if (
@@ -525,7 +458,7 @@ function Sidebar() {
 										}
 
 										return (
-											<ListItemButton
+											<MenuItem
 												className={
 													location.pathname.includes(child.path) ? "selected-path" : ""
 												}
@@ -537,51 +470,123 @@ function Sidebar() {
 													} else {
 														navigate(`/${child.path}`);
 													}
+													closePopup();
 												}}
 												sx={{
 													gap: theme.spacing(4),
-													borderRadius: theme.shape.borderRadius,
-													pl: theme.spacing(4),
-													"&::before": {
-														content: `""`,
-														position: "absolute",
-														top: 0,
-														left: "-7px",
-														height: "100%",
-														borderLeft: 1,
-														borderLeftColor: theme.palette.primary.lowContrast,
-													},
-													"&:last-child::before": {
-														height: "50%",
-													},
-													"&::after": {
-														content: `""`,
-														position: "absolute",
-														top: "45%",
-														left: "-8px",
-														height: "3px",
-														width: "3px",
-														borderRadius: "50%",
-														backgroundColor: theme.palette.primary.lowContrast,
-													},
-													"&.selected-path::after": {
-														/* TODO what is this selector doing? */
-														backgroundColor: theme.palette.primary.contrastTextTertiary,
-														transform: "scale(1.2)",
+													opacity: 0.9,
+													/* TODO this has no effect? */
+													"& svg": {
+														"& path": {
+															stroke: theme.palette.primary.contrastTextTertiary,
+															strokeWidth: 1.1,
+														},
 													},
 												}}
 											>
-												<ListItemIcon sx={{ minWidth: 0 }}>{child.icon}</ListItemIcon>
-												<ListItemText>{child.name}</ListItemText>
-											</ListItemButton>
+												{child.icon}
+												{child.name}
+											</MenuItem>
 										);
 									})}
-								</List>
-							</Collapse>
-						</React.Fragment>
-					);
-				})}
-			</List>
+								</Menu>
+							</React.Fragment>
+						) : (
+							/* TODO Do we ever get here? If item does not have a path and collapsed state is false */
+							<React.Fragment key={item.name}>
+								<ListItemButton
+									onClick={() =>
+										setOpen((prev) => ({
+											...Object.fromEntries(Object.keys(prev).map((key) => [key, false])),
+											[item.name]: !prev[item.name],
+										}))
+									}
+									sx={{
+										gap: theme.spacing(4),
+										borderRadius: theme.shape.borderRadius,
+										px: theme.spacing(4),
+									}}
+								>
+									<ListItemIcon sx={{ minWidth: 0 }}>{item.icon}</ListItemIcon>
+									<ListItemText>{item.name}</ListItemText>
+									{open[`${item.name}`] ? <ArrowUp /> : <ArrowDown />}
+								</ListItemButton>
+								<Collapse
+									in={open[`${item.name}`]}
+									timeout="auto"
+								>
+									<List
+										component="div"
+										disablePadding
+										sx={{ pl: theme.spacing(12) }}
+									>
+										{item.nested.map((child) => {
+											if (
+												child.name === "Team" &&
+												authState.user?.role &&
+												!authState.user.role.includes("superadmin")
+											) {
+												return null;
+											}
+
+											return (
+												<ListItemButton
+													className={
+														location.pathname.includes(child.path) ? "selected-path" : ""
+													}
+													key={child.path}
+													onClick={() => {
+														const url = URL_MAP[child.path];
+														if (url) {
+															window.open(url, "_blank", "noreferrer");
+														} else {
+															navigate(`/${child.path}`);
+														}
+													}}
+													sx={{
+														gap: theme.spacing(4),
+														borderRadius: theme.shape.borderRadius,
+														pl: theme.spacing(4),
+														"&::before": {
+															content: `""`,
+															position: "absolute",
+															top: 0,
+															left: "-7px",
+															height: "100%",
+															borderLeft: 1,
+															borderLeftColor: theme.palette.primary.lowContrast,
+														},
+														"&:last-child::before": {
+															height: "50%",
+														},
+														"&::after": {
+															content: `""`,
+															position: "absolute",
+															top: "45%",
+															left: "-8px",
+															height: "3px",
+															width: "3px",
+															borderRadius: "50%",
+															backgroundColor: theme.palette.primary.lowContrast,
+														},
+														"&.selected-path::after": {
+															/* TODO what is this selector doing? */
+															backgroundColor: theme.palette.primary.contrastTextTertiary,
+															transform: "scale(1.2)",
+														},
+													}}
+												>
+													<ListItemIcon sx={{ minWidth: 0 }}>{child.icon}</ListItemIcon>
+													<ListItemText>{child.name}</ListItemText>
+												</ListItemButton>
+											);
+										})}
+									</List>
+								</Collapse>
+							</React.Fragment>
+						);
+					})}
+				</List>
 			</Box>
 			<Divider sx={{ mt: "auto", borderColor: theme.palette.primary.lowContrast }} />
 
