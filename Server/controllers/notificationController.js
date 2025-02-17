@@ -1,13 +1,12 @@
-
 class NotificationController {
     constructor(notificationService) {
         this.notificationService = notificationService;
         this.triggerNotification = this.triggerNotification.bind(this);
     }
 
-    async triggerNotification(req, res, next) { 
+    async triggerNotification(req, res, next) {
         try {
-            const { monitorId, type, config } = req.body;
+            const { monitorId, type, platform, config } = req.body;
     
             const networkResponse = {
                 monitor: { _id: monitorId, name: "Test Monitor", url: "http://www.google.com" },
@@ -15,18 +14,24 @@ class NotificationController {
                 statusChanged: true,
                 prevStatus: true,
             };
-
+    
             if (type === "webhook") {
+                const notification = {
+                    type,
+                    platform,  
+                    config
+                };
+                
                 await this.notificationService.sendWebhookNotification(
                     networkResponse,
-                    config
+                    notification
                 );
             }
-
+    
             return res.success({
                 msg: "Notification sent successfully"
             });
-
+    
         } catch (error) {
             error.service = "NotificationController";
             error.method = "triggerNotification";

@@ -1,4 +1,11 @@
 import mongoose from "mongoose";
+
+const configSchema = mongoose.Schema({
+    webhookUrl: { type: String },
+    botToken: { type: String },
+    chatId: { type: String }
+}, { _id: false });
+
 const NotificationSchema = mongoose.Schema(
 	{
 		monitorId: {
@@ -11,11 +18,9 @@ const NotificationSchema = mongoose.Schema(
 			enum: ["email", "sms", "webhook"],
 		},
 		config: {
-			type: String,  
-			webhookUrl: String,
-			botToken: String,
-			chatId: String
-		  },
+            type: configSchema,
+            default: () => ({})
+        },
 		address: {
 			type: String,
 		},

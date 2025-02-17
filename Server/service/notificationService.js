@@ -33,23 +33,24 @@ class NotificationService {
 		return null;
 	}
 
-	async sendWebhookNotification(networkResponse, config) {
+	async sendWebhookNotification(networkResponse, notification) {
 		const { monitor, status } = networkResponse;
-		const { type, webhookUrl, botToken, chatId } = config;
+		const { platform } = notification;  // Use platform instead of type for webhook formatting
+		const { webhookUrl, botToken, chatId } = notification.config;
 		let url = webhookUrl;
 	
-		const message = this.formatNotificationMessage(monitor, status, type, chatId);
+		const message = this.formatNotificationMessage(monitor, status, platform, chatId);
 		if (message === null) {
 			this.logger.warn({
-				message: `Unsupported webhook type: ${type}`,
+				message: `Unsupported webhook platform: ${platform}`,
 				service: this.SERVICE_NAME,
 				method: 'sendWebhookNotification',
-				type
+				platform
 			});
 			return false;
 		}
 	
-		if (type === 'telegram') {
+		if (platform === 'telegram') {
 			if (!botToken || !chatId) {
 				return false;
 			}
@@ -57,17 +58,17 @@ class NotificationService {
 		}
 	
 		try {
-			const response = await this.networkService.requestWebhook(type, url, message);
+			const response = await this.networkService.requestWebhook(platform, url, message);
 			return response.status;
 		} catch (error) {
 			this.logger.error({
-				message: `Error sending ${type} notification`,
+				message: `Error sending ${platform} notification`,
 				service: this.SERVICE_NAME,
 				method: 'sendWebhookNotification',
 				error: error.message,
 				stack: error.stack,
 				url,
-				type,
+				platform,
 				requestPayload: message
 			});
 			return false;
@@ -115,7 +116,7 @@ class NotificationService {
 
 	async handleStatusNotifications(networkResponse) {
 		try {
-			//If status hasn't changed, we're done
+			// If status hasn't changed, we're done
 			if (networkResponse.statusChanged === false) return false;
 			// if prevStatus is undefined, monitor is resuming, we're done
 			if (networkResponse.prevStatus === undefined) return false;
@@ -124,13 +125,12 @@ class NotificationService {
 	
 			for (const notification of notifications) {
 				if (notification.type === "email") {
-					this.sendEmail(networkResponse, notification.address);
+					await this.sendEmail(networkResponse, notification.address);
 				} else if (notification.type === "webhook") {
-					this.sendWebhookNotification(networkResponse, notification.address, notification.type);
-				
+					await this.sendWebhookNotification(networkResponse, notification);
+				}
 				// Handle other types of notifications here
 			}
-		}
 			return true;
 		} catch (error) {
 			this.logger.warn({

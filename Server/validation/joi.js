@@ -476,7 +476,7 @@ const imageValidation = joi
 	});
 
 	const telegramWebhookConfigValidation = joi.object({
-		type: joi.string().valid('telegram').required(),
+		webhookUrl: joi.string().uri().optional(),
 		botToken: joi.string().required().messages({
 			'string.empty': 'Telegram bot token is required',
 			'any.required': 'Telegram bot token is required'
@@ -488,21 +488,23 @@ const imageValidation = joi
 	});
 	
 	const discordWebhookConfigValidation = joi.object({
-		type: joi.string().valid('discord').required(),
 		webhookUrl: joi.string().uri().required().messages({
 			'string.empty': 'Discord webhook URL is required',
 			'string.uri': 'Discord webhook URL must be a valid URL',
 			'any.required': 'Discord webhook URL is required'
-		})
+		}),
+		botToken: joi.string().optional(),
+		chatId: joi.string().optional()
 	});
 	
 	const slackWebhookConfigValidation = joi.object({
-		type: joi.string().valid('slack').required(),
 		webhookUrl: joi.string().uri().required().messages({
 			'string.empty': 'Slack webhook URL is required',
 			'string.uri': 'Slack webhook URL must be a valid URL',
 			'any.required': 'Slack webhook URL is required'
-		})
+		}),
+		botToken: joi.string().optional(),
+		chatId: joi.string().optional()
 	});
 	
 	const triggerNotificationBodyValidation = joi.object({
@@ -515,16 +517,30 @@ const imageValidation = joi
 			'any.required': 'Notification type is required',
 			'any.only': 'Notification type must be webhook'
 		}),
+		
+		platform: joi.string().valid('telegram', 'discord', 'slack').required().messages({
+			'string.empty': 'Platform type is required',
+			'any.required': 'Platform type is required',
+			'any.only': 'Platform must be telegram, discord, or slack'
+		}),
 		config: joi.alternatives()
-			.conditional('type', {
-				is: 'webhook',
-				then: joi.alternatives().try(
-					telegramWebhookConfigValidation,
-					discordWebhookConfigValidation,
-					slackWebhookConfigValidation
-				).required().messages({
-					'any.required': 'Webhook configuration is required'
-				})
+			.conditional('platform', [
+				{
+					is: 'telegram',
+					then: telegramWebhookConfigValidation
+				},
+				{
+					is: 'discord',
+					then: discordWebhookConfigValidation
+				},
+				{
+					is: 'slack',
+					then: slackWebhookConfigValidation
+				}
+			])
+			.required()
+			.messages({
+				'any.required': 'Webhook configuration is required'
 			})
 	});
 
