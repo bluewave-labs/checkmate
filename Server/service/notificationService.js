@@ -1,5 +1,12 @@
 const SERVICE_NAME = "NotificationService";
 const TELEGRAM_API_BASE_URL = "https://api.telegram.org/bot";
+const PLATFORM_TYPES = ['telegram', 'slack', 'discord'];
+
+const MESSAGE_FORMATTERS = {
+    telegram: (messageText, chatId) => ({ chat_id: chatId, text: messageText }),
+    slack: (messageText) => ({ text: messageText }),
+    discord: (messageText) => ({ content: messageText })
+};
 
 class NotificationService {
 	static SERVICE_NAME = SERVICE_NAME;
@@ -39,16 +46,11 @@ class NotificationService {
             monitor.url
         );
 
-        if (platform === 'telegram') {
-            return { chat_id: chatId, text: messageText };
+        if (!PLATFORM_TYPES.includes(platform)) {
+            return undefined;
         }
-        if (platform === 'slack') {
-            return { text: messageText };
-        }
-        if (platform === 'discord') {
-            return { content: messageText };
-        }
-        return undefined;
+
+        return MESSAGE_FORMATTERS[platform](messageText, chatId);
     }
 
 	/**
