@@ -49,7 +49,6 @@ import ping from "ping";
 import http from "http";
 import Docker from "dockerode";
 import net from "net";
-import ngrok from "ngrok";
 // Email service and dependencies
 import EmailService from "./service/emailService.js";
 import nodemailer from "nodemailer";
@@ -74,9 +73,9 @@ import MongoDB from "./db/mongo/MongoDB.js";
 
 import IORedis from "ioredis";
 
-import TranslationService from './service/translationService.js';
-import languageMiddleware from './middleware/languageMiddleware.js';
-import StringService from './service/stringService.js';
+import TranslationService from "./service/translationService.js";
+import languageMiddleware from "./middleware/languageMiddleware.js";
+import StringService from "./service/stringService.js";
 
 const SERVICE_NAME = "Server";
 const SHUTDOWN_TIMEOUT = 1000;
@@ -88,7 +87,6 @@ const openApiSpec = JSON.parse(
 );
 
 let server;
-let ngrokUrl;
 
 const PORT = 5000;
 
@@ -136,29 +134,6 @@ const shutdown = async () => {
 // Need to wrap server setup in a function to handle async nature of JobQueue
 const startApp = async () => {
 	const app = express();
-	if (process.env.NODE_ENV === "development") {
-		try {
-			ngrokUrl = await ngrok.connect({
-				proto: "http",
-				addr: PORT,
-				authtoken: process.env.NGROK_AUTH_TOKEN,
-				api_addr: false,
-			});
-			process.env.NGROK_URL = ngrokUrl;
-			logger.info({
-				message: `ngrok url: ${ngrokUrl}`,
-				service: SERVICE_NAME,
-				method: "startApp",
-			});
-		} catch (error) {
-			logger.error({
-				message: `Error connecting to ngrok`,
-				service: SERVICE_NAME,
-				method: "startApp",
-				stack: error.stack,
-			});
-		}
-	}
 
 	// Create and Register Primary services
 	const translationService = new TranslationService(logger);
@@ -170,7 +145,15 @@ const startApp = async () => {
 	await db.connect();
 
 	// Create services
-	const networkService = new NetworkService(axios, ping, logger, http, Docker, net, stringService);
+	const networkService = new NetworkService(
+		axios,
+		ping,
+		logger,
+		http,
+		Docker,
+		net,
+		stringService
+	);
 	const settingsService = new SettingsService(AppSettings);
 	await settingsService.loadSettings();
 	const emailService = new EmailService(
@@ -184,7 +167,6 @@ const startApp = async () => {
 	);
 	const statusService = new StatusService(db, logger);
 	const notificationService = new NotificationService(emailService, db, logger);
-
 
 	const jobQueue = new JobQueue(
 		db,
