@@ -187,7 +187,7 @@ const startApp = async () => {
 		logger
 	);
 	const statusService = new StatusService(db, logger);
-	const notificationService = new NotificationService(emailService, db, logger, networkService);
+	const notificationService = new NotificationService(emailService, db, logger, networkService, stringService);
 
 
 	const jobQueue = new JobQueue(
@@ -274,7 +274,8 @@ const startApp = async () => {
 	);
 
 	const notificationController = new NotificationController(
-		ServiceRegistry.get(NotificationService.SERVICE_NAME)
+		ServiceRegistry.get(NotificationService.SERVICE_NAME),
+		ServiceRegistry.get(StringService.SERVICE_NAME)
 	);
 
 	const distributedUptimeController = new DistributedUptimeController(

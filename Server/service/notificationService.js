@@ -11,12 +11,13 @@ class NotificationService {
 	 * @param {Object} logger - The logger instance for logging activities.
 	 * @param {Object} networkService - The network service for sending webhook notifications.
 	 */
-	constructor(emailService, db, logger, networkService) {
+	constructor(emailService, db, logger, networkService, stringService) {
 		this.SERVICE_NAME = SERVICE_NAME;
 		this.emailService = emailService;
 		this.db = db;
 		this.logger = logger;
 		this.networkService = networkService;
+		this.stringService = stringService;
 	}
 
 	/**
@@ -32,19 +33,23 @@ class NotificationService {
  */
 
 	formatNotificationMessage(monitor, status, platform, chatId) {
-		const messageText = `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`;
-	
-		if (platform === 'telegram') {
-			return { chat_id: chatId, text: messageText };
-		}
-		if (platform === 'slack') {
-			return { text: messageText };
-		}
-		if (platform === 'discord') {
-			return { content: messageText };
-		}
-		return null;
-	}
+        const messageText = this.stringService.getMonitorStatus(
+            monitor.name,
+            status,
+            monitor.url
+        );
+
+        if (platform === 'telegram') {
+            return { chat_id: chatId, text: messageText };
+        }
+        if (platform === 'slack') {
+            return { text: messageText };
+        }
+        if (platform === 'discord') {
+            return { content: messageText };
+        }
+        return null;
+    }
 
 	/**
  * Sends a webhook notification to a specified platform.
@@ -62,46 +67,46 @@ class NotificationService {
  */
 
 	async sendWebhookNotification(networkResponse, notification) {
-		const { monitor, status } = networkResponse;
-		const { platform } = notification;  
-		const { webhookUrl, botToken, chatId } = notification.config;
-		let url = webhookUrl;
-	
-		const message = this.formatNotificationMessage(monitor, status, platform, chatId);
-		if (message === null) {
-			this.logger.warn({
-				message: `Unsupported webhook platform: ${platform}`,
-				service: this.SERVICE_NAME,
-				method: 'sendWebhookNotification',
-				platform
-			});
-			return false;
-		}
-	
-		if (platform === 'telegram') {
-			if (!botToken || !chatId) {
-				return false;
-			}
-			url = `${TELEGRAM_API_BASE_URL}${botToken}/sendMessage`;
-		}
-	
-		try {
-			const response = await this.networkService.requestWebhook(platform, url, message);
-			return response.status;
-		} catch (error) {
-			this.logger.error({
-				message: `Error sending ${platform} notification`,
-				service: this.SERVICE_NAME,
-				method: 'sendWebhookNotification',
-				error: error.message,
-				stack: error.stack,
-				url,
-				platform,
-				requestPayload: message
-			});
-			return false;
-		}
-	}
+        const { monitor, status } = networkResponse;
+        const { platform } = notification;
+        const { webhookUrl, botToken, chatId } = notification.config;
+        let url = webhookUrl;
+
+        const message = this.formatNotificationMessage(monitor, status, platform, chatId);
+        if (message === null) {
+            this.logger.warn({
+                message: this.stringService.getWebhookUnsupportedPlatform(platform),
+                service: this.SERVICE_NAME,
+                method: 'sendWebhookNotification',
+                platform
+            });
+            return false;
+        }
+
+        if (platform === 'telegram') {
+            if (!botToken || !chatId) {
+                return false;
+            }
+            url = `${TELEGRAM_API_BASE_URL}${botToken}/sendMessage`;
+        }
+
+        try {
+            const response = await this.networkService.requestWebhook(platform, url, message);
+            return response.status;
+        } catch (error) {
+            this.logger.error({
+                message: this.stringService.getWebhookSendError(platform),
+                service: this.SERVICE_NAME,
+                method: 'sendWebhookNotification',
+                error: error.message,
+                stack: error.stack,
+                url,
+                platform,
+                requestPayload: message
+            });
+            return false;
+        }
+    }
 		
 	/**
 	 * Sends an email notification for hardware infrastructure alerts

@@ -9,8 +9,9 @@ import { handleError, handleValidationError } from './controllerUtils.js';
 const SERVICE_NAME = "NotificationController";
 
 class NotificationController {
-    constructor(notificationService) {
+    constructor(notificationService, stringService) {
         this.notificationService = notificationService;
+        this.stringService = stringService;
         this.triggerNotification = this.triggerNotification.bind(this);
     }
 
