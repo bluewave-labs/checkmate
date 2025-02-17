@@ -393,9 +393,7 @@ class NetworkService {
 	async requestDistributedHttp(job) {
 		try {
 			const monitor = job.data;
-			const CALLBACK_URL = process.env.NGROK_URL
-				? process.env.NGROK_URL
-				: process.env.CALLBACK_URL;
+			const CALLBACK_URL = process.env.CALLBACK_URL;
 
 			const response = await this.axios.post(
 				UPROCK_ENDPOINT,
