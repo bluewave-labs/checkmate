@@ -72,10 +72,9 @@ class NotificationService {
         const { monitor, status } = networkResponse;
         const { platform } = notification;
         const { webhookUrl, botToken, chatId } = notification.config;
-        let url = webhookUrl;
 
-        const message = this.formatNotificationMessage(monitor, status, platform, chatId);
-        if (message === null) {
+        // Early return if platform is not supported
+        if (!PLATFORM_TYPES.includes(platform)) {
             this.logger.warn({
                 message: this.stringService.getWebhookUnsupportedPlatform(platform),
                 service: this.SERVICE_NAME,
@@ -85,12 +84,24 @@ class NotificationService {
             return false;
         }
 
+        // Early return for telegram if required fields are missing
+        if (platform === 'telegram' && (!botToken || !chatId)) {
+            this.logger.warn({
+                message: 'Missing required fields for Telegram notification',
+                service: this.SERVICE_NAME,
+                method: 'sendWebhookNotification',
+                platform
+            });
+            return false;
+        }
+
+        let url = webhookUrl;
         if (platform === 'telegram') {
-            if (!botToken || !chatId) {
-                return false;
-            }
             url = `${TELEGRAM_API_BASE_URL}${botToken}/sendMessage`;
         }
+
+        // Now that we know the platform is valid, format the message
+        const message = this.formatNotificationMessage(monitor, status, platform, chatId);
 
         try {
             const response = await this.networkService.requestWebhook(platform, url, message);
@@ -108,7 +119,7 @@ class NotificationService {
             });
             return false;
         }
-    }
+   	}
 		
 	/**
 	 * Sends an email notification for hardware infrastructure alerts
