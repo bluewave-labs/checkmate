@@ -9,6 +9,7 @@ class NotificationService {
 	 * @param {Object} emailService - The email service used for sending notifications.
 	 * @param {Object} db - The database instance for storing notification data.
 	 * @param {Object} logger - The logger instance for logging activities.
+	 * @param {Object} networkService - The network service for sending webhook notifications.
 	 */
 	constructor(emailService, db, logger, networkService) {
 		this.SERVICE_NAME = SERVICE_NAME;
@@ -17,6 +18,18 @@ class NotificationService {
 		this.logger = logger;
 		this.networkService = networkService;
 	}
+
+	/**
+ * Formats a notification message based on the monitor status and platform.
+ *
+ * @param {Object} monitor - The monitor object.
+ * @param {string} monitor.name - The name of the monitor.
+ * @param {string} monitor.url - The URL of the monitor.
+ * @param {boolean} status - The current status of the monitor (true for up, false for down).
+ * @param {string} platform - The notification platform (e.g., "telegram", "slack", "discord").
+ * @param {string} [chatId] - The chat ID for platforms that require it (e.g., Telegram).
+ * @returns {Object|null} The formatted message object for the specified platform, or null if the platform is unsupported.
+ */
 
 	formatNotificationMessage(monitor, status, platform, chatId) {
 		const messageText = `Monitor ${monitor.name} is ${status ? "up" : "down"}. URL: ${monitor.url}`;
@@ -33,9 +46,24 @@ class NotificationService {
 		return null;
 	}
 
+	/**
+ * Sends a webhook notification to a specified platform.
+ *
+ * @param {Object} networkResponse - The response object from the network.
+ * @param {Object} networkResponse.monitor - The monitor object.
+ * @param {boolean} networkResponse.status - The monitor's status (true for up, false for down).
+ * @param {Object} notification - The notification settings.
+ * @param {string} notification.platform - The target platform ("telegram", "slack", "discord").
+ * @param {Object} notification.config - The configuration object for the webhook.
+ * @param {string} notification.config.webhookUrl - The webhook URL for the platform.
+ * @param {string} [notification.config.botToken] - The bot token for Telegram notifications.
+ * @param {string} [notification.config.chatId] - The chat ID for Telegram notifications.
+ * @returns {Promise<boolean>} A promise that resolves to true if the notification was sent successfully, otherwise false.
+ */
+
 	async sendWebhookNotification(networkResponse, notification) {
 		const { monitor, status } = networkResponse;
-		const { platform } = notification;  // Use platform instead of type for webhook formatting
+		const { platform } = notification;  
 		const { webhookUrl, botToken, chatId } = notification.config;
 		let url = webhookUrl;
 	
