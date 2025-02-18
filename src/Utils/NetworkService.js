@@ -28,9 +28,12 @@ class NetworkService {
 			(config) => {
 				const currentLanguage = i18next.language || "en";
 
+				const { authToken } = store.getState().auth;
+
 				config.headers = {
-					...config.headers,
+					Authorization: `Bearer ${authToken}`,
 					"Accept-Language": currentLanguage,
+					...config.headers,
 				};
 
 				return config;
