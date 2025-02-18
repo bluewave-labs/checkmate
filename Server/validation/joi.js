@@ -475,39 +475,53 @@ const imageValidation = joi
 		"any.required": "Image file is required",
 	});
 
-	const telegramWebhookConfigValidation = joi.object({
-		webhookUrl: joi.string().uri().optional(),
-		botToken: joi.string().required().messages({
-			'string.empty': 'Telegram bot token is required',
-			'any.required': 'Telegram bot token is required'
-		}),
-		chatId: joi.string().required().messages({
-			'string.empty': 'Telegram chat ID is required',
-			'any.required': 'Telegram chat ID is required'
-		})
-	});
+	const webhookConfigValidation = joi.object({
+		webhookUrl: joi.string().uri()
+		  .when('$platform', {
+			switch: [
+			  {
+				is: 'telegram',
+				then: joi.optional()
+			  },
+			  {
+				is: 'discord',
+				then: joi.required().messages({
+				  'string.empty': 'Discord webhook URL is required',
+				  'string.uri': 'Discord webhook URL must be a valid URL',
+				  'any.required': 'Discord webhook URL is required'
+				})
+			  },
+			  {
+				is: 'slack',
+				then: joi.required().messages({
+				  'string.empty': 'Slack webhook URL is required',
+				  'string.uri': 'Slack webhook URL must be a valid URL',
+				  'any.required': 'Slack webhook URL is required'
+				})
+			  }
+			]
+		  }),
+		botToken: joi.string()
+		  .when('$platform', {
+			is: 'telegram',
+			then: joi.required().messages({
+			  'string.empty': 'Telegram bot token is required',
+			  'any.required': 'Telegram bot token is required'
+			}),
+			otherwise: joi.optional()
+		  }),
+		chatId: joi.string()
+		  .when('$platform', {
+			is: 'telegram',
+			then: joi.required().messages({
+			  'string.empty': 'Telegram chat ID is required',
+			  'any.required': 'Telegram chat ID is required'
+			}),
+			otherwise: joi.optional()
+		  })
+	  }).required();
 	
-	const discordWebhookConfigValidation = joi.object({
-		webhookUrl: joi.string().uri().required().messages({
-			'string.empty': 'Discord webhook URL is required',
-			'string.uri': 'Discord webhook URL must be a valid URL',
-			'any.required': 'Discord webhook URL is required'
-		}),
-		botToken: joi.string().optional(),
-		chatId: joi.string().optional()
-	});
-	
-	const slackWebhookConfigValidation = joi.object({
-		webhookUrl: joi.string().uri().required().messages({
-			'string.empty': 'Slack webhook URL is required',
-			'string.uri': 'Slack webhook URL must be a valid URL',
-			'any.required': 'Slack webhook URL is required'
-		}),
-		botToken: joi.string().optional(),
-		chatId: joi.string().optional()
-	});
-	
-	const triggerNotificationBodyValidation = joi.object({
+	  const triggerNotificationBodyValidation = joi.object({
 		monitorId: joi.string().required().messages({
 			'string.empty': 'Monitor ID is required',
 			'any.required': 'Monitor ID is required'
@@ -517,31 +531,14 @@ const imageValidation = joi
 			'any.required': 'Notification type is required',
 			'any.only': 'Notification type must be webhook'
 		}),
-		
 		platform: joi.string().valid('telegram', 'discord', 'slack').required().messages({
 			'string.empty': 'Platform type is required',
 			'any.required': 'Platform type is required',
 			'any.only': 'Platform must be telegram, discord, or slack'
 		}),
-		config: joi.alternatives()
-			.conditional('platform', [
-				{
-					is: 'telegram',
-					then: telegramWebhookConfigValidation
-				},
-				{
-					is: 'discord',
-					then: discordWebhookConfigValidation
-				},
-				{
-					is: 'slack',
-					then: slackWebhookConfigValidation
-				}
-			])
-			.required()
-			.messages({
-				'any.required': 'Webhook configuration is required'
-			})
+		config: webhookConfigValidation.required().messages({
+			'any.required': 'Webhook configuration is required'
+		})
 	});
 
 export {
@@ -604,7 +601,5 @@ export {
 	getStatusPageQueryValidation,
 	imageValidation, 
 	triggerNotificationBodyValidation,
-    telegramWebhookConfigValidation,
-    discordWebhookConfigValidation,
-    slackWebhookConfigValidation
+    webhookConfigValidation,
 };

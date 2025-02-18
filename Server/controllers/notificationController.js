@@ -1,8 +1,5 @@
 import {
     triggerNotificationBodyValidation,
-    telegramWebhookConfigValidation,
-    discordWebhookConfigValidation,
-    slackWebhookConfigValidation
 } from '../validation/joi.js';
 import { handleError, handleValidationError } from './controllerUtils.js';
 
