@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { networkService } from "../../../../main";
 import { createToast } from "../../../../Utils/toastUtils";
 
-export const useMonitorFetch = ({ authToken, monitorId, isCreate }) => {
+export const useMonitorFetch = ({ monitorId, isCreate }) => {
 	const [networkError, setNetworkError] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [monitor, setMonitor] = useState(undefined);
@@ -12,7 +12,6 @@ export const useMonitorFetch = ({ authToken, monitorId, isCreate }) => {
 			try {
 				if (isCreate) return;
 				const res = await networkService.getUptimeDetailsById({
-					authToken: authToken,
 					monitorId: monitorId,
 					normalize: true,
 				});
@@ -25,7 +24,7 @@ export const useMonitorFetch = ({ authToken, monitorId, isCreate }) => {
 			}
 		};
 		fetchMonitors();
-	}, [authToken, monitorId, isCreate]);
+	}, [monitorId, isCreate]);
 	return [monitor, isLoading, networkError];
 };
 

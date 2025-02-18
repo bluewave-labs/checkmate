@@ -7,13 +7,10 @@ const useHardwareMonitorsFetch = ({ monitorId, dateRange }) => {
 	const [networkError, setNetworkError] = useState(false);
 	const [monitor, setMonitor] = useState(undefined);
 
-	const { authToken } = useSelector((state) => state.auth);
-
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const response = await networkService.getHardwareDetailsByMonitorId({
-					authToken: authToken,
 					monitorId: monitorId,
 					dateRange: dateRange,
 				});
@@ -26,7 +23,7 @@ const useHardwareMonitorsFetch = ({ monitorId, dateRange }) => {
 			}
 		};
 		fetchData();
-	}, [monitorId, dateRange, authToken]);
+	}, [monitorId, dateRange]);
 
 	return {
 		isLoading,

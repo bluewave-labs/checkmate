@@ -53,7 +53,6 @@ const useSubscribeToDetails = ({ monitorId, isPublic, isPublished, dateRange }) 
 	const [monitor, setMonitor] = useState(undefined);
 	const [lastUpdateTrigger, setLastUpdateTrigger] = useState(0);
 	const [devices, setDevices] = useState(Array.from({ length: 5 }, getRandomDevice));
-	const authToken = useSelector((state) => state.auth.token);
 
 	const prevDateRangeRef = useRef(dateRange);
 
@@ -68,7 +67,6 @@ const useSubscribeToDetails = ({ monitorId, isPublic, isPublished, dateRange }) 
 
 		try {
 			const cleanup = networkService.subscribeToDistributedUptimeDetails({
-				authToken,
 				monitorId,
 				dateRange: dateRange,
 				normalize: true,
@@ -105,7 +103,6 @@ const useSubscribeToDetails = ({ monitorId, isPublic, isPublished, dateRange }) 
 			setNetworkError(true);
 		}
 	}, [
-		authToken,
 		dateRange,
 		monitorId,
 		retryCount,

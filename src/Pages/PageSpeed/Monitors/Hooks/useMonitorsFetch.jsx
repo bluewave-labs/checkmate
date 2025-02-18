@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { networkService } from "../../../../main";
 import { createToast } from "../../../../Utils/toastUtils";
 
-const useMonitorsFetch = ({ authToken, teamId }) => {
+const useMonitorsFetch = ({ teamId }) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [monitors, setMonitors] = useState([]);
 	const [summary, setSummary] = useState({});
@@ -13,7 +13,6 @@ const useMonitorsFetch = ({ authToken, teamId }) => {
 			try {
 				setIsLoading(true);
 				const res = await networkService.getMonitorsByTeamId({
-					authToken: authToken,
 					teamId: teamId,
 					limit: 10,
 					types: ["pagespeed"],
@@ -38,7 +37,7 @@ const useMonitorsFetch = ({ authToken, teamId }) => {
 		};
 
 		fetchMonitors();
-	}, [authToken, teamId]);
+	}, [teamId]);
 	return { isLoading, monitors, summary, networkError };
 };
 

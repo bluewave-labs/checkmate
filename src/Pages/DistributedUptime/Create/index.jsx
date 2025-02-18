@@ -48,7 +48,7 @@ const CreateDistributedUptime = () => {
 	];
 
 	// Redux state
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	// Local state
 	const [https, setHttps] = useState(true);
@@ -68,7 +68,6 @@ const CreateDistributedUptime = () => {
 		useCreateDistributedUptimeMonitor({ isCreate, monitorId });
 
 	const [monitor, monitorIsLoading, monitorNetworkError] = useMonitorFetch({
-		authToken,
 		monitorId,
 		isCreate,
 	});

@@ -54,7 +54,7 @@ const CreatePageSpeed = () => {
 
 	const [https, setHttps] = useState(true);
 	const [errors, setErrors] = useState({});
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 	const { isLoading } = useSelector((state) => state.pageSpeedMonitors);
 
 	// Setup
@@ -87,7 +87,7 @@ const CreatePageSpeed = () => {
 		}
 
 		const checkEndpointAction = await dispatch(
-			checkEndpointResolution({ authToken, monitorURL: form.url })
+			checkEndpointResolution({ monitorURL: form.url })
 		);
 
 		if (checkEndpointAction.meta.requestStatus === "rejected") {
@@ -106,7 +106,7 @@ const CreatePageSpeed = () => {
 			notifications: monitor.notifications,
 		};
 
-		const action = await dispatch(createPageSpeed({ authToken, monitor: form }));
+		const action = await dispatch(createPageSpeed({ monitor: form }));
 		if (action.meta.requestStatus === "fulfilled") {
 			createToast({ body: "Monitor created successfully!" });
 			navigate("/pagespeed");

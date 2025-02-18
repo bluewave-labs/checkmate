@@ -9,12 +9,10 @@ const useStatusPageFetchByUrl = ({ url }) => {
 	const [statusPage, setStatusPage] = useState(undefined);
 	const [monitorId, setMonitorId] = useState(undefined);
 	const [isPublished, setIsPublished] = useState(false);
-	const { authToken } = useSelector((state) => state.auth);
 	useEffect(() => {
 		const fetchStatusPageByUrl = async () => {
 			try {
 				const response = await networkService.getStatusPageByUrl({
-					authToken,
 					url,
 					type: "distributed",
 				});
@@ -33,7 +31,7 @@ const useStatusPageFetchByUrl = ({ url }) => {
 			}
 		};
 		fetchStatusPageByUrl();
-	}, [authToken, url]);
+	}, [url]);
 
 	return [isLoading, networkError, statusPage, monitorId, isPublished];
 };

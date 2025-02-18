@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { createToast } from "../../../../Utils/toastUtils";
 
 const useStatusPagesFetch = () => {
-	const { authToken, user } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [networkError, setNetworkError] = useState(false);
@@ -14,7 +14,6 @@ const useStatusPagesFetch = () => {
 		const fetchStatusPages = async () => {
 			try {
 				const res = await networkService.getStatusPagesByTeamId({
-					authToken,
 					teamId: user.teamId,
 				});
 				setStatusPages(res?.data?.data);
@@ -28,7 +27,7 @@ const useStatusPagesFetch = () => {
 			}
 		};
 		fetchStatusPages();
-	}, [authToken, user]);
+	}, [user]);
 	return [isLoading, networkError, statusPages];
 };
 

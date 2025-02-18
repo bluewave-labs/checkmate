@@ -5,11 +5,10 @@ import { createToast } from "../../../../Utils/toastUtils";
 
 const useDeleteMonitor = ({ monitorId }) => {
 	const [isLoading, setIsLoading] = useState(false);
-	const { authToken } = useSelector((state) => state.auth);
 	const deleteMonitor = async () => {
 		try {
 			setIsLoading(true);
-			await networkService.deleteMonitorById({ authToken, monitorId });
+			await networkService.deleteMonitorById({ monitorId });
 			return true;
 		} catch (error) {
 			createToast({

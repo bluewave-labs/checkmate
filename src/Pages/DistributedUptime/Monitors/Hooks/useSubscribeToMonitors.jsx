@@ -7,7 +7,7 @@ import { createToast } from "../../../../Utils/toastUtils";
 
 const useSubscribeToMonitors = () => {
 	// Redux
-	const { authToken, user } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	// Local state
 	const [isLoading, setIsLoading] = useState(true);
@@ -22,7 +22,6 @@ const useSubscribeToMonitors = () => {
 	useEffect(() => {
 		try {
 			const cleanup = networkService.subscribeToDistributedUptimeMonitors({
-				authToken: authToken,
 				teamId: user.teamId,
 				limit: 25,
 				types: ["distributed_http"],
@@ -57,7 +56,7 @@ const useSubscribeToMonitors = () => {
 			});
 			setNetworkError(true);
 		}
-	}, [authToken, user, getMonitorWithPercentage, theme]);
+	}, [user, getMonitorWithPercentage, theme]);
 	return [isLoading, networkError, monitors, monitorsSummary, filteredMonitors];
 };
 export { useSubscribeToMonitors };

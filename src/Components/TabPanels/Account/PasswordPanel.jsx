@@ -30,7 +30,7 @@ const PasswordPanel = () => {
 	const SPACING_GAP = theme.spacing(12);
 
 	//redux state
-	const { authToken, isLoading } = useSelector((state) => state.auth);
+	const { isLoading } = useSelector((state) => state.auth);
 
 	const idToName = {
 		"edit-current-password": "password",
@@ -89,7 +89,7 @@ const PasswordPanel = () => {
 			});
 			setErrors(newErrors);
 		} else {
-			const action = await dispatch(update({ authToken, localData }));
+			const action = await dispatch(update({ localData }));
 			if (action.payload.success) {
 				createToast({
 					body: "Your password was changed successfully.",

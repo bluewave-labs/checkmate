@@ -23,7 +23,6 @@ const TeamPanel = () => {
 
 	const SPACING_GAP = theme.spacing(12);
 
-	const { authToken } = useSelector((state) => state.auth);
 	const [toInvite, setToInvite] = useState({
 		email: "",
 		role: ["0"],
@@ -63,9 +62,7 @@ const TeamPanel = () => {
 	useEffect(() => {
 		const fetchTeam = async () => {
 			try {
-				const response = await networkService.getAllUsers({
-					authToken: authToken,
-				});
+				const response = await networkService.getAllUsers();
 				setMembers(response.data.data);
 			} catch (error) {
 				createToast({
@@ -75,7 +72,7 @@ const TeamPanel = () => {
 		};
 
 		fetchTeam();
-	}, [authToken]);
+	}, []);
 
 	useEffect(() => {
 		const ROLE_MAP = {
@@ -150,7 +147,6 @@ const TeamPanel = () => {
 
 		try {
 			await networkService.requestInvitationToken({
-				authToken: authToken,
 				email: toInvite.email,
 				role: toInvite.role,
 			});

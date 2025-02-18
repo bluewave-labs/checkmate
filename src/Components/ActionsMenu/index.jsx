@@ -25,8 +25,6 @@ const ActionsMenu = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 	const theme = useTheme();
-	const authState = useSelector((state) => state.auth);
-	const authToken = authState.authToken;
 	const { isLoading } = useSelector((state) => state.uptimeMonitors);
 
 	const handleRemove = async (event) => {
@@ -34,7 +32,7 @@ const ActionsMenu = ({
 		event.stopPropagation();
 		let monitor = { _id: actions.id };
 		const action = await dispatch(
-			deleteUptimeMonitor({ authToken: authState.authToken, monitor })
+			deleteUptimeMonitor({ monitor })
 		);
 		if (action.meta.requestStatus === "fulfilled") {
 			setIsOpen(false); // close modal
@@ -49,7 +47,7 @@ const ActionsMenu = ({
 		try {
 			setIsLoading(true);
 			const action = await dispatch(
-				pauseUptimeMonitor({ authToken, monitorId: monitor._id })
+				pauseUptimeMonitor({ monitorId: monitor._id })
 			);
 			if (pauseUptimeMonitor.fulfilled.match(action)) {
 				const state = action?.payload?.data.isActive === false ? "paused" : "resumed";

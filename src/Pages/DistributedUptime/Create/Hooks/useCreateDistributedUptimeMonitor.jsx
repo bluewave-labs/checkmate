@@ -4,17 +4,15 @@ import { useSelector } from "react-redux";
 import { createToast } from "../../../../Utils/toastUtils";
 
 const useCreateDistributedUptimeMonitor = ({ isCreate, monitorId }) => {
-	const { authToken, user } = useSelector((state) => state.auth);
-
 	const [isLoading, setIsLoading] = useState(false);
 	const [networkError, setNetworkError] = useState(false);
 	const createDistributedUptimeMonitor = async ({ form }) => {
 		setIsLoading(true);
 		try {
 			if (isCreate) {
-				await networkService.createMonitor({ authToken, monitor: form });
+				await networkService.createMonitor({ monitor: form });
 			} else {
-				await networkService.updateMonitor({ authToken, monitor: form, monitorId });
+				await networkService.updateMonitor({ monitor: form, monitorId });
 			}
 
 			return true;

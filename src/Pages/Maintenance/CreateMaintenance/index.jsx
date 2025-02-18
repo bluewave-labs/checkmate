@@ -113,7 +113,7 @@ const CreateMaintenance = () => {
 	const { maintenanceWindowId } = useParams();
 	const navigate = useNavigate();
 	const theme = useTheme();
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 	const [monitors, setMonitors] = useState([]);
 	const [search, setSearch] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
@@ -133,7 +133,6 @@ const CreateMaintenance = () => {
 			setIsLoading(true);
 			try {
 				const response = await networkService.getMonitorsByTeamId({
-					authToken: authToken,
 					teamId: user.teamId,
 					limit: null,
 					types: ["http", "ping", "pagespeed"],
@@ -146,7 +145,6 @@ const CreateMaintenance = () => {
 				}
 
 				const res = await networkService.getMaintenanceWindowById({
-					authToken: authToken,
 					maintenanceWindowId: maintenanceWindowId,
 				});
 				const maintenanceWindow = res.data.data;
@@ -174,7 +172,7 @@ const CreateMaintenance = () => {
 			}
 		};
 		fetchMonitors();
-	}, [authToken, user]);
+	}, [user]);
 
 	const handleSearch = (value) => {
 		setSearch(value);
@@ -239,7 +237,7 @@ const CreateMaintenance = () => {
 			submit.expiry = end;
 		}
 
-		const requestConfig = { authToken: authToken, maintenanceWindow: submit };
+		const requestConfig = { maintenanceWindow: submit };
 
 		if (maintenanceWindowId !== undefined) {
 			requestConfig.maintenanceWindowId = maintenanceWindowId;

@@ -5,7 +5,6 @@ import { formatDateWithTz } from "../../../../Utils/timeUtils";
 
 const useCertificateFetch = ({
 	monitor,
-	authToken,
 	monitorId,
 	certificateDateFormat,
 	uiTimezone,
@@ -22,7 +21,6 @@ const useCertificateFetch = ({
 			try {
 				setIsLoading(true);
 				const res = await networkService.getCertificateExpiry({
-					authToken: authToken,
 					monitorId: monitorId,
 				});
 				if (res?.data?.data?.certificateDate) {
@@ -39,7 +37,7 @@ const useCertificateFetch = ({
 			}
 		};
 		fetchCertificate();
-	}, [authToken, monitorId, certificateDateFormat, uiTimezone, monitor]);
+	}, [monitorId, certificateDateFormat, uiTimezone, monitor]);
 	return [certificateExpiry, isLoading];
 };
 

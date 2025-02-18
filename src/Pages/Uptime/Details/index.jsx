@@ -31,7 +31,6 @@ const certificateDateFormat = "MMM D, YYYY h A";
 
 const UptimeDetails = () => {
 	// Redux state
-	const { authToken } = useSelector((state) => state.auth);
 	const uiTimezone = useSelector((state) => state.ui.timezone);
 
 	// Local state
@@ -48,21 +47,18 @@ const UptimeDetails = () => {
 	const isAdmin = useIsAdmin();
 
 	const [monitor, monitorIsLoading, monitorNetworkError] = useMonitorFetch({
-		authToken,
 		monitorId,
 		dateRange,
 	});
 
 	const [certificateExpiry, certificateIsLoading] = useCertificateFetch({
 		monitor,
-		authToken,
 		monitorId,
 		certificateDateFormat,
 		uiTimezone,
 	});
 
 	const [checks, checksCount, checksAreLoading, checksNetworkError] = useChecksFetch({
-		authToken,
 		monitorId,
 		dateRange,
 		page,

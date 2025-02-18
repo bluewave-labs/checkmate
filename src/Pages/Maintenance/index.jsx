@@ -13,7 +13,6 @@ import { useIsAdmin } from "../../Hooks/useIsAdmin";
 const Maintenance = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
-	const { authToken } = useSelector((state) => state.auth);
 	const { rowsPerPage } = useSelector((state) => state.ui.maintenance);
 	const isAdmin = useIsAdmin();
 	const [maintenanceWindows, setMaintenanceWindows] = useState([]);
@@ -30,7 +29,6 @@ const Maintenance = () => {
 		const fetchMaintenanceWindows = async () => {
 			try {
 				const response = await networkService.getMaintenanceWindowsByTeamId({
-					authToken: authToken,
 					page: page,
 					rowsPerPage: rowsPerPage,
 				});
@@ -42,7 +40,7 @@ const Maintenance = () => {
 			}
 		};
 		fetchMaintenanceWindows();
-	}, [authToken, page, rowsPerPage, updateTrigger]);
+	}, [page, rowsPerPage, updateTrigger]);
 
 	return (
 		<Box

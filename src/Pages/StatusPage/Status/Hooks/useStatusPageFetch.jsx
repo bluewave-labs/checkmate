@@ -10,13 +10,11 @@ const useStatusPageFetch = (isCreate = false, url) => {
 	const [networkError, setNetworkError] = useState(false);
 	const [statusPage, setStatusPage] = useState(undefined);
 	const [monitors, setMonitors] = useState(undefined);
-	const { authToken } = useSelector((state) => state.auth);
 	const theme = useTheme();
 	const { getMonitorWithPercentage } = useMonitorUtils();
 	const fetchStatusPage = useCallback(async () => {
 		try {
 			const response = await networkService.getStatusPageByUrl({
-				authToken,
 				url,
 				type: "uptime",
 			});
@@ -40,7 +38,7 @@ const useStatusPageFetch = (isCreate = false, url) => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [authToken, theme, getMonitorWithPercentage, url]);
+	}, [theme, getMonitorWithPercentage, url]);
 
 	useEffect(() => {
 		if (isCreate === true) {

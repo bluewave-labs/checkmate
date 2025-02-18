@@ -32,7 +32,7 @@ const ProfilePanel = () => {
 	const SPACING_GAP = theme.spacing(12);
 
 	//redux state
-	const { user, authToken, isLoading } = useSelector((state) => state.auth);
+	const { user, isLoading } = useSelector((state) => state.auth);
 
 	const idToName = {
 		"edit-first-name": "firstName",
@@ -164,7 +164,7 @@ const ProfilePanel = () => {
 			return;
 		}
 
-		const action = await dispatch(update({ authToken, localData }));
+		const action = await dispatch(update({ localData }));
 		if (action.payload.success) {
 			createToast({
 				body: "Your profile data was changed successfully.",
@@ -187,7 +187,7 @@ const ProfilePanel = () => {
 
 	// Initiates the account deletion process
 	const handleDeleteAccount = async () => {
-		const action = await dispatch(deleteUser(authToken));
+		const action = await dispatch(deleteUser());
 		if (action.payload.success) {
 			dispatch(clearAuthState());
 			dispatch(clearUptimeMonitorState());
