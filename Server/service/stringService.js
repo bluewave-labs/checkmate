@@ -165,6 +165,36 @@ class StringService {
     return this.translationService.getTranslation('maintenanceWindowEdit');
   }
 
+  // Webhook Messages
+  get webhookUnsupportedPlatform() {
+    return this.translationService.getTranslation('webhookUnsupportedPlatform');
+  }
+
+  get webhookSendError() {
+      return this.translationService.getTranslation('webhookSendError');
+  }
+
+  get webhookSendSuccess() {
+      return this.translationService.getTranslation('webhookSendSuccess');
+  }
+
+  getWebhookUnsupportedPlatform(platform) {
+      return this.translationService.getTranslation('webhookUnsupportedPlatform')
+          .replace('{platform}', platform);
+  }
+
+  getWebhookSendError(platform) {
+      return this.translationService.getTranslation('webhookSendError')
+          .replace('{platform}', platform);
+  }
+
+  getMonitorStatus(name, status, url) {
+      return this.translationService.getTranslation('monitorStatus')
+          .replace('{name}', name)
+          .replace('{status}', status ? "up" : "down")
+          .replace('{url}', url);
+  }
+
   // Error Messages
   get unknownError() {
     return this.translationService.getTranslation('unknownError');

@@ -1,4 +1,11 @@
 import mongoose from "mongoose";
+
+const configSchema = mongoose.Schema({
+    webhookUrl: { type: String },
+    botToken: { type: String },
+    chatId: { type: String }
+}, { _id: false });
+
 const NotificationSchema = mongoose.Schema(
 	{
 		monitorId: {
@@ -8,8 +15,12 @@ const NotificationSchema = mongoose.Schema(
 		},
 		type: {
 			type: String,
-			enum: ["email", "sms"],
+			enum: ["email", "sms", "webhook"],
 		},
+		config: {
+            type: configSchema,
+            default: () => ({})
+        },
 		address: {
 			type: String,
 		},
@@ -76,4 +87,5 @@ NotificationSchema.pre("findOneAndUpdate", function (next) {
 	}
 	next();
 });
+
 export default mongoose.model("Notification", NotificationSchema);
