@@ -1,6 +1,5 @@
 import { networkService } from "../../main";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const initialState = {
@@ -45,7 +44,7 @@ export const login = createAsyncThunk("auth/login", async (form, thunkApi) => {
 
 export const update = createAsyncThunk("auth/update", async (data, thunkApi) => {
 	const { localData: form } = data;
-	const user = jwtDecode(token);
+	const user = thunkApi.getState().auth.user;
 	try {
 		const fd = new FormData();
 		form.firstName && fd.append("firstName", form.firstName);
@@ -77,8 +76,8 @@ export const update = createAsyncThunk("auth/update", async (data, thunkApi) => 
 	}
 });
 
-export const deleteUser = createAsyncThunk("auth/delete", async (data, thunkApi) => {
-	const user = jwtDecode(data);
+export const deleteUser = createAsyncThunk("auth/delete", async (_, thunkApi) => {
+	const user = thunkApi.getState().auth.user;
 
 	try {
 		const res = await networkService.deleteUser({ userId: user._id, });

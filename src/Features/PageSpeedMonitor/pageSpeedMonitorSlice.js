@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { jwtDecode } from "jwt-decode";
 import { networkService } from "../../main";
 const initialState = {
 	isLoading: false,
@@ -70,8 +69,8 @@ export const getPagespeedMonitorById = createAsyncThunk(
 
 export const getPageSpeedByTeamId = createAsyncThunk(
 	"pageSpeedMonitors/getPageSpeedByTeamId",
-	async (token, thunkApi) => {
-		const user = jwtDecode(token);
+	async (_, thunkApi) => {
+		const user = thunkApi.getState().auth.user;
 		try {
 			const res = await networkService.getMonitorsAndSummaryByTeamId({
 				teamId: user.teamId,

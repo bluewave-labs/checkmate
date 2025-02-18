@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { jwtDecode } from "jwt-decode";
 import { networkService } from "../../main";
 const initialState = {
 	isLoading: false,
