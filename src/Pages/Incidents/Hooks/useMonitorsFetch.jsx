@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { networkService } from "../../../main";
 import { createToast } from "../../../Utils/toastUtils";
-const useMonitorsFetch = ({ authToken, teamId }) => {
+const useMonitorsFetch = ({ teamId }) => {
 	//Local state
 	const [isLoading, setIsLoading] = useState(true);
 	const [networkError, setNetworkError] = useState(false);
@@ -13,7 +13,6 @@ const useMonitorsFetch = ({ authToken, teamId }) => {
 			try {
 				setIsLoading(true);
 				const res = await networkService.getMonitorsByTeamId({
-					authToken,
 					teamId,
 					limit: null,
 					types: null,
@@ -44,7 +43,7 @@ const useMonitorsFetch = ({ authToken, teamId }) => {
 		};
 
 		fetchMonitors();
-	}, [authToken, teamId]);
+	}, [teamId]);
 	return { isLoading, monitors, networkError };
 };
 

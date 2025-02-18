@@ -25,10 +25,8 @@ const PageSpeedDetails = () => {
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
 	const { monitorId } = useParams();
-	const { authToken } = useSelector((state) => state.auth);
 
 	const { monitor, audits, isLoading, networkError } = useMonitorFetch({
-		authToken,
 		monitorId,
 	});
 

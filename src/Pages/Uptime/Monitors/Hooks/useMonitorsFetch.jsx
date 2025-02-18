@@ -5,7 +5,6 @@ import { useTheme } from "@emotion/react";
 import { useMonitorUtils } from "../../../../Hooks/useMonitorUtils";
 
 export const useMonitorFetch = ({
-	authToken,
 	teamId,
 	limit,
 	page,
@@ -28,7 +27,6 @@ export const useMonitorFetch = ({
 			try {
 				setMonitorsAreLoading(true);
 				const res = await networkService.getMonitorsByTeamId({
-					authToken,
 					teamId,
 					limit,
 					types: ["http", "ping", "docker", "port"],
@@ -56,7 +54,6 @@ export const useMonitorFetch = ({
 		};
 		fetchMonitors();
 	}, [
-		authToken,
 		teamId,
 		limit,
 		field,

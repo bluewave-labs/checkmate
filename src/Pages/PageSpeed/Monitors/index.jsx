@@ -19,10 +19,9 @@ const BREADCRUMBS = [{ name: `pagespeed`, path: "/pagespeed" }];
 const PageSpeed = () => {
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	const { isLoading, monitors, summary, networkError } = useMonitorsFetch({
-		authToken: authToken,
 		teamId: user.teamId,
 	});
 

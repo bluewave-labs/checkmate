@@ -30,8 +30,6 @@ const InfrastructureMenu = ({ monitor, isAdmin, updateCallback }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const theme = useTheme();
-	const authState = useSelector((state) => state.auth);
-	const authToken = authState.authToken;
 	const { isLoading } = useSelector((state) => state.uptimeMonitors);
 
 	const openMenu = (e) => {
@@ -61,7 +59,6 @@ const InfrastructureMenu = ({ monitor, isAdmin, updateCallback }) => {
 	const handleRemove = async () => {
 		try {
 			await networkService.deleteMonitorById({
-				authToken,
 				monitorId: monitor.id,
 			});
 			createToast({ body: "Monitor deleted successfully." });

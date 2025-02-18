@@ -4,7 +4,7 @@ import { createToast } from "../../../Utils/toastUtils";
 import { useSelector } from "react-redux";
 const useChecksFetch = ({ selectedMonitor, filter, dateRange, page, rowsPerPage }) => {
 	//Redux
-	const { authToken, user } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	//Local
 	const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +20,6 @@ const useChecksFetch = ({ selectedMonitor, filter, dateRange, page, rowsPerPage 
 
 				if (selectedMonitor === "0") {
 					res = await networkService.getChecksByTeam({
-						authToken: authToken,
 						status: false,
 						teamId: user.teamId,
 						sortOrder: "desc",
@@ -32,7 +31,6 @@ const useChecksFetch = ({ selectedMonitor, filter, dateRange, page, rowsPerPage 
 					});
 				} else {
 					res = await networkService.getChecksByMonitor({
-						authToken: authToken,
 						status: false,
 						monitorId: selectedMonitor,
 						sortOrder: "desc",
@@ -53,7 +51,7 @@ const useChecksFetch = ({ selectedMonitor, filter, dateRange, page, rowsPerPage 
 			}
 		};
 		fetchChecks();
-	}, [authToken, user, dateRange, page, rowsPerPage, filter, selectedMonitor]);
+	}, [user, dateRange, page, rowsPerPage, filter, selectedMonitor]);
 	return { isLoading, networkError, checks, checksCount };
 };
 

@@ -68,7 +68,7 @@ const CreateMonitor = () => {
 		},
 	};
 
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 	const { isLoading } = useSelector((state) => state.uptimeMonitors);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -126,7 +126,7 @@ const CreateMonitor = () => {
 
 		if (monitor.type === "http") {
 			// const checkEndpointAction = await dispatch(
-			// 	checkEndpointResolution({ authToken, monitorURL: form.url })
+			// 	checkEndpointResolution({ monitorURL: form.url })
 			// );
 			// if (checkEndpointAction.meta.requestStatus === "rejected") {
 			// 	createToast({
@@ -144,7 +144,7 @@ const CreateMonitor = () => {
 			userId: user._id,
 			notifications: monitor.notifications,
 		};
-		const action = await dispatch(createUptimeMonitor({ authToken, monitor: form }));
+		const action = await dispatch(createUptimeMonitor({ monitor: form }));
 		if (action.meta.requestStatus === "fulfilled") {
 			createToast({ body: "Monitor created successfully!" });
 			navigate("/uptime");
@@ -205,7 +205,7 @@ const CreateMonitor = () => {
 	useEffect(() => {
 		const fetchMonitor = async () => {
 			if (monitorId) {
-				const action = await dispatch(getUptimeMonitorById({ authToken, monitorId }));
+				const action = await dispatch(getUptimeMonitorById({ monitorId }));
 
 				if (action.payload.success) {
 					const data = action.payload.data;
@@ -228,7 +228,7 @@ const CreateMonitor = () => {
 			}
 		};
 		fetchMonitor();
-	}, [monitorId, authToken, dispatch, navigate]);
+	}, [monitorId, dispatch, navigate]);
 
 	return (
 		<Box className="create-monitor">

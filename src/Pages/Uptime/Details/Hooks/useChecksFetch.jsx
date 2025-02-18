@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { networkService } from "../../../../main";
 import { createToast } from "../../../../Utils/toastUtils";
 export const useChecksFetch = ({
-	authToken,
 	monitorId,
 	dateRange,
 	page,
@@ -19,7 +18,6 @@ export const useChecksFetch = ({
 			try {
 				setIsLoading(true);
 				const res = await networkService.getChecksByMonitor({
-					authToken: authToken,
 					monitorId: monitorId,
 					sortOrder: "desc",
 					limit: null,
@@ -38,7 +36,7 @@ export const useChecksFetch = ({
 			}
 		};
 		fetchChecks();
-	}, [authToken, monitorId, dateRange, page, rowsPerPage]);
+	}, [monitorId, dateRange, page, rowsPerPage]);
 
 	return [checks, checksCount, isLoading, networkError];
 };

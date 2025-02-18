@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { createToast } from "../../../../Utils/toastUtils";
 
 const useMonitorsFetch = () => {
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	const [monitors, setMonitors] = useState(undefined);
 	const [isLoading, setIsLoading] = useState(true);
@@ -13,7 +13,6 @@ const useMonitorsFetch = () => {
 		const fetchMonitors = async () => {
 			try {
 				const response = await networkService.getMonitorsByTeamId({
-					authToken: authToken,
 					teamId: user.teamId,
 					limit: null, // donot return any checks for the monitors
 					types: ["http"], // status page is available only for the uptime type
@@ -27,7 +26,7 @@ const useMonitorsFetch = () => {
 			}
 		};
 		fetchMonitors();
-	}, [authToken, user]);
+	}, [user]);
 
 	return [monitors, isLoading, networkError];
 };

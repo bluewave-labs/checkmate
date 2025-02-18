@@ -5,7 +5,7 @@ import { createToast } from "../../../../Utils/toastUtils";
 
 const useMonitorFetch = ({ page, rowsPerPage, updateTrigger }) => {
 	// Redux state
-	const { authToken, user } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	// Local state
 	const [isLoading, setIsLoading] = useState(true);
@@ -17,7 +17,6 @@ const useMonitorFetch = ({ page, rowsPerPage, updateTrigger }) => {
 		const fetchMonitors = async () => {
 			try {
 				const response = await networkService.getMonitorsByTeamId({
-					authToken,
 					teamId: user.teamId,
 					limit: 1,
 					types: ["hardware"],
@@ -37,7 +36,7 @@ const useMonitorFetch = ({ page, rowsPerPage, updateTrigger }) => {
 		};
 
 		fetchMonitors();
-	}, [page, rowsPerPage, authToken, user.teamId, updateTrigger]);
+	}, [page, rowsPerPage, user.teamId, updateTrigger]);
 
 	return { monitors, summary, isLoading, networkError };
 };

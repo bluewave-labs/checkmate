@@ -48,7 +48,7 @@ const getAlertError = (errors) => {
 
 const CreateInfrastructureMonitor = () => {
 	const theme = useTheme();
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 	const monitorState = useSelector((state) => state.infrastructureMonitor);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -148,7 +148,7 @@ const CreateInfrastructureMonitor = () => {
 		};
 
 		const action = await dispatch(
-			createInfrastructureMonitor({ authToken, monitor: form })
+			createInfrastructureMonitor({ monitor: form })
 		);
 		if (action.meta.requestStatus === "fulfilled") {
 			createToast({ body: "Infrastructure monitor created successfully!" });

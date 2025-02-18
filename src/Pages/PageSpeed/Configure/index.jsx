@@ -31,7 +31,7 @@ const PageSpeedConfigure = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const MS_PER_MINUTE = 60000;
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 	const { isLoading } = useSelector((state) => state.pageSpeedMonitors);
 	const { monitorId } = useParams();
 	const [monitor, setMonitor] = useState({});
@@ -59,7 +59,7 @@ const PageSpeedConfigure = () => {
 	useEffect(() => {
 		const fetchMonitor = async () => {
 			try {
-				const action = await dispatch(getPagespeedMonitorById({ authToken, monitorId }));
+				const action = await dispatch(getPagespeedMonitorById({ monitorId }));
 
 				if (getPagespeedMonitorById.fulfilled.match(action)) {
 					const monitor = action.payload.data;
@@ -73,7 +73,7 @@ const PageSpeedConfigure = () => {
 			}
 		};
 		fetchMonitor();
-	}, [dispatch, authToken, monitorId, navigate]);
+	}, [dispatch, monitorId, navigate]);
 
 	const handleChange = (event, name) => {
 		let { value, id } = event.target;
@@ -130,7 +130,7 @@ const PageSpeedConfigure = () => {
 
 	const handlePause = async () => {
 		try {
-			const action = await dispatch(pausePageSpeed({ authToken, monitorId }));
+			const action = await dispatch(pausePageSpeed({ monitorId }));
 			if (pausePageSpeed.fulfilled.match(action)) {
 				const monitor = action.payload.data;
 				setMonitor(monitor);
@@ -147,10 +147,10 @@ const PageSpeedConfigure = () => {
 
 	const handleSave = async (event) => {
 		event.preventDefault();
-		const action = await dispatch(updatePageSpeed({ authToken, monitor: monitor }));
+		const action = await dispatch(updatePageSpeed({ monitor: monitor }));
 		if (action.meta.requestStatus === "fulfilled") {
 			createToast({ body: "Monitor updated successfully!" });
-			dispatch(getPageSpeedByTeamId(authToken));
+			dispatch(getPageSpeedByTeamId());
 		} else {
 			createToast({ body: "Failed to update monitor." });
 		}
@@ -160,7 +160,7 @@ const PageSpeedConfigure = () => {
 	const handleRemove = async (event) => {
 		event.preventDefault();
 		setButtonLoading(true);
-		const action = await dispatch(deletePageSpeed({ authToken, monitor }));
+		const action = await dispatch(deletePageSpeed({ monitor }));
 		if (action.meta.requestStatus === "fulfilled") {
 			navigate("/pagespeed");
 		} else {

@@ -11,9 +11,7 @@ export const getAppSettings = createAsyncThunk(
 	"settings/getSettings",
 	async (data, thunkApi) => {
 		try {
-			const res = await networkService.getAppSettings({
-				authToken: data.authToken,
-			});
+			const res = await networkService.getAppSettings();
 			return res.data;
 		} catch (error) {
 			if (error.response.data) {
@@ -30,7 +28,7 @@ export const getAppSettings = createAsyncThunk(
 
 export const updateAppSettings = createAsyncThunk(
 	"settings/updateSettings",
-	async ({ settings, authToken }, thunkApi) => {
+	async ({ settings }, thunkApi) => {
 		networkService.setBaseUrl(settings.apiBaseUrl);
 		try {
 			const parsedSettings = {
@@ -49,10 +47,7 @@ export const updateAppSettings = createAsyncThunk(
 				systemEmailAddress: settings.systemEmailAddress,
 				systemEmailPassword: settings.systemEmailPassword,
 			};
-			const res = await networkService.updateAppSettings({
-				settings: parsedSettings,
-				authToken,
-			});
+			const res = await networkService.updateAppSettings({ settings: parsedSettings, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {

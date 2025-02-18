@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { networkService } from "../../../../main";
 import { createToast } from "../../../../Utils/toastUtils";
 import { useNavigate } from "react-router-dom";
-const useMonitorFetch = ({ authToken, monitorId }) => {
+const useMonitorFetch = ({ monitorId }) => {
 	const navigate = useNavigate();
 
 	const [monitor, setMonitor] = useState(undefined);
@@ -13,7 +13,6 @@ const useMonitorFetch = ({ authToken, monitorId }) => {
 		const fetchMonitor = async () => {
 			try {
 				const res = await networkService.getStatsByMonitorId({
-					authToken: authToken,
 					monitorId: monitorId,
 					sortOrder: "desc",
 					limit: 50,
@@ -32,7 +31,7 @@ const useMonitorFetch = ({ authToken, monitorId }) => {
 		};
 
 		fetchMonitor();
-	}, [authToken, monitorId, navigate]);
+	}, [monitorId, navigate]);
 
 	return { monitor, audits, isLoading };
 };

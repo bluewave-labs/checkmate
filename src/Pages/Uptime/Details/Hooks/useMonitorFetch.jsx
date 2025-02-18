@@ -3,7 +3,7 @@ import { networkService } from "../../../../main";
 import { useNavigate } from "react-router-dom";
 import { createToast } from "../../../../Utils/toastUtils";
 
-export const useMonitorFetch = ({ authToken, monitorId, dateRange }) => {
+export const useMonitorFetch = ({ monitorId, dateRange }) => {
 	const [networkError, setNetworkError] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [monitor, setMonitor] = useState(undefined);
@@ -13,7 +13,6 @@ export const useMonitorFetch = ({ authToken, monitorId, dateRange }) => {
 		const fetchMonitors = async () => {
 			try {
 				const res = await networkService.getUptimeDetailsById({
-					authToken: authToken,
 					monitorId: monitorId,
 					dateRange: dateRange,
 					normalize: true,
@@ -27,7 +26,7 @@ export const useMonitorFetch = ({ authToken, monitorId, dateRange }) => {
 			}
 		};
 		fetchMonitors();
-	}, [authToken, dateRange, monitorId, navigate]);
+	}, [dateRange, monitorId, navigate]);
 	return [monitor, isLoading, networkError];
 };
 

@@ -48,7 +48,7 @@ const Configure = () => {
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const dispatch = useDispatch();
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 	const { isLoading } = useSelector((state) => state.uptimeMonitors);
 	const [monitor, setMonitor] = useState({});
 	const [errors, setErrors] = useState({});
@@ -76,7 +76,7 @@ const Configure = () => {
 	useEffect(() => {
 		const fetchMonitor = async () => {
 			try {
-				const action = await dispatch(getUptimeMonitorById({ authToken, monitorId }));
+				const action = await dispatch(getUptimeMonitorById({ monitorId }));
 
 				if (getUptimeMonitorById.fulfilled.match(action)) {
 					const monitor = action.payload.data;
@@ -90,7 +90,7 @@ const Configure = () => {
 			}
 		};
 		fetchMonitor();
-	}, [monitorId, authToken, navigate]);
+	}, [monitorId, navigate]);
 
 	const handleChange = (event, name) => {
 		let { value, id } = event.target;
@@ -147,7 +147,7 @@ const Configure = () => {
 
 	const handlePause = async () => {
 		try {
-			const action = await dispatch(pauseUptimeMonitor({ authToken, monitorId }));
+			const action = await dispatch(pauseUptimeMonitor({ monitorId }));
 			if (pauseUptimeMonitor.fulfilled.match(action)) {
 				const monitor = action.payload.data;
 				setMonitor(monitor);
@@ -164,7 +164,7 @@ const Configure = () => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const action = await dispatch(updateUptimeMonitor({ authToken, monitor: monitor }));
+		const action = await dispatch(updateUptimeMonitor({ monitor: monitor }));
 		if (action.meta.requestStatus === "fulfilled") {
 			createToast({ body: "Monitor updated successfully!" });
 		} else {
@@ -175,7 +175,7 @@ const Configure = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const handleRemove = async (event) => {
 		event.preventDefault();
-		const action = await dispatch(deleteUptimeMonitor({ authToken, monitor }));
+		const action = await dispatch(deleteUptimeMonitor({ monitor }));
 		if (action.meta.requestStatus === "fulfilled") {
 			navigate("/uptime");
 		} else {

@@ -39,7 +39,7 @@ const SECONDS_PER_DAY = 86400;
 const Settings = () => {
 	const theme = useTheme();
 	const isAdmin = useIsAdmin();
-	const { user, authToken } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 	const { checkTTL } = user;
 	const { isLoading } = useSelector((state) => state.uptimeMonitors);
 	const { isLoading: authIsLoading } = useSelector((state) => state.auth);
@@ -115,11 +115,10 @@ const Settings = () => {
 		try {
 			setChecksIsLoading(true);
 			await networkService.updateChecksTTL({
-				authToken: authToken,
 				ttl: form.ttl,
 			});
 			const updatedUser = { ...user, checkTTL: form.ttl };
-			const action = await dispatch(update({ authToken, localData: updatedUser }));
+			const action = await dispatch(update({ localData: updatedUser }));
 
 			if (action.payload.success) {
 				createToast({
@@ -149,7 +148,7 @@ const Settings = () => {
 	const handleClearStats = async () => {
 		try {
 			const action = await dispatch(
-				deleteMonitorChecksByTeamId({ teamId: user.teamId, authToken })
+				deleteMonitorChecksByTeamId({ teamId: user.teamId })
 			);
 
 			if (deleteMonitorChecksByTeamId.fulfilled.match(action)) {
@@ -167,7 +166,7 @@ const Settings = () => {
 
 	const handleInsertDemoMonitors = async () => {
 		try {
-			const action = await dispatch(addDemoMonitors({ authToken }));
+			const action = await dispatch(addDemoMonitors());
 			if (addDemoMonitors.fulfilled.match(action)) {
 				createToast({ body: "Successfully added demo monitors" });
 			} else {
@@ -181,7 +180,7 @@ const Settings = () => {
 
 	const handleDeleteAllMonitors = async () => {
 		try {
-			const action = await dispatch(deleteAllMonitors({ authToken }));
+			const action = await dispatch(deleteAllMonitors());
 			if (deleteAllMonitors.fulfilled.match(action)) {
 				createToast({ body: "Successfully deleted all monitors" });
 			} else {

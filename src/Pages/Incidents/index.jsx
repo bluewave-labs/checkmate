@@ -16,7 +16,7 @@ const BREADCRUMBS = [{ name: `Incidents`, path: "/incidents" }];
 
 const Incidents = () => {
 	// Redux state
-	const { authToken, user } = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	// Local state
 	const [selectedMonitor, setSelectedMonitor] = useState("0");
@@ -26,7 +26,6 @@ const Incidents = () => {
 	const theme = useTheme();
 
 	const { monitors, isLoading, networkError } = useMonitorsFetch({
-		authToken,
 		teamId: user.teamId,
 	});
 

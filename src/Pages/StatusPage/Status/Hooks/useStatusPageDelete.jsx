@@ -5,11 +5,10 @@ import { createToast } from "../../../../Utils/toastUtils";
 
 const useStatusPageDelete = (fetchStatusPage, url) => {
 	const [isLoading, setIsLoading] = useState(false);
-	const { authToken } = useSelector((state) => state.auth);
 	const deleteStatusPage = async () => {
 		try {
 			setIsLoading(true);
-			await networkService.deleteStatusPage({ authToken, url });
+			await networkService.deleteStatusPage({ url });
 			fetchStatusPage?.();
 			return true;
 		} catch (error) {

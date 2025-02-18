@@ -13,7 +13,6 @@ import Dialog from "../../../../Components/Dialog";
 
 const ActionsMenu = ({ /* isAdmin, */ maintenanceWindow, updateCallback }) => {
 	maintenanceWindow;
-	const { authToken } = useSelector((state) => state.auth);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +25,6 @@ const ActionsMenu = ({ /* isAdmin, */ maintenanceWindow, updateCallback }) => {
 		try {
 			setIsLoading(true);
 			await networkService.deleteMaintenanceWindow({
-				authToken,
 				maintenanceWindowId: maintenanceWindow._id,
 			});
 			updateCallback();
@@ -47,7 +45,6 @@ const ActionsMenu = ({ /* isAdmin, */ maintenanceWindow, updateCallback }) => {
 				active: !maintenanceWindow.active,
 			};
 			await networkService.editMaintenanceWindow({
-				authToken,
 				maintenanceWindowId: maintenanceWindow._id,
 				maintenanceWindow: data,
 			});
