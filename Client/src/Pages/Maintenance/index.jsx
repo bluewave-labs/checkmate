@@ -61,20 +61,6 @@ const Maintenance = () => {
 	}
 
 	return (
-		<Box
-			className="maintenance table-container"
-			sx={{
-				':has(> [class*="fallback__"])': {
-				position: "relative",
-				border: 1,
-				borderColor: theme.palette.primary.lowContrast,
-				borderRadius: theme.shape.borderRadius,
-				borderStyle: "dashed",
-				backgroundColor: theme.palette.primary.main,
-				overflow: "hidden",
-			},
-			}}
-		>
 			<Stack gap={theme.spacing(8)}>
 				<Stack
 					direction="row"
@@ -105,7 +91,6 @@ const Maintenance = () => {
 					updateCallback={handleActionMenuDelete}
 				/>
 			</Stack>
-		</Box>
 	);
 };
 
