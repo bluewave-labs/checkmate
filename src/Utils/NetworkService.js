@@ -75,7 +75,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.monitorId - The monitor ID to be sent in the param.
 	 * @returns {Promise<AxiosResponse>} The response from the axios GET request.
 	 */
@@ -83,7 +82,6 @@ class NetworkService {
 	async getMonitorById(config) {
 		return this.axiosInstance.get(`/monitors/${config.monitorId}`, {
 			headers: {
-				Authorization: `Bearer ${config.authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -97,19 +95,13 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {Object} config.monitor - The monitor object to be sent in the request body.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 */
 	async createMonitor(config) {
-		const { authToken, monitor } = config;
+		const { monitor } = config;
 
-		return this.axiosInstance.post(`/monitors`, monitor, {
-			headers: {
-				Authorization: `Bearer ${authToken}`,
-				"Content-Type": "application/json",
-			},
-		});
+		return this.axiosInstance.post(`/monitors`, monitor);
 	}
 
 	/**
@@ -120,19 +112,17 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {Object} config.monitorURL - The monitor url to be sent in the request body.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 */
 	async checkEndpointResolution(config) {
-		const { authToken, monitorURL } = config;
+		const { monitorURL } = config;
 		const params = new URLSearchParams();
 
 		if (monitorURL) params.append("monitorURL", monitorURL);
 
 		return this.axiosInstance.get(`/monitors/resolution/url?${params.toString()}`, {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -146,7 +136,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.teamId - Team ID
 	 * @param {Array<string>} config.types - Array of monitor types
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
@@ -163,7 +152,6 @@ class NetworkService {
 			`/monitors/team/summary/${config.teamId}?${params.toString()}`,
 			{
 				headers: {
-					Authorization: `Bearer ${config.authToken}`,
 					"Content-Type": "application/json",
 				},
 			}
@@ -177,7 +165,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.teamId - The ID of the team whose monitors are to be retrieved.
 	 * @param {number} [config.limit] - The maximum number of checks to retrieve.  0 for all, -1 for none
 	 * @param {Array<string>} [config.types] - The types of monitors to retrieve.
@@ -190,7 +177,7 @@ class NetworkService {
 	 */
 
 	async getMonitorsByTeamId(config) {
-		const { authToken, teamId, limit, types, page, rowsPerPage, filter, field, order } =
+		const { teamId, limit, types, page, rowsPerPage, filter, field, order } =
 			config;
 		const params = new URLSearchParams();
 
@@ -208,7 +195,6 @@ class NetworkService {
 
 		return this.axiosInstance.get(`/monitors/team/${teamId}?${params.toString()}`, {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -221,7 +207,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.monitorId - The ID of the monitor whose statistics are to be retrieved.
 	 * @param {string} config.sortOrder - The order in which to sort the retrieved statistics.
 	 * @param {number} config.limit - The maximum number of statistics to retrieve.
@@ -239,13 +224,7 @@ class NetworkService {
 		if (config.normalize) params.append("normalize", config.normalize);
 
 		return this.axiosInstance.get(
-			`/monitors/stats/${config.monitorId}?${params.toString()}`,
-			{
-				headers: {
-					Authorization: `Bearer ${config.authToken}`,
-				},
-			}
-		);
+			`/monitors/stats/${config.monitorId}?${params.toString()}`);
 	}
 
 	async getHardwareDetailsByMonitorId(config) {
@@ -253,13 +232,7 @@ class NetworkService {
 		if (config.dateRange) params.append("dateRange", config.dateRange);
 
 		return this.axiosInstance.get(
-			`/monitors/hardware/details/${config.monitorId}?${params.toString()}`,
-			{
-				headers: {
-					Authorization: `Bearer ${config.authToken}`,
-				},
-			}
-		);
+			`/monitors/hardware/details/${config.monitorId}?${params.toString()}`);
 	}
 	async getUptimeDetailsById(config) {
 		const params = new URLSearchParams();
@@ -267,13 +240,7 @@ class NetworkService {
 		if (config.normalize) params.append("normalize", config.normalize);
 
 		return this.axiosInstance.get(
-			`/monitors/uptime/details/${config.monitorId}?${params.toString()}`,
-			{
-				headers: {
-					Authorization: `Bearer ${config.authToken}`,
-				},
-			}
-		);
+			`/monitors/uptime/details/${config.monitorId}?${params.toString()}`);
 	}
 
 	/**
@@ -283,13 +250,12 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.monitorId - The ID of the monitor to be updated.
 	 * @param {Object} config.updatedFields - The fields to be updated for the monitor.
 	 * @returns {Promise<AxiosResponse>} The response from the axios PUT request.
 	 */
 	async updateMonitor(config) {
-		const { authToken, monitorId, monitor } = config;
+		const { monitorId, monitor } = config;
 		const updatedFields = {
 			name: monitor.name,
 			description: monitor.description,
@@ -298,7 +264,6 @@ class NetworkService {
 		};
 		return this.axiosInstance.put(`/monitors/${monitorId}`, updatedFields, {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -311,14 +276,12 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.monitorId - The ID of the monitor to be deleted.
 	 * @returns {Promise<AxiosResponse>} The response from the axios DELETE request.
 	 */
 	async deleteMonitorById(config) {
 		return this.axiosInstance.delete(`/monitors/${config.monitorId}`, {
 			headers: {
-				Authorization: `Bearer ${config.authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -331,14 +294,12 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.teamId - The team ID of the monitors to be deleted.
 	 * @returns {Promise<AxiosResponse>} The response from the axios DELETE request.
 	 */
 	async deleteChecksByTeamId(config) {
 		return this.axiosInstance.delete(`/checks/team/${config.teamId}`, {
 			headers: {
-				Authorization: `Bearer ${config.authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -350,7 +311,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.monitorId - The ID of the monitor to be paused.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 */
@@ -360,7 +320,6 @@ class NetworkService {
 			{},
 			{
 				headers: {
-					Authorization: `Bearer ${config.authToken}`,
 					"Content-Type": "application/json",
 				},
 			}
@@ -374,7 +333,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 */
 	async addDemoMonitors(config) {
@@ -383,7 +341,6 @@ class NetworkService {
 			{},
 			{
 				headers: {
-					Authorization: `Bearer ${config.authToken}`,
 					"Content-Type": "application/json",
 				},
 			}
@@ -397,13 +354,11 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @returns {Promise<AxiosResponse>} The response from the axios DELETE request.
 	 */
 	async deleteAllMonitors(config) {
 		return this.axiosInstance.delete(`/monitors/`, {
 			headers: {
-				Authorization: `Bearer ${config.authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -416,17 +371,12 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.monitorId - The ID of the monitor whose certificate expiry is to be retrieved.
 	 * @returns {Promise<AxiosResponse>} The response from the axios GET request.
 	 *
 	 */
 	async getCertificateExpiry(config) {
-		return this.axiosInstance.get(`/monitors/certificate/${config.monitorId}`, {
-			headers: {
-				Authorization: `Bearer ${config.authToken}`,
-			},
-		});
+		return this.axiosInstance.get(`/monitors/certificate/${config.monitorId}`);
 	}
 
 	/**
@@ -463,18 +413,13 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.userId - The ID of the user to be updated.
 	 * @param {Object} config.form - The form data for the user to be updated.
 	 * @returns {Promise<AxiosResponse>} The response from the axios PUT request.
 	 *
 	 */
 	async updateUser(config) {
-		return this.axiosInstance.put(`/auth/user/${config.userId}`, config.form, {
-			headers: {
-				Authorization: `Bearer ${config.authToken}`,
-			},
-		});
+		return this.axiosInstance.put(`/auth/user/${config.userId}`, config.form);
 	}
 
 	/**
@@ -484,14 +429,11 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.userId - The ID of the user to be deleted.
 	 *
 	 **/
 	async deleteUser(config) {
-		return this.axiosInstance.delete(`/auth/user/${config.userId}`, {
-			headers: { Authorization: `Bearer ${config.authToken}` },
-		});
+		return this.axiosInstance.delete(`/auth/user/${config.userId}`);
 	}
 
 	/**
@@ -564,14 +506,11 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @returns {Promise<AxiosResponse>} The response from the axios GET request.
 	 *
 	 */
 	async getAllUsers(config) {
-		return this.axiosInstance.get("/auth/users", {
-			headers: { Authorization: `Bearer ${config.authToken}` },
-		});
+		return this.axiosInstance.get("/auth/users");
 	}
 
 	/**
@@ -581,7 +520,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.email - The email of the user to be invited.
 	 * @param {string} config.role - The role of the user to be invited.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
@@ -591,9 +529,6 @@ class NetworkService {
 		return this.axiosInstance.post(
 			`/invite`,
 			{ email: config.email, role: config.role },
-			{
-				headers: { Authorization: `Bearer ${config.authToken}` },
-			}
 		);
 	}
 
@@ -620,7 +555,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.monitorId - The ID of the monitor.
 	 * @param {string} config.sortOrder - The order in which to sort the checks.
 	 * @param {number} config.limit - The maximum number of checks to retrieve.
@@ -642,9 +576,7 @@ class NetworkService {
 		if (config.rowsPerPage) params.append("rowsPerPage", config.rowsPerPage);
 		if (config.status !== undefined) params.append("status", config.status);
 
-		return this.axiosInstance.get(`/checks/${config.monitorId}?${params.toString()}`, {
-			headers: { Authorization: `Bearer ${config.authToken}` },
-		});
+		return this.axiosInstance.get(`/checks/${config.monitorId}?${params.toString()}`);
 	}
 
 	/**
@@ -654,7 +586,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} config.userId - The ID of the user.
 	 * @param {string} config.sortOrder - The order in which to sort the checks.
 	 * @param {number} config.limit - The maximum number of checks to retrieve.
@@ -674,9 +605,7 @@ class NetworkService {
 		if (config.page) params.append("page", config.page);
 		if (config.rowsPerPage) params.append("rowsPerPage", config.rowsPerPage);
 		if (config.status !== undefined) params.append("status", config.status);
-		return this.axiosInstance.get(`/checks/team/${config.teamId}?${params.toString()}`, {
-			headers: { Authorization: `Bearer ${config.authToken}` },
-		});
+		return this.axiosInstance.get(`/checks/team/${config.teamId}?${params.toString()}`);
 	}
 
 	/**
@@ -686,7 +615,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {number} config.ttl - TTL for checks
 	 * @returns {Promise<AxiosResponse>} The response from the axios GET request.
 	 *
@@ -697,7 +625,6 @@ class NetworkService {
 			{ ttl: config.ttl },
 			{
 				headers: {
-					Authorization: `Bearer ${config.authToken}`,
 					"Content-Type": "application/json",
 				},
 			}
@@ -711,7 +638,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @returns {Promise<AxiosResponse>} The response from the axios GET request.
 	 *
 	 */
@@ -719,7 +645,6 @@ class NetworkService {
 	async getAppSettings(config) {
 		return this.axiosInstance.get("/settings", {
 			headers: {
-				Authorization: `Bearer ${config.authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -733,14 +658,12 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {Object} config.settings - The monitor object to be sent in the request body.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 */
 	async updateAppSettings(config) {
 		return this.axiosInstance.put(`/settings`, config.settings, {
 			headers: {
-				Authorization: `Bearer ${config.authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -753,7 +676,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {Object} config.maintenanceWindow - The maintenance window object to be sent in the request body.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 *
@@ -762,7 +684,6 @@ class NetworkService {
 	async createMaintenanceWindow(config) {
 		return this.axiosInstance.post(`/maintenance-window`, config.maintenanceWindow, {
 			headers: {
-				Authorization: `Bearer ${config.authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -775,7 +696,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {Object} config.maintenanceWindowId - The maintenance window id.
 	 * @param {Object} config.maintenanceWindow - The maintenance window object to be sent in the request body.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
@@ -788,7 +708,6 @@ class NetworkService {
 			config.maintenanceWindow,
 			{
 				headers: {
-					Authorization: `Bearer ${config.authToken}`,
 					"Content-Type": "application/json",
 				},
 			}
@@ -802,17 +721,15 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} [config.maintenanceWindowId] - The id of the maintenance window to delete.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 *
 	 */
 
 	async getMaintenanceWindowById(config) {
-		const { authToken, maintenanceWindowId } = config;
+		const { maintenanceWindowId } = config;
 		return this.axiosInstance.get(`/maintenance-window/${maintenanceWindowId}`, {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -825,7 +742,6 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} [config.active] - The status of the maintenance windows to retrieve.
 	 * @param {number} [config.page] - The page number for pagination.
 	 * @param {number} [config.rowsPerPage] - The number of rows per page for pagination.
@@ -836,7 +752,7 @@ class NetworkService {
 	 */
 
 	async getMaintenanceWindowsByTeamId(config) {
-		const { authToken, active, page, rowsPerPage, field, order } = config;
+		const { active, page, rowsPerPage, field, order } = config;
 		const params = new URLSearchParams();
 
 		if (active) params.append("status", active);
@@ -847,7 +763,6 @@ class NetworkService {
 
 		return this.axiosInstance.get(`/maintenance-window/team?${params.toString()}`, {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -859,17 +774,15 @@ class NetworkService {
 	 *
 	 * @async
 	 * @param {Object} config - The configuration object.
-	 * @param {string} config.authToken - The authorization token to be used in the request header.
 	 * @param {string} [config.maintenanceWindowId] - The id of the maintenance window to delete.
 	 * @returns {Promise<AxiosResponse>} The response from the axios POST request.
 	 *
 	 */
 
 	async deleteMaintenanceWindow(config) {
-		const { authToken, maintenanceWindowId } = config;
+		const { maintenanceWindowId } = config;
 		return this.axiosInstance.delete(`/maintenance-window/${maintenanceWindowId}`, {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
@@ -892,7 +805,6 @@ class NetworkService {
 
 	subscribeToDistributedUptimeMonitors(config) {
 		const {
-			authToken,
 			teamId,
 			onUpdate,
 			onError,
@@ -925,15 +837,13 @@ class NetworkService {
 		}
 
 		const url = `${this.axiosInstance.defaults.baseURL}/distributed-uptime/monitors/${teamId}?${params.toString()}`;
-		this.eventSource = new EventSource(url, {
-			headers: { Authorization: `Bearer ${authToken}` },
-		});
+		this.eventSource = new EventSource(url);
 
 		this.eventSource.onopen = () => {
 			onOpen?.();
 		};
 
-		this.eventSource.addEventListener("open", (e) => {});
+		this.eventSource.addEventListener("open", (e) => { });
 
 		this.eventSource.onmessage = (event) => {
 			const data = JSON.parse(event.data);
@@ -960,15 +870,13 @@ class NetworkService {
 
 	subscribeToDistributedUptimeDetails(config) {
 		const params = new URLSearchParams();
-		const { authToken, monitorId, onUpdate, onOpen, onError, dateRange, normalize } =
+		const { monitorId, onUpdate, onOpen, onError, dateRange, normalize } =
 			config;
 		if (dateRange) params.append("dateRange", dateRange);
 		if (normalize) params.append("normalize", normalize);
 
 		const url = `${this.axiosInstance.defaults.baseURL}/distributed-uptime/monitors/details/${monitorId}?${params.toString()}`;
-		this.eventSource = new EventSource(url, {
-			headers: { Authorization: `Bearer ${authToken}` },
-		});
+		this.eventSource = new EventSource(url);
 
 		this.eventSource.onopen = (e) => {
 			onOpen?.();
@@ -992,41 +900,37 @@ class NetworkService {
 		};
 	}
 
-	async getStatusPage(config) {
-		const { authToken } = config;
+	async getStatusPage() {
 		return this.axiosInstance.get(`/status-page`, {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
 	}
 
 	async getStatusPageByUrl(config) {
-		const { authToken, url, type } = config;
+		const { url, type } = config;
 		const params = new URLSearchParams();
 		params.append("type", type);
 
 		return this.axiosInstance.get(`/status-page/${url}?${params.toString()}`, {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
 	}
 
 	async getStatusPagesByTeamId(config) {
-		const { authToken, teamId } = config;
+		const { teamId } = config;
 		return this.axiosInstance.get(`/status-page/team/${teamId}`, {
 			headers: {
-				Authorization: `Bearer ${authToken}`,
 				"Content-Type": "application/json",
 			},
 		});
 	}
 
 	async createStatusPage(config) {
-		const { authToken, user, form, isCreate } = config;
+		const { user, form, isCreate } = config;
 
 		const fd = new FormData();
 		fd.append("teamId", user.teamId);
@@ -1055,29 +959,17 @@ class NetworkService {
 			}
 		}
 		if (isCreate) {
-			return this.axiosInstance.post(`/status-page`, fd, {
-				headers: {
-					Authorization: `Bearer ${authToken}`,
-				},
-			});
+			return this.axiosInstance.post(`/status-page`, fd);
 		}
 
-		return this.axiosInstance.put(`/status-page`, fd, {
-			headers: {
-				Authorization: `Bearer ${authToken}`,
-			},
-		});
+		return this.axiosInstance.put(`/status-page`, fd);
 	}
 
 	async deleteStatusPage(config) {
-		const { authToken, url } = config;
+		const { url } = config;
 		const encodedUrl = encodeURIComponent(url);
 
-		return this.axiosInstance.delete(`/status-page/${encodedUrl}`, {
-			headers: {
-				Authorization: `Bearer ${authToken}`,
-			},
-		});
+		return this.axiosInstance.delete(`/status-page/${encodedUrl}`);
 	}
 }
 
