@@ -22,17 +22,17 @@ class NotificationController {
             next(handleValidationError(error, SERVICE_NAME));
             return;
         }
-
+    
         try {
             const { monitorId, type, platform, config } = req.body;
-
+    
             const networkResponse = {
                 monitor: { _id: monitorId, name: "Test Monitor", url: "http://www.google.com" },
                 status: false,
                 statusChanged: true,
                 prevStatus: true,
             };
-
+    
             if (type === "webhook") {
                 const notification = {
                     type,
@@ -45,11 +45,11 @@ class NotificationController {
                     notification
                 );
             }
-
+    
             return res.success({
-                msg: "Notification sent successfully"
+                msg: this.stringService.webhookSendSuccess
             });
-
+    
         } catch (error) {
             next(handleError(error, SERVICE_NAME, "triggerNotification"));
         }
