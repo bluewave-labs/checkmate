@@ -44,7 +44,7 @@ export const login = createAsyncThunk("auth/login", async (form, thunkApi) => {
 });
 
 export const update = createAsyncThunk("auth/update", async (data, thunkApi) => {
-	const { authToken: token, localData: form } = data;
+	const { localData: form } = data;
 	const user = jwtDecode(token);
 	try {
 		const fd = new FormData();
@@ -61,7 +61,6 @@ export const update = createAsyncThunk("auth/update", async (data, thunkApi) => 
 		form.deleteProfileImage && fd.append("deleteProfileImage", form.deleteProfileImage);
 
 		const res = await networkService.updateUser({
-			authToken: token,
 			userId: user._id,
 			form: fd,
 		});
@@ -82,10 +81,7 @@ export const deleteUser = createAsyncThunk("auth/delete", async (data, thunkApi)
 	const user = jwtDecode(data);
 
 	try {
-		const res = await networkService.deleteUser({
-			authToken: data,
-			userId: user._id,
-		});
+		const res = await networkService.deleteUser({ userId: user._id, });
 		return res.data;
 	} catch (error) {
 		if (error.response && error.response.data) {

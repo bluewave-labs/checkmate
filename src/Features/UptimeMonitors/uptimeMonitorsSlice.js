@@ -12,11 +12,8 @@ export const createUptimeMonitor = createAsyncThunk(
 	"monitors/createMonitor",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitor } = data;
-			const res = await networkService.createMonitor({
-				authToken: authToken,
-				monitor: monitor,
-			});
+			const { monitor } = data;
+			const res = await networkService.createMonitor({ monitor: monitor });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -35,12 +32,8 @@ export const checkEndpointResolution = createAsyncThunk(
 	"monitors/checkEndpoint",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitorURL } = data;
-
-			const res = await networkService.checkEndpointResolution({
-				authToken: authToken,
-				monitorURL: monitorURL,
-			});
+			const { monitorURL } = data;
+			const res = await networkService.checkEndpointResolution({ monitorURL: monitorURL, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -59,11 +52,8 @@ export const getUptimeMonitorById = createAsyncThunk(
 	"monitors/getMonitorById",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitorId } = data;
-			const res = await networkService.getMonitorById({
-				authToken: authToken,
-				monitorId: monitorId,
-			});
+			const { monitorId } = data;
+			const res = await networkService.getMonitorById({ monitorId: monitorId, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -82,7 +72,7 @@ export const updateUptimeMonitor = createAsyncThunk(
 	"monitors/updateMonitor",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitor } = data;
+			const { monitor } = data;
 			const updatedFields = {
 				name: monitor.name,
 				description: monitor.description,
@@ -93,7 +83,6 @@ export const updateUptimeMonitor = createAsyncThunk(
 				jsonPath: monitor.jsonPath,
 			};
 			const res = await networkService.updateMonitor({
-				authToken: authToken,
 				monitorId: monitor._id,
 				monitor,
 			});
@@ -115,11 +104,8 @@ export const deleteUptimeMonitor = createAsyncThunk(
 	"monitors/deleteMonitor",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitor } = data;
-			const res = await networkService.deleteMonitorById({
-				authToken: authToken,
-				monitorId: monitor._id,
-			});
+			const { monitor } = data;
+			const res = await networkService.deleteMonitorById({ monitorId: monitor._id, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -138,11 +124,8 @@ export const pauseUptimeMonitor = createAsyncThunk(
 	"monitors/pauseMonitor",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitorId } = data;
-			const res = await networkService.pauseMonitorById({
-				authToken: authToken,
-				monitorId: monitorId,
-			});
+			const { monitorId } = data;
+			const res = await networkService.pauseMonitorById({ monitorId: monitorId, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -161,11 +144,8 @@ export const deleteMonitorChecksByTeamId = createAsyncThunk(
 	"monitors/deleteChecksByTeamId",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, teamId } = data;
-			const res = await networkService.deleteChecksByTeamId({
-				authToken: authToken,
-				teamId: teamId,
-			});
+			const { teamId } = data;
+			const res = await networkService.deleteChecksByTeamId({ teamId: teamId, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -183,10 +163,7 @@ export const addDemoMonitors = createAsyncThunk(
 	"monitors/addDemoMonitors",
 	async (data, thunkApi) => {
 		try {
-			const { authToken } = data;
-			const res = await networkService.addDemoMonitors({
-				authToken: authToken,
-			});
+			const res = await networkService.addDemoMonitors();
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -205,10 +182,7 @@ export const deleteAllMonitors = createAsyncThunk(
 	"monitors/deleteAllMonitors",
 	async (data, thunkApi) => {
 		try {
-			const { authToken } = data;
-			const res = await networkService.deleteAllMonitors({
-				authToken: authToken,
-			});
+			const res = await networkService.deleteAllMonitors();
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {

@@ -12,11 +12,8 @@ export const createPageSpeed = createAsyncThunk(
 	"pageSpeedMonitors/createPageSpeed",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitor } = data;
-			const res = await networkService.createMonitor({
-				authToken: authToken,
-				monitor: monitor,
-			});
+			const { monitor } = data;
+			const res = await networkService.createMonitor({ monitor: monitor, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -35,12 +32,8 @@ export const checkEndpointResolution = createAsyncThunk(
 	"monitors/checkEndpoint",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitorURL } = data;
-
-			const res = await networkService.checkEndpointResolution({
-				authToken: authToken,
-				monitorURL: monitorURL,
-			});
+			const { monitorURL } = data;
+			const res = await networkService.checkEndpointResolution({ monitorURL: monitorURL, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -59,11 +52,8 @@ export const getPagespeedMonitorById = createAsyncThunk(
 	"monitors/getMonitorById",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitorId } = data;
-			const res = await networkService.getMonitorById({
-				authToken: authToken,
-				monitorId: monitorId,
-			});
+			const { monitorId } = data;
+			const res = await networkService.getMonitorById({ monitorId: monitorId, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -84,7 +74,6 @@ export const getPageSpeedByTeamId = createAsyncThunk(
 		const user = jwtDecode(token);
 		try {
 			const res = await networkService.getMonitorsAndSummaryByTeamId({
-				authToken: token,
 				teamId: user.teamId,
 				types: ["pagespeed"],
 			});
@@ -106,7 +95,7 @@ export const updatePageSpeed = createAsyncThunk(
 	"pageSpeedMonitors/updatePageSpeed",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitor } = data;
+			const { monitor } = data;
 			const updatedFields = {
 				name: monitor.name,
 				description: monitor.description,
@@ -114,7 +103,6 @@ export const updatePageSpeed = createAsyncThunk(
 				// notifications: monitor.notifications,
 			};
 			const res = await networkService.updateMonitor({
-				authToken: authToken,
 				monitorId: monitor._id,
 				updatedFields: updatedFields,
 			});
@@ -136,11 +124,8 @@ export const deletePageSpeed = createAsyncThunk(
 	"pageSpeedMonitors/deletePageSpeed",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitor } = data;
-			const res = await networkService.deleteMonitorById({
-				authToken: authToken,
-				monitorId: monitor._id,
-			});
+			const { monitor } = data;
+			const res = await networkService.deleteMonitorById({ monitorId: monitor._id, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
@@ -158,11 +143,8 @@ export const pausePageSpeed = createAsyncThunk(
 	"pageSpeedMonitors/pausePageSpeed",
 	async (data, thunkApi) => {
 		try {
-			const { authToken, monitorId } = data;
-			const res = await networkService.pauseMonitorById({
-				authToken: authToken,
-				monitorId: monitorId,
-			});
+			const { monitorId } = data;
+			const res = await networkService.pauseMonitorById({ monitorId: monitorId, });
 			return res.data;
 		} catch (error) {
 			if (error.response && error.response.data) {
