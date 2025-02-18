@@ -58,37 +58,36 @@ const Maintenance = () => {
 	}
 
 	return (
-
-			<Stack gap={theme.spacing(8)}>
-				<Stack
-					direction="row"
-					justifyContent="space-between"
-					alignItems="center"
-					mt={theme.spacing(5)}
+		<Stack gap={theme.spacing(10)}>
+			<Stack
+				direction="row"
+				justifyContent="space-between"
+				alignItems="center"
+				mt={theme.spacing(5)}
+			>
+				<Breadcrumbs list={[{ name: "maintenance", path: "/maintenance" }]} />
+				<Button
+					variant="contained"
+					color="accent"
+					onClick={() => {
+						navigate("/maintenance/create");
+					}}
+					sx={{ fontWeight: 500 }}
 				>
-					<Breadcrumbs list={[{ name: "maintenance", path: "/maintenance" }]} />
-					<Button
-						variant="contained"
-						color="accent"
-						onClick={() => {
-							navigate("/maintenance/create");
-						}}
-						sx={{ fontWeight: 500 }}
-					>
-						Create maintenance window
-					</Button>
-				</Stack>
-				<MaintenanceTable
-					page={page}
-					setPage={setPage}
-					rowsPerPage={rowsPerPage}
-					sort={sort}
-					setSort={setSort}
-					maintenanceWindows={maintenanceWindows}
-					maintenanceWindowCount={maintenanceWindowCount}
-					updateCallback={handleActionMenuDelete}
-				/>
+					Create maintenance window
+				</Button>
 			</Stack>
+			<MaintenanceTable
+				page={page}
+				setPage={setPage}
+				rowsPerPage={rowsPerPage}
+				sort={sort}
+				setSort={setSort}
+				maintenanceWindows={maintenanceWindows}
+				maintenanceWindowCount={maintenanceWindowCount}
+				updateCallback={handleActionMenuDelete}
+			/>
+		</Stack>
 	);
 };
 
