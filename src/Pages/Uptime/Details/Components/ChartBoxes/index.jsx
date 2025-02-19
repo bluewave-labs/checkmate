@@ -45,6 +45,7 @@ const ChartBoxes = ({
 			<ChartBox
 				icon={<UptimeIcon />}
 				header="Uptime"
+				isEmpty={monitor?.uptimePercentage === 0 && !monitor?.upChecks?.length}
 			>
 				<Stack
 					width={"100%"}
@@ -95,6 +96,8 @@ const ChartBoxes = ({
 			<ChartBox
 				icon={<IncidentsIcon />}
 				header="Incidents"
+				noDataMessage="Great. No Incidents, yet!"
+				isEmpty={!monitor?.groupedDownChecks?.length}
 			>
 				<Stack width={"100%"}>
 					<Box position="relative">
