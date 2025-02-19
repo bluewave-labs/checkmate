@@ -30,7 +30,7 @@ const ImageUpload = ({
 	onChange,
 	maxSize = 3 * 1024 * 1024,
 	accept = ["jpg", "jpeg", "png"],
-	errors,
+	error,
 }) => {
 	const theme = useTheme();
 	const roundStyle = previewIsRound ? { borderRadius: "50%" } : {};
@@ -61,8 +61,6 @@ const ImageUpload = ({
 			</Stack>
 		);
 	}
-
-	const hasError = errors?.logo;
 
 	return (
 		<>
@@ -147,7 +145,7 @@ const ImageUpload = ({
 			>
 				Supported formats: {accept.join(", ").toUpperCase()}
 			</Typography>
-			{hasError && (
+			{error && (
 				<Typography
 					component="span"
 					className="input-error"
@@ -157,7 +155,7 @@ const ImageUpload = ({
 						opacity: 0.8,
 					}}
 				>
-					{hasError}
+					{error}
 				</Typography>
 			)}
 		</>
@@ -170,7 +168,7 @@ ImageUpload.propTypes = {
 	onChange: PropTypes.func,
 	maxSize: PropTypes.number,
 	accept: PropTypes.array,
-	errors: PropTypes.object,
+	error: PropTypes.string,
 };
 
 export default ImageUpload;
