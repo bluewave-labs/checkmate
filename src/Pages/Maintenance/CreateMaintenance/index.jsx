@@ -137,7 +137,7 @@ const CreateMaintenance = () => {
 					limit: null,
 					types: ["http", "ping", "pagespeed"],
 				});
-				const monitors = response.data.data.monitors;
+				const monitors = response.data.data.filteredMonitors; //fetching monitor data from fileterdMonitors
 				setMonitors(monitors);
 
 				if (maintenanceWindowId === undefined) {
@@ -178,10 +178,13 @@ const CreateMaintenance = () => {
 		setSearch(value);
 	};
 
-	const handleSelectMonitors = (_, monitors) => {
-		setForm({ ...form, monitors });
+	const handleSelectMonitors = (event, selectedMonitors) => {
+		const monitorsArray = Array.isArray(event) ? event : selectedMonitors; // Check if the selected monitors are in event or the selectedMonitors
+		if (!monitorsArray) return;
+
+		setForm({ ...form, monitors: monitorsArray }); // Update form state with the selected monitors
 		const { error } = maintenanceWindowValidation.validate(
-			{ monitors },
+			{ monitors: monitorsArray },
 			{ abortEarly: false }
 		);
 		setErrors((prev) => {
@@ -359,7 +362,7 @@ const CreateMaintenance = () => {
 									disablePast
 									disableHighlightToday
 									value={form.startDate}
-									slots={{ openPickerIcon: CalendarIcon }}
+									slots={{ openPickerIcon: () => <CalendarIcon /> }}
 									slotProps={{
 										switchViewButton: { sx: { display: "none" } },
 										nextIconButton: { sx: { ml: theme.spacing(2) } },
