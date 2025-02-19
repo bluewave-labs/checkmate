@@ -23,6 +23,8 @@ Checkmate has ben stress tested with 1000+ active monitors without any particula
 
 We **love** what we are building here, and we contibuously learn a few things about Reactjs, Nodejs, MongoDB and Docker while building Checkmate.
 
+This repository only includes the frontend files. For backend, please check [Checkmate backend](https://github.com/bluewave-labs/checkmate-backend) repository.
+
 ## 📦 Demo
 
 See [Checkmate](https://checkmate-demo.bluewavelabs.ca/) in action. The username is uptimedemo@demo.com and the password is Demouser1! (just a note that we update the demo server from time to time, so if it doesn't work for you, please ping us on Discussions channel).
