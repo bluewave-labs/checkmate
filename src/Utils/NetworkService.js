@@ -100,7 +100,6 @@ class NetworkService {
 	 */
 	async createMonitor(config) {
 		const { monitor } = config;
-
 		return this.axiosInstance.post(`/monitors`, monitor);
 	}
 
@@ -177,8 +176,7 @@ class NetworkService {
 	 */
 
 	async getMonitorsByTeamId(config) {
-		const { teamId, limit, types, page, rowsPerPage, filter, field, order } =
-			config;
+		const { teamId, limit, types, page, rowsPerPage, filter, field, order } = config;
 		const params = new URLSearchParams();
 
 		if (limit) params.append("limit", limit);
@@ -224,7 +222,8 @@ class NetworkService {
 		if (config.normalize) params.append("normalize", config.normalize);
 
 		return this.axiosInstance.get(
-			`/monitors/stats/${config.monitorId}?${params.toString()}`);
+			`/monitors/stats/${config.monitorId}?${params.toString()}`
+		);
 	}
 
 	async getHardwareDetailsByMonitorId(config) {
@@ -232,7 +231,8 @@ class NetworkService {
 		if (config.dateRange) params.append("dateRange", config.dateRange);
 
 		return this.axiosInstance.get(
-			`/monitors/hardware/details/${config.monitorId}?${params.toString()}`);
+			`/monitors/hardware/details/${config.monitorId}?${params.toString()}`
+		);
 	}
 	async getUptimeDetailsById(config) {
 		const params = new URLSearchParams();
@@ -240,7 +240,8 @@ class NetworkService {
 		if (config.normalize) params.append("normalize", config.normalize);
 
 		return this.axiosInstance.get(
-			`/monitors/uptime/details/${config.monitorId}?${params.toString()}`);
+			`/monitors/uptime/details/${config.monitorId}?${params.toString()}`
+		);
 	}
 
 	/**
@@ -526,10 +527,7 @@ class NetworkService {
 	 *
 	 */
 	async requestInvitationToken(config) {
-		return this.axiosInstance.post(
-			`/invite`,
-			{ email: config.email, role: config.role },
-		);
+		return this.axiosInstance.post(`/invite`, { email: config.email, role: config.role });
 	}
 
 	/**
@@ -843,7 +841,7 @@ class NetworkService {
 			onOpen?.();
 		};
 
-		this.eventSource.addEventListener("open", (e) => { });
+		this.eventSource.addEventListener("open", (e) => {});
 
 		this.eventSource.onmessage = (event) => {
 			const data = JSON.parse(event.data);
@@ -870,8 +868,7 @@ class NetworkService {
 
 	subscribeToDistributedUptimeDetails(config) {
 		const params = new URLSearchParams();
-		const { monitorId, onUpdate, onOpen, onError, dateRange, normalize } =
-			config;
+		const { monitorId, onUpdate, onOpen, onError, dateRange, normalize } = config;
 		if (dateRange) params.append("dateRange", dateRange);
 		if (normalize) params.append("normalize", normalize);
 
@@ -970,6 +967,14 @@ class NetworkService {
 		const encodedUrl = encodeURIComponent(url);
 
 		return this.axiosInstance.delete(`/status-page/${encodedUrl}`);
+	}
+
+	async getQueueJobs() {
+		return this.axiosInstance.get("/queue/jobs");
+	}
+
+	async getQueueMetrics() {
+		return this.axiosInstance.get("/queue/metrics");
 	}
 }
 
