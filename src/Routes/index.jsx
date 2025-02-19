@@ -50,11 +50,15 @@ import Integrations from "../Pages/Integrations";
 import Account from "../Pages/Account";
 import Settings from "../Pages/Settings";
 
+// Maintenance
 import Maintenance from "../Pages/Maintenance";
+import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
+
+// Queue
+import QueueUtils from "../Pages/Queue";
 
 import ProtectedRoute from "../Components/ProtectedRoute";
 import ProtectedDistributedUptimeRoute from "../Components/ProtectedDistributedUptimeRoute";
-import CreateNewMaintenanceWindow from "../Pages/Maintenance/CreateMaintenance";
 import withAdminCheck from "../Components/HOC/withAdminCheck";
 
 const Routes = () => {
@@ -231,6 +235,10 @@ const Routes = () => {
 				<Route
 					path="account/team"
 					element={<Account open={"team"} />}
+				/>
+				<Route
+					path="queue"
+					element={<QueueUtils />}
 				/>
 			</Route>
 
