@@ -137,7 +137,9 @@ const CreateMaintenance = () => {
 					limit: null,
 					types: ["http", "ping", "pagespeed"],
 				});
-				const monitors = response.data.data.monitors;
+				console.log(response);
+				const monitors = response.data.data.filteredMonitors; //fetching monitor data from fileterdMonitors
+				console.log(monitors);
 				setMonitors(monitors);
 
 				if (maintenanceWindowId === undefined) {
