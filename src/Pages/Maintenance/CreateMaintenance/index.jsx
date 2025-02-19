@@ -137,9 +137,7 @@ const CreateMaintenance = () => {
 					limit: null,
 					types: ["http", "ping", "pagespeed"],
 				});
-				console.log(response);
 				const monitors = response.data.data.filteredMonitors; //fetching monitor data from fileterdMonitors
-				console.log(monitors);
 				setMonitors(monitors);
 
 				if (maintenanceWindowId === undefined) {
@@ -180,10 +178,13 @@ const CreateMaintenance = () => {
 		setSearch(value);
 	};
 
-	const handleSelectMonitors = (_, monitors) => {
-		setForm({ ...form, monitors });
+	const handleSelectMonitors = (event, selectedMonitors) => {
+		const monitorsArray = Array.isArray(event) ? event : selectedMonitors; // Check if the selected monitors are in event or the selectedMonitors
+		if (!monitorsArray) return;
+
+		setForm({ ...form, monitors: monitorsArray }); // Update form state with the selected monitors
 		const { error } = maintenanceWindowValidation.validate(
-			{ monitors },
+			{ monitors: monitorsArray },
 			{ abortEarly: false }
 		);
 		setErrors((prev) => {
